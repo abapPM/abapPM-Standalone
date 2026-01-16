@@ -6,7 +6,7 @@
 </div>
 
 ![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/abapPM/src/core/zif_abappm_version.intf.abap/c_version&label=Version&color=blue)
-[![Download](https://img.shields.io/badge/Download-Click_Here-blue)](https://github.com/abapPM/abapPM-Standalone/src/zabappm_standalone.prog.abap)
+[![Download](https://img.shields.io/badge/Download-Click_Here-blue)](https://raw.githubusercontent.com/abapPM/abapPM-Standalone/refs/heads/main/src/zabappm_standalone.prog.abap)
 
 [![License](https://img.shields.io/github/license/abapPM/abapPM-Standalone?label=License&color=success)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=success)](https://github.com/abapPM/.github/blob/main/CODE_OF_CONDUCT.md)
@@ -30,19 +30,23 @@ SAP Basis 7.50 or higher
 
 ## Installation with abapGit
 
-1. Create an online repository for `https://github.com/abapPM/abapPM-Standalone` and SAP package `$ZAPM`
+1. Create an online repository for `https://github.com/abapPM/abapPM-Standalone` and SAP package `$ABAPPM`
 1. Pull this repository
 
 ## Manual Installation
 
-1. Download the standalone version of apm from [zabappm_standalone](https://github.com/abapPM/abapPM-Standalone/zabappm_standalone.prog.abap)
-1. Create SAP package `$ZAPM` in your system
-1. Create the program `ZABAPPM_STANDALONE` in package `$ZAPM`, upload the code, and activate
-1. Create transaction `ZAPM` in package `$ZAPM` for the program `ZABAPPM_STANDALONE`
+1. Download the standalone version of apm from [zabappm_standalone.prog.abap](https://raw.githubusercontent.com/abapPM/abapPM-Standalone/refs/heads/main/src/zabappm_standalone.prog.abap)
+1. Create SAP package `$ABAPPM` in your system
+1. Create the program `ZABAPPM_STANDALONE` in package `$ABAPPM`, upload the code, and activate
+1. Create transaction `ZAPM` in package `$ABAPPM` for the program `ZABAPPM_STANDALONE`
 
 ## Usage
 
 Start apm using transaction `ZAPM`.
+
+## Issues
+
+Please file any issues in the [repository of the apm developer version](https://github.com/abapPM/abapPM/issues).
 
 ## Contributions
 
