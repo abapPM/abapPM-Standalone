@@ -1,3 +1,4 @@
+// https://github.com/abaplint/abaplint/blob/main/packages/core/src/rules/downport.ts
 {
     "global": {
         "files": "/../../src/**/*.*"
@@ -14,11 +15,11 @@
         "errorNamespace": "."
     },
     "rules": {
+        "downport": true,
         "begin_end_names": true,
         "check_ddic": true,
         "check_include": true,
         "check_syntax": true,
-        "downport": true,
         "global_class": true,
         "definitions_top": true,
         "implement_methods": true,

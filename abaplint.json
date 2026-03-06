@@ -8,13 +8,28 @@
     {
       "files": "/src/**/*.*",
       "folder": "/deps2",
-      "url": "https://github.com/abapPM/ABAP-Error"
+      "url": "https://github.com/abapGit/abapGit"
     }
   ],
   "global": {
     "exclude": [],
     "files": "/src/**/*.*",
-    "noIssues": [],
+    "noIssues": [
+      "/src/modules/ajson/*.*",
+      "/src/modules/markdown/*.*",
+      "/src/modules/semver-sap/*.*",
+      "/src/modules/string-map/*.*",
+      "#apmg#cl_apm_abapgit_*",
+      "#apmg#cl_apm_exception_viewer*",
+      "#apmg#cl_apm_frontend_services*",
+      "#apmg#if_apm_frontend_services*",
+      "#apmg#cl_apm_gui*",
+      "#apmg#if_apm_gui*",
+      "#apmg#cl_apm_html_*",
+      "#apmg#if_apm_html_*",
+      "#apmg#cl_apm_popups*",
+      "#apmg#if_apm_popups*"
+    ],
     "skipGeneratedBOPFInterfaces": true,
     "skipGeneratedFunctionGroups": true,
     "skipGeneratedGatewayClasses": true,
@@ -28,7 +43,7 @@
     "7bit_ascii": true,
     "abapdoc": false,
     "add_test_attributes": true,
-    "align_parameters": false,
+    "align_parameters": true,
     "align_pseudo_comments": true,
     "align_type_expressions": true,
     "allowed_object_naming": true,
@@ -37,7 +52,10 @@
         "CLAS",
         "DEVC",
         "INTF",
-        "PROG"
+        "NSPC",
+        "PROG",
+        "TRAN",
+        "W3MI"
       ]
     },
     "ambiguous_statement": true,
@@ -68,10 +86,34 @@
     "constant_classes": true,
     "constructor_visibility_public": true,
     "contains_tab": true,
-    "cyclic_oo": true,
+    "cyclic_oo": {
+      "exclude": [
+        "#apmg#cl_apm_arborist",
+        "#apmg#if_apm_arborist"
+      ]
+    },
     "cyclomatic_complexity": true,
-    "dangerous_statement": true,
-    "db_operation_in_loop": true,
+    "dangerous_statement": {
+      "exclude": [
+        "#apmg#cl_apm_persist_apm",
+        "#apmg#cl_apm_object_prog",
+        "#apmg#cl_apm_tap"
+      ],
+      "execSQL": true,
+      "kernelCall": true,
+      "systemCall": true,
+      "insertReport": true,
+      "generateDynpro": true,
+      "generateReport": true,
+      "generateSubroutine": true,
+      "deleteReport": true,
+      "deleteTextpool": true,
+      "insertTextpool": true,
+      "deleteDynpro": true,
+      "exportDynpro": true,
+      "dynamicSQL": true
+    },
+    "db_operation_in_loop": false,
     "definitions_top": true,
     "description_empty": true,
     "double_space": true,
@@ -81,7 +123,7 @@
     "empty_event": true,
     "empty_line_in_statement": true,
     "empty_statement": true,
-    "empty_structure": true,
+    "empty_structure": false,
     "exit_or_check": {
       "allowCheck": true,
       "allowExit": false
@@ -107,7 +149,11 @@
     "form_tables_obsolete": true,
     "fully_type_constants": true,
     "fully_type_itabs": true,
-    "function_module_recommendations": true,
+    "function_module_recommendations": {
+      "exclude": [
+        "#apmg#cl_apm_progress_bar"
+      ]
+    },
     "functional_writing": true,
     "global_class": true,
     "identical_conditions": true,
@@ -127,7 +173,12 @@
       "ignoreGlobalInterface": false
     },
     "inline_data_old_versions": true,
-    "intf_referencing_clas": true,
+    "intf_referencing_clas": {
+      "allow": [
+        "/APMG/CL_APM_ARBORIST_NODE",
+        "/APMG/CL_APM_STRING_MAP"
+      ]
+    },
     "invalid_table_index": true,
     "keep_single_parameter_on_one_line": true,
     "keyword_case": true,
@@ -135,7 +186,11 @@
       "count": 3
     },
     "line_break_style": true,
-    "line_length": true,
+    "line_length": {
+      "exclude": [
+        "#apmg#cl_apm_emoji.clas.macros"
+      ]
+    },
     "line_only_punc": true,
     "local_class_naming": true,
     "local_testclass_consistency": true,
@@ -147,18 +202,38 @@
     "max_one_statement": true,
     "message_exists": true,
     "method_implemented_twice": true,
-    "method_length": true,
-    "method_overwrites_builtin": true,
+    "method_length": {
+      "statements": 100,
+      "errorWhenEmpty": true,
+      "ignoreTestClasses": false,
+      "checkForms": true
+    },
+    "method_overwrites_builtin": {
+      "exclude": [
+        "#apmg#cl_apm_tap"
+      ]
+    },
     "method_parameter_names": false,
     "mix_returning": true,
-    "modify_only_own_db_tables": true,
+    "modify_only_own_db_tables": {
+      "ownTables": "^[Z|CLMCUS|SOTR_.*|OBJ*]",
+      "reportDynamic": false
+    },
     "msag_consistency": true,
     "names_no_dash": true,
-    "nesting": true,
+    "nesting": {
+      "exclude": [
+        "#apmg#cl_apm_semver"
+      ]
+    },
     "newline_between_methods": true,
     "no_aliases": true,
     "no_chained_assignment": true,
-    "no_external_form_calls": true,
+    "no_external_form_calls": {
+      "exclude": [
+        "#apmg#apm_forms"
+      ]
+    },
     "no_inline_in_optional_branches": false,
     "no_prefixes": {
       "data": "^[LGM].?_",
@@ -180,7 +255,7 @@
       "aqqu": "^Z",
       "aqsg": "^Z",
       "auth": "^Z",
-      "clas": "^ZC(L|X)\\_",
+      "clas": "^/APMG/C(L|X)_APM",
       "cmod": "^Z",
       "doma": "^Z",
       "dtel": "^Z",
@@ -192,11 +267,11 @@
       "idoc": "^Z",
       "ignoreNames": [],
       "ignorePatterns": [],
-      "intf": "^ZIF\\_",
+      "intf": "^/APMG/IF_APM",
       "msag": "^Z",
       "patternKind": "required",
       "pinf": "^Z",
-      "prog": "^Z",
+      "prog": "^/APMG/APM",
       "sfpf": "^Z",
       "sfpi": "^Z",
       "shlp": "^Z",
@@ -206,7 +281,7 @@
       "suso": "^Z",
       "sxci": "^Z",
       "tabl": "^Z",
-      "tran": "^Z",
+      "tran": "^/APMG/APM",
       "ttyp": "^Z",
       "wdya": "^Z",
       "wdyn": "^Z",
@@ -229,13 +304,23 @@
     "prefer_xsdbool": true,
     "preferred_compare_operator": true,
     "prefix_is_current_class": true,
-    "reduce_procedural_code": true,
+    "reduce_procedural_code": {
+      "maxStatements": 20
+    },
     "reduce_string_templates": true,
     "release_idoc": true,
     "remove_descriptions": true,
     "rfc_error_handling": true,
     "select_add_order_by": false,
-    "select_performance": true,
+    "select_performance": {
+      "exclude": [
+        "#apmg#cl_apm_installer",
+        "#apmg#cl_apm_persist_apm"
+      ],
+      "endSelect": true,
+      "selectStar": true,
+      "starOkayIfFewColumns": 10
+    },
     "select_single_full_key": true,
     "selection_screen_naming": true,
     "sequential_blank": true,
@@ -252,7 +337,11 @@
     "strict_sql": false,
     "superclass_final": true,
     "superfluous_value": true,
-    "sy_modification": true,
+    "sy_modification": {
+      "exclude": [
+        "#apmg#cl_apm_tap"
+      ]
+    },
     "tabl_enhancement_category": true,
     "tables_declared_locally": true,
     "try_without_catch": true,
@@ -264,7 +353,11 @@
     "unnecessary_pragma": true,
     "unnecessary_return": true,
     "unreachable_code": true,
-    "unsecure_fae": true,
+    "unsecure_fae": {
+      "exclude": [
+        "#apmg#cl_apm_installer"
+      ]
+    },
     "unused_ddic": true,
     "unused_macros": true,
     "unused_methods": true,
@@ -279,7 +372,7 @@
     "xml_consistency": true
   },
   "syntax": {
-    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)",
+    "errorNamespace": "^(/APMG/|LCL_|TY_|LIF_)",
     "globalConstants": [],
     "globalMacros": [],
     "version": "v750"
