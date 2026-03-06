@@ -1,0 +1,24 @@
+name: ABAP_702
+
+on:
+  push:
+    branches: ['702']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ABAP_702:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        ref: 702
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '20'
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run downport

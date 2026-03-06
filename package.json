@@ -1,0 +1,24 @@
+{
+    "name": "abappm-standalone",
+    "private": true,
+    "version": "1.0.0",
+    "description": "apm Standalone",
+    "scripts": {
+      "downport": "abaplint --fix .github/abaplint/abap-702.jsonc"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/abapPM/abapPM-Standalone.git"
+    },
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/abapPM/abapPM"
+    },
+    "homepage": "https://abappm.com",
+    "devDependencies": {
+      "@abaplint/cli": "^2.115.25",
+      "@abaplint/database-sqlite": "^2.11.78",
+      "@abaplint/runtime": "^2.12.28",
+      "@abaplint/transpiler-cli": "^2.12.28"
+    }
+  }
