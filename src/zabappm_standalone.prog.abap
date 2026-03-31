@@ -73,6 +73,7 @@ INTERFACE /apmg/if_apm_semver_options DEFERRED.
 INTERFACE /apmg/if_apm_settings DEFERRED.
 INTERFACE /apmg/if_apm_types DEFERRED.
 INTERFACE /apmg/if_apm_version DEFERRED.
+INTERFACE zif_abapgit_aff_doma_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_intf_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_oo_types_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_registry DEFERRED.
@@ -1412,6 +1413,7 @@ CLASS /apmg/cl_apm_gui_page_debuginf DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_hoc DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_list DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_package DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_gui_page_tree DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_router DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_utils DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_highlighter DEFINITION DEFERRED.
@@ -1766,25 +1768,16 @@ INTERFACE zif_abapgit_aff_types_v1 .
     END OF co_abap_language_version_cloud.
 
   TYPES ty_description_60 TYPE c LENGTH 60.
+
+  TYPES ty_description_80 TYPE c LENGTH 80.
+
   TYPES ty_description_100 TYPE c LENGTH 100.
 
   TYPES ty_object_name_30 TYPE c LENGTH 30.
 
+  TYPES ty_object_name_40 TYPE c LENGTH 40.
+
   TYPES ty_original_language TYPE sy-langu.
-
-  TYPES:
-    BEGIN OF ty_header_60_src,
-      description           TYPE ty_description_60,
-      original_language     TYPE ty_original_language,
-      abap_language_version TYPE ty_abap_language_version_src,
-    END OF ty_header_60_src.
-
-  TYPES:
-    BEGIN OF ty_header_60_cloud,
-      description           TYPE ty_description_60,
-      original_language     TYPE ty_original_language,
-      abap_language_version TYPE ty_abap_language_version_cloud,
-    END OF ty_header_60_cloud.
 
   TYPES:
     BEGIN OF ty_header_60,
@@ -1794,10 +1787,38 @@ INTERFACE zif_abapgit_aff_types_v1 .
     END OF ty_header_60.
 
   TYPES:
+    BEGIN OF ty_header_60_cloud,
+      description           TYPE ty_description_60,
+      original_language     TYPE ty_original_language,
+      abap_language_version TYPE ty_abap_language_version_cloud,
+    END OF ty_header_60_cloud.
+
+  TYPES:
     BEGIN OF ty_header_60_no_abap_lv,
       description       TYPE ty_description_60,
       original_language TYPE ty_original_language,
     END OF ty_header_60_no_abap_lv.
+
+  TYPES:
+    BEGIN OF ty_header_60_src,
+      description           TYPE ty_description_60,
+      original_language     TYPE ty_original_language,
+      abap_language_version TYPE ty_abap_language_version_src,
+    END OF ty_header_60_src.
+
+  TYPES:
+    BEGIN OF ty_header_80,
+      description           TYPE ty_description_80,
+      original_language     TYPE ty_original_language,
+      abap_language_version TYPE ty_abap_language_version,
+    END OF ty_header_80.
+
+  TYPES:
+    BEGIN OF ty_header_80_cloud,
+      description           TYPE ty_description_80,
+      original_language     TYPE ty_original_language,
+      abap_language_version TYPE ty_abap_language_version_cloud,
+    END OF ty_header_80_cloud.
 
   TYPES:
     BEGIN OF ty_header_100,
@@ -1805,6 +1826,13 @@ INTERFACE zif_abapgit_aff_types_v1 .
       original_language     TYPE ty_original_language,
       abap_language_version TYPE ty_abap_language_version,
     END OF ty_header_100.
+
+  TYPES:
+    BEGIN OF ty_header_100_cloud,
+      description           TYPE ty_description_100,
+      original_language     TYPE ty_original_language,
+      abap_language_version TYPE ty_abap_language_version_cloud,
+    END OF ty_header_100_cloud.
 
   TYPES:
     BEGIN OF ty_header_only_description,
@@ -2933,6 +2961,9 @@ INTERFACE zif_abapgit_sap_package
       iv_obj_type TYPE tadir-object
     RAISING
       zcx_abapgit_exception.
+  METHODS update_tree
+    RAISING
+      zcx_abapgit_exception .
 ENDINTERFACE.
 
 INTERFACE /apmg/if_apm_ajson_types
@@ -3469,7 +3500,7 @@ INTERFACE /apmg/if_apm_types .
 * but there are differences! Several fields are not included while
 * others have been added.
 *
-* https://docs.npmjs.com/cli/v10/configuring-npm/package-json
+* https://docs.npmjs.com/cli/v11/configuring-npm/package-json
 ************************************************************************
 
   CONSTANTS c_version TYPE string VALUE '1.0.0' ##NO_TEXT.
@@ -3563,7 +3594,8 @@ INTERFACE /apmg/if_apm_types .
     "! SAP package
     BEGIN OF ty_sap_package,
       default               TYPE ty_devclass,
-      software_component    TYPE dlvunit,
+      software_component    TYPE string, "dlvunit
+      application_component TYPE string, "ufps_posid
       abap_language_version TYPE string,
     END OF ty_sap_package.
 
@@ -3571,7 +3603,8 @@ INTERFACE /apmg/if_apm_types .
 
   TYPES:
     "! Schema for package.abap.json
-    "! Everything but "icon" and "devclass" is also in regular npm package.json
+    "! This type is similar to npm's package.json with the following additions:
+    "! changelog, icon, and sap_package
     BEGIN OF ty_package_json,
       name                  TYPE ty_name,
       version               TYPE ty_version,
@@ -3579,6 +3612,7 @@ INTERFACE /apmg/if_apm_types .
       type                  TYPE string,
       keywords              TYPE string_table,
       homepage              TYPE string,
+      changelog             TYPE string,
       icon                  TYPE string,
       bugs                  TYPE ty_bugs,
       license               TYPE string,
@@ -3673,6 +3707,7 @@ INTERFACE /apmg/if_apm_types .
       readme       TYPE string,
       users        TYPE ty_users,
       homepage     TYPE string,
+      changelog    TYPE string,
       icon         TYPE string,
       bugs         TYPE ty_bugs,
       license      TYPE string,
@@ -3714,6 +3749,15 @@ INTERFACE /apmg/if_apm_types .
       sep2      TYPE c LENGTH 1 VALUE '.',
       extension TYPE c LENGTH 4 VALUE 'json',
     END OF c_package_json_file.
+
+  CONSTANTS c_latest_version TYPE string VALUE 'latest'.
+
+  CONSTANTS:
+    "! Time entries
+    BEGIN OF c_time_entries,
+      created  TYPE string VALUE 'created',
+      modified TYPE string VALUE 'modified',
+    END OF c_time_entries.
 
   "! Package Readme File
   CONSTANTS c_readme_file TYPE string VALUE 'README.md'.
@@ -4789,6 +4833,12 @@ INTERFACE /apmg/if_apm_settings .
       order_by         TYPE string,
       order_descending TYPE abap_bool,
     END OF ty_list_settings,
+    BEGIN OF ty_tree_settings,
+      filter           TYPE string,
+      " show_details     TYPE abap_bool, " uses JS windows.localStorage
+      order_by         TYPE string,
+      order_descending TYPE abap_bool,
+    END OF ty_tree_settings,
     BEGIN OF ty_package_settings,
       package         TYPE devclass,
       favorite        TYPE abap_bool,
@@ -4805,6 +4855,7 @@ INTERFACE /apmg/if_apm_settings .
       gui_settings          TYPE ty_gui_settings,
       keyboard_settings     TYPE ty_keyboard_settings,
       list_settings         TYPE ty_list_settings,
+      tree_settings         TYPE ty_tree_settings,
       package_settings      TYPE SORTED TABLE OF ty_package_settings WITH UNIQUE KEY package,
     END OF ty_settings.
 
@@ -5878,6 +5929,8 @@ INTERFACE zif_abapgit_cts_api
   TYPES: BEGIN OF ty_request_and_tasks,
            trkorr  TYPE trkorr,
            as4user TYPE sy-uname,
+           as4date TYPE d,
+           as4time TYPE t,
          END OF ty_request_and_tasks.
   TYPES: ty_request_and_tasks_tt TYPE STANDARD TABLE OF ty_request_and_tasks WITH DEFAULT KEY.
 
@@ -6752,8 +6805,10 @@ INTERFACE /apmg/if_apm_gui_router .
       go_db                TYPE string VALUE 'go_db',
       go_debuginfo         TYPE string VALUE 'go_debuginfo',
       go_home              TYPE string VALUE 'go_home',
+      go_package           TYPE string VALUE 'go_package',
       go_settings          TYPE string VALUE 'go_settings',
       go_settings_personal TYPE string VALUE 'go_settings_personal',
+      go_tree              TYPE string VALUE 'go_tree',
       go_tutorial          TYPE string VALUE 'go_tutorial',
       goto_message         TYPE string VALUE 'goto_message',
       goto_source          TYPE string VALUE 'goto_source',
@@ -6873,6 +6928,147 @@ INTERFACE /apmg/if_apm_version .
 ************************************************************************
 
   CONSTANTS c_version TYPE string VALUE '1.0.0'.
+
+ENDINTERFACE.
+
+INTERFACE zif_abapgit_aff_doma_v1 .
+
+  TYPES ty_data_type TYPE c LENGTH 4.
+
+  CONSTANTS:
+    BEGIN OF co_data_type,
+      accp       TYPE ty_data_type VALUE 'ACCP',
+      char       TYPE ty_data_type VALUE 'CHAR',
+      clnt       TYPE ty_data_type VALUE 'CLNT',
+      cuky       TYPE ty_data_type VALUE 'CUKY',
+      curr       TYPE ty_data_type VALUE 'CURR',
+      df16_dec   TYPE ty_data_type VALUE 'D16D',
+      df16_raw   TYPE ty_data_type VALUE 'D16R',
+      df16_scl   TYPE ty_data_type VALUE 'D16S',
+      decfloat16 TYPE ty_data_type VALUE 'D16N',
+      df34_dec   TYPE ty_data_type VALUE 'D34D',
+      df34_raw   TYPE ty_data_type VALUE 'D34R',
+      df34_scl   TYPE ty_data_type VALUE 'D34S',
+      decfloat34 TYPE ty_data_type VALUE 'D34N',
+      dats       TYPE ty_data_type VALUE 'DATS',
+      datn       TYPE ty_data_type VALUE 'DATN',
+      dec        TYPE ty_data_type VALUE 'DEC',
+      fltp       TYPE ty_data_type VALUE 'FLTP',
+      geom_ewkb  TYPE ty_data_type VALUE 'GGM1',
+      int1       TYPE ty_data_type VALUE 'INT1',
+      int2       TYPE ty_data_type VALUE 'INT2',
+      int4       TYPE ty_data_type VALUE 'INT4',
+      int8       TYPE ty_data_type VALUE 'INT8',
+      lang       TYPE ty_data_type VALUE 'LANG',
+      lchr       TYPE ty_data_type VALUE 'LCHR',
+      lraw       TYPE ty_data_type VALUE 'LRAW',
+      numc       TYPE ty_data_type VALUE 'NUMC',
+      prec       TYPE ty_data_type VALUE 'PREC',
+      quan       TYPE ty_data_type VALUE 'QUAN',
+      raw        TYPE ty_data_type VALUE 'RAW',
+      rawstring  TYPE ty_data_type VALUE 'RSTR',
+      sstring    TYPE ty_data_type VALUE 'SSTR',
+      string     TYPE ty_data_type VALUE 'STRG',
+      tims       TYPE ty_data_type VALUE 'TIMS',
+      timn       TYPE ty_data_type VALUE 'TIMN',
+      unit       TYPE ty_data_type VALUE 'UNIT',
+      utclong    TYPE ty_data_type VALUE 'UTCL',
+      varc       TYPE ty_data_type VALUE 'VARC',
+    END OF co_data_type.
+
+  TYPES ty_output_style TYPE n LENGTH 2.
+
+  CONSTANTS:
+    BEGIN OF co_output_style,
+               normal                       TYPE ty_output_style VALUE '00',
+               sign_right                   TYPE ty_output_style VALUE '01',
+               scale_preserving             TYPE ty_output_style VALUE '02',
+               scientific                   TYPE ty_output_style VALUE '03',
+               scientific_with_leading_zero TYPE ty_output_style VALUE '04',
+               scale_preserving_scientific  TYPE ty_output_style VALUE '05',
+               engineering                  TYPE ty_output_style VALUE '06',
+             END OF co_output_style.
+
+  TYPES ty_length               TYPE i.
+
+  TYPES ty_decimals             TYPE i.
+
+  TYPES ty_output_length        TYPE i.
+
+  TYPES ty_conv_routine         TYPE c LENGTH 5.
+
+  TYPES:
+    BEGIN OF ty_format,
+      data_type TYPE ty_data_type,
+
+      length    TYPE ty_length,
+
+      decimals  TYPE ty_decimals,
+
+    END OF ty_format.
+
+  TYPES:
+    BEGIN OF ty_output_characteristics,
+      style              TYPE ty_output_style,
+
+      length             TYPE ty_output_length,
+
+      conversion_routine TYPE ty_conv_routine,
+
+      case_sensitive     TYPE abap_bool,
+
+      negative_values    TYPE abap_bool,
+
+      am_pm_time_format  TYPE abap_bool,
+
+    END OF ty_output_characteristics.
+
+  TYPES:
+    BEGIN OF ty_value_table,
+      name TYPE zif_abapgit_aff_types_v1=>ty_object_name_30,
+    END OF ty_value_table.
+
+  TYPES:
+    BEGIN OF ty_single_value,
+      fixed_value TYPE c LENGTH 10,
+      description TYPE zif_abapgit_aff_types_v1=>ty_description_60,
+    END OF ty_single_value,
+
+    ty_single_values TYPE STANDARD TABLE OF ty_single_value WITH DEFAULT KEY.
+
+  TYPES:
+    BEGIN OF ty_intervals_value,
+      low_limit   TYPE c LENGTH 10,
+      high_limit  TYPE c LENGTH 10,
+      description TYPE zif_abapgit_aff_types_v1=>ty_description_60,
+    END OF ty_intervals_value,
+
+    ty_intervals_values TYPE STANDARD TABLE OF ty_intervals_value WITH DEFAULT KEY.
+
+  TYPES:
+    BEGIN OF ty_fixed_value_append,
+      name TYPE zif_abapgit_aff_types_v1=>ty_object_name_30,
+    END OF ty_fixed_value_append,
+
+    ty_fixed_value_appends TYPE STANDARD TABLE OF ty_fixed_value_append WITH DEFAULT KEY.
+
+  TYPES:
+    BEGIN OF ty_main,
+      format_version         TYPE zif_abapgit_aff_types_v1=>ty_format_version,
+      header                 TYPE zif_abapgit_aff_types_v1=>ty_header_60,
+
+      format                 TYPE ty_format,
+
+      output_characteristics TYPE ty_output_characteristics,
+
+      fixed_values           TYPE ty_single_values,
+
+      fixed_value_intervals  TYPE ty_intervals_values,
+
+      value_table            TYPE ty_value_table,
+
+      fixed_value_appends    TYPE ty_fixed_value_appends,
+    END OF ty_main.
 
 ENDINTERFACE.
 
@@ -7010,7 +7206,7 @@ INTERFACE zif_abapgit_version
    .
 
   CONSTANTS c_xml_version TYPE string VALUE 'v1.0.0' ##NO_TEXT.
-  CONSTANTS c_abap_version TYPE string VALUE '1.132.0' ##NO_TEXT.
+  CONSTANTS c_abap_version TYPE string VALUE '1.133.0' ##NO_TEXT.
 
 ENDINTERFACE.
 
@@ -8052,8 +8248,8 @@ CLASS /apmg/cl_apm_arborist DEFINITION
     "! Process a single package and its dependencies
     METHODS process_package
       IMPORTING
-        !package_info TYPE /apmg/if_apm_package_json=>ty_package
-        !depth        TYPE i DEFAULT 0.
+        !package TYPE /apmg/if_apm_package_json=>ty_package
+        !depth   TYPE i DEFAULT 0.
 
     "! Process dependencies of a node
     METHODS process_dependencies
@@ -8348,14 +8544,43 @@ CLASS /apmg/cl_apm_auth DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
+    CONSTANTS:
+      BEGIN OF c_activity,
+        create  TYPE activ_auth VALUE '01',
+        change  TYPE activ_auth VALUE '02',
+        display TYPE activ_auth VALUE '03',
+        delete  TYPE activ_auth VALUE '06',
+      END OF c_activity.
+
     CLASS-METHODS is_package_allowed
       IMPORTING
         package       TYPE devclass
       RETURNING
         VALUE(result) TYPE abap_bool.
 
+    CLASS-METHODS is_package_authorized
+      IMPORTING
+        package       TYPE devclass
+        activity      TYPE activ_auth
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS check_package_authorized
+      IMPORTING
+        package  TYPE devclass
+        activity TYPE activ_auth
+      RAISING
+        /apmg/cx_apm_error.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
+
+    CLASS-METHODS _get_activity_text
+      IMPORTING
+        activity      TYPE activ_auth
+      RETURNING
+        VALUE(result) TYPE string.
+
 ENDCLASS.
 
 CLASS /apmg/cl_apm_code_importer DEFINITION  FINAL CREATE PUBLIC.
@@ -9109,6 +9334,12 @@ CLASS /apmg/cl_apm_command_unpublish DEFINITION
         VALUE(result) TYPE string
       RAISING
         /apmg/cx_apm_error.
+
+    METHODS find_latest_version
+      IMPORTING
+        !time         TYPE /apmg/if_apm_types=>ty_packument-time
+      RETURNING
+        VALUE(result) TYPE string.
 
 ENDCLASS.
 
@@ -11693,6 +11924,7 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
   PRIVATE SECTION.
 
     CONSTANTS:
+      c_page_id TYPE string VALUE 'apm-package-list',
       BEGIN OF c_action,
         select           TYPE string VALUE 'select',
         apply_filter     TYPE string VALUE 'apply_filter',
@@ -11710,6 +11942,101 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
       all_labels   TYPE string_table,
       label_colors TYPE REF TO /apmg/cl_apm_string_map,
       settings     TYPE /apmg/if_apm_settings=>ty_settings.
+
+    " PREPARE
+
+    METHODS build_table_scheme
+      RETURNING
+        VALUE(result) TYPE /apmg/cl_apm_gui_chunk_lib=>ty_col_spec_tt.
+
+    METHODS prepare_packages
+      RETURNING
+        VALUE(result) TYPE /apmg/if_apm_package_json=>ty_packages
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS prepare_labels
+      IMPORTING
+        !packages     TYPE /apmg/if_apm_package_json=>ty_packages
+      RETURNING
+        VALUE(result) TYPE string_table.
+
+    " CONTENT
+
+    METHODS render_package_list
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_header
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_table_body
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_item
+      IMPORTING
+        !html    TYPE REF TO /apmg/if_apm_html
+        !package TYPE /apmg/if_apm_package_json=>ty_package
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_footer
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    " HEADER
+
+    METHODS render_action_toolbar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_header_bar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_header_label_list
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_filter_bar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_filter_help_hint
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS render_registry
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    " CSS + JS
+
+    METHODS render_styles
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS get_scripts
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS get_palette
+      IMPORTING
+        !action       TYPE string
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    " ACTIONS
 
     METHODS set_order_by
       IMPORTING
@@ -11733,94 +12060,11 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
       CHANGING
         !packages TYPE /apmg/if_apm_package_json=>ty_packages.
 
-    METHODS render_package_list
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS get_palette
-      IMPORTING
-        !action       TYPE string
-      RETURNING
-        VALUE(result) TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS render_styles
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_table_header
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_table_footer
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_table_body
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS render_table_item
-      IMPORTING
-        !html    TYPE REF TO /apmg/if_apm_html
-        !package TYPE /apmg/if_apm_package_json=>ty_package
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS render_header_bar
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_header_label_list
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
     METHODS apply_order_by
       CHANGING
         packages TYPE /apmg/if_apm_package_json=>ty_packages.
 
-    METHODS prepare_packages
-      RETURNING
-        VALUE(result) TYPE /apmg/if_apm_package_json=>ty_packages
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS get_scripts
-      RETURNING
-        VALUE(result) TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
-
-    METHODS render_action_toolbar
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_filter_bar
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS render_registry
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
-    METHODS build_table_scheme
-      RETURNING
-        VALUE(result) TYPE /apmg/cl_apm_gui_chunk_lib=>ty_col_spec_tt.
-
-    METHODS collect_all_labels
-      IMPORTING
-        !packages     TYPE /apmg/if_apm_package_json=>ty_packages
-      RETURNING
-        VALUE(result) TYPE string_table.
-
-    METHODS render_filter_help_hint
-      RETURNING
-        VALUE(result) TYPE string.
+    " INIT
 
     METHODS load_package_list
       RAISING
@@ -12049,6 +12293,197 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
         !filename  TYPE string
         !extension TYPE string
         !data      TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_page_tree DEFINITION
+  INHERITING FROM /apmg/cl_apm_gui_component
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm GUI Package Tree
+*
+* Copyright 2026 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+* CSS classes have to match repo-overview to allow JS to work properly
+* TODO: move tree to tree_list
+* TODO: apply filter and sorting to tree_list
+************************************************************************
+  PUBLIC SECTION.
+
+    INTERFACES:
+      /apmg/if_apm_gui_event_handler,
+      /apmg/if_apm_gui_menu_provider,
+      /apmg/if_apm_gui_renderable.
+
+    CLASS-METHODS create
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_gui_renderable
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS constructor
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS:
+      c_page_id TYPE string VALUE 'apm-package-tree',
+      BEGIN OF c_action,
+        select           TYPE string VALUE 'select',
+        apply_filter     TYPE string VALUE 'apply_filter',
+        label_filter     TYPE string VALUE 'label_filter',
+        toggle_favorites TYPE string VALUE 'toggle_favorites',
+        change_order_by  TYPE string VALUE 'change_order_by',
+        direction        TYPE string VALUE 'direction',
+        refresh          TYPE string VALUE 'refresh',
+      END OF c_action,
+      c_raw_field_suffix TYPE string VALUE '_RAW' ##NO_TEXT.
+
+    DATA:
+      tree     TYPE /apmg/if_apm_arborist=>ty_node_refs,
+      settings TYPE /apmg/if_apm_settings=>ty_settings.
+
+    " PREPARE
+
+    METHODS build_table_scheme
+      RETURNING
+        VALUE(result) TYPE /apmg/cl_apm_gui_chunk_lib=>ty_col_spec_tt.
+
+    " CONTENT
+
+    METHODS render_package_tree
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_header
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_table_body
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_item
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+        !node TYPE /apmg/if_apm_arborist=>ty_node_ref
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_table_footer
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    " EDGES
+
+    METHODS render_edges_out
+      IMPORTING
+        !edges        TYPE /apmg/cl_apm_arborist_node=>ty_edges
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS render_edges_in
+      IMPORTING
+        !edges        TYPE /apmg/cl_apm_arborist_node=>ty_edges
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS render_edges_ranges
+      IMPORTING
+        !edges        TYPE /apmg/cl_apm_arborist_node=>ty_edges
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS render_edges_status
+      IMPORTING
+        !edges        TYPE /apmg/cl_apm_arborist_node=>ty_edges
+      RETURNING
+        VALUE(result) TYPE string.
+
+    " HEADER
+
+    METHODS render_action_toolbar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_header_bar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_filter_bar
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_filter_help_hint
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS render_registry
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    " CSS + JS
+
+    METHODS render_styles
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS get_scripts
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    " ACTIONS
+
+    METHODS set_order_by
+      IMPORTING
+        !order_by TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS set_order_direction
+      IMPORTING
+        !order_descending TYPE abap_bool
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS set_filter
+      IMPORTING
+        !postdata TYPE /apmg/if_apm_html_viewer=>ty_post_data
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS apply_filter
+      CHANGING
+        !packages TYPE /apmg/if_apm_package_json=>ty_packages.
+
+    METHODS apply_order_by
+      CHANGING
+        packages TYPE /apmg/if_apm_package_json=>ty_packages.
+
+    " INIT
+
+    METHODS load_package_tree
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS load_settings
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS save_settings
       RAISING
         /apmg/cx_apm_error.
 
@@ -13620,6 +14055,19 @@ CLASS /apmg/cl_apm_importer DEFINITION  FINAL CREATE PUBLIC.
       RAISING
         /apmg/cx_apm_error.
 
+    CLASS-METHODS import_objects_start
+      IMPORTING
+        !transport TYPE trkorr
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS import_objects_end
+      IMPORTING
+        !transport TYPE trkorr
+        !log       TYPE REF TO zcl_abapgit_log
+      RAISING
+        /apmg/cx_apm_error.
+
     CLASS-METHODS save_packages
       IMPORTING
         !packages     TYPE /apmg/if_apm_importer=>ty_packages
@@ -13641,6 +14089,7 @@ CLASS /apmg/cl_apm_installer DEFINITION
 ************************************************************************
 * TODO: This installer is a copy from Marc Bernard Tools
 * Some of the features are not relevant for apm and can be removed
+* TODO: Support for data config
 ************************************************************************
   PUBLIC SECTION.
 
@@ -13783,6 +14232,14 @@ CLASS /apmg/cl_apm_installer DEFINITION
       IMPORTING
         !transport TYPE trkorr
         !tadir     TYPE zif_abapgit_definitions=>ty_tadir_tt.
+
+    CLASS-METHODS _delete_objects
+      IMPORTING
+        !transport TYPE trkorr
+        !tadir     TYPE zif_abapgit_definitions=>ty_tadir_tt
+      RAISING
+        /apmg/cx_apm_error.
+
 ENDCLASS.
 
 CLASS /apmg/cl_apm_installer_files DEFINITION
@@ -14999,9 +15456,12 @@ CLASS /apmg/cl_apm_object_clas DEFINITION  FINAL CREATE PUBLIC
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    DATA class_name TYPE seoclsname.
+    DATA original_class_name TYPE seoclsname.
+    DATA original_class_key TYPE seoclskey.
 
     METHODS source
+      IMPORTING
+        class_name    TYPE seoclsname
       RETURNING
         VALUE(result) TYPE seop_source_string
       RAISING
@@ -15079,12 +15539,14 @@ CLASS /apmg/cl_apm_object_intf DEFINITION  FINAL CREATE PUBLIC
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    "! Original interface name
-    DATA interface_name TYPE seoclsname.
+    DATA original_interface_name TYPE seoclsname.
+    DATA original_interface_key TYPE seoclskey.
 
     METHODS source
+      IMPORTING
+        interface_name TYPE seoclsname
       RETURNING
-        VALUE(result) TYPE seop_source_string
+        VALUE(result)  TYPE seop_source_string
       RAISING
         /apmg/cx_apm_error.
 
@@ -15418,6 +15880,18 @@ CLASS /apmg/cl_apm_package_json_vali DEFINITION
     CLASS-METHODS is_valid_abap_language_version
       IMPORTING
         !vers         TYPE string
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS is_valid_software_component
+      IMPORTING
+        !component    TYPE csequence
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS is_valid_application_component
+      IMPORTING
+        !component    TYPE string
       RETURNING
         VALUE(result) TYPE abap_bool.
 
@@ -17858,8 +18332,7 @@ CLASS zcl_abapgit_abap_language_vers DEFINITION
 
     CONSTANTS:
       c_any_abap_language_version TYPE zif_abapgit_aff_types_v1=>ty_abap_language_version VALUE '*',
-      c_no_abap_language_version  TYPE zif_abapgit_aff_types_v1=>ty_abap_language_version VALUE '-',
-      c_feature_flag              TYPE string VALUE 'ALAV'.
+      c_no_abap_language_version  TYPE zif_abapgit_aff_types_v1=>ty_abap_language_version VALUE '-'.
 
     METHODS constructor
       IMPORTING
@@ -21713,7 +22186,12 @@ CLASS zcl_abapgit_object_ddls DEFINITION  INHERITING FROM zcl_abapgit_objects_su
       CHANGING
         !cg_data TYPE any
       RAISING
-        zcx_abapgit_exception.
+        zcx_abapgit_exception .
+    METHODS clear_baseinfo
+      IMPORTING
+        !iv_json       TYPE string
+      RETURNING
+        VALUE(rv_json) TYPE string.
     METHODS get_log_uuid
       RETURNING
         VALUE(rv_log_uuid) TYPE sysuuid_c32.
@@ -33015,8 +33493,11 @@ CLASS lcl_empty_filter IMPLEMENTATION.
   METHOD /apmg/if_apm_ajson_filter~keep_node.
 
     rv_keep = boolc(
-      ( iv_visit = /apmg/if_apm_ajson_filter=>visit_type-value AND is_node-value IS NOT INITIAL ) OR
-      ( iv_visit <> /apmg/if_apm_ajson_filter=>visit_type-value AND is_node-children > 0 ) ).
+      ( iv_visit = /apmg/if_apm_ajson_filter=>visit_type-value AND
+        is_node-type <> /apmg/if_apm_ajson_types=>node_type-number AND is_node-value IS NOT INITIAL ) OR " string & bool & null
+      ( iv_visit = /apmg/if_apm_ajson_filter=>visit_type-value AND
+        is_node-type = /apmg/if_apm_ajson_types=>node_type-number AND is_node-value <> '0' ) OR " num
+      ( iv_visit <> /apmg/if_apm_ajson_filter=>visit_type-value AND is_node-children > 0 ) ). " array & object
     " children = 0 on open for initially empty nodes and on close for filtered ones
 
   ENDMETHOD.
@@ -34085,6 +34566,7 @@ CLASS /apmg/cl_apm_arborist IMPLEMENTATION.
 
     " Clear previous tree and state
     /apmg/cl_apm_arborist_node=>clear( ).
+
     CLEAR: log, visited, processing_stack.
 
     add_log(
@@ -34126,8 +34608,8 @@ CLASS /apmg/cl_apm_arborist IMPLEMENTATION.
     " Now that all nodes exist, create edges
     LOOP AT packages ASSIGNING <package>.
       process_package(
-        package_info = <package>
-        depth        = 0 ).
+        package = <package>
+        depth   = 0 ).
     ENDLOOP.
 
     " Step 4: Process uninstalled dependencies recursively
@@ -34190,7 +34672,7 @@ CLASS /apmg/cl_apm_arborist IMPLEMENTATION.
 
   METHOD constructor.
 
-    me->registry                  = registry.
+    me->registry                 = registry.
     me->with_bundle_dependencies = with_bundle_dependencies.
 
   ENDMETHOD.
@@ -34368,12 +34850,12 @@ CLASS /apmg/cl_apm_arborist IMPLEMENTATION.
   METHOD process_package.
 
     " Skip if no instance or no name
-    IF package_info-instance IS NOT BOUND OR package_info-name IS INITIAL.
+    IF package-instance IS NOT BOUND OR package-name IS INITIAL.
       RETURN.
     ENDIF.
 
     " Get the node from the tree
-    DATA(node) = /apmg/cl_apm_arborist_node=>get_by_name( package_info-name ).
+    DATA(node) = /apmg/cl_apm_arborist_node=>get_by_name( package-name ).
 
     IF node IS INITIAL.
       RETURN.
@@ -34728,6 +35210,16 @@ ENDCLASS.
 
 CLASS /apmg/cl_apm_auth IMPLEMENTATION.
 
+  METHOD check_package_authorized.
+
+    IF NOT is_package_authorized( package = package activity = activity ).
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |Not authorized to { _get_activity_text( activity ) } package { package }|.
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD is_package_allowed.
 
     " Check if package owned by SAP is allowed (new packages are ok, since they are created automatically)
@@ -34735,6 +35227,30 @@ CLASS /apmg/cl_apm_auth IMPLEMENTATION.
 
     " TODO: This uses abapGit exit. Replace with apm logic
     result = xsdbool( username <> 'SAP' OR zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_true ).
+
+  ENDMETHOD.
+
+  METHOD is_package_authorized.
+
+    AUTHORITY-CHECK OBJECT 'S_DEVELOP'
+     ID 'DEVCLASS' FIELD package
+     ID 'OBJTYPE' FIELD 'DEVC'
+     ID 'OBJNAME' FIELD package
+     ID 'P_GROUP' FIELD '*'
+     ID 'ACTVT' FIELD activity.
+
+    result = xsdbool( sy-subrc = 0 ).
+
+  ENDMETHOD.
+
+  METHOD _get_activity_text.
+
+    SELECT SINGLE ltext FROM tactt INTO @result WHERE spras = @sy-langu AND actvt = @activity.
+    IF sy-subrc <> 0.
+      result = '<undefined>' ##NO_TEXT.
+    ENDIF.
+
+    result = to_lower( result ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -35197,7 +35713,7 @@ CLASS /apmg/cl_apm_code_import_rules IMPLEMENTATION.
             IF rule-name+1(*) CS '@'.
               SPLIT rule-name AT '@' INTO rule-name rule-version.
             ELSE.
-              rule-version = 'latest'.
+              rule-version = /apmg/if_apm_types=>c_latest_version.
             ENDIF.
 
             " Default mapping uses module name
@@ -35527,6 +36043,11 @@ CLASS /apmg/cl_apm_command_init IMPLEMENTATION.
 
   METHOD execute.
 
+    " Authorization check
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-display ).
+
     " Package JSON
     DATA(package_json_service) = /apmg/cl_apm_package_json=>factory(
       package = package
@@ -35782,6 +36303,14 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
   METHOD execute.
 
     DATA package_json_init TYPE /apmg/if_apm_types=>ty_package_json.
+
+    " Authorization check
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-create ).
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-change ).
 
     " 1. Check if something else is already installed
     check_package(
@@ -36206,8 +36735,6 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
   METHOD init_package.
 
-    CONSTANTS c_latest TYPE string VALUE 'latest'.
-
     IF packument IS INITIAL.
       result        = CORRESPONDING #( package_json ).
       result-_id    = package_json-name.
@@ -36234,7 +36761,7 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
     " Update LATEST dist-tag
     " TODO: Allow publishing with other tags
     DATA(dist_tag) = VALUE /apmg/if_apm_types=>ty_generic(
-      key   = c_latest
+      key   = /apmg/if_apm_types=>c_latest_version
       value = package_json-version ).
 
     INSERT dist_tag INTO TABLE result-dist_tags.
@@ -36325,6 +36852,10 @@ CLASS /apmg/cl_apm_command_uninstall IMPLEMENTATION.
 
     DATA(package_json) = check_package( package ).
 
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-delete ).
+
     /apmg/cl_apm_command_installer=>uninstall_package(
       name    = package_json-name
       version = package_json-version
@@ -36360,7 +36891,7 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   METHOD execute.
 
-    " 1. Get packument from registry
+    " 1. Get packument from registry for update
     DATA(packument) = /apmg/cl_apm_command_utils=>get_packument_from_registry(
       registry = registry
       name     = name
@@ -36421,6 +36952,24 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD find_latest_version.
+
+    " Note: Returns the new latest version when sorted by timestamp. This can become confusing, if
+    " versions are not published sequentially, for example when using pre-releases for a new major
+    " mixed with patches for minor releases. It might be better to find the predecesor using
+    " semver-sorting.
+
+    DATA(time_list) = time.
+
+    DELETE time_list
+      WHERE key = /apmg/if_apm_types=>c_time_entries-created OR key = /apmg/if_apm_types=>c_time_entries-modified.
+
+    SORT time_list BY timestamp DESCENDING.
+
+    result = time_list[ 1 ]-key.
+
+  ENDMETHOD.
+
   METHOD get_tarball.
 
     READ TABLE packument-versions ASSIGNING FIELD-SYMBOL(<version>) WITH KEY key = version.
@@ -36448,10 +36997,18 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
     IF lines( result-versions ) = 0.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
         EXPORTING
-          text = |Version { version } is the last version of package { packument-name }. You may unpublish the complete package, instead|.
+          text = |Version { version } is the only version of package { packument-name }. | &&
+                 |You may unpublish the complete package, instead|.
     ENDIF.
 
     DELETE result-time WHERE key = version ##SUBRC_OK.
+
+    " Must have at last "created" and "modified" entries
+    IF lines( result-time ) < 2.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |Inconsistent time list for package { packument-name }.|.
+    ENDIF.
 
     DELETE result-_attachments WHERE key = tarball.
 
@@ -36499,9 +37056,15 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   METHOD update_dist_tags.
 
-    " TODO
-    DATA(ver) = version ##NEEDED.
     result = packument.
+
+    LOOP AT result-dist_tags ASSIGNING FIELD-SYMBOL(<dist_tag>) WHERE value = version.
+      IF <dist_tag>-key = /apmg/if_apm_types=>c_latest_version.
+        <dist_tag>-value = find_latest_version( result-time ).
+      ELSE.
+        DELETE result-dist_tags INDEX sy-tabix.
+      ENDIF.
+    ENDLOOP.
 
   ENDMETHOD.
 ENDCLASS.
@@ -36509,6 +37072,10 @@ ENDCLASS.
 CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
 
   METHOD execute.
+
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-change ).
 
     " 1. Check package is installed and get version details
     DATA(package_json) = get_package( package ).
@@ -43313,6 +43880,16 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         result-page  = /apmg/cl_apm_gui_page_list=>create( ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page_replacing.
 
+      WHEN /apmg/if_apm_gui_router=>c_action-go_package.
+
+        result-page  = /apmg/cl_apm_gui_page_package=>create( |{ event->query( )->get( 'KEY' ) }| ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-go_tree.
+
+        result-page  = /apmg/cl_apm_gui_page_tree=>create( ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
       WHEN /apmg/if_apm_gui_router=>c_action-go_settings.
 
         DATA(key) = /apmg/cl_apm_settings=>get_setting_key( /apmg/if_apm_settings=>c_global ).
@@ -44077,6 +44654,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '.crossout     { text-decoration: line-through !important; }' ).
     lo_buf->add( '.right        { text-align:right; }' ).
     lo_buf->add( '.center       { text-align:center; }' ).
+    lo_buf->add( '.left         { text-align:left; }' ).
+    lo_buf->add( '.top          { vertical-align: top; }' ).
+    lo_buf->add( '.bottom       { vertical-align: bottom; }' ).
     lo_buf->add( '.paddings     { padding: 0.5em 0.5em; }' ).
     lo_buf->add( '.pad-sides    { padding-left: 0.3em; padding-right: 0.3em; }' ).
     lo_buf->add( '.pad-1em      { padding: 1em 1em; }' ).
@@ -49607,6 +50187,9 @@ CLASS /apmg/cl_apm_gui_menus IMPLEMENTATION.
     result = /apmg/cl_apm_html_toolbar=>create( 'apm-toolbar-advanced' ).
 
     result->add(
+      iv_txt = 'Package Tree'
+      iv_act = /apmg/if_apm_gui_router=>c_action-go_tree
+    )->add(
       iv_txt = 'Database Utility'
       iv_act = /apmg/if_apm_gui_router=>c_action-go_db
     )->add(
@@ -51554,6 +52137,11 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     hotkey_action-hotkey      = |p|.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
+    hotkey_action-description = |Tree|.
+    hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-go_tree.
+    hotkey_action-hotkey      = |e|.
+    INSERT hotkey_action INTO TABLE rt_hotkey_actions.
+
     hotkey_action-description = |Refresh|.
     hotkey_action-action      = c_action-refresh.
     hotkey_action-hotkey      = |r|.
@@ -51655,6 +52243,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     )->add(
       iv_txt      = /apmg/cl_apm_html=>icon( 'chevron-right' ) && ' Commands'
       io_sub      = commands
+      iv_class    = c_action_class
+      iv_li_class = c_action_class
     )->add(
       iv_txt      = /apmg/cl_apm_gui_buttons=>settings( )
       io_sub      = /apmg/cl_apm_gui_menus=>settings( )
@@ -51825,18 +52415,6 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD collect_all_labels.
-
-    LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
-      APPEND LINES OF <package>-labels TO result.
-    ENDLOOP.
-
-    SORT result.
-    DELETE result WHERE table_line IS INITIAL.
-    DELETE ADJACENT DUPLICATES FROM result.
-
-  ENDMETHOD.
-
   METHOD constructor.
 
     super->constructor( ).
@@ -51902,7 +52480,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
     html->set_title( cl_abap_typedescr=>describe_by_object_ref( me )->get_relative_name( ) ).
-    html->add( 'var gHelper = new RepoOverViewHelper({ focusFilterKey: "f", pageId: "apm-list" });' ).
+    html->add( |var gHelper = new RepoOverViewHelper(\{ focusFilterKey: "f", pageId: "{ c_page_id }" \});| ).
 
     result = html.
 
@@ -51927,6 +52505,18 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD prepare_labels.
+
+    LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
+      APPEND LINES OF <package>-labels TO result.
+    ENDLOOP.
+
+    SORT result.
+    DELETE result WHERE table_line IS INITIAL.
+    DELETE ADJACENT DUPLICATES FROM result.
+
+  ENDMETHOD.
+
   METHOD prepare_packages.
 
     result = packages.
@@ -51946,7 +52536,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     ENDIF.
 
     " Hmmm, side effect, not ideal, but we need label list before filter applied
-    all_labels = collect_all_labels( result ).
+    all_labels = prepare_labels( result ).
 
     apply_order_by( CHANGING packages = result ).
     apply_filter( CHANGING packages = result ).
@@ -52085,8 +52675,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     LOOP AT list ASSIGNING FIELD-SYMBOL(<package>).
       render_table_item(
-        html     = html
-        package  = <package> ).
+        html    = html
+        package = <package> ).
     ENDLOOP.
 
     html->add( |</tbody>| ).
@@ -52129,7 +52719,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       fav_color = 'grey'.
     ENDIF.
 
-    html->add( |<tr data-key="{ package-id }"{ fav_class }">| ).
+    html->add( |<tr data-key="{ package-id }"{ fav_class }>| ).
 
     " Favorite
     DATA(favorite_icon) = html->icon(
@@ -53036,6 +53626,579 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
     html->add( '</tr></table>' ).
 
     html->add( '</div>' ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS LCL_TABLE_SCHEME_ DEFINITION FINAL.
+  " TODO: move to a global class, when table is separated as a component
+  PUBLIC SECTION.
+
+    DATA columns TYPE /apmg/cl_apm_gui_chunk_lib=>ty_col_spec_tt READ-ONLY.
+
+    METHODS add_column
+      IMPORTING
+        tech_name      TYPE string OPTIONAL
+        display_name   TYPE string OPTIONAL
+        css_class      TYPE string OPTIONAL
+        add_tz         TYPE abap_bool OPTIONAL
+        title          TYPE string OPTIONAL
+        allow_order_by TYPE any OPTIONAL
+      RETURNING
+        VALUE(result)  TYPE REF TO LCL_TABLE_SCHEME_.
+
+ENDCLASS.
+
+CLASS LCL_TABLE_SCHEME_ IMPLEMENTATION.
+
+  METHOD add_column.
+
+    APPEND INITIAL LINE TO columns ASSIGNING FIELD-SYMBOL(<column>).
+    <column>-display_name   = display_name.
+    <column>-tech_name      = tech_name.
+    <column>-title          = title.
+    <column>-css_class      = css_class.
+    <column>-add_tz         = add_tz.
+    <column>-allow_order_by = allow_order_by.
+
+    result = me.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
+
+  METHOD /apmg/if_apm_gui_event_handler~on_event.
+
+    DATA(package) = CONV devclass( ii_event->query( )->get( 'KEY' ) ).
+
+    CASE ii_event->mv_action.
+      WHEN c_action-refresh.
+
+        load_package_tree( ).
+
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN c_action-select.
+
+        settings-last_package = package.
+        save_settings( ).
+
+        rs_handled-page  = /apmg/cl_apm_gui_page_package=>create( package ).
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
+      WHEN c_action-change_order_by.
+
+        set_order_by( ii_event->query( )->get( 'ORDERBY' ) ).
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN c_action-direction.
+
+        set_order_direction( xsdbool( ii_event->query( )->get( 'DIRECTION' ) = 'DESCENDING' ) ).
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN c_action-apply_filter.
+
+        set_filter( ii_event->mt_postdata ).
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_menu_provider~get_menu.
+
+    DATA(toolbar) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-tree' ).
+
+    toolbar->add(
+      iv_txt = 'Back'
+      iv_act = /apmg/if_apm_gui_router=>c_action-go_back ).
+
+    ro_toolbar = toolbar.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_renderable~render.
+
+    register_handlers( ).
+
+    load_settings( ).
+    load_package_tree( ).
+
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    render_styles( html ).
+
+    html->add( |<div class="repo-overview">| ).
+
+    render_header_bar( html ).
+    render_package_tree( html ).
+
+    html->add( |</div>| ).
+
+    register_deferred_script( get_scripts( ) ).
+
+    ri_html = html.
+
+  ENDMETHOD.
+
+  METHOD apply_filter.
+
+    IF settings-tree_settings-filter IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DELETE packages
+      WHERE package    NS settings-tree_settings-filter
+        AND name       NS settings-tree_settings-filter
+        AND version    NS settings-tree_settings-filter
+        AND changed_by NS settings-tree_settings-filter.
+
+  ENDMETHOD.
+
+  METHOD apply_order_by.
+
+    DATA:
+      sort_order      TYPE abap_sortorder_tab,
+      sort_order_item LIKE LINE OF sort_order.
+
+    IF settings-tree_settings-order_by IS NOT INITIAL.
+      CLEAR sort_order_item.
+
+      IF settings-tree_settings-order_by = 'CHANGED_AT'.
+        sort_order_item-name = settings-tree_settings-order_by && c_raw_field_suffix.
+      ELSE.
+        sort_order_item-name   = settings-tree_settings-order_by.
+        sort_order_item-astext = abap_true.
+      ENDIF.
+
+      sort_order_item-descending = settings-tree_settings-order_descending.
+      INSERT sort_order_item INTO TABLE sort_order.
+    ENDIF.
+
+    SORT packages BY (sort_order).
+
+  ENDMETHOD.
+
+  METHOD build_table_scheme.
+
+    DATA(table_schema) = NEW LCL_TABLE_SCHEME_( ).
+
+    table_schema->add_column(
+      tech_name      = 'NAME'
+      display_name   = 'Name'
+      css_class      = 'name'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'VERSION'
+      display_name   = 'Version'
+      css_class      = 'version'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'PACKAGE'
+      display_name   = 'Package'
+      css_class      = 'package'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'STATUS'
+      display_name   = 'Status'
+      css_class      = 'status'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'DEPENDENCIES'
+      display_name   = 'Deps'
+      css_class      = 'ro-detail count'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'DEV_DEPENDENCIES'
+      display_name   = 'devDeps'
+      css_class      = 'ro-detail count'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'OPTIONAL_DEPENDENCIES'
+      display_name   = 'optDeps'
+      css_class      = 'ro-detail count'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'PEER_DEPENDENCIES'
+      display_name   = 'peerDeps'
+      css_class      = 'ro-detail count'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'KEY'
+      display_name   = 'Key'
+      css_class      = 'ro-detail nodisplay'
+      allow_order_by = abap_true
+    )->add_column(
+      tech_name      = 'GO'
+      css_class      = 'ro-go wmin'
+      allow_order_by = abap_false ).
+
+    result = table_schema->columns.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+
+    super->constructor( ).
+
+    load_settings( ).
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    DATA(component) = NEW /apmg/cl_apm_gui_page_tree( ).
+
+    result = /apmg/cl_apm_gui_page_hoc=>create(
+      page_title         = 'Package Tree'
+      page_menu_provider = component
+      child_component    = component ).
+
+  ENDMETHOD.
+
+  METHOD get_scripts.
+
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    html->set_title( cl_abap_typedescr=>describe_by_object_ref( me )->get_relative_name( ) ).
+    html->add( |var gHelper = new RepoOverViewHelper(\{ focusFilterKey: "f", pageId: "{ c_page_id }" \});| ).
+
+    result = html.
+
+  ENDMETHOD.
+
+  METHOD load_package_tree.
+
+    tree = /apmg/cl_apm_arborist=>factory( settings-registry )->load_actual_tree( ).
+
+  ENDMETHOD.
+
+  METHOD load_settings.
+
+    TRY.
+        settings = /apmg/cl_apm_settings=>factory( )->get( ).
+      CATCH /apmg/cx_apm_error.
+        " Settings didn't exist, so save the defaults
+        /apmg/cl_apm_settings=>factory( )->set( settings )->save( ).
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD render_action_toolbar.
+
+    " FUTURE
+    html->add( '' ).
+
+  ENDMETHOD.
+
+  METHOD render_edges_in.
+
+    CHECK edges IS NOT INITIAL.
+
+    result = '<div class="pad-1em">'.
+
+    result &&= '<strong>Dependents</strong>'.
+
+    result &&= '<div>'.
+
+    LOOP AT edges ASSIGNING FIELD-SYMBOL(<edge>).
+      result &&= '<br>' && <edge>->from->name.
+    ENDLOOP.
+
+    result &&= '</div></div>'.
+
+  ENDMETHOD.
+
+  METHOD render_edges_out.
+
+    CHECK edges IS NOT INITIAL.
+
+    result = '<div class="pad-1em">'.
+
+    result &&= '<strong>Dependencies</strong>'.
+
+    result &&= '<div>'.
+
+    LOOP AT edges ASSIGNING FIELD-SYMBOL(<edge>).
+      result &&= '<br>' && <edge>->to->name.
+    ENDLOOP.
+
+    result &&= '</div></div>'.
+
+  ENDMETHOD.
+
+  METHOD render_edges_ranges.
+
+    CHECK edges IS NOT INITIAL.
+
+    result = '<div class="pad-1em">'.
+
+    result &&= '<strong>Ranges</strong>'.
+
+    result &&= '<div>'.
+
+    LOOP AT edges ASSIGNING FIELD-SYMBOL(<edge>).
+      result &&= |<br>{ <edge>->name }: { <edge>->spec }|.
+    ENDLOOP.
+
+    result &&= '</div></div>'.
+
+  ENDMETHOD.
+
+  METHOD render_edges_status.
+
+    CHECK edges IS NOT INITIAL.
+
+    result = '<div class="pad-1em">'.
+
+    result &&= '<strong>Check</strong>'.
+
+    result &&= '<div>'.
+
+    LOOP AT edges ASSIGNING FIELD-SYMBOL(<edge>).
+      IF <edge>->error IS INITIAL.
+        result &&= |<br><span style="color:green">ok</span>|.
+      ELSE.
+        result &&= |<br><span style="color:red">{ <edge>->error }</span>|.
+      ENDIF.
+    ENDLOOP.
+
+    result &&= '</div></div>'.
+
+  ENDMETHOD.
+
+  METHOD render_filter_bar.
+
+    html->add( |<form class="inline" method="post" action="sapevent:{ c_action-apply_filter }">| ).
+    html->add( /apmg/cl_apm_gui_chunk_lib=>render_text_input(
+      iv_name      = |filter|
+      iv_label     = |Filter: { render_filter_help_hint( ) }|
+      iv_value     = settings-tree_settings-filter ) ).
+    html->add( |<input type="submit" class="hidden-submit">| ).
+    html->add( |</form>| ).
+
+    html->add( '<span class="toolbar-light pad-sides">' ).
+    html->add( html->a(
+      iv_txt   = '<i id="icon-filter-detail" class="icon icon-check"></i> Detail'
+      iv_act   = |gHelper.toggleRepoListDetail()|
+      iv_class = 'command'
+      iv_typ   = /apmg/if_apm_html=>c_action_type-onclick ) ).
+    html->add( '</span>' ).
+
+  ENDMETHOD.
+
+  METHOD render_filter_help_hint.
+
+    DATA fragments TYPE string_table.
+
+    APPEND `Filter is applied to all text fields in the below table.` TO fragments.
+    APPEND ` Search works for any portion of the text (so can be a mid part as well).` TO fragments.
+
+    result = /apmg/cl_apm_gui_chunk_lib=>render_help_hint( concat_lines_of( table = fragments ) ).
+
+  ENDMETHOD.
+
+  METHOD render_header_bar.
+
+    html->add( |<div class="repo-overview-toolbar">| ).
+
+    render_filter_bar( html ).
+    render_registry( html ).
+    render_action_toolbar( html ).
+
+    html->add( |</div>| ).
+
+  ENDMETHOD.
+
+  METHOD render_package_tree.
+
+    html->add( |<table>| ).
+
+    render_table_header( html ).
+    render_table_body( html ).
+    render_table_footer( html ).
+
+    html->add( |</table>| ).
+
+  ENDMETHOD.
+
+  METHOD render_registry.
+
+    IF settings-registry = /apmg/if_apm_settings=>c_registry.
+      DATA(fav_class) = 'transport-box'. " green
+    ELSE.
+      fav_class = 'user-box'. " blue
+    ENDIF.
+
+    html->add( '<span style="float:right">' ).
+    html->add( |<span class="{ fav_class }">| ).
+    html->add_a(
+      iv_title = 'Registry'
+      iv_txt   = settings-registry
+      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-url }?url={ settings-registry }| ).
+    html->add( '</span>' ).
+    html->add( '</span>' ).
+
+  ENDMETHOD.
+
+  METHOD render_styles.
+
+    " Emoji Styles
+    DATA(emoji_styles) = concat_lines_of(
+      table = /apmg/cl_apm_emoji=>create( )->get_emoji_css( )
+      sep   = cl_abap_char_utilities=>newline ).
+
+    html->add( '<style>' ).
+    html->add( emoji_styles ).
+    html->add( '</style>' ).
+
+  ENDMETHOD.
+
+  METHOD render_table_body.
+
+    html->add( '<tbody>' ).
+
+    LOOP AT tree ASSIGNING FIELD-SYMBOL(<node>).
+      render_table_item(
+        html = html
+        node = <node> ).
+    ENDLOOP.
+
+    html->add( |</tbody>| ).
+
+  ENDMETHOD.
+
+  METHOD render_table_footer.
+
+  ENDMETHOD.
+
+  METHOD render_table_header.
+
+    html->add( /apmg/cl_apm_gui_chunk_lib=>render_table_header(
+      it_col_spec         = build_table_scheme( )
+      iv_order_by         = settings-tree_settings-order_by
+      iv_order_descending = settings-tree_settings-order_descending ) ).
+
+  ENDMETHOD.
+
+  METHOD render_table_item.
+
+    " Start of row
+    html->add( |<tr data-key="{ node->package }">| ).
+
+    " Name
+    html->td(
+      iv_content =
+        html->a(
+          iv_txt = node->name
+          iv_act = |{ c_action-select }?key={ node->package }| )
+        && render_edges_out( node->edges_out )
+        && render_edges_in( node->edges_in )
+      iv_class = 'top' ).
+
+    " Version
+    html->td(
+      iv_content =
+        html->a(
+          iv_txt = node->version
+          iv_act = |{ c_action-select }?key={ node->package }| )
+        && render_edges_ranges( node->edges_out )
+        && render_edges_ranges( node->edges_in )
+      iv_class = 'top' ).
+
+    " Package
+    html->td(
+      ii_content = /apmg/cl_apm_gui_chunk_lib=>render_package_name( node->package )
+      iv_class   = 'top' ).
+
+    " Status
+    IF node->errors IS INITIAL.
+      html->td(
+        iv_content = |<span class="boxed green-filled-set">OK</span>|
+                     && render_edges_status( node->edges_out )
+                     && render_edges_status( node->edges_in )
+        iv_class   = 'top' ).
+    ELSE.
+      DATA(error_count) = lines( node->errors ).
+      DATA(error_text) = 'error'.
+      IF error_count <> 1.
+        error_text = 'errors'.
+      ENDIF.
+      html->td(
+        iv_content = |<span class="boxed red-filled-set">{ error_count } { error_text }</span>|
+                     && render_edges_status( node->edges_out )
+                     && render_edges_status( node->edges_in )
+        iv_class   = 'top' ).
+    ENDIF.
+
+    " Dependency counts
+    html->td(
+      iv_class   = 'ro-detail top'
+      iv_content = |{ lines( node->dependencies ) }| ).
+    html->td(
+      iv_class   = 'ro-detail top'
+      iv_content = |{ lines( node->dev_dependencies ) }| ).
+    html->td(
+      iv_class   = 'ro-detail top'
+      iv_content = |{ lines( node->optional_dependencies ) }| ).
+    html->td(
+      iv_class   = 'ro-detail top'
+      iv_content = |{ lines( node->peer_dependencies ) }| ).
+
+    " Details: key for navigation
+    html->td(
+      iv_class   = 'ro-detail nodisplay top'
+      iv_content = |{ node->package }| ).
+
+    " Go-to action
+    html->td(
+      iv_class   = 'ro-go wmin top'
+      iv_content = html->a(
+        iv_title = 'Open'
+        iv_txt   = '&rtrif;'
+        iv_act   = |{ c_action-select }?key={ node->package }| ) ).
+
+    html->add( `</tr>` ).
+
+  ENDMETHOD.
+
+  METHOD save_settings.
+
+    /apmg/cl_apm_settings=>factory( )->set( settings )->save( ).
+
+  ENDMETHOD.
+
+  METHOD set_filter.
+
+    READ TABLE postdata ASSIGNING FIELD-SYMBOL(<postdata>) INDEX 1.
+    IF sy-subrc = 0.
+      FIND FIRST OCCURRENCE OF REGEX 'filter=(.*)'
+        IN <postdata>
+        SUBMATCHES settings-tree_settings-filter ##SUBRC_OK ##REGEX_POSIX.
+    ENDIF.
+
+    settings-tree_settings-filter = condense( settings-tree_settings-filter ).
+    save_settings( ).
+
+  ENDMETHOD.
+
+  METHOD set_order_by.
+
+    IF settings-tree_settings-order_by <> order_by.
+      set_order_direction( abap_false ). " Reset ordering
+    ENDIF.
+
+    settings-tree_settings-order_by = order_by.
+    save_settings( ).
+
+  ENDMETHOD.
+
+  METHOD set_order_direction.
+
+    settings-tree_settings-order_descending = order_descending.
+    save_settings( ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -57343,6 +58506,14 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
     TRY.
         LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
+          /apmg/cl_apm_auth=>check_package_authorized(
+            package  = <package>-source_package
+            activity = /apmg/cl_apm_auth=>c_activity-display ).
+
+          /apmg/cl_apm_auth=>check_package_authorized(
+            package  = <package>-target_package
+            activity = /apmg/cl_apm_auth=>c_activity-change ).
+
           DATA(source) = zcl_abapgit_factory=>get_sap_package( <package>-source_package ).
           DATA(target) = zcl_abapgit_factory=>get_sap_package( <package>-target_package ).
 
@@ -57394,9 +58565,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
   METHOD get_packages.
 
-    " XXX: Switch for self-update
     DATA(list) = /apmg/cl_apm_package_json=>list(
-      "DATA(list) = /apmg/cl_package_json=>list(
       instanciate = abap_true
       is_bundle   = abap_false ).
 
@@ -57436,7 +58605,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
           parent_package = <rule>-parent_package ).
 
         CASE <rule>-version.
-          WHEN 'latest'.
+          WHEN /apmg/if_apm_types=>c_latest_version.
             IF dependencies IS NOT INITIAL.
               package-version = <dependency>-version.
             ELSE.
@@ -57570,23 +58739,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
     DATA(progress) = /apmg/cl_apm_progress_bar=>get_instance( lines( map ) ).
 
-    IF is_log = abap_true.
-      FORMAT COLOR COL_HEADING.
-      WRITE: / 'Importing:', AT c_width space.
-      FORMAT COLOR OFF.
-      SKIP.
-    ENDIF.
-
-    TRY.
-        zcl_abapgit_objects_activation=>clear( ).
-
-        IF transport IS NOT INITIAL.
-          zcl_abapgit_factory=>get_default_transport( )->set( transport ).
-        ENDIF.
-
-      CATCH zcx_abapgit_exception INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
+    import_objects_start( transport ).
 
     LOOP AT map INTO DATA(mapping).
 
@@ -57601,7 +58754,6 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
           'IN PACKAGE', mapping-target_package.
       ENDIF.
 
-      " TODO: i18n
       DATA(old_item) = VALUE /apmg/if_apm_object=>ty_item(
         obj_type = mapping-object_type
         obj_name = mapping-old_object
@@ -57610,13 +58762,12 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
       DATA(new_item) = VALUE /apmg/if_apm_object=>ty_item(
         obj_type = mapping-object_type
-        obj_name = map[ old_object = mapping-old_object ]-new_object
+        obj_name = mapping-new_object
         package  = mapping-target_package
         language = sy-langu ).
 
       ASSERT new_item-obj_name IS NOT INITIAL AND new_item-obj_name <> old_item-obj_name.
 
-      " XXX: Switch for apm self-update
       " Some modules are used by the importer and don't support self-update
       " If these items are changed, it would dump, so we skip them (requires manual update)
       IF new_item-package CP '/APMG/APM*' AND
@@ -57659,7 +58810,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
               iv_package  = new_item-package
               iv_language = new_item-language ).
           ENDIF.
-        CATCH zcx_abapgit_exception INTO error.
+        CATCH zcx_abapgit_exception INTO DATA(error).
           RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
       ENDTRY.
 
@@ -57680,6 +58831,10 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
             ENDIF.
           ENDIF.
 
+          zcl_abapgit_objects_activation=>add(
+            iv_type = new_item-obj_type
+            iv_name = new_item-obj_name ).
+
         CATCH cx_root INTO DATA(any_error).
           IF is_log = abap_true.
             DATA(msg) = any_error->get_text( ).
@@ -57689,6 +58844,16 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
     ENDLOOP.
 
+    import_objects_end(
+      transport = transport
+      log       = log ).
+
+    progress->off( ).
+
+  ENDMETHOD.
+
+  METHOD import_objects_end.
+
     TRY.
         " TODO: support DDIC (eventually)
         zcl_abapgit_objects_activation=>activate( log ).
@@ -57697,22 +58862,59 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
           zcl_abapgit_factory=>get_default_transport( )->reset( ).
         ENDIF.
 
-      CATCH zcx_abapgit_exception INTO error.
+      CATCH zcx_abapgit_exception INTO DATA(error).
         RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
     ENDTRY.
 
-    progress->off( ).
-
     IF is_log = abap_true.
+      IF log->zif_abapgit_log~get_log_level( ) >= zif_abapgit_log=>c_log_level-warning.
+        LOOP AT log->zif_abapgit_log~get_messages( ) ASSIGNING FIELD-SYMBOL(<msg>).
+          CASE <msg>-type.
+            WHEN zif_abapgit_log=>c_status-error.
+              WRITE: / <msg>-text COLOR COL_NEGATIVE.
+            WHEN zif_abapgit_log=>c_status-warning.
+              WRITE: / <msg>-text COLOR COL_TOTAL.
+            WHEN OTHERS.
+              WRITE: / <msg>-text COLOR COL_NORMAL.
+          ENDCASE.
+        ENDLOOP.
+      ENDIF.
+
       FORMAT COLOR OFF.
       SKIP.
     ENDIF.
 
   ENDMETHOD.
 
+  METHOD import_objects_start.
+
+    IF is_log = abap_true.
+      FORMAT COLOR COL_HEADING.
+      WRITE: / 'Importing:', AT c_width space.
+      FORMAT COLOR OFF.
+      SKIP.
+    ENDIF.
+
+    TRY.
+        zcl_abapgit_objects_activation=>clear( ).
+
+        IF transport IS NOT INITIAL.
+          zcl_abapgit_factory=>get_default_transport( )->set( transport ).
+        ENDIF.
+
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
   METHOD run.
 
     is_log = is_logging.
+
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-change ).
 
     " 1. Get all programs that contain IMPORT statements
     DATA(programs) = get_programs( package ).
@@ -57763,9 +58965,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
     " TODO: This should be using the complete manifest of the dependencies (and not just name/version)
     LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
 
-      " XXX: Switch for apm self-update
       DATA(package_json_service) = /apmg/cl_apm_package_json=>factory( <package>-target_package ).
-      " DATA(package_json_service) = /apmg/cl_package_json=>factory( <package>-target_package )
 
       IF package_json_service->exists( ).
         DATA(package_json) = package_json_service->load( )->get( ).
@@ -57776,9 +58976,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
         ENDIF.
         package_json-version = <package>-version.
       ELSE.
-        "XXX: Switch for apm self-update
         package_json = VALUE /apmg/if_apm_types=>ty_package_json(
-        " package_json = VALUE /apmg/if_types=>ty_package_json(
           name    = <package>-name
           version = <package>-version ).
       ENDIF.
@@ -57790,9 +58988,7 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
     " Remove dependencies
     LOOP AT dependencies ASSIGNING FIELD-SYMBOL(<dependency>) WHERE action = /apmg/if_apm_importer=>c_action-remove.
 
-      " XXX: Switch for apm self-update
       package_json_service = /apmg/cl_apm_package_json=>factory( <dependency>-package ).
-      " package_json_service = /apmg/cl_package_json=>factory( <dependency>-package )
 
       IF package_json_service->exists( ).
         package_json_service->delete( ).
@@ -57806,6 +59002,10 @@ ENDCLASS.
 CLASS /apmg/cl_apm_installer IMPLEMENTATION.
 
   METHOD install.
+
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-change ).
 
     TRY.
         _log_start(
@@ -57840,6 +59040,8 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
           transport     = transport
           main_language = main_language ).
 
+        " TODO: Support data config
+
       CATCH cx_root INTO DATA(error).
         _transport_reset( ).
 
@@ -57858,6 +59060,10 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD uninstall.
+
+    /apmg/cl_apm_auth=>check_package_authorized(
+      package  = package
+      activity = /apmg/cl_apm_auth=>c_activity-change ).
 
     TRY.
         _log_start(
@@ -57887,13 +59093,13 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
               tadir     = tadir
               transport = transport ).
 
-            " Bridge to abapGit
-            /apmg/cl_apm_abapgit_objects=>delete(
-              it_tadir     = tadir
-              iv_transport = transport
-              ii_log       = log ).
+            _delete_objects(
+              tadir     = tadir
+              transport = transport ).
           ENDIF.
         ENDDO.
+
+        " TODO: Support data config
 
       CATCH cx_root INTO DATA(error).
         _transport_reset( ).
@@ -57969,6 +59175,20 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
 
     customizing-obj_type = 'METH'.
     INSERT clmcus FROM @customizing ##SUBRC_OK.
+
+  ENDMETHOD.
+
+  METHOD _delete_objects.
+
+    " Bridge to abapGit
+    TRY.
+        /apmg/cl_apm_abapgit_objects=>delete(
+          it_tadir     = tadir
+          iv_transport = transport
+          ii_log       = log ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
 
   ENDMETHOD.
 
@@ -62974,123 +64194,128 @@ CLASS /apmg/cl_apm_object_clas IMPLEMENTATION.
     DATA(is_pretty) = xsdbool( is_dry_run = abap_false ).
 
     TRY.
-        DATA(class_key) = VALUE seoclskey( clsname = class_name ).
-
         " TODO: Make files mandatory
         IF files IS INITIAL.
-          " Copy globally installed interface
-          DATA(class_metadata)   = zif_abapgit_oo_object_fnc~get_class_properties( class_key ).
-          DATA(class_attributes) = zif_abapgit_oo_object_fnc~read_attributes( class_name ).
-          DATA(class_text_pool) = zif_abapgit_oo_object_fnc~read_text_pool(
-            iv_class_name = class_name
+          " Copy globally installed class
+          DATA(import_metadata)   = zif_abapgit_oo_object_fnc~get_class_properties( original_class_key ).
+          DATA(import_attributes) = zif_abapgit_oo_object_fnc~read_attributes( original_class_name ).
+          DATA(import_text_pool) = zif_abapgit_oo_object_fnc~read_text_pool(
+            iv_class_name = original_class_name
             iv_language   = sy-langu ).
 
-          IF class_metadata IS INITIAL.
+          IF import_metadata IS INITIAL.
             RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Not found'.
           ENDIF.
 
-          DATA(orig_class_code) = source( ).
+          DATA(class_code) = source( original_class_name ).
         ELSE.
-          orig_class_code = files->get_abap( ).
-
+          " Import class from registry
           DATA(xml) = files->get_xml_parsed( ).
 
           xml->read(
             EXPORTING
               iv_name = 'VSEOCLASS'
             CHANGING
-              cg_data = class_metadata ).
+              cg_data = import_metadata ).
           xml->read(
             EXPORTING
               iv_name = 'ATTRIBUTES'
             CHANGING
-              cg_data = class_attributes ).
+              cg_data = import_attributes ).
           xml->read(
             EXPORTING
               iv_name = 'TPOOL'
             CHANGING
-              cg_data = class_text_pool ).
-        ENDIF.
+              cg_data = import_text_pool ).
 
-        " Rename and create new class
-        class_key-clsname      = new_object.
-        class_metadata-clsname = new_object.
+          class_code = files->get_abap( ).
 
-        IF is_production = abap_true.
-          CLEAR class_metadata-with_unit_tests.
-        ENDIF.
-
-        DATA(class_code) = /apmg/cl_apm_code_importer=>import(
-          program_name   = cl_oo_classname_service=>get_classpool_name( class_name )
-          program_source = orig_class_code
-          map            = map
-          is_pretty      = is_pretty ).
-
-        IF is_dry_run IS INITIAL AND class_code <> orig_class_code.
-          zif_abapgit_oo_object_fnc~create(
-            EXPORTING
-              iv_check      = abap_false
-              iv_package    = new_package
-              it_attributes = class_attributes
-            CHANGING
-              cg_properties = class_metadata ).
-
-          zif_abapgit_oo_object_fnc~deserialize_source(
-            iv_package = new_package
-            iv_version = class_metadata-unicode
-            is_key     = class_key
-            it_source  = class_code ).
-        ENDIF.
-
-        " TODO: Make files mandatory
-        IF files IS NOT INITIAL.
           DATA(local_definitions)     = files->get_abap( zif_abapgit_oo_object_fnc=>c_parts-locals_def ).
           DATA(local_implementations) = files->get_abap( zif_abapgit_oo_object_fnc=>c_parts-locals_imp ).
           DATA(local_macros)          = files->get_abap( zif_abapgit_oo_object_fnc=>c_parts-macros ).
           DATA(test_classes)          = files->get_abap( zif_abapgit_oo_object_fnc=>c_parts-testclasses ).
         ENDIF.
 
-        local_definitions = /apmg/cl_apm_code_importer=>import(
-          program_name   = cl_oo_classname_service=>get_ccdef_name( class_name )
+        " Rename and create new class
+        DATA(import_key)        = original_class_key.
+        import_key-clsname      = new_object.
+        import_metadata-clsname = new_object.
+
+        " No test classes in production
+        IF is_production = abap_true.
+          CLEAR import_metadata-with_unit_tests.
+        ENDIF.
+
+        " Get existing and to be imported code
+        IF zif_abapgit_oo_object_fnc~exists( import_key-clsname ).
+          DATA(existing_class_code) = source( import_key-clsname ).
+        ENDIF.
+
+        DATA(import_class_code) = /apmg/cl_apm_code_importer=>import(
+          program_name   = cl_oo_classname_service=>get_classpool_name( original_class_name )
+          program_source = class_code
+          map            = map
+          is_pretty      = is_pretty ).
+
+        " Compare existing code to newly imported code to avoid slow REPOSRC updates
+        IF is_dry_run IS INITIAL AND import_class_code <> existing_class_code.
+          zif_abapgit_oo_object_fnc~create(
+            EXPORTING
+              iv_check      = abap_false
+              iv_package    = new_package
+              it_attributes = import_attributes
+            CHANGING
+              cg_properties = import_metadata ).
+
+          zif_abapgit_oo_object_fnc~deserialize_source(
+            iv_package = new_package
+            iv_version = import_metadata-unicode
+            is_key     = import_key
+            it_source  = import_class_code ).
+        ENDIF.
+
+        DATA(import_local_definitions) = /apmg/cl_apm_code_importer=>import(
+          program_name   = cl_oo_classname_service=>get_ccdef_name( original_class_name )
           program_source = local_definitions
           map            = map
           is_pretty      = is_pretty ).
 
-        local_implementations = /apmg/cl_apm_code_importer=>import(
-          program_name   = cl_oo_classname_service=>get_ccimp_name( class_name )
+        DATA(import_local_implementations) = /apmg/cl_apm_code_importer=>import(
+          program_name   = cl_oo_classname_service=>get_ccimp_name( original_class_name )
           program_source = local_implementations
           map            = map
           is_pretty      = is_pretty ).
 
-        local_macros = /apmg/cl_apm_code_importer=>import(
-          program_name   = cl_oo_classname_service=>get_ccmac_name( class_name )
+        DATA(import_local_macros) = /apmg/cl_apm_code_importer=>import(
+          program_name   = cl_oo_classname_service=>get_ccmac_name( original_class_name )
           program_source = local_macros
           map            = map
           is_pretty      = is_pretty ).
 
-        IF is_production = abap_true.
-          CLEAR test_classes.
-        ELSE.
-          test_classes = /apmg/cl_apm_code_importer=>import(
-            program_name   = cl_oo_classname_service=>get_ccau_name( class_name )
+        " No test classes in production
+        IF is_production = abap_false.
+          DATA(import_test_classes) = /apmg/cl_apm_code_importer=>import(
+            program_name   = cl_oo_classname_service=>get_ccau_name( original_class_name )
             program_source = test_classes
             map            = map
             is_pretty      = is_pretty ).
+        ELSE.
+          CLEAR import_test_classes.
         ENDIF.
 
         IF is_dry_run IS INITIAL.
           zif_abapgit_oo_object_fnc~generate_locals(
             iv_package               = new_package
-            iv_version               = class_metadata-unicode
-            is_key                   = class_key
-            it_local_definitions     = local_definitions
-            it_local_implementations = local_implementations
-            it_local_macros          = local_macros
-            it_local_test_classes    = test_classes ).
+            iv_version               = import_metadata-unicode
+            is_key                   = import_key
+            it_local_definitions     = import_local_definitions
+            it_local_implementations = import_local_implementations
+            it_local_macros          = import_local_macros
+            it_local_test_classes    = import_test_classes ).
 
           zif_abapgit_oo_object_fnc~insert_text_pool(
-            iv_class_name = class_name
-            it_text_pool  = class_text_pool
+            iv_class_name = import_key-clsname
+            it_text_pool  = import_text_pool
             iv_language   = sy-langu ).
         ENDIF.
 
@@ -63103,7 +64328,9 @@ CLASS /apmg/cl_apm_object_clas IMPLEMENTATION.
   METHOD constructor.
 
     super->constructor( ).
-    class_name = item-obj_name.
+
+    original_class_name = item-obj_name.
+    original_class_key  = VALUE seoclskey( clsname = original_class_name ).
 
   ENDMETHOD.
 
@@ -63441,53 +64668,59 @@ CLASS /apmg/cl_apm_object_intf IMPLEMENTATION.
     DATA(is_pretty) = xsdbool( is_dry_run = abap_false ).
 
     TRY.
-        " Copy globally installed interface
-        DATA(interface_key) = VALUE seoclskey( clsname = interface_name ).
-
         " TODO: Make files mandatory
         IF files IS INITIAL.
-          DATA(interface_metadata)  = zif_abapgit_oo_object_fnc~get_interface_properties( interface_key ).
+          " Copy globally installed interface
+          DATA(import_metadata)  = zif_abapgit_oo_object_fnc~get_interface_properties( original_interface_key ).
 
-          IF interface_metadata IS INITIAL.
+          IF import_metadata IS INITIAL.
             RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Not found'.
           ENDIF.
 
-          DATA(orig_interface_code) = source( ).
+          DATA(interface_code) = source( original_interface_name ).
         ELSE.
-          orig_interface_code = files->get_abap( ).
-
+          " Import interface from registry
           DATA(xml) = files->get_xml_parsed( ).
 
           xml->read(
             EXPORTING
               iv_name = 'VSEOINTERF'
             CHANGING
-              cg_data = interface_metadata ).
+              cg_data = import_metadata ).
+
+          interface_code = files->get_abap( ).
         ENDIF.
 
         " Rename and create new interface
-        interface_key-clsname      = new_object.
-        interface_metadata-clsname = new_object.
+        DATA(import_key)        = original_interface_key.
+        import_key-clsname      = new_object.
+        import_metadata-clsname = new_object.
 
-        DATA(interface_code) = /apmg/cl_apm_code_importer=>import(
-          program_name   = cl_oo_classname_service=>get_intfsec_name( interface_name )
-          program_source = orig_interface_code
+        " Get existing and to be imported code
+        IF zif_abapgit_oo_object_fnc~exists( import_key-clsname ).
+          DATA(existing_interface_code) = source( import_key-clsname ).
+        ENDIF.
+
+        DATA(import_interface_code) = /apmg/cl_apm_code_importer=>import(
+          program_name   = cl_oo_classname_service=>get_intfsec_name( original_interface_name )
+          program_source = interface_code
           map            = map
           is_pretty      = is_pretty ).
 
-        IF is_dry_run IS INITIAL AND interface_code <> orig_interface_code.
+        " Compare existing code to newly imported code to avoid slow REPOSRC updates
+        IF is_dry_run IS INITIAL AND import_interface_code <> existing_interface_code.
           zif_abapgit_oo_object_fnc~create(
             EXPORTING
               iv_check      = abap_false
               iv_package    = new_package
             CHANGING
-              cg_properties = interface_metadata ).
+              cg_properties = import_metadata ).
 
           zif_abapgit_oo_object_fnc~deserialize_source(
             iv_package = new_package
-            iv_version = interface_metadata-unicode
-            is_key     = interface_key
-            it_source  = interface_code ).
+            iv_version = import_metadata-unicode
+            is_key     = import_key
+            it_source  = import_interface_code ).
         ENDIF.
 
       CATCH zcx_abapgit_exception INTO DATA(error).
@@ -63499,13 +64732,14 @@ CLASS /apmg/cl_apm_object_intf IMPLEMENTATION.
   METHOD constructor.
 
     super->constructor( ).
-    interface_name = item-obj_name.
+
+    original_interface_name = item-obj_name.
+    original_interface_key  = VALUE seoclskey( clsname = original_interface_name ).
 
   ENDMETHOD.
 
   METHOD source.
 
-    " or /apmg/cl_apm_code_importer=>read( cl_oo_classname_service=>get_intfsec_name( interface_name ) ) ?
     TRY.
         DATA(instance) = cl_oo_factory=>create_instance( ).
 
@@ -64551,6 +65785,16 @@ CLASS lcl_validate IMPLEMENTATION.
       INSERT |Invalid default SAP package: { manifest-sap_package-default }| INTO TABLE result.
     ENDIF.
 
+    IF /apmg/cl_apm_package_json_vali=>is_valid_software_component( manifest-sap_package-software_component )
+      = abap_false.
+      INSERT |Invalid software component: { manifest-sap_package-software_component }| INTO TABLE result.
+    ENDIF.
+
+    IF /apmg/cl_apm_package_json_vali=>is_valid_application_component( manifest-sap_package-application_component )
+      = abap_false.
+      INSERT |Invalid application component: { manifest-sap_package-application_component }| INTO TABLE result.
+    ENDIF.
+
     IF /apmg/cl_apm_package_json_vali=>is_valid_abap_language_version( manifest-sap_package-abap_language_version )
       = abap_false.
       INSERT |Invalid ABAP language version: { manifest-sap_package-abap_language_version }| INTO TABLE result.
@@ -64592,6 +65836,15 @@ CLASS /apmg/cl_apm_package_json_vali IMPLEMENTATION.
       vers_val = /apmg/if_apm_types=>c_abap_language_version-cloud_development OR
       vers_val = /apmg/if_apm_types=>c_abap_language_version-ignore OR
       vers_val = /apmg/if_apm_types=>c_abap_language_version-undefined ).
+
+  ENDMETHOD.
+
+  METHOD is_valid_application_component.
+
+    " Should match values from DF14L-PS_POSID but might not exist in all systems. Therefore, we use a regex here
+    FIND REGEX '^[A-Z][A-Z0-9]*(-[A-Z][A-Z0-9]*)*$' IN component ##REGEX_POSIX.
+
+    result = xsdbool( component IS INITIAL OR sy-subrc = 0 AND strlen( component ) <= 24 ).
 
   ENDMETHOD.
 
@@ -64742,6 +65995,15 @@ CLASS /apmg/cl_apm_package_json_vali IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD is_valid_software_component.
+
+    " Should match values from CVERS-COMPONENT but might not exist in all systems. Therefore, we use a regex here
+    FIND REGEX '^[A-Z][-A-Z0-9_]*$' IN component ##REGEX_POSIX.
+
+    result = xsdbool( component IS INITIAL OR sy-subrc = 0 AND strlen( component ) <= 30 ).
+
+  ENDMETHOD.
+
   METHOD is_valid_timestamp.
 
     CONSTANTS c_regex TYPE string
@@ -64844,7 +66106,7 @@ CLASS LCL_VALIDATE_ IMPLEMENTATION.
       INSERT |Duplicate dist-tags| INTO TABLE result.
     ENDIF.
 
-    IF NOT line_exists( packument-dist_tags[ key = 'latest' ] ).
+    IF NOT line_exists( packument-dist_tags[ key = /apmg/if_apm_types=>c_latest_version ] ).
       INSERT |"latest" dist-tags is missing| INTO TABLE result.
     ENDIF.
 
@@ -64858,7 +66120,9 @@ CLASS LCL_VALIDATE_ IMPLEMENTATION.
     LOOP AT packument-time INTO DATA(time).
       COLLECT time-key INTO values.
 
-      IF time-key <> 'created' AND time-key <> 'modified' AND NOT line_exists( packument-versions[ key = time-key ] ).
+      IF time-key <> /apmg/if_apm_types=>c_time_entries-created AND
+         time-key <> /apmg/if_apm_types=>c_time_entries-modified AND
+         NOT line_exists( packument-versions[ key = time-key ] ).
         INSERT |Timestamp version does not exist: { time-key }| INTO TABLE result.
       ENDIF.
     ENDLOOP.
@@ -70526,12 +71790,12 @@ CLASS /apmg/cl_apm_semver_utils IMPLEMENTATION.
   METHOD trim.
     " Remove leading and trailing tab, cr, lf and spaces Like JavaScript trim
     result = condense(
-      val = replace(
+      val  = replace(
         val   = data
         regex = `[\t\n\r]`
         with  = ` `
         occ   = 0 )
-      del = ` ` ) ##REGEX_POSIX.
+      from = `` ) ##REGEX_POSIX.
   ENDMETHOD.
 
   METHOD version_trim.
@@ -70718,6 +71982,7 @@ CLASS /apmg/cl_apm_settings IMPLEMENTATION.
     result-registry = /apmg/if_apm_settings=>c_playground.
 
     result-list_settings-order_by = 'PACKAGE'.
+    result-tree_settings-order_by = 'NAME'.
 
   ENDMETHOD.
 
@@ -72566,9 +73831,7 @@ CLASS zcl_abapgit_abap_language_vers IMPLEMENTATION.
 
     mo_dot_abapgit = io_dot_abapgit.
 
-    IF zcl_abapgit_feature=>is_enabled( c_feature_flag ) = abap_false.
-      mv_has_abap_language_vers = abap_undefined.
-    ELSEIF get_abap_language_vers_by_repo( ) = zif_abapgit_dot_abapgit=>c_abap_language_version-undefined.
+    IF get_abap_language_vers_by_repo( ) = zif_abapgit_dot_abapgit=>c_abap_language_version-undefined.
       mv_has_abap_language_vers = abap_undefined.
     ELSEIF get_abap_language_vers_by_repo( ) = zif_abapgit_dot_abapgit=>c_abap_language_version-ignore.
       mv_has_abap_language_vers = abap_false.
@@ -74479,33 +75742,6 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD zif_abapgit_cts_api~read_request_and_tasks.
-
-    DATA lt_request_headers TYPE trwbo_request_headers.
-    DATA ls_row             LIKE LINE OF lt_request_headers.
-    DATA ls_task            LIKE LINE OF rt_tasks.
-
-    CALL FUNCTION 'TR_READ_REQUEST_WITH_TASKS'
-      EXPORTING
-        iv_trkorr          = iv_request
-      IMPORTING
-        et_request_headers = lt_request_headers
-      EXCEPTIONS
-        invalid_input      = 1
-        OTHERS             = 2.
-    IF sy-subrc <> 0.
-      zcx_abapgit_exception=>raise_t100( ).
-    ENDIF.
-
-    LOOP AT lt_request_headers INTO ls_row.
-      ls_task-trkorr  = ls_row-trkorr.
-      ls_task-as4user = ls_row-as4user.
-
-      INSERT ls_task INTO TABLE rt_tasks.
-    ENDLOOP.
-
-  ENDMETHOD.
-
   METHOD zif_abapgit_cts_api~confirm_transport_messages.
 
     TYPES: BEGIN OF ty_s_message,
@@ -74706,7 +75942,7 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
             AND lokey <= ls_lock_key-hi.                  "#EC PORTABLE
           IF lv_request IS INITIAL.
             lv_request = <ls_tlock>-trkorr.
-          ELSE.
+          ELSEIF lv_request <> <ls_tlock>-trkorr.
             lv_request = zif_abapgit_definitions=>c_multiple_transports.
             EXIT.
           ENDIF.
@@ -74901,6 +76137,35 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
         INTO rv_description
         WHERE trkorr = iv_trkorr ##SUBRC_OK. "#EC CI_NOORDER
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD zif_abapgit_cts_api~read_request_and_tasks.
+
+    DATA lt_request_headers TYPE trwbo_request_headers.
+    DATA ls_row             LIKE LINE OF lt_request_headers.
+    DATA ls_task            LIKE LINE OF rt_tasks.
+
+    CALL FUNCTION 'TR_READ_REQUEST_WITH_TASKS'
+      EXPORTING
+        iv_trkorr          = iv_request
+      IMPORTING
+        et_request_headers = lt_request_headers
+      EXCEPTIONS
+        invalid_input      = 1
+        OTHERS             = 2.
+    IF sy-subrc <> 0.
+      zcx_abapgit_exception=>raise_t100( ).
+    ENDIF.
+
+    LOOP AT lt_request_headers INTO ls_row.
+      ls_task-trkorr  = ls_row-trkorr.
+      ls_task-as4user = ls_row-as4user.
+      ls_task-as4date = ls_row-as4date.
+      ls_task-as4time = ls_row-as4time.
+
+      INSERT ls_task INTO TABLE rt_tasks.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -75585,8 +76850,19 @@ CLASS zcl_abapgit_dot_abapgit IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    " Ignore all files outside of starting folder tree
+    IF ms_data-starting_folder <> '/' AND NOT lv_name CP lv_starting.
+      rv_ignored = abap_true.
+    ENDIF.
+
+    " Allow all files in data folder
+    IF iv_path = zif_abapgit_data_config=>c_default_path.
+      rv_ignored = abap_false.
+    ENDIF.
+
     " Ignore all files matching pattern in ignore list
-    LOOP AT ms_data-ignore INTO lv_ignore.
+    " Patterns are read top-to-bottom with later ones overriding earlier (like .gitignore)
+    LOOP AT ms_data-ignore INTO lv_ignore WHERE table_line IS NOT INITIAL.
       " # needs to be escaped since it's the escape character
       " and used as namespace separator in filenames, for example
       lv_ignore = replace(
@@ -75596,18 +76872,11 @@ CLASS zcl_abapgit_dot_abapgit IMPLEMENTATION.
         occ  = 0 ).
       IF lv_name CP lv_ignore.
         rv_ignored = abap_true.
-        RETURN.
+      ENDIF.
+      IF lv_ignore(1) = '!' AND lv_name CP lv_ignore+1(*).
+        rv_ignored = abap_false.
       ENDIF.
     ENDLOOP.
-
-    " Ignore all files outside of starting folder tree
-    IF ms_data-starting_folder <> '/' AND NOT lv_name CP lv_starting.
-      rv_ignored = abap_true.
-    ENDIF.
-
-    IF iv_path = zif_abapgit_data_config=>c_default_path.
-      rv_ignored = abap_false.
-    ENDIF.
 
   ENDMETHOD.
 
@@ -79528,6 +80797,20 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     SELECT SINGLE as4user FROM tdevc
       INTO rv_responsible
       WHERE devclass = mv_package ##SUBRC_OK.           "#EC CI_GENBUFF
+  ENDMETHOD.
+
+  METHOD zif_abapgit_sap_package~update_tree.
+
+    DATA lv_tree TYPE string.
+
+* update package tree for SE80
+    lv_tree = 'EU_' && mv_package.
+    CALL FUNCTION 'WB_TREE_ACTUALIZE'
+      EXPORTING
+        tree_name              = lv_tree
+        without_crossreference = abap_true
+        with_tcode_index       = abap_true.
+
   ENDMETHOD.
 
   METHOD zif_abapgit_sap_package~validate_name.
@@ -85740,6 +87023,7 @@ CLASS zcl_abapgit_object_aifc IMPLEMENTATION.
   METHOD zif_abapgit_object~deserialize.
     DATA: lx_root TYPE REF TO cx_root.
     DATA: lt_content TYPE ty_content_t.
+    DATA lv_abap_language_version TYPE uccheck.
 
     DATA lr_tabledescr TYPE REF TO cl_abap_tabledescr.
     DATA lr_structdescr TYPE REF TO cl_abap_structdescr.
@@ -85754,10 +87038,6 @@ CLASS zcl_abapgit_object_aifc IMPLEMENTATION.
 
     DATA lv_tablename TYPE string.
     FIELD-SYMBOLS: <lv_value> TYPE any.
-
-    IF iv_step <> zif_abapgit_object=>gc_step_id-abap.
-      RETURN.
-    ENDIF.
 
     TRY.
         IF execute_checks( io_xml ) = abap_false.
@@ -85836,6 +87116,22 @@ CLASS zcl_abapgit_object_aifc IMPLEMENTATION.
         IF compress_interface( ls_ifkey ) = abap_false.
           RETURN.
         ENDIF.
+
+        " No API for updating ABAP Language Version?
+        TRY.
+            io_xml->read( EXPORTING iv_name = 'ABAP_LANGUAGE_VERSION'
+                          CHANGING  cg_data = lv_abap_language_version ).
+
+            set_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
+
+            UPDATE ('/AIF/ICD_DATA') SET abap_language_version = lv_abap_language_version
+              WHERE depl_scenario = ms_icd_data_key-depl_scenario
+                AND ns            = ms_icd_data_key-ns
+                AND ifname        = ms_icd_data_key-ifname
+                AND ifver2        = ms_icd_data_key-ifver2 ##SUBRC_OK.
+
+          CATCH cx_root ##NO_HANDLER.
+        ENDTRY.
 
       CATCH cx_root INTO lx_root.
         ii_log->add_exception( ix_exc  = lx_root
@@ -85921,6 +87217,7 @@ CLASS zcl_abapgit_object_aifc IMPLEMENTATION.
     DATA lx_root TYPE REF TO cx_root.
     DATA ls_icd_data_key TYPE ty_icd_data_key.
     DATA lt_ifdata TYPE ty_table_data_t.
+    DATA lv_abap_language_version TYPE uccheck.
 
     DATA lt_content TYPE ty_content_t.
     DATA ls_content TYPE ty_content_s.
@@ -85959,6 +87256,21 @@ CLASS zcl_abapgit_object_aifc IMPLEMENTATION.
 
         io_xml->add( iv_name = `Content_table`
                      ig_data = lt_content ).
+
+        TRY.
+            SELECT SINGLE ('ABAP_LANGUAGE_VERSION') FROM ('/AIF/ICD_DATA') INTO lv_abap_language_version
+              WHERE depl_scenario = ms_icd_data_key-depl_scenario
+                AND ns            = ms_icd_data_key-ns
+                AND ifname        = ms_icd_data_key-ifname
+                AND ifver2        = ms_icd_data_key-ifver2.
+            IF sy-subrc = 0.
+              clear_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
+
+              io_xml->add( iv_name = 'ABAP_LANGUAGE_VERSION'
+                           ig_data = lv_abap_language_version ).
+            ENDIF.
+          CATCH cx_root ##NO_HANDLER.
+        ENDTRY.
 
       CATCH cx_root INTO lx_root.
         zcx_abapgit_exception=>raise( iv_text     = 'Serialize not possible'
@@ -91847,6 +93159,24 @@ ENDCLASS.
 
 CLASS zcl_abapgit_object_ddls IMPLEMENTATION.
 
+  METHOD clear_baseinfo.
+
+    " To prevent diffs across various releases
+    DATA li_json TYPE REF TO /apmg/if_apm_ajson.
+
+    TRY.
+        li_json = /apmg/cl_apm_ajson=>parse(
+          iv_json            = iv_json
+          iv_keep_item_order = abap_true ).
+        li_json = li_json->filter( /apmg/cl_apm_ajson_filter_lib=>create_empty_filter( ) ).
+        rv_json = li_json->stringify( 2 ) && |\n|.
+      CATCH /apmg/cx_apm_ajson_error.
+        " fallback to original value
+        rv_json = iv_json.
+    ENDTRY.
+
+  ENDMETHOD.
+
   METHOD clear_fields.
 
     DATA:
@@ -92122,7 +93452,7 @@ CLASS zcl_abapgit_object_ddls IMPLEMENTATION.
 
     TRY.
         io_xml->read( EXPORTING iv_name = 'DDLS'
-                      CHANGING cg_data  = <lg_data> ).
+                      CHANGING  cg_data = <lg_data> ).
 
         ASSIGN COMPONENT 'SOURCE' OF STRUCTURE <lg_data> TO <lg_source>.
         ASSERT sy-subrc = 0.
@@ -92313,7 +93643,7 @@ CLASS zcl_abapgit_object_ddls IMPLEMENTATION.
               ASSERT sy-subrc = 0.
               mo_files->add_string(
                 iv_ext    = 'baseinfo'
-                iv_string = <lg_field> ).
+                iv_string = clear_baseinfo( <lg_field> ) ).
               EXIT.
             ENDIF.
           ENDLOOP.
@@ -93458,6 +94788,10 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
 
     CLEAR: ls_package_data-devclass,
            ls_package_data-parentcl.
+
+    " Clear language fields to prevents diffs, package has to match repo language. Filled since 816
+    CLEAR: ls_package_data-language,
+           ls_package_data-masterlang.
 
     " Clear administrative data to prevent diffs
     CLEAR: ls_package_data-created_by,
@@ -95973,6 +97307,10 @@ CLASS zcl_abapgit_object_dtel IMPLEMENTATION.
 
     io_xml->read( EXPORTING iv_name = 'DD04V'
                   CHANGING cg_data = ls_dd04v ).
+
+    IF ls_dd04v-ddtext IS INITIAL.
+      zcx_abapgit_exception=>raise( |DTEL { ms_item-obj_name }: description is empty| ).
+    ENDIF.
 
     corr_insert( iv_package = iv_package
                  ig_object_class = 'DICT' ).
@@ -120552,6 +121890,7 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
       lo_merged_data_prop   TYPE REF TO if_wb_object_data_model,
       lo_merged_data_cont   TYPE REF TO if_wb_object_data_model,
       lr_wbobjtype          TYPE REF TO data,
+      lv_try_update         TYPE abap_bool,
       lr_category           TYPE REF TO data.
 
     FIELD-SYMBOLS:
@@ -120586,10 +121925,10 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
         " exists() can return false even when a ghost WB entry remains
         " (e.g. after incomplete delete/activation). In that case CREATE
         " throws CX_WB_OBJECT_ALREADY_EXISTS and we fall through to UPDATE.
-        TRY.
-            IF zif_abapgit_object~exists( ) = abap_false.
-              CASE <lv_category>.
-                WHEN '1'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_atomic.
+        IF zif_abapgit_object~exists( ) = abap_false.
+          CASE <lv_category>.
+            WHEN '1'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_atomic.
+              TRY.
                   CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~CREATE')
                     EXPORTING
                       io_object_data    = lo_object_data
@@ -120597,7 +121936,11 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
                       version           = 'I' "swbm_version_inactive
                       package           = iv_package
                       transport_request = iv_transport.
-                WHEN '2'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_compound_s.
+                CATCH cx_static_check. " cx_wb_object_already_exists doesnt exist on 740sp05
+                  lv_try_update = abap_true.
+              ENDTRY.
+            WHEN '2'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_compound_s.
+              TRY.
                   CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~CREATE')
                     EXPORTING
                       io_object_data    = lo_object_data
@@ -120611,41 +121954,45 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
                       data_selection    = 'D' "if_wb_object_data_selection_co=>c_data_content
                       version           = 'I' "swbm_version_inactive
                       transport_request = iv_transport.
-                WHEN OTHERS.
-                  zcx_abapgit_exception=>raise( |Category '{ <lv_category> }' not supported| ).
-              ENDCASE.
-            ELSE.
-              RAISE EXCEPTION TYPE cx_wb_object_already_exists.
-            ENDIF.
-          CATCH cx_wb_object_already_exists.
-            CASE <lv_category>.
-              WHEN '1'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_atomic.
-                lo_merged_data_all = merge_object_data( lo_object_data ).
-                CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
+                CATCH cx_static_check. " cx_wb_object_already_exists doesnt exist on 740sp05
+                  lv_try_update = abap_true.
+              ENDTRY.
+            WHEN OTHERS.
+              zcx_abapgit_exception=>raise( |Category '{ <lv_category> }' not supported| ).
+          ENDCASE.
+        ELSE.
+          lv_try_update = abap_true.
+        ENDIF.
+
+        IF lv_try_update = abap_true.
+          CASE <lv_category>.
+            WHEN '1'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_atomic.
+              lo_merged_data_all = merge_object_data( lo_object_data ).
+              CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
                   EXPORTING
                     io_object_data    = lo_merged_data_all
                     data_selection    = 'AL' "if_wb_object_data_selection_co=>c_all_data
                     version           = 'I' "swbm_version_inactive
                     transport_request = iv_transport.
-              WHEN '2'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_compound_s.
-                lo_merged_data_prop = merge_object_data( lo_object_data ).
-                lo_merged_data_cont = merge_object_data( lo_object_data ).
-                CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
+            WHEN '2'. "if_wb_adt_plugin_resource_co=>co_sfs_res_category_compound_s.
+              lo_merged_data_prop = merge_object_data( lo_object_data ).
+              lo_merged_data_cont = merge_object_data( lo_object_data ).
+              CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
                   EXPORTING
                     io_object_data    = lo_merged_data_prop
                     data_selection    = 'P' "if_wb_object_data_selection_co=>c_properties
                     version           = 'I' "swbm_version_inactive
                     transport_request = iv_transport.
-                CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
+              CALL METHOD lo_wb_object_operator->('IF_WB_OBJECT_OPERATOR~UPDATE')
                   EXPORTING
                     io_object_data    = lo_merged_data_cont
                     data_selection    = 'D' "if_wb_object_data_selection_co=>c_data_content
                     version           = 'I' "swbm_version_inactive
                     transport_request = iv_transport.
-              WHEN OTHERS.
-                zcx_abapgit_exception=>raise( |Category '{ <lv_category> }' not supported| ).
-            ENDCASE.
-        ENDTRY.
+            WHEN OTHERS.
+              zcx_abapgit_exception=>raise( |Category '{ <lv_category> }' not supported| ).
+          ENDCASE.
+        ENDIF.
 
         corr_insert( iv_package ).
 
@@ -131662,14 +133009,14 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
     ls_key-controller_name = is_controller-definition-controller_name.
 
     lv_found = cl_wdy_md_controller=>check_existency(
-          component_name  = ls_key-component_name
-          controller_name = ls_key-controller_name ).
+      component_name  = ls_key-component_name
+      controller_name = ls_key-controller_name ).
     IF lv_found = abap_false.
       TRY.
           li_controller ?= cl_wdy_md_controller=>create_complete(
-                component_name  = ls_key-component_name
-                controller_name = ls_key-controller_name
-                controller_type = is_controller-definition-controller_type ).
+            component_name  = ls_key-component_name
+            controller_name = ls_key-controller_name
+            controller_type = is_controller-definition-controller_type ).
           li_controller->save_to_database( ).
           li_controller->unlock( ).
         CATCH cx_wdy_md_exception INTO lx_error.
@@ -131809,14 +133156,14 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
     ls_key-view_name      = is_view-definition-view_name.
 
     lv_found = cl_wdy_md_abstract_view=>check_existency(
-                 component_name = ls_key-component_name
-                 name           = ls_key-view_name ).
+      component_name = ls_key-component_name
+      name           = ls_key-view_name ).
     IF lv_found = abap_false.
       TRY.
           li_view = cl_wdy_md_abstract_view=>create(
-                      component_name = is_view-definition-component_name
-                      view_name      = is_view-definition-view_name
-                      type           = is_view-definition-type ).
+            component_name = is_view-definition-component_name
+            view_name      = is_view-definition-view_name
+            type           = is_view-definition-type ).
           li_view->save_to_database( ).
           li_view->unlock( ).
         CATCH cx_wdy_md_exception INTO lx_error.
@@ -131877,16 +133224,16 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
       ls_sources LIKE LINE OF mt_sources.
 
     " Old format
-    ii_xml->read( EXPORTING iv_name  = 'SOURCES'
-                  CHANGING cg_data = mt_sources ).
+    ii_xml->read( EXPORTING iv_name = 'SOURCES'
+                  CHANGING  cg_data = mt_sources ).
 
     IF mt_sources IS NOT INITIAL.
       RETURN.
     ENDIF.
 
     " New format
-    ii_xml->read( EXPORTING iv_name  = 'FILES'
-                  CHANGING cg_data = lt_extra ).
+    ii_xml->read( EXPORTING iv_name = 'FILES'
+                  CHANGING  cg_data = lt_extra ).
 
     LOOP AT lt_extra INTO lv_extra.
       lv_line = 0.
@@ -132046,76 +133393,76 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
 *   Calling FM dynamically because version 702 has less parameters
 
 *   FM parameters
-    add_fm_param_exporting( EXPORTING iv_name     = 'CONTROLLER_KEY'
-                                      ig_value    = is_key
+    add_fm_param_exporting( EXPORTING iv_name  = 'CONTROLLER_KEY'
+                                      ig_value = is_key
                             CHANGING  ct_param = lt_fm_param ).
-    add_fm_param_exporting( EXPORTING iv_name     = 'GET_ALL_TRANSLATIONS'
-                                      ig_value    = abap_false
+    add_fm_param_exporting( EXPORTING iv_name  = 'GET_ALL_TRANSLATIONS'
+                                      ig_value = abap_false
                             CHANGING  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'DEFINITION'
+    add_fm_param_tables( EXPORTING iv_name  = 'DEFINITION'
                          CHANGING  ct_value = lt_definition
                                    ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'DESCRIPTIONS'
-                         CHANGING ct_value = rs_controller-descriptions
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_USAGES'
-                         CHANGING ct_value = rs_controller-controller_usages
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_COMPONENTS'
-                         CHANGING ct_value = lt_components
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_COMPONENT_SOURCES'
-                         CHANGING ct_value = lt_sources
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_COMPONENT_TEXTS'
-                         CHANGING ct_value = rs_controller-controller_component_texts
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_PARAMETERS'
-                         CHANGING ct_value = rs_controller-controller_parameters
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_PARAMETER_TEXTS'
-                         CHANGING ct_value = rs_controller-controller_parameter_texts
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTEXT_NODES'
-                         CHANGING ct_value = rs_controller-context_nodes
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTEXT_ATTRIBUTES'
-                         CHANGING ct_value = rs_controller-context_attributes
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'CONTEXT_MAPPINGS'
-                         CHANGING ct_value = rs_controller-context_mappings
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'FIELDGROUPS'
-                         CHANGING ct_value = rs_controller-fieldgroups
-                                  ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'DESCRIPTIONS'
+                         CHANGING  ct_value = rs_controller-descriptions
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_USAGES'
+                         CHANGING  ct_value = rs_controller-controller_usages
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_COMPONENTS'
+                         CHANGING  ct_value = lt_components
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_COMPONENT_SOURCES'
+                         CHANGING  ct_value = lt_sources
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_COMPONENT_TEXTS'
+                         CHANGING  ct_value = rs_controller-controller_component_texts
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_PARAMETERS'
+                         CHANGING  ct_value = rs_controller-controller_parameters
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_PARAMETER_TEXTS'
+                         CHANGING  ct_value = rs_controller-controller_parameter_texts
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTEXT_NODES'
+                         CHANGING  ct_value = rs_controller-context_nodes
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTEXT_ATTRIBUTES'
+                         CHANGING  ct_value = rs_controller-context_attributes
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'CONTEXT_MAPPINGS'
+                         CHANGING  ct_value = rs_controller-context_mappings
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'FIELDGROUPS'
+                         CHANGING  ct_value = rs_controller-fieldgroups
+                                   ct_param = lt_fm_param ).
 *   Version 702 doesn't have these two attributes so we
 *   use them dynamically for downward compatibility
     ASSIGN COMPONENT 'CONTROLLER_EXCEPTIONS' OF STRUCTURE rs_controller TO <lt_ctrl_exceptions>.
     IF sy-subrc = 0.
-      add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_EXCEPTIONS'
-                           CHANGING ct_value = <lt_ctrl_exceptions>
-                                    ct_param = lt_fm_param ).
+      add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_EXCEPTIONS'
+                           CHANGING  ct_value = <lt_ctrl_exceptions>
+                                     ct_param = lt_fm_param ).
     ENDIF.
     ASSIGN COMPONENT 'CONTROLLER_EXCEPTION_TEXTS' OF STRUCTURE rs_controller TO <lt_ctrl_exception_texts>.
     IF sy-subrc = 0.
-      add_fm_param_tables( EXPORTING iv_name = 'CONTROLLER_EXCEPTION_TEXTS'
-                           CHANGING ct_value = <lt_ctrl_exception_texts>
-                                    ct_param = lt_fm_param ).
+      add_fm_param_tables( EXPORTING iv_name  = 'CONTROLLER_EXCEPTION_TEXTS'
+                           CHANGING  ct_value = <lt_ctrl_exception_texts>
+                                     ct_param = lt_fm_param ).
     ENDIF.
-    add_fm_param_tables( EXPORTING iv_name = 'PSMODILOG'
-                         CHANGING ct_value = lt_psmodilog
-                                  ct_param = lt_fm_param ).
-    add_fm_param_tables( EXPORTING iv_name = 'PSMODISRC'
-                         CHANGING ct_value = lt_psmodisrc
-                                  ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'PSMODILOG'
+                         CHANGING  ct_value = lt_psmodilog
+                                   ct_param = lt_fm_param ).
+    add_fm_param_tables( EXPORTING iv_name  = 'PSMODISRC'
+                         CHANGING  ct_value = lt_psmodisrc
+                                   ct_param = lt_fm_param ).
 
 *   FM exceptions
-    add_fm_exception( EXPORTING iv_name = 'NOT_EXISTING'
-                                iv_value = 1
-                      CHANGING ct_exception = lt_fm_exception ).
-    add_fm_exception( EXPORTING iv_name = 'OTHERS'
-                                iv_value = 2
-                      CHANGING ct_exception = lt_fm_exception ).
+    add_fm_exception( EXPORTING iv_name      = 'NOT_EXISTING'
+                                iv_value     = 1
+                      CHANGING  ct_exception = lt_fm_exception ).
+    add_fm_exception( EXPORTING iv_name      = 'OTHERS'
+                                iv_value     = 2
+                      CHANGING  ct_exception = lt_fm_exception ).
 
     CALL FUNCTION 'WDYC_GET_OBJECT'
       PARAMETER-TABLE
@@ -132146,6 +133493,8 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
     DATA: lt_definition TYPE TABLE OF wdy_component,
           lt_psmodilog  TYPE TABLE OF smodilog,
           lt_psmodisrc  TYPE TABLE OF smodisrc.
+
+    FIELD-SYMBOLS <lv_field> TYPE any.
 
     CALL FUNCTION 'WDYD_GET_OBJECT'
       EXPORTING
@@ -132181,6 +133530,11 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
            rs_definition-definition-changedon,
            rs_definition-definition-gendate,
            rs_definition-definition-gentime.
+
+    ASSIGN COMPONENT 'GENVERSION' OF STRUCTURE rs_definition-definition TO <lv_field>.
+    IF sy-subrc = 0.
+      CLEAR <lv_field>.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -132315,6 +133669,46 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD serialize_sources.
+
+    DATA:
+      lv_extra TYPE string,
+      lt_extra TYPE string_table,
+      ls_abap  TYPE abaptxt255,
+      lt_abap  TYPE abaptxt255_tab.
+
+    FIELD-SYMBOLS <ls_sources> LIKE LINE OF mt_sources.
+
+    " Store code as separate ABAP files instead of XML (assumes sorted data, see "read")
+    LOOP AT mt_sources ASSIGNING <ls_sources>.
+      AT NEW controller_name.
+        CLEAR lt_abap.
+        lv_extra = to_lower( <ls_sources>-controller_name ).
+      ENDAT.
+
+      ls_abap-line = <ls_sources>-source_line.
+      INSERT ls_abap INTO TABLE lt_abap.
+
+      AT END OF cmpname.
+        CLEAR ls_abap.
+        INSERT ls_abap INTO TABLE lt_abap.
+      ENDAT.
+      AT END OF controller_name.
+        IF lt_abap IS NOT INITIAL.
+          mo_files->add_abap(
+            iv_extra = lv_extra
+            it_abap  = lt_abap ).
+          INSERT lv_extra INTO TABLE lt_extra.
+        ENDIF.
+      ENDAT.
+    ENDLOOP.
+
+    ii_xml->add(
+      iv_name = 'FILES'
+      ig_data = lt_extra ).
+
+  ENDMETHOD.
+
   METHOD unlock_controller.
 
     DATA lo_controller TYPE REF TO cl_wdy_md_controller.
@@ -132362,46 +133756,6 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD serialize_sources.
-
-    DATA:
-      lv_extra TYPE string,
-      lt_extra TYPE string_table,
-      ls_abap  TYPE abaptxt255,
-      lt_abap  TYPE abaptxt255_tab.
-
-    FIELD-SYMBOLS <ls_sources> LIKE LINE OF mt_sources.
-
-    " Store code as separate ABAP files instead of XML (assumes sorted data, see "read")
-    LOOP AT mt_sources ASSIGNING <ls_sources>.
-      AT NEW controller_name.
-        CLEAR lt_abap.
-        lv_extra = to_lower( <ls_sources>-controller_name ).
-      ENDAT.
-
-      ls_abap-line = <ls_sources>-source_line.
-      INSERT ls_abap INTO TABLE lt_abap.
-
-      AT END OF cmpname.
-        CLEAR ls_abap.
-        INSERT ls_abap INTO TABLE lt_abap.
-      ENDAT.
-      AT END OF controller_name.
-        IF lt_abap IS NOT INITIAL.
-          mo_files->add_abap(
-            iv_extra = lv_extra
-            it_abap  = lt_abap ).
-          INSERT lv_extra INTO TABLE lt_extra.
-        ENDIF.
-      ENDAT.
-    ENDLOOP.
-
-    ii_xml->add(
-      iv_name = 'FILES'
-      ig_data = lt_extra ).
-
-  ENDMETHOD.
-
   METHOD zif_abapgit_object~changed_by.
     SELECT SINGLE changedby FROM wdy_component INTO rv_user
       WHERE component_name = ms_item-obj_name AND version = 'A'.
@@ -132441,9 +133795,9 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
                    <ls_controller> LIKE LINE OF ls_component-ctlr_metadata.
 
     io_xml->read( EXPORTING iv_name = 'COMPONENT'
-                  CHANGING cg_data = ls_component ).
-    io_xml->read( EXPORTING iv_name  = 'COMPONENTS'
-                  CHANGING cg_data = mt_components ).
+                  CHANGING  cg_data = ls_component ).
+    io_xml->read( EXPORTING iv_name = 'COMPONENTS'
+                  CHANGING  cg_data = mt_components ).
 
     deserialize_sources( io_xml ).
 
@@ -132552,11 +133906,11 @@ CLASS zcl_abapgit_object_wdyn IMPLEMENTATION.
     READ TABLE ls_component-comp_metadata-descriptions INTO ls_description INDEX 1.
     IF sy-subrc = 0.
       zcl_abapgit_sotr_handler=>read_sotr(
-        iv_pgmid    = 'LIMU'
-        iv_object   = 'WDYV'
-        iv_obj_name = ms_item-obj_name
+        iv_pgmid       = 'LIMU'
+        iv_object      = 'WDYV'
+        iv_obj_name    = ms_item-obj_name
         io_i18n_params = mo_i18n_params
-        io_xml      = io_xml ).
+        io_xml         = io_xml ).
     ENDIF.
 
     serialize_longtexts(
@@ -136282,7 +137636,7 @@ START-OF-SELECTION.
 
 **********************************************************************
 INTERFACE lif_abapmerge_marker.
-  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-02-12T13:15:41Z`.
+  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-03-06T21:38:14Z`.
   CONSTANTS c_abapinst_version TYPE string VALUE `1.2.0`.
 ENDINTERFACE.
 **********************************************************************
