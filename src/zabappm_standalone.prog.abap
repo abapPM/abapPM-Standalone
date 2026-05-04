@@ -2766,6 +2766,12 @@ INTERFACE zif_abapgit_exit .
       cv_name     TYPE csequence
       cv_email    TYPE csequence.
 
+  METHODS change_password_popup_username
+    IMPORTING
+      iv_repo_url TYPE csequence
+    CHANGING
+      cv_user     TYPE string.
+
   METHODS change_local_host
     CHANGING
       !ct_hosts TYPE zif_abapgit_definitions=>ty_string_tt.
@@ -5884,11 +5890,14 @@ INTERFACE zif_abapgit_cts_api
     RAISING
       zcx_abapgit_exception .
 
+  TYPES ty_skip_limu_types_tt TYPE RANGE OF e071-object.
+
   METHODS list_r3tr_by_request
     IMPORTING
-      !iv_request    TYPE trkorr
+      !iv_request         TYPE trkorr
+      !it_skip_limu_types TYPE ty_skip_limu_types_tt OPTIONAL
     RETURNING
-      VALUE(rt_list) TYPE ty_transport_obj_tt
+      VALUE(rt_list)      TYPE ty_transport_obj_tt
     RAISING
       zcx_abapgit_exception .
 
@@ -5941,6 +5950,17 @@ INTERFACE zif_abapgit_cts_api
       VALUE(rt_tasks) TYPE ty_request_and_tasks_tt
     RAISING
       zcx_abapgit_exception.
+
+  "! Check if an object is customizing i.e. needs a workbench or customizing transport
+  "! @parameter iv_pgmid | Program ID / R3TR and LIMU are relevant
+  "! @parameter iv_object | Object type
+  "! @parameter rv_is_customizing_object | True if an object requires a customizing transport
+  METHODS is_object_type_customizing
+    IMPORTING
+      !iv_pgmid                       TYPE tadir-pgmid DEFAULT 'R3TR'
+      !iv_object                      TYPE tadir-object
+    RETURNING
+      VALUE(rv_is_customizing_object) TYPE abap_bool.
 
 ENDINTERFACE.
 
@@ -11929,6 +11949,7 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
         select           TYPE string VALUE 'select',
         apply_filter     TYPE string VALUE 'apply_filter',
         label_filter     TYPE string VALUE 'label_filter',
+        clear_filter     TYPE string VALUE 'clear_filter',
         toggle_favorites TYPE string VALUE 'toggle_favorites',
         change_order_by  TYPE string VALUE 'change_order_by',
         direction        TYPE string VALUE 'direction',
@@ -12077,7 +12098,6 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
     METHODS save_settings
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_package DEFINITION
@@ -12267,6 +12287,13 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
         !html                TYPE REF TO /apmg/if_apm_html
         !dependencies        TYPE /apmg/if_apm_types=>ty_dependencies
         !bundle_dependencies TYPE string_table OPTIONAL
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_engines_table
+      IMPORTING
+        !html    TYPE REF TO /apmg/if_apm_html
+        !engines TYPE /apmg/if_apm_types=>ty_dependencies
       RAISING
         /apmg/cx_apm_error.
 
@@ -18735,6 +18762,18 @@ CLASS zcl_abapgit_cts_api DEFINITION
         !iv_object_type         TYPE trobjtype
       RETURNING
         VALUE(rv_transportable) TYPE abap_bool .
+
+    "! Insert logical object into customizing request
+    "! @parameter iv_transport | Transport
+    "! @parameter iv_object | Object type
+    "! @parameter iv_obj_name | Object Name
+    METHODS insert_cust_logical_object
+      IMPORTING
+        !iv_transport TYPE trkorr
+        !iv_object    TYPE trobjtype
+        !iv_obj_name  TYPE csequence
+      RAISING
+        zcx_abapgit_exception.
 ENDCLASS.
 
 CLASS zcl_abapgit_default_transport DEFINITION
@@ -19885,7 +19924,7 @@ ENDCLASS.
 
 CLASS zcl_abapgit_filename_logic DEFINITION
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
 
@@ -19928,7 +19967,7 @@ CLASS zcl_abapgit_filename_logic DEFINITION
         !ev_is_xml   TYPE abap_bool
         !ev_is_json  TYPE abap_bool
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
 
     CLASS-METHODS i18n_file_to_object
       IMPORTING
@@ -19939,7 +19978,7 @@ CLASS zcl_abapgit_filename_logic DEFINITION
         !ev_lang     TYPE laiso
         !ev_ext      TYPE string
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
 
     CLASS-METHODS object_to_file
       IMPORTING
@@ -19947,7 +19986,7 @@ CLASS zcl_abapgit_filename_logic DEFINITION
         !iv_ext            TYPE string
         !iv_extra          TYPE clike OPTIONAL
       RETURNING
-        VALUE(rv_filename) TYPE string .
+        VALUE(rv_filename) TYPE string.
 
     CLASS-METHODS object_to_i18n_file
       IMPORTING
@@ -20652,14 +20691,14 @@ CLASS zcl_abapgit_objects_files DEFINITION
     METHODS constructor
       IMPORTING
         !is_item TYPE zif_abapgit_definitions=>ty_item
-        !iv_path TYPE string OPTIONAL .
+        !iv_path TYPE string OPTIONAL.
     METHODS add_string
       IMPORTING
         !iv_extra  TYPE clike OPTIONAL
         !iv_ext    TYPE string
         !iv_string TYPE string
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS read_string
       IMPORTING
         !iv_extra        TYPE clike OPTIONAL
@@ -20667,7 +20706,7 @@ CLASS zcl_abapgit_objects_files DEFINITION
       RETURNING
         VALUE(rv_string) TYPE string
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS add_xml
       IMPORTING
         !iv_extra     TYPE clike OPTIONAL
@@ -20675,14 +20714,14 @@ CLASS zcl_abapgit_objects_files DEFINITION
         !iv_normalize TYPE abap_bool DEFAULT abap_true
         !is_metadata  TYPE zif_abapgit_definitions=>ty_metadata OPTIONAL
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS read_xml
       IMPORTING
         !iv_extra     TYPE clike OPTIONAL
       RETURNING
         VALUE(ri_xml) TYPE REF TO zif_abapgit_xml_input
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS read_abap
       IMPORTING
         !iv_extra      TYPE clike OPTIONAL
@@ -20690,16 +20729,16 @@ CLASS zcl_abapgit_objects_files DEFINITION
       RETURNING
         VALUE(rt_abap) TYPE abaptxt255_tab
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS add_abap
       IMPORTING
         !iv_extra TYPE clike OPTIONAL
         !it_abap  TYPE STANDARD TABLE
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS add
       IMPORTING
-        !is_file TYPE zif_abapgit_git_definitions=>ty_file .
+        !is_file TYPE zif_abapgit_git_definitions=>ty_file.
     METHODS add_raw
       IMPORTING
         !iv_extra TYPE clike OPTIONAL
@@ -20712,25 +20751,25 @@ CLASS zcl_abapgit_objects_files DEFINITION
       RETURNING
         VALUE(rv_data) TYPE xstring
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS get_files
       RETURNING
-        VALUE(rt_files) TYPE zif_abapgit_git_definitions=>ty_files_tt .
+        VALUE(rt_files) TYPE zif_abapgit_git_definitions=>ty_files_tt.
     METHODS set_files
       IMPORTING
-        !it_files TYPE zif_abapgit_git_definitions=>ty_files_tt .
+        !it_files TYPE zif_abapgit_git_definitions=>ty_files_tt.
     METHODS get_accessed_files
       RETURNING
-        VALUE(rt_files) TYPE zif_abapgit_git_definitions=>ty_file_signatures_tt .
+        VALUE(rt_files) TYPE zif_abapgit_git_definitions=>ty_file_signatures_tt.
     METHODS contains_file
       IMPORTING
         !iv_extra         TYPE clike OPTIONAL
         !iv_ext           TYPE string
       RETURNING
-        VALUE(rv_present) TYPE abap_bool .
+        VALUE(rv_present) TYPE abap_bool.
     METHODS get_file_pattern
       RETURNING
-        VALUE(rv_pattern) TYPE string .
+        VALUE(rv_pattern) TYPE string.
     METHODS is_json_metadata
       RETURNING
         VALUE(rv_result) TYPE abap_bool.
@@ -20738,12 +20777,12 @@ CLASS zcl_abapgit_objects_files DEFINITION
       IMPORTING
         !ii_i18n_file TYPE REF TO zif_abapgit_i18n_file
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
     METHODS read_i18n_files
       RETURNING
         VALUE(rt_i18n_files) TYPE zif_abapgit_i18n_file=>ty_table_of
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
 
   PROTECTED SECTION.
 
@@ -20754,13 +20793,13 @@ CLASS zcl_abapgit_objects_files DEFINITION
       RETURNING
         VALUE(rv_data) TYPE xstring
       RAISING
-        zcx_abapgit_exception .
+        zcx_abapgit_exception.
   PRIVATE SECTION.
 
-    DATA ms_item TYPE zif_abapgit_definitions=>ty_item .
-    DATA mt_accessed_files TYPE zif_abapgit_git_definitions=>ty_file_signatures_tt .
-    DATA mt_files TYPE zif_abapgit_git_definitions=>ty_files_tt .
-    DATA mv_path TYPE string .
+    DATA ms_item TYPE zif_abapgit_definitions=>ty_item.
+    DATA mt_accessed_files TYPE zif_abapgit_git_definitions=>ty_file_signatures_tt.
+    DATA mt_files TYPE zif_abapgit_git_definitions=>ty_files_tt.
+    DATA mv_path TYPE string.
 
     METHODS mark_accessed
       IMPORTING
@@ -20784,13 +20823,15 @@ CLASS zcl_abapgit_objects_generic DEFINITION
         zcx_abapgit_exception .
     METHODS delete
       IMPORTING
-        !iv_package TYPE devclass
+        !iv_package   TYPE devclass
+        !iv_transport TYPE trkorr
       RAISING
         zcx_abapgit_exception .
     METHODS deserialize
       IMPORTING
-        !iv_package TYPE devclass
-        !io_xml     TYPE REF TO zif_abapgit_xml_input
+        !iv_package   TYPE devclass
+        !io_xml       TYPE REF TO zif_abapgit_xml_input
+        !iv_transport TYPE trkorr
       RAISING
         zcx_abapgit_exception .
     METHODS exists
@@ -20825,7 +20866,8 @@ CLASS zcl_abapgit_objects_generic DEFINITION
     METHODS before_export .
     METHODS corr_insert
       IMPORTING
-        !iv_package TYPE devclass
+        !iv_package   TYPE devclass
+        !iv_transport TYPE trkorr
       RAISING
         zcx_abapgit_exception .
     METHODS deserialize_data
@@ -25173,6 +25215,9 @@ CLASS zcl_abapgit_object_sfpf DEFINITION
     CONSTANTS c_layout_file_ext TYPE string VALUE 'xdp'.
 
     METHODS:
+      check_ads_connection
+        RAISING
+          zcx_abapgit_exception,
       load
         RETURNING VALUE(ri_wb_form) TYPE REF TO if_fp_wb_form
         RAISING   zcx_abapgit_exception,
@@ -28460,6 +28505,9 @@ CLASS zcl_abapgit_xml IMPLEMENTATION.
 
     li_element = mi_xml_doc->find_from_name_ns( depth = 0
                                                 name = c_abapgit_tag ).
+    IF li_element IS NOT BOUND.
+      zcx_abapgit_exception=>raise( |{ c_abapgit_tag } element not found, check the XML structure| ).
+    ENDIF.
     li_version = li_element->if_ixml_node~get_attributes(
       )->get_named_item_ns( c_attr_version ).
     IF li_version->get_value( ) <> zif_abapgit_version=>c_xml_version.
@@ -34620,10 +34668,10 @@ CLASS /apmg/cl_apm_arborist IMPLEMENTATION.
     DATA(final_nodes) = resolve( ).
 
     " Log summary
-    DATA(total_nodes) = lines( final_nodes ).
+    DATA(total_nodes)     = lines( final_nodes ).
     DATA(installed_count) = 0.
-    DATA(missing_count) = 0.
-    DATA(invalid_count) = 0.
+    DATA(missing_count)   = 0.
+    DATA(invalid_count)   = 0.
 
     LOOP AT final_nodes ASSIGNING FIELD-SYMBOL(<node>).
       IF <node>->installed = abap_true.
@@ -36553,7 +36601,7 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
     " Include a list of all objects which the registry will compare against the global object
     " directory (GTADIR) to avoid name conflicts with other packages
-    LOOP AT files ASSIGNING FIELD-SYMBOL(<file>).
+    LOOP AT files ASSIGNING FIELD-SYMBOL(<file>) WHERE item-obj_type IS NOT INITIAL AND item-obj_name IS NOT INITIAL.
       DATA(item) = |{ <file>-item-obj_type },{ <file>-item-obj_name }|.
       COLLECT item INTO packument-_objects.
     ENDLOOP.
@@ -47279,7 +47327,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    || document.createElement("form");' ).
     lo_buf->add( '' ).
     lo_buf->add( '  form.setAttribute("method", method || "post");' ).
-    lo_buf->add( '  if (/sapevent/i.test(action)) {' ).
+    lo_buf->add( '  var form_action = form.getAttribute("action");' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  // SAP GUI for HTML: inside an HTML control, form actions look as follows:' ).
+    lo_buf->add( '  // ~control=116&~event=OnSAPEvent&ALINK=1&frameName=&PARAMS=stage_commit' ).
+    lo_buf->add( '  if (/~control=/i.test(form_action)) {' ).
+    lo_buf->add( '    form.setAttribute("action", form_action.replace(/PARAMS=.*$/, "PARAMS=" + action));' ).
+    lo_buf->add( '  } else if (/sapevent/i.test(action)) {' ).
     lo_buf->add( '    form.setAttribute("action", action);' ).
     lo_buf->add( '  } else {' ).
     lo_buf->add( '    form.setAttribute("action", getSapeventPrefix() + "SAPEVENT:" + action);' ).
@@ -47450,16 +47504,16 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    var indexOfSelected = rows.indexOf(selected);' ).
     lo_buf->add( '    var lastRow         = rows.length - 1;' ).
     lo_buf->add( '' ).
-    lo_buf->add( '    if (keycode == 13 && document.activeElement.tagName.toLowerCase() != "input") {' ).
+    lo_buf->add( '    if (keycode === 13 && document.activeElement.tagName.toLowerCase() !== "input") {' ).
     lo_buf->add( '      // "enter" to open, unless command field has focus' ).
     lo_buf->add( '      self.openSelectedRepo();' ).
-    lo_buf->add( '    } else if ((keycode == 52 || keycode == 56) && indexOfSelected > 0) {' ).
+    lo_buf->add( '    } else if ((keycode === 52 || keycode === 56) && indexOfSelected > 0) {' ).
     lo_buf->add( '      // "4,8" for previous, digits are the numlock keys' ).
     lo_buf->add( '      // NB: numpad must be activated, keypress does not detect arrows' ).
     lo_buf->add( '      //     if we need arrows it will be keydown. But then mind the keycodes, they may change !' ).
     lo_buf->add( '      //     e.g. 100 is ''d'' with keypress (and conflicts with diff hotkey), and also it is arrow-left keydown' ).
     lo_buf->add( '      self.selectRowByIndex(indexOfSelected - 1);' ).
-    lo_buf->add( '    } else if ((keycode == 54 || keycode == 50) && indexOfSelected < lastRow) {' ).
+    lo_buf->add( '    } else if ((keycode === 54 || keycode === 50) && indexOfSelected < lastRow) {' ).
     lo_buf->add( '      // "6,2" for next' ).
     lo_buf->add( '      self.selectRowByIndex(indexOfSelected + 1);' ).
     lo_buf->add( '    }' ).
@@ -47507,11 +47561,19 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  // now we have a repo selected, determine which action buttons are relevant' ).
     lo_buf->add( '  var selectedRepoKey       = selectedRow.dataset.key;' ).
     lo_buf->add( '  var selectedRepoIsOffline = selectedRow.dataset.offline === "X";' ).
+    lo_buf->add( '  var reKey                 = /key=(#|\d+)$/;' ).
+    lo_buf->add( '  var newKey                = "key=" + selectedRepoKey;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  var actionLinks = document.querySelectorAll("a.action_link");' ).
     lo_buf->add( '  actionLinks.forEach(function(link) {' ).
     lo_buf->add( '    // adjust repo key in urls' ).
-    lo_buf->add( '    link.href = link.href.replace(/\?key=(#|\d+)/, "?key=" + selectedRepoKey);' ).
+    lo_buf->add( '    link.href = link.href.replace(reKey, newKey);' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '    // SAP GUI for HTML rewrites links and saves the original in hrefsav' ).
+    lo_buf->add( '    // see /sap/public/icmandir/its/lsgui/js/htmlviewer.js' ).
+    lo_buf->add( '    if (link.hrefsav) {' ).
+    lo_buf->add( '      link.hrefsav = link.hrefsav.replace(reKey, newKey);' ).
+    lo_buf->add( '    }' ).
     lo_buf->add( '' ).
     lo_buf->add( '    // toggle button visibility' ).
     lo_buf->add( '    if (link.classList.contains("action_offline_repo")) {' ).
@@ -47650,7 +47712,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    remove : "R",' ).
     lo_buf->add( '    ignore : "I",' ).
     lo_buf->add( '    reset  : "?",' ).
-    lo_buf->add( '    isValid: function(status) { return "ARI?".indexOf(status) == -1 }' ).
+    lo_buf->add( '    isValid: function(status) { return "ARI?".indexOf(status) === -1 }' ).
     lo_buf->add( '  };' ).
     lo_buf->add( '' ).
     lo_buf->add( '  this.TEMPLATES = {' ).
@@ -47765,7 +47827,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    } else return;' ).
     lo_buf->add( '  } else return;' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  if (["TD", "TH"].indexOf(td.tagName) == -1 || td.className != "cmd") return;' ).
+    lo_buf->add( '  if (["TD", "TH"].indexOf(td.tagName) === -1 || td.className !== "cmd") return;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  var status    = this.STATUS[target.innerText]; // Convert anchor text to status' ).
     lo_buf->add( '  var targetRow = td.parentNode;' ).
@@ -47893,7 +47955,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'StageHelper.prototype.updateRowCommand = function(row, status) {' ).
     lo_buf->add( '  var cell = row.cells[this.colIndex["cmd"]];' ).
     lo_buf->add( '  if (status === this.STATUS.reset) {' ).
-    lo_buf->add( '    cell.innerHTML = (row.className == "local")' ).
+    lo_buf->add( '    cell.innerHTML = (row.className === "local")' ).
     lo_buf->add( '      ? this.TEMPLATES.cmdLocal' ).
     lo_buf->add( '      :     this.TEMPLATES.cmdRemote;' ).
     lo_buf->add( '  } else {' ).
@@ -48271,8 +48333,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '  var td = e.target;' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  while (td != undefined && td.tagName != "TD" && td.tagName != "TBODY") td = td.parentElement;' ).
-    lo_buf->add( '  if (td == undefined) return;' ).
+    lo_buf->add( '  while (td !== null && td !== undefined && td.tagName !== "TD" && td.tagName !== "TBODY") td = td.parentElement;' ).
+    lo_buf->add( '  if (td === null || td === undefined) return;' ).
     lo_buf->add( '  var table = td.parentElement.parentElement;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  var patchColumnCount = 0;' ).
@@ -48283,7 +48345,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  if (td.classList.contains("diff_left")) {' ).
     lo_buf->add( '    table.classList.remove("diff_select_right");' ).
     lo_buf->add( '    table.classList.add("diff_select_left");' ).
-    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx != splitCodeLeftColumnIdx + patchColumnCount) {' ).
+    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx !== splitCodeLeftColumnIdx + patchColumnCount) {' ).
     lo_buf->add( '      // De-select to avoid effect of dragging selection in case the right column was first selected' ).
     lo_buf->add( '      if (document.body.createTextRange) { // All IE but Edge' ).
     lo_buf->add( '        // document.getSelection().removeAllRanges() may trigger error' ).
@@ -48302,7 +48364,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  } else if (td.classList.contains("diff_right")) {' ).
     lo_buf->add( '    table.classList.remove("diff_select_left");' ).
     lo_buf->add( '    table.classList.add("diff_select_right");' ).
-    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx != splitCodeRightColumnIdx + patchColumnCount) {' ).
+    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx !== splitCodeRightColumnIdx + patchColumnCount) {' ).
     lo_buf->add( '      if (document.body.createTextRange) { // All IE but Edge' ).
     lo_buf->add( '        // document.getSelection().removeAllRanges() may trigger error' ).
     lo_buf->add( '        // so use this code which is equivalent but does not fail' ).
@@ -48332,11 +48394,11 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  // (https://stackoverflow.com/questions/6619805/select-text-in-a-column-of-an-html-table)' ).
     lo_buf->add( '  var td = e.target;' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  while (td != undefined && td.tagName != "TD" && td.tagName != "TBODY") td = td.parentElement;' ).
-    lo_buf->add( '  if (td != undefined) {' ).
+    lo_buf->add( '  while (td !== null && td !== undefined && td.tagName !== "TD" && td.tagName !== "TBODY") td = td.parentElement;' ).
+    lo_buf->add( '  if (td !== null && td !== undefined) {' ).
     lo_buf->add( '    // Use window.clipboardData instead of e.clipboardData' ).
     lo_buf->add( '    // (https://stackoverflow.com/questions/23470958/ie-10-copy-paste-issue)' ).
-    lo_buf->add( '    var clipboardData = (e.clipboardData == undefined ? window.clipboardData : e.clipboardData);' ).
+    lo_buf->add( '    var clipboardData = (e.clipboardData === undefined ? window.clipboardData : e.clipboardData);' ).
     lo_buf->add( '    var text          = this.getSelectedText();' ).
     lo_buf->add( '    clipboardData.setData("text", text);' ).
     lo_buf->add( '    e.preventDefault();' ).
@@ -49097,7 +49159,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
     lo_buf->add( 'Patch.prototype.getToggledCheckbox = function(oEvent) {' ).
-    lo_buf->add( '  var elCheckbox = null;' ).
+    lo_buf->add( '  var elCheckbox;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  // We have either an input element or any element with input child' ).
     lo_buf->add( '  // in the latter case we have to toggle the checkbox manually' ).
@@ -49504,7 +49566,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    });' ).
     lo_buf->add( '' ).
     lo_buf->add( '  items = items.map(function(item) {' ).
-    lo_buf->add( '    var action = "";' ).
+    lo_buf->add( '    var action;' ).
     lo_buf->add( '    var anchor = item[0];' ).
     lo_buf->add( '    if (anchor.href.includes("#")) {' ).
     lo_buf->add( '      action = function() {' ).
@@ -49654,7 +49716,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '// Toggle display of warning message when using Edge (based on Chromium) browser control' ).
     lo_buf->add( '// Todo: Remove once https://github.com/abapGit/abapGit/issues/4841 is fixed' ).
-    lo_buf->add( 'function toggleBrowserControlWarning(){' ).
+    lo_buf->add( 'function toggleBrowserControlWarning() {' ).
     lo_buf->add( '  if (!navigator.userAgent.includes("Edg")){' ).
     lo_buf->add( '    var elBrowserControlWarning = document.getElementById("browser-control-warning");' ).
     lo_buf->add( '    if (elBrowserControlWarning) {' ).
@@ -49667,6 +49729,59 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'function displayBrowserControlFooter() {' ).
     lo_buf->add( '  var out = document.getElementById("browser-control-footer");' ).
     lo_buf->add( '  out.innerHTML = " - " + ( navigator.userAgent.includes("Edg") ? "Edge" : "IE"  );' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '/**********************************************************' ).
+    lo_buf->add( ' * Popup Control' ).
+    lo_buf->add( ' **********************************************************/' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '// Prevents keyboard navigation to elements outside the modal popup' ).
+    lo_buf->add( '// eslint-disable-next-line no-unused-vars' ).
+    lo_buf->add( 'function trapFocus() {' ).
+    lo_buf->add( '  const modal = document.getElementById("modal");' ).
+    lo_buf->add( '  if (!modal) return;' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  var focusableSelectors = "button, [href], input, select, textarea, [tabindex]";' ).
+    lo_buf->add( '  var focusableElements = modal.querySelectorAll(focusableSelectors);' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  // Filter out elements with tabindex="-1"' ).
+    lo_buf->add( '  var focusable = [];' ).
+    lo_buf->add( '  for (var i = 0; i < focusableElements.length; i++) {' ).
+    lo_buf->add( '    if (focusableElements[i].getAttribute("tabindex") !== "-1") {' ).
+    lo_buf->add( '      focusable.push(focusableElements[i]);' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  if (focusable.length === 0) return;' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  var firstElement = focusable[0];' ).
+    lo_buf->add( '  var lastElement = focusable[focusable.length - 1];' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  // Focus the main button when modal opens, if it exists' ).
+    lo_buf->add( '  if (document.querySelector(".main-button")) {' ).
+    lo_buf->add( '    setInitialFocus("main-button");' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  modal.onkeydown = function(e) {' ).
+    lo_buf->add( '    var keyCode = e.keyCode || e.which;' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '    // Tab key' ).
+    lo_buf->add( '    if (keyCode === 9) {' ).
+    lo_buf->add( '      if (e.shiftKey) {' ).
+    lo_buf->add( '        // Shift + Tab' ).
+    lo_buf->add( '        if (document.activeElement === firstElement) {' ).
+    lo_buf->add( '          e.preventDefault();' ).
+    lo_buf->add( '          lastElement.focus();' ).
+    lo_buf->add( '        }' ).
+    lo_buf->add( '      } else {' ).
+    lo_buf->add( '        // Tab only' ).
+    lo_buf->add( '        if (document.activeElement === lastElement) {' ).
+    lo_buf->add( '          e.preventDefault();' ).
+    lo_buf->add( '          firstElement.focus();' ).
+    lo_buf->add( '        }' ).
+    lo_buf->add( '      }' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '  };' ).
     lo_buf->add( '}' ).
 
     li_asset_man->register_asset(
@@ -52117,6 +52232,12 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
         save_settings( ).
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
 
+      WHEN c_action-clear_filter.
+
+        CLEAR settings-list_settings-filter.
+        save_settings( ).
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
     ENDCASE.
 
   ENDMETHOD.
@@ -52567,6 +52688,14 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     ENDIF.
 
     html->add( '<span class="toolbar-light pad-sides">' ).
+
+    IF settings-list_settings-filter IS NOT INITIAL.
+      html->add( html->a(
+        iv_txt   = |<i id="icon-clear-filter" class="icon icon-times-solid"></i>|
+        iv_class = 'command'
+        iv_act   = |{ c_action-clear_filter }| ) ).
+    ENDIF.
+
     html->add( html->a(
       iv_txt   = |<i id="icon-filter-favorite" class="icon icon-check { icon_class }"></i> Only Favorites|
       iv_class = 'command'
@@ -53360,6 +53489,16 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
       none = abap_false.
     ENDIF.
 
+    IF package_json-engines IS NOT INITIAL.
+      html->add( |<h2>Engines ({ lines( package_json-engines ) })</h2>| ).
+
+      render_engines_table(
+        html    = html
+        engines = package_json-engines ).
+
+      none = abap_false.
+    ENDIF.
+
     IF none = abap_true.
       html->add( '<h3>This package has no dependencies</h3>' ).
     ENDIF.
@@ -53413,6 +53552,56 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
       DATA(satisfies) = /apmg/cl_apm_semver_functions=>satisfies(
         version = installed_package-version
         range   = <dependency>-range ).
+
+      IF satisfies = abap_true.
+        html->td( html->icon( 'check/success' ) ).
+      ELSE.
+        html->td( html->icon( 'bolt/warning' ) ).
+      ENDIF.
+
+      html->add( '</tr>' ).
+    ENDLOOP.
+
+    html->add( '</table>' ).
+
+  ENDMETHOD.
+
+  METHOD render_engines_table.
+
+    html->add( '<table width="100%">' ).
+    html->add( '<tr>' ).
+    html->add( '<th width="30%">Range</th>' ).
+    html->add( '<th width="10%">&nbsp;</th>' ).
+    html->add( '<th width="40%">&nbsp;</th>' ).
+    html->add( '<th width="10%">Version</th>' ).
+    html->add( '<th width="10%">Status</th>' ).
+    html->add( '</tr>' ).
+
+    LOOP AT engines ASSIGNING FIELD-SYMBOL(<engine>)
+      WHERE key = /apmg/if_apm_types=>c_engine-abap OR key = /apmg/if_apm_types=>c_engine-apm.
+
+      html->add( '<tr>' ).
+      html->td( get_package_boxed(
+        name  = <engine>-key
+        value = <engine>-range ) ).
+
+      html->td( '' ).
+
+      CASE <engine>-key.
+        WHEN /apmg/if_apm_types=>c_engine-abap.
+          DATA(version) = /apmg/cl_apm_command_utils=>get_abap_version( ).
+        WHEN /apmg/if_apm_types=>c_engine-apm.
+          version = /apmg/if_apm_version=>c_version.
+        WHEN OTHERS.
+          ASSERT 0 = 1.
+      ENDCASE.
+
+      html->td( '' ).
+      html->td( version ).
+
+      DATA(satisfies) = /apmg/cl_apm_semver_functions=>satisfies(
+        version = version
+        range   = <engine>-range ).
 
       IF satisfies = abap_true.
         html->td( html->icon( 'check/success' ) ).
@@ -58871,11 +59060,11 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
         LOOP AT log->zif_abapgit_log~get_messages( ) ASSIGNING FIELD-SYMBOL(<msg>).
           CASE <msg>-type.
             WHEN zif_abapgit_log=>c_status-error.
-              WRITE: / <msg>-text COLOR COL_NEGATIVE.
+              WRITE / <msg>-text COLOR COL_NEGATIVE.
             WHEN zif_abapgit_log=>c_status-warning.
-              WRITE: / <msg>-text COLOR COL_TOTAL.
+              WRITE / <msg>-text COLOR COL_TOTAL.
             WHEN OTHERS.
-              WRITE: / <msg>-text COLOR COL_NORMAL.
+              WRITE / <msg>-text COLOR COL_NORMAL.
           ENDCASE.
         ENDLOOP.
       ENDIF.
@@ -75605,6 +75794,56 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD insert_cust_logical_object.
+
+    DATA: lt_tasks    TYPE trwbo_request_headers,
+          ls_task     TYPE trwbo_request_header,
+          lv_obj_name TYPE e071-obj_name.
+
+    CALL FUNCTION 'TR_READ_REQUEST_WITH_TASKS'
+      EXPORTING
+        iv_trkorr          = iv_transport
+      IMPORTING
+        et_request_headers = lt_tasks
+      EXCEPTIONS
+        invalid_input      = 1
+        OTHERS             = 2.
+    IF sy-subrc <> 0.
+      zcx_abapgit_exception=>raise_t100( ).
+    ENDIF.
+
+    READ TABLE lt_tasks INTO ls_task WITH KEY strkorr = iv_transport.
+    IF sy-subrc = 0.
+
+      lv_obj_name = iv_obj_name.
+
+      CALL FUNCTION 'TLOGO_OBJECT_APPEND'
+        EXPORTING
+          korrnr                      = ls_task-trkorr
+          objtype                     = iv_object
+          obj_name                    = lv_obj_name
+        EXCEPTIONS
+          korrnr_already_released     = 1
+          korrnr_locked               = 2
+          korrnr_not_exists           = 3
+          korrnr_not_korr             = 4
+          korr_other_user             = 5
+          no_logical_object           = 6
+          object_has_no_tadir         = 7
+          object_locked_in_other_korr = 8
+          obj_name_too_long_or_space  = 9
+          error_append_to_comm        = 10
+          OTHERS                      = 11.
+      IF sy-subrc <> 0.
+        zcx_abapgit_exception=>raise_t100( ).
+      ENDIF.
+    ELSE.
+      zcx_abapgit_exception=>raise(
+        |Error inserting logical object { iv_obj_name } into customizing transport { iv_transport }| ).
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD is_object_locked_in_transport.
     DATA: ls_object_key        TYPE e071,
           lv_type_check_result TYPE c LENGTH 1,
@@ -75991,23 +76230,36 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
 
   METHOD zif_abapgit_cts_api~insert_transport_object.
 
-    CALL FUNCTION 'RS_CORR_INSERT'
-      EXPORTING
-        object              = iv_obj_name
-        object_class        = iv_object
-        devclass            = iv_package
-        master_language     = iv_language
-        korrnum             = iv_transport
-        mode                = iv_mode
-        global_lock         = abap_true
-        suppress_dialog     = abap_true
-      EXCEPTIONS
-        cancelled           = 1
-        permission_failure  = 2
-        unknown_objectclass = 3
-        OTHERS              = 4.
-    IF sy-subrc <> 0.
-      zcx_abapgit_exception=>raise_t100( ).
+    IF zif_abapgit_cts_api~is_object_type_customizing( iv_object ) = abap_true.
+
+      insert_cust_logical_object( iv_transport = iv_transport
+                                  iv_object    = iv_object
+                                  iv_obj_name  = iv_obj_name ).
+
+    ELSE.
+      IF iv_obj_name IS INITIAL.
+        zcx_abapgit_exception=>raise( |RS_CORR_INSERT: Object name must not be empty| ).
+      ENDIF.
+
+      CALL FUNCTION 'RS_CORR_INSERT'
+        EXPORTING
+          object              = iv_obj_name
+          object_class        = iv_object
+          devclass            = iv_package
+          master_language     = iv_language
+          korrnum             = iv_transport
+          mode                = iv_mode
+          global_lock         = abap_true
+          suppress_dialog     = abap_true
+        EXCEPTIONS
+          cancelled           = 1
+          permission_failure  = 2
+          unknown_objectclass = 3
+          OTHERS              = 4.
+      IF sy-subrc <> 0.
+        zcx_abapgit_exception=>raise_t100( ).
+      ENDIF.
+
     ENDIF.
 
   ENDMETHOD.
@@ -76016,6 +76268,28 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
     IF iv_package IS NOT INITIAL.
       rv_possible = zcl_abapgit_factory=>get_sap_package( iv_package )->are_changes_recorded_in_tr_req( ).
     ENDIF.
+  ENDMETHOD.
+
+  METHOD zif_abapgit_cts_api~is_object_type_customizing.
+
+    DATA:
+      ls_e071              TYPE e071,
+      lv_is_logical_object TYPE abap_bool,
+      lv_category          TYPE c LENGTH 4.
+
+    ls_e071-pgmid  = iv_pgmid.
+    ls_e071-object = iv_object.
+
+    CALL FUNCTION 'TR_CHECK_TYPE'
+      EXPORTING
+        wi_e071     = ls_e071
+      IMPORTING
+        we_category = lv_category
+        ev_logo_obj = lv_is_logical_object.
+
+    rv_is_customizing_object = boolc(
+      lv_category = zif_abapgit_cts_api~c_transport_category-customizing AND lv_is_logical_object = abap_true ).
+
   ENDMETHOD.
 
   METHOD zif_abapgit_cts_api~list_open_requests.
@@ -76068,6 +76342,9 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
           ls_list-obj_name = ls_contents-obj_name.
           INSERT ls_list INTO TABLE rt_list.
         WHEN 'LIMU'.
+          IF ls_contents-object IN it_skip_limu_types.
+            CONTINUE.
+          ENDIF.
           TRY.
               zif_abapgit_cts_api~get_r3tr_obj_for_limu_obj(
                 EXPORTING
@@ -76135,7 +76412,7 @@ CLASS zcl_abapgit_cts_api IMPLEMENTATION.
 * fallback to any language
       SELECT SINGLE as4text FROM e07t
         INTO rv_description
-        WHERE trkorr = iv_trkorr ##SUBRC_OK. "#EC CI_NOORDER
+        WHERE trkorr = iv_trkorr ##SUBRC_OK.            "#EC CI_NOORDER
     ENDIF.
 
   ENDMETHOD.
@@ -79153,6 +79430,21 @@ CLASS zcl_abapgit_exit IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD zif_abapgit_exit~change_password_popup_username.
+
+    IF gi_exit IS NOT INITIAL.
+      TRY.
+          gi_exit->change_password_popup_username(
+            EXPORTING
+              iv_repo_url = iv_repo_url
+            CHANGING
+              cv_user     = cv_user ).
+        CATCH cx_sy_ref_is_initial cx_sy_dyn_call_illegal_method ##NO_HANDLER.
+      ENDTRY.
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD zif_abapgit_exit~change_local_host.
 
     IF gi_exit IS NOT INITIAL.
@@ -79723,11 +80015,14 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " Convert string of 2-letter ISO languages into table of sy-langu codes
+    " Convert string of languages into table of of 2-letter ISO languages
     SPLIT iv_langs AT ',' INTO TABLE lt_langs_str.
 
     LOOP AT lt_langs_str ASSIGNING <lv_str>.
       lv_laiso = condense( to_upper( <lv_str> ) ).
+      IF strlen( lv_laiso ) = 1.
+        lv_laiso = langu_to_laiso_safe( lv_laiso(1) ).
+      ENDIF.
       APPEND lv_laiso TO rt_languages.
     ENDLOOP.
 
@@ -79750,7 +80045,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       <lv_lang> LIKE LINE OF it_languages,
       <lv_str>  TYPE string.
 
-    " Convert table of sy-langu codes into string of 2-letter ISO languages
+    " Convert table of 2-letter ISO languages codes into string
     LOOP AT it_languages ASSIGNING <lv_lang>.
       " Keep * as indicator for 'all installed languages'
       IF <lv_lang> = '*'.
@@ -81546,7 +81841,7 @@ CLASS zcl_abapgit_factory IMPLEMENTATION.
 
   METHOD get_function_module.
 
-    IF gi_function_module IS INITIAL.
+    IF gi_function_module IS NOT BOUND.
       CREATE OBJECT gi_function_module TYPE zcl_abapgit_function_module.
     ENDIF.
 
@@ -81620,7 +81915,7 @@ CLASS zcl_abapgit_factory IMPLEMENTATION.
 
   METHOD get_tadir.
 
-    IF gi_tadir IS INITIAL.
+    IF gi_tadir IS NOT BOUND.
       CREATE OBJECT gi_tadir TYPE zcl_abapgit_tadir.
     ENDIF.
 
@@ -81740,7 +82035,7 @@ CLASS zcl_abapgit_field_rules IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_FILENAME_LOGIC IMPLEMENTATION.
+CLASS zcl_abapgit_filename_logic IMPLEMENTATION.
 
   METHOD detect_obj_definition.
 
@@ -81783,11 +82078,11 @@ CLASS ZCL_ABAPGIT_FILENAME_LOGIC IMPLEMENTATION.
     map_filename_to_object(
       EXPORTING
         iv_item_part_of_filename = lv_name " original-cased object name part only
-        iv_path     = iv_path
-        io_dot      = io_dot
-        iv_package  = iv_devclass
+        iv_path                  = iv_path
+        io_dot                   = io_dot
+        iv_package               = iv_devclass
       CHANGING
-        cs_item     = es_item ).
+        cs_item                  = es_item ).
 
     detect_obj_definition(
       EXPORTING
@@ -81895,11 +82190,11 @@ CLASS ZCL_ABAPGIT_FILENAME_LOGIC IMPLEMENTATION.
         CALL METHOD (lv_class)=>('ZIF_ABAPGIT_OBJECT~MAP_FILENAME_TO_OBJECT')
           EXPORTING
             iv_item_part_of_filename = iv_item_part_of_filename
-            iv_path     = iv_path
-            io_dot      = io_dot
-            iv_package  = iv_package
+            iv_path                  = iv_path
+            io_dot                   = io_dot
+            iv_package               = iv_package
           CHANGING
-            cs_item     = cs_item.
+            cs_item                  = cs_item.
       CATCH cx_sy_dyn_call_illegal_class.
         " Map data config to TABU object type
         IF cs_item-obj_type = 'CONF'.
@@ -81927,9 +82222,9 @@ CLASS ZCL_ABAPGIT_FILENAME_LOGIC IMPLEMENTATION.
 
         CALL METHOD (lv_class)=>('ZIF_ABAPGIT_OBJECT~MAP_OBJECT_TO_FILENAME')
           EXPORTING
-            is_item     = is_item
-            iv_ext      = iv_ext
-            iv_extra    = iv_extra
+            is_item                  = is_item
+            iv_ext                   = iv_ext
+            iv_extra                 = iv_extra
           CHANGING
             cv_item_part_of_filename = cv_item_part_of_filename.
       CATCH cx_sy_dyn_call_illegal_class ##NO_HANDLER.
@@ -81974,9 +82269,9 @@ CLASS ZCL_ABAPGIT_FILENAME_LOGIC IMPLEMENTATION.
     TRY.
         map_object_to_filename(
           EXPORTING
-            is_item     = is_item
-            iv_ext      = iv_ext
-            iv_extra    = iv_extra
+            is_item                  = is_item
+            iv_ext                   = iv_ext
+            iv_extra                 = iv_extra
           CHANGING
             cv_item_part_of_filename = rv_filename ).
       CATCH zcx_abapgit_exception ##NO_HANDLER.
@@ -84417,7 +84712,7 @@ CLASS ZCL_ABAPGIT_OBJECTS_FACTORY IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_OBJECTS_FILES IMPLEMENTATION.
+CLASS zcl_abapgit_objects_files IMPLEMENTATION.
 
   METHOD add.
     APPEND is_file TO mt_files.
@@ -84454,9 +84749,9 @@ CLASS ZCL_ABAPGIT_OBJECTS_FILES IMPLEMENTATION.
 
     ls_file-path     = '/'.
     ls_file-filename = zcl_abapgit_filename_logic=>object_to_i18n_file(
-      is_item  = ms_item
+      is_item        = ms_item
       iv_lang_suffix = ii_i18n_file->lang_suffix( )
-      iv_ext   = ii_i18n_file->ext( ) ).
+      iv_ext         = ii_i18n_file->ext( ) ).
 
     APPEND ls_file TO mt_files.
 
@@ -84498,7 +84793,7 @@ CLASS ZCL_ABAPGIT_OBJECTS_FILES IMPLEMENTATION.
           ls_file TYPE zif_abapgit_git_definitions=>ty_file.
 
     lv_xml = ii_xml->render( iv_normalize = iv_normalize
-                             is_metadata = is_metadata ).
+                             is_metadata  = is_metadata ).
     ls_file-path = '/'.
 
     ls_file-filename = zcl_abapgit_filename_logic=>object_to_file(
@@ -84556,8 +84851,8 @@ CLASS ZCL_ABAPGIT_OBJECTS_FILES IMPLEMENTATION.
 
   METHOD get_file_pattern.
     rv_pattern = zcl_abapgit_filename_logic=>object_to_file(
-      is_item  = ms_item
-      iv_ext   = '*' ).
+      is_item = ms_item
+      iv_ext  = '*' ).
     " Escape special characters for use with 'covers pattern' (CP)
     REPLACE ALL OCCURRENCES OF '#' IN rv_pattern WITH '##'.
     REPLACE ALL OCCURRENCES OF '+' IN rv_pattern WITH '#+'.
@@ -84899,10 +85194,11 @@ CLASS zcl_abapgit_objects_generic IMPLEMENTATION.
 
 * this will also insert into TADIR
     zcl_abapgit_factory=>get_cts_api( )->insert_transport_object(
-      iv_object   = ms_item-obj_type
-      iv_obj_name = ms_item-obj_name
-      iv_package  = iv_package
-      iv_language = mv_language ).
+      iv_object    = ms_item-obj_type
+      iv_obj_name  = ms_item-obj_name
+      iv_package   = iv_package
+      iv_transport = iv_transport
+      iv_language  = mv_language ).
 
   ENDMETHOD.
 
@@ -84926,7 +85222,8 @@ CLASS zcl_abapgit_objects_generic IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
-    corr_insert( iv_package ).
+    corr_insert( iv_package   = iv_package
+                 iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -84934,7 +85231,8 @@ CLASS zcl_abapgit_objects_generic IMPLEMENTATION.
 
     validate( io_xml ).
 
-    delete( iv_package ).
+    delete( iv_package   = iv_package
+            iv_transport = iv_transport ).
 
     deserialize_data(
       io_xml     = io_xml
@@ -84942,7 +85240,8 @@ CLASS zcl_abapgit_objects_generic IMPLEMENTATION.
 
     after_import( ).
 
-    corr_insert( iv_package ).
+    corr_insert( iv_package   = iv_package
+                 iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -87551,6 +87850,19 @@ CLASS zcl_abapgit_object_amsd IMPLEMENTATION.
         rv_bool = abap_false.
     ENDTRY.
 
+    IF rv_bool = abap_false.
+      TRY.
+          mi_persistence->get(
+            p_object_key           = mv_logical_db_schema_key
+            p_version              = 'I'
+            p_existence_check_only = abap_true ).
+          rv_bool = abap_true.
+
+        CATCH cx_swb_exception.
+          rv_bool = abap_false.
+      ENDTRY.
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD zif_abapgit_object~get_comparator.
@@ -88516,15 +88828,17 @@ CLASS zcl_abapgit_object_aqbg IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -88624,15 +88938,17 @@ CLASS zcl_abapgit_object_aqqu IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -88728,15 +89044,17 @@ CLASS zcl_abapgit_object_aqsg IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -89098,7 +89416,8 @@ CLASS zcl_abapgit_object_asfc IMPLEMENTATION.
 
     set_default_transport( iv_transport ).
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -89107,8 +89426,9 @@ CLASS zcl_abapgit_object_asfc IMPLEMENTATION.
     set_default_transport( iv_transport ).
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -90172,6 +90492,19 @@ CLASS zcl_abapgit_object_bdef IMPLEMENTATION.
       CATCH cx_swb_exception.
         rv_bool = abap_false.
     ENDTRY.
+
+    IF rv_bool = abap_false.
+      TRY.
+          mi_persistence->get(
+            p_object_key           = mv_behaviour_definition_key
+            p_version              = 'I'
+            p_existence_check_only = abap_true ).
+          rv_bool = abap_true.
+
+        CATCH cx_swb_exception.
+          rv_bool = abap_false.
+      ENDTRY.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -94733,7 +95066,7 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
   METHOD zif_abapgit_object~map_filename_to_object.
 
     IF iv_item_part_of_filename <> zcl_abapgit_filename_logic=>c_package_file-obj_name.
-      zcx_abapgit_exception=>raise( |Unexpected filename for package { cs_item-obj_name }| ).
+      zcx_abapgit_exception=>raise( |Unexpected filename part for package: { iv_item_part_of_filename }| ).
     ENDIF.
 
     " Try to get a unique package name for DEVC by using the path
@@ -96289,6 +96622,19 @@ CLASS zcl_abapgit_object_drul IMPLEMENTATION.
         rv_bool = abap_false.
     ENDTRY.
 
+    IF rv_bool = abap_false.
+      TRY.
+          mi_persistence->get(
+            p_object_key           = mv_dependency_rule_key
+            p_version              = 'I'
+            p_existence_check_only = abap_true ).
+          rv_bool = abap_true.
+
+        CATCH cx_swb_exception.
+          rv_bool = abap_false.
+      ENDTRY.
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD zif_abapgit_object~get_comparator.
@@ -97025,6 +97371,19 @@ CLASS zcl_abapgit_object_dtdc IMPLEMENTATION.
         rv_bool = abap_false.
     ENDTRY.
 
+    IF rv_bool = abap_false.
+      TRY.
+          mi_persistence->get(
+            p_object_key           = mv_dynamic_cache_key
+            p_version              = 'I'
+            p_existence_check_only = abap_true ).
+          rv_bool = abap_true.
+
+        CATCH cx_swb_exception.
+          rv_bool = abap_false.
+      ENDTRY.
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD zif_abapgit_object~get_comparator.
@@ -97362,7 +97721,8 @@ CLASS zcl_abapgit_object_dtel IMPLEMENTATION.
 
   METHOD zif_abapgit_object~exists.
 
-    DATA: lv_rollname TYPE dd04l-rollname.
+    DATA lv_rollname TYPE dd04l-rollname.
+    DATA ls_x030l    TYPE x030l.
 
     lv_rollname = ms_item-obj_name.
 
@@ -97370,10 +97730,16 @@ CLASS zcl_abapgit_object_dtel IMPLEMENTATION.
     CALL FUNCTION 'DD_GET_NAMETAB_HEADER'
       EXPORTING
         tabname   = lv_rollname
+      IMPORTING
+        x030l_wa  = ls_x030l
       EXCEPTIONS
         not_found = 1
         OTHERS    = 2.
-    IF sy-subrc <> 0.
+    IF sy-subrc = 0 AND ls_x030l-tabtype <> 'E'.
+      " then its not a data element
+      rv_bool = abap_false.
+      RETURN.
+    ELSEIF sy-subrc <> 0.
       " Check for inactive or modified versions
       SELECT SINGLE rollname FROM dd04l INTO lv_rollname
         WHERE rollname = lv_rollname.
@@ -102162,6 +102528,9 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
           lv_msg       TYPE string,
           lx_error     TYPE REF TO zcx_abapgit_exception.
 
+    DATA lt_tasks TYPE zif_abapgit_cts_api=>ty_request_and_tasks_tt.
+    DATA lv_transport TYPE trkorr.
+
     FIELD-SYMBOLS: <ls_func> LIKE LINE OF it_functions.
 
     LOOP AT it_functions ASSIGNING <ls_func>.
@@ -102228,8 +102597,10 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
               corrnum                 = iv_transport
               rfcscope                = <ls_func>-rfcscope " not on lower releases
               rfcvers                 = <ls_func>-rfcvers " not on lower releases
+              suppress_corr_check     = abap_false
             IMPORTING
               function_include        = lv_include
+              corrnum_e               = lv_transport
             TABLES
               import_parameter        = <ls_func>-import
               export_parameter        = <ls_func>-export
@@ -102262,8 +102633,10 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
               namespace               = lv_namespace
               remote_basxml_supported = <ls_func>-remote_basxml
               corrnum                 = iv_transport
+              suppress_corr_check     = abap_false
             IMPORTING
               function_include        = lv_include
+              corrnum_e               = lv_transport
             TABLES
               import_parameter        = <ls_func>-import
               export_parameter        = <ls_func>-export
@@ -102289,6 +102662,17 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
         ii_log->add_error( iv_msg  = |Function module { <ls_func>-funcname }: { lv_msg }|
                            is_item = ms_item ).
         CONTINUE.  "with next function module
+      ENDIF.
+
+      IF iv_transport IS NOT INITIAL.
+        lt_tasks = zcl_abapgit_factory=>get_cts_api( )->read_request_and_tasks( iv_transport ).
+        READ TABLE lt_tasks WITH KEY trkorr = lv_transport TRANSPORTING NO FIELDS.
+        IF sy-subrc <> 0.
+          " this happens when a FUNC is recorded in a different transport than
+          " what the current user selected
+          ii_log->add_warning( iv_msg  = |FUGR, transport changed to { lv_transport }|
+                               is_item = ms_item ).
+        ENDIF.
       ENDIF.
 
       zcl_abapgit_factory=>get_sap_report( )->insert_report(
@@ -102416,6 +102800,8 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
           lv_stext     TYPE tftit-stext,
           lv_group     TYPE rs38l-area.
 
+    DATA lv_transport TYPE trkorr.
+
     lv_complete = ms_item-obj_name.
 
     CALL FUNCTION 'FUNCTION_INCLUDE_SPLIT'
@@ -102454,6 +102840,8 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
         unicode_checks          = iv_version
         corrnum                 = iv_transport
         suppress_corr_check     = abap_false
+      IMPORTING
+        corrnum                 = lv_transport
       EXCEPTIONS
         name_already_exists     = 1
         name_not_correct        = 2
@@ -103471,7 +103859,8 @@ CLASS zcl_abapgit_object_g4ba IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
 * SUSH object type checks if the G4BA exists, and blocks deletion if the TADIR exists without deletion flag
     UPDATE tadir SET delflag = abap_true WHERE pgmid = 'R3TR' AND object = 'G4BA' AND obj_name = ms_item-obj_name.
@@ -103481,8 +103870,9 @@ CLASS zcl_abapgit_object_g4ba IMPLEMENTATION.
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -103611,15 +104001,17 @@ CLASS zcl_abapgit_object_g4bs IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -107997,15 +108389,17 @@ CLASS zcl_abapgit_object_iwmo IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -108138,15 +108532,17 @@ CLASS zcl_abapgit_object_iwom IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -108244,15 +108640,17 @@ CLASS zcl_abapgit_object_iwpr IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -108370,15 +108768,17 @@ CLASS zcl_abapgit_object_iwsg IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -108491,15 +108891,17 @@ CLASS zcl_abapgit_object_iwsv IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -108639,15 +109041,17 @@ CLASS zcl_abapgit_object_iwvb IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -109041,12 +109445,12 @@ CLASS zcl_abapgit_object_msag IMPLEMENTATION.
       EXPORTING
         iv_lang_field_name = 'SPRSL'
       CHANGING
-        ct_tab = lt_t100_texts ).
+        ct_tab             = lt_t100_texts ).
     mo_i18n_params->trim_saplang_keyed_table(
       EXPORTING
         iv_lang_field_name = 'SPRSL'
       CHANGING
-        ct_tab = lt_t100t ).
+        ct_tab             = lt_t100t ).
 
     MODIFY t100t FROM TABLE lt_t100t.                     "#EC CI_SUBRC
 
@@ -109102,7 +109506,7 @@ CLASS zcl_abapgit_object_msag IMPLEMENTATION.
         FOR ALL ENTRIES IN lt_doku_object_names
         WHERE id = c_longtext_id_msag
         AND object = lt_doku_object_names-table_line
-        AND masterlang = abap_true
+        AND langu = mv_language
         ORDER BY PRIMARY KEY.
     ELSE.
       lt_language_filter = mo_i18n_params->build_language_filter( ).
@@ -109111,7 +109515,7 @@ CLASS zcl_abapgit_object_msag IMPLEMENTATION.
         FOR ALL ENTRIES IN lt_doku_object_names
         WHERE id = c_longtext_id_msag
         AND object = lt_doku_object_names-table_line
-        AND langu IN lt_language_filter
+        AND ( langu IN lt_language_filter OR langu = mv_language )
         ORDER BY PRIMARY KEY.
     ENDIF.
 
@@ -109251,9 +109655,9 @@ CLASS zcl_abapgit_object_msag IMPLEMENTATION.
     FIELD-SYMBOLS: <ls_t100> LIKE LINE OF lt_t100.
 
     io_xml->read( EXPORTING iv_name = 'T100A'
-                  CHANGING cg_data = ls_t100a ).
+                  CHANGING  cg_data = ls_t100a ).
     io_xml->read( EXPORTING iv_name = 'T100'
-                  CHANGING cg_data = lt_t100 ).
+                  CHANGING  cg_data = lt_t100 ).
 
     corr_insert( iv_package ).
 
@@ -112552,6 +112956,10 @@ CLASS zcl_abapgit_object_prog IMPLEMENTATION.
     io_xml->read( EXPORTING iv_name = 'PROGDIR'
                   CHANGING cg_data  = ls_progdir ).
 
+    IF ls_progdir-name IS INITIAL.
+      zcx_abapgit_exception=>raise( |PROGDIR-NAME must be filled| ).
+    ENDIF.
+
     set_abap_language_version( CHANGING cv_abap_language_version = ls_progdir-uccheck ).
 
     IF strlen( lv_program_name ) > 30.
@@ -112934,13 +113342,19 @@ CLASS zcl_abapgit_object_saxx_super IMPLEMENTATION.
         mi_persistence->get( p_object_key           = mv_object_key
                              p_version              = 'A'
                              p_existence_check_only = abap_true ).
+        rv_bool = abap_true.
 
       CATCH cx_swb_exception.
-        rv_bool = abap_false.
-        RETURN.
-    ENDTRY.
+        TRY.
+            mi_persistence->get( p_object_key           = mv_object_key
+                                 p_version              = 'I'
+                                 p_existence_check_only = abap_true ).
+            rv_bool = abap_true.
 
-    rv_bool = abap_true.
+          CATCH cx_swb_exception.
+            rv_bool = abap_false.
+        ENDTRY.
+    ENDTRY.
 
   ENDMETHOD.
 
@@ -114513,6 +114927,23 @@ CLASS zcl_abapgit_object_sfpf IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD check_ads_connection.
+
+    DATA lv_version TYPE string.
+
+    TRY.
+        lv_version = cl_fp=>get_reference(
+            )->create_pdf_object( connection = cl_fp=>get_ads_connection( )
+            )->get_version_info( ).
+        IF lv_version IS INITIAL.
+          zcx_abapgit_exception=>raise( 'SFPF: ADS connection not configured' ).
+        ENDIF.
+      CATCH cx_root.
+        zcx_abapgit_exception=>raise( 'SFPF: ADS connection not configured' ).
+    ENDTRY.
+
+  ENDMETHOD.
+
   METHOD zif_abapgit_object~deserialize.
 
     DATA: lv_xstr      TYPE xstring,
@@ -114521,6 +114952,8 @@ CLASS zcl_abapgit_object_sfpf IMPLEMENTATION.
           li_wb_object TYPE REF TO if_fp_wb_form,
           li_form      TYPE REF TO if_fp_form,
           lx_fp_err    TYPE REF TO cx_fp_api.
+
+    check_ads_connection( ).
 
     lv_name = ms_item-obj_name.
     lv_xstr = cl_ixml_80_20=>render_to_xstring( io_xml->get_raw( ) ).
@@ -117237,7 +117670,8 @@ CLASS zcl_abapgit_object_sicf IMPLEMENTATION.
     CLEAR ls_icfservice-icf_cclnt.
     CLEAR ls_icfservice-icf_mclnt.
     " If the original name is different (lower vs upper case), it needs to be serialized
-    IF ls_icfservice-icfaltnme = ls_icfservice-icfaltnme_orig.
+    IF ls_icfservice-icfaltnme = ls_icfservice-icfaltnme_orig AND
+       ls_icfservice-orig_name = ls_icfservice-icfaltnme_orig.
       CLEAR ls_icfservice-icfaltnme_orig.
     ENDIF.
     CLEAR ls_icfservice-icfbitmap.
@@ -117548,6 +117982,19 @@ CLASS zcl_abapgit_object_sktd IMPLEMENTATION.
       CATCH cx_swb_exception.
         rv_bool = abap_false.
     ENDTRY.
+
+    IF rv_bool = abap_false.
+      TRY.
+          mi_persistence->get(
+            p_object_key           = mv_object_key
+            p_version              = 'I'
+            p_existence_check_only = abap_true ).
+          rv_bool = abap_true.
+
+        CATCH cx_swb_exception.
+          rv_bool = abap_false.
+      ENDTRY.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -118647,15 +119094,17 @@ CLASS zcl_abapgit_object_sobj IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -120153,7 +120602,8 @@ CLASS zcl_abapgit_object_sppf IMPLEMENTATION.
 
     set_default_transport( iv_transport ).
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -120162,8 +120612,9 @@ CLASS zcl_abapgit_object_sppf IMPLEMENTATION.
     set_default_transport( iv_transport ).
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -120939,13 +121390,26 @@ CLASS zcl_abapgit_object_srfc IMPLEMENTATION.
             p_version     = 'A'
           CHANGING
             p_object_data = li_object_data ).
+        rv_bool = abap_true.
 
       CATCH cx_root.
-        rv_bool = abap_false.
-        RETURN.
-    ENDTRY.
+        IF li_srfc_persist IS NOT BOUND.
+          rv_bool = abap_false.
+          RETURN.
+        ENDIF.
+        TRY.
+            li_srfc_persist->get(
+              EXPORTING
+                p_object_key  = |{ ms_item-obj_name }|
+                p_version     = 'I'
+              CHANGING
+                p_object_data = li_object_data ).
+            rv_bool = abap_true.
 
-    rv_bool = abap_true.
+          CATCH cx_root.
+            rv_bool = abap_false.
+        ENDTRY.
+    ENDTRY.
 
   ENDMETHOD.
 
@@ -121701,6 +122165,7 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
 
     DATA:
       lr_metadata TYPE REF TO data,
+      li_element  TYPE REF TO if_ixml_element,
       lr_data     TYPE REF TO data.
 
     FIELD-SYMBOLS:
@@ -121720,6 +122185,21 @@ CLASS zcl_abapgit_object_srvd IMPLEMENTATION.
     CREATE DATA lr_metadata  TYPE ('CL_SRVD_WB_OBJECT_DATA=>TY_METADATA_EXTENDED').
     ASSIGN lr_metadata->* TO <ls_metadata>.
     ASSERT sy-subrc = 0.
+
+    li_element = io_xml->get_raw( )->find_from_name_ns( 'DESCRIPTION' ).
+    IF li_element IS NOT BOUND OR li_element->get_value( ) IS INITIAL.
+      zcx_abapgit_exception=>raise( |SRVD: XML must contain DESCRIPTION and be filled| ).
+    ENDIF.
+
+* note: these cannot be done after reading the XML, as it will trigger conversion exits and fail while reading
+    li_element = io_xml->get_raw( )->find_from_name_ns( 'LANGUAGE' ).
+    IF li_element IS NOT BOUND OR strlen( li_element->get_value( ) ) <> 2.
+      zcx_abapgit_exception=>raise( |SRVD: XML must contain LANGUAGE and be 2 characters| ).
+    ENDIF.
+    li_element = io_xml->get_raw( )->find_from_name_ns( 'MASTER_LANGUAGE' ).
+    IF li_element IS NOT BOUND OR strlen( li_element->get_value( ) ) <> 2.
+      zcx_abapgit_exception=>raise( |SRVD: XML must contain MASTER_LANGUAGE and be 2 characters| ).
+    ENDIF.
 
     io_xml->read(
       EXPORTING
@@ -123310,15 +123790,17 @@ CLASS zcl_abapgit_object_sucu IMPLEMENTATION.
 
   METHOD zif_abapgit_object~delete.
 
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
   METHOD zif_abapgit_object~deserialize.
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -125580,7 +126062,11 @@ CLASS zcl_abapgit_object_tabl IMPLEMENTATION.
       EXCEPTIONS
         not_found = 1
         OTHERS    = 2.
-    IF sy-subrc <> 0.
+    IF sy-subrc = 0 AND ls_x030l-tabtype = 'E'.
+      " then its a data element
+      rv_bool = abap_false.
+      RETURN.
+    ELSEIF sy-subrc <> 0.
       " Check for new, inactive, or modified versions that might not be in nametab
       SELECT SINGLE tabname FROM dd02l INTO lv_tabname
         WHERE tabname = lv_tabname.                     "#EC CI_NOORDER
@@ -127593,7 +128079,6 @@ CLASS zcl_abapgit_object_tran IMPLEMENTATION.
     READ TABLE lt_tcodes INDEX 1 INTO es_transaction.
     ASSERT sy-subrc = 0.
     READ TABLE lt_gui_attr INDEX 1 INTO es_gui_attr.
-    ASSERT sy-subrc = 0.
 
   ENDMETHOD.
 
@@ -127914,8 +128399,10 @@ CLASS zcl_abapgit_object_tran IMPLEMENTATION.
 
     io_xml->add( iv_name = 'TSTC'
                  ig_data = ls_tcode ).
-    io_xml->add( iv_name = 'TSTCC'
-                 ig_data = ls_gui_attr ).
+    IF ls_gui_attr IS NOT INITIAL.
+      io_xml->add( iv_name = 'TSTCC'
+                   ig_data = ls_gui_attr ).
+    ENDIF.
     io_xml->add( iv_name = 'TSTCT'
                  ig_data = ls_tstct ).
     IF ls_tstcp IS NOT INITIAL.
@@ -129709,7 +130196,8 @@ CLASS zcl_abapgit_object_ueno IMPLEMENTATION.
     delete_docu_usp( ).
 
     " the deletion of the tables of the entity
-    get_generic( )->delete( iv_package ).
+    get_generic( )->delete( iv_package   = iv_package
+                            iv_transport = iv_transport ).
 
   ENDMETHOD.
 
@@ -129720,8 +130208,9 @@ CLASS zcl_abapgit_object_ueno IMPLEMENTATION.
     is_name_permitted( ).
 
     get_generic( )->deserialize(
-      iv_package = iv_package
-      io_xml     = io_xml ).
+      iv_package   = iv_package
+      io_xml       = io_xml
+      iv_transport = iv_transport ).
 
     deserialize_docu_uen( io_xml ).
     deserialize_docu_url( io_xml ).
@@ -136575,7 +137064,7 @@ CLASS zcl_abapgit_status_calc IMPLEMENTATION.
       APPEND INITIAL LINE TO ct_results ASSIGNING <ls_result>.
 
       <ls_result> = build_new_remote(
-        is_remote   = <ls_remote>
+        is_remote    = <ls_remote>
         it_items_idx = it_items_idx
         it_state_idx = it_state_idx ).
 
@@ -137636,7 +138125,7 @@ START-OF-SELECTION.
 
 **********************************************************************
 INTERFACE lif_abapmerge_marker.
-  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-03-06T21:38:14Z`.
+  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-05-04T17:31:52Z`.
   CONSTANTS c_abapinst_version TYPE string VALUE `1.2.0`.
 ENDINTERFACE.
 **********************************************************************
