@@ -38,6 +38,7 @@ INTERFACE /apmg/if_apm_ajson_refs_init DEFERRED.
 INTERFACE /apmg/if_apm_ajson_types DEFERRED.
 INTERFACE /apmg/if_apm_arborist DEFERRED.
 INTERFACE /apmg/if_apm_constants DEFERRED.
+INTERFACE /apmg/if_apm_env DEFERRED.
 INTERFACE /apmg/if_apm_file_importer DEFERRED.
 INTERFACE /apmg/if_apm_frontend_services DEFERRED.
 INTERFACE /apmg/if_apm_gui_asset_manager DEFERRED.
@@ -73,6 +74,7 @@ INTERFACE /apmg/if_apm_semver_options DEFERRED.
 INTERFACE /apmg/if_apm_settings DEFERRED.
 INTERFACE /apmg/if_apm_types DEFERRED.
 INTERFACE /apmg/if_apm_version DEFERRED.
+INTERFACE zif_abapgit_aff_docu_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_doma_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_intf_v1 DEFERRED.
 INTERFACE zif_abapgit_aff_oo_types_v1 DEFERRED.
@@ -1369,6 +1371,7 @@ CLASS /apmg/cl_apm_arborist DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_arborist_edge DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_arborist_node DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_auth DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_certificates DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_code_import_rules DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_code_importer DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_code_mapper DEFINITION DEFERRED.
@@ -1376,14 +1379,17 @@ CLASS /apmg/cl_apm_command_deprecate DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_init DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_install DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_installer DEFINITION DEFERRED.
-CLASS /apmg/cl_apm_command_integrity DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_login DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_command_logout DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_command_ping DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_publish DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_uninstall DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_unpublish DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_command_update DEFINITION DEFERRED.
-CLASS /apmg/cl_apm_command_utils DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_command_version DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_command_whoami DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_emoji DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_env DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_exception_viewer DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_file_importer DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_frontend_services DEFINITION DEFERRED.
@@ -1396,10 +1402,12 @@ CLASS /apmg/cl_apm_gui_css_processor DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_deprecate DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_init DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_install DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_gui_dlg_login DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_publish DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_undepreca DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_uninstall DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_dlg_unpublish DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_gui_dlg_update DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_event DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_factory DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_hotkey_ctl DEFINITION DEFERRED.
@@ -1414,6 +1422,7 @@ CLASS /apmg/cl_apm_gui_page_hoc DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_list DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_package DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_tree DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_gui_page_welcome DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_router DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_utils DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_highlighter DEFINITION DEFERRED.
@@ -1440,6 +1449,7 @@ CLASS /apmg/cl_apm_http_login_manage DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_importer DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_installer DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_installer_files DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_integrity DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_json DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_logo DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_markdown DEFINITION DEFERRED.
@@ -1457,6 +1467,7 @@ CLASS /apmg/cl_apm_popup_utils DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_popups DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_progress_bar DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_readme DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_registry DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_roadmap DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_semver DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_semver_cli DEFINITION DEFERRED.
@@ -1472,10 +1483,12 @@ CLASS /apmg/cl_apm_semver_sap DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_semver_utils DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_settings DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_string_map DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_strust DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_tar DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_trace DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_url DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_url_params DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_utils DEFINITION DEFERRED.
 CLASS zcl_abapgit_abap_language_vers DEFINITION DEFERRED.
 CLASS zcl_abapgit_adt_link DEFINITION DEFERRED.
 CLASS zcl_abapgit_aff_factory DEFINITION DEFERRED.
@@ -1567,6 +1580,8 @@ CLASS zcl_abapgit_object_dsys DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_dtdc DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_dteb DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_dtel DEFINITION DEFERRED.
+CLASS zcl_abapgit_object_dtix DEFINITION DEFERRED.
+CLASS zcl_abapgit_object_dtsc DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_ecat DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_ecatt_super DEFINITION DEFERRED.
 CLASS zcl_abapgit_object_ecsd DEFINITION DEFERRED.
@@ -2070,11 +2085,12 @@ INTERFACE zif_abapgit_definitions
     BEGIN OF ty_overwrite.
       INCLUDE TYPE ty_item.
   TYPES:
-      state    TYPE c LENGTH 2,
-      action   TYPE i,
-      icon     TYPE icon_d,
-      text     TYPE string,
-      decision TYPE ty_yes_no,
+      changed_by TYPE syuname,
+      state      TYPE c LENGTH 2,
+      action     TYPE i,
+      icon       TYPE icon_d,
+      text       TYPE string,
+      decision   TYPE ty_yes_no,
     END OF ty_overwrite .
   TYPES:
     ty_overwrite_tt TYPE STANDARD TABLE OF ty_overwrite WITH DEFAULT KEY
@@ -3600,17 +3616,19 @@ INTERFACE /apmg/if_apm_types .
     "! SAP package
     BEGIN OF ty_sap_package,
       default               TYPE ty_devclass,
-      software_component    TYPE string, "dlvunit
-      application_component TYPE string, "ufps_posid
-      abap_language_version TYPE string,
+      software_component    TYPE string, "see table cvers-dlvunit
+      application_component TYPE string, "see table df14l-ps_posid
+      abap_language_version TYPE string, "see c_abap_language_version below
     END OF ty_sap_package.
 
   " *** PACKAGE.ABAP.JSON ***
 
   TYPES:
     "! Schema for package.abap.json
-    "! This type is similar to npm's package.json with the following additions:
-    "! changelog, icon, and sap_package
+    "!
+    "! This type is similar to npm's package.json
+    "! https://docs.npmjs.com/cli/v11/configuring-npm/package-json
+    "! with the following additions: changelog, icon, and sap_package
     BEGIN OF ty_package_json,
       name                  TYPE ty_name,
       version               TYPE ty_version,
@@ -3626,6 +3644,8 @@ INTERFACE /apmg/if_apm_types .
       contributors          TYPE ty_persons,
       maintainers           TYPE ty_persons,
       main                  TYPE string,
+      files                 TYPE string_table, " FUTURE: files to include
+      ignore                TYPE string_table, " FUTURE: files to exclude
       man                   TYPE string_table,
       repository            TYPE ty_repository,
       funding               TYPE ty_funding,
@@ -3870,7 +3890,7 @@ INTERFACE /apmg/if_apm_package_json .
 * https://www.npmjs.com/package/@npmcli/package-json
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.0.0' ##NEEDED.
+  CONSTANTS c_version TYPE string VALUE '1.0.1' ##NEEDED.
 
   INTERFACES /apmg/if_apm_types.
 
@@ -4052,6 +4072,182 @@ INTERFACE /apmg/if_apm_importer .
     ty_object_types TYPE RANGE OF tadir-object,
     ty_object_names TYPE RANGE OF tadir-obj_name,
     ty_code         TYPE rswsourcet.
+
+ENDINTERFACE.
+
+INTERFACE /apmg/if_apm_env .
+
+************************************************************************
+* Environment
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+* Note: Adding constants not related to environment variables with
+* require adjusting the select in cl_env->constructor
+************************************************************************
+
+  CONSTANTS c_version TYPE string VALUE '1.0.0'.
+
+  CONSTANTS:
+    BEGIN OF c_env,
+      abap    TYPE string VALUE 'ABAP',
+      os      TYPE string VALUE 'OS',
+      profile TYPE string VALUE 'PROFILE',
+    END OF c_env.
+
+  " Note: When adding or changing constants, ...
+  " - names must not match SAP software components
+  " - add value to cl_env=>init_abap
+  " - check mapping in lcl_abap_environment=>get
+  " - implement getter method in lcl_abap_environment
+  CONSTANTS:
+    abap_env              TYPE string VALUE 'ABAP_ENV',
+    " Kernel
+    kernel                TYPE string VALUE 'KERNEL',
+    kernel_platform       TYPE string VALUE 'KERNEL_PLATFORM',
+    kernel_type           TYPE string VALUE 'KERNEL_TYPE',
+    kernel_arch           TYPE string VALUE 'KERNEL_ARCH',
+    kernel_release        TYPE string VALUE 'KERNEL_RELEASE',
+    kernel_patch          TYPE string VALUE 'KERNEL_PATCH',
+    kernel_cryptolib      TYPE string VALUE 'KERNEL_CRYPTOLIB',
+    endian                TYPE string VALUE 'ENDIAN',
+    is_64bit              TYPE string VALUE 'IS_64BIT',
+    " Host
+    host_name             TYPE string VALUE 'HOST_NAME',
+    host_instance         TYPE string VALUE 'HOST_INSTANCE',
+    host_instance_no      TYPE string VALUE 'HOST_INSTANCE_NO',
+    host_state            TYPE string VALUE 'HOST_STATE',
+    " Connection
+    conn_snc_name         TYPE string VALUE 'CONN_SNC_NAME',
+    is_secure_conn        TYPE string VALUE 'IS_SECURE_CONN',
+    " License
+    hardware_key          TYPE string VALUE 'HARDWARE_KEY',
+    license_number        TYPE string VALUE 'LICENSE_NUMBER',
+    license_exp_date      TYPE string VALUE 'LICENSE_EXP_DATE',
+    " Database
+    database              TYPE string VALUE 'DATABASE',
+    database_platform     TYPE string VALUE 'DATABASE_PLATFORM',
+    database_release      TYPE string VALUE 'DATABASE_RELEASE',
+    database_patch        TYPE string VALUE 'DATABASE_PATCH',
+    database_schema       TYPE string VALUE 'DATABASE_SCHEMA',
+    database_host         TYPE string VALUE 'DATABASE_HOST',
+    database_name         TYPE string VALUE 'DATABASE_NAME',
+    database_charset      TYPE string VALUE 'DATABASE_CHARSET',
+    " Database Library
+    dbsl                  TYPE string VALUE 'DBSL',
+    dbsl_release          TYPE string VALUE 'DBSL_RELEASE',
+    dbsl_patch            TYPE string VALUE 'DBSL_PATCH',
+    " SAP HANA
+    hana_release          TYPE string VALUE 'HANA_RELEASE',
+    hana_sp               TYPE string VALUE 'HANA_SP',
+    hana_revision         TYPE string VALUE 'HANA_REVISION',
+    hana_patch            TYPE string VALUE 'HANA_PATCH',
+    hana_platform         TYPE string VALUE 'HANA_PLATFORM',
+    hana_hardware         TYPE string VALUE 'HANA_HARDWARE',
+    hana_hardware_key     TYPE string VALUE 'HANA_HARDWARE_KEY',
+    hana_license_number   TYPE string VALUE 'HANA_LICENSE_NUMBER',
+    hana_license_exp_date TYPE string VALUE 'HANA_LICENSE_EXP_DATE',
+    is_hana               TYPE string VALUE 'IS_HANA',
+    " Client
+    is_customzing_client  TYPE string VALUE 'IS_CLIENT_CUSTOMIZING',
+    is_demo_client        TYPE string VALUE 'IS_CLIENT_DEMO',
+    is_production_client  TYPE string VALUE 'IS_CLIENT_PRODUTION',
+    is_sap_client         TYPE string VALUE 'IS_CLIENT_SAP',
+    is_test_client        TYPE string VALUE 'IS_CLIENT_TEST',
+    is_training_client    TYPE string VALUE 'IS_CLIENT_TRAINING',
+    " Timezones
+    timezone_system       TYPE string VALUE 'TIMEZONE_SYSTEM',
+    timezone_user         TYPE string VALUE 'TIMEZONE_USER',
+    " Support Package Manager
+    spam_release          TYPE string VALUE 'SPAM_RELEASE',
+    spam_version          TYPE string VALUE 'SPAM_VERSION',
+    " Language
+    language_primary      TYPE string VALUE 'LANGUAGE_PRIMARY',
+    language_secondary    TYPE string VALUE 'LANGUAGE_SECONDARY',
+    " Characters
+    codepage              TYPE string VALUE 'CODEPAGE',
+    is_unicode            TYPE string VALUE 'IS_UNICODE',
+    " Process
+    has_dialog_proc       TYPE string VALUE 'HAS_PROCESS_DIALOG',
+    has_batch_proc        TYPE string VALUE 'HAS_PROCESS_BATCH',
+    has_update_proc       TYPE string VALUE 'HAS_PROCESS_UPDATE',
+    has_update2_proc      TYPE string VALUE 'HAS_PROCESS_UPDATE2',
+    has_spool_proc        TYPE string VALUE 'HAS_PROCESS_SPOOL',
+    has_enqueue_proc      TYPE string VALUE 'HAS_PROCESS_ENQUEUE',
+    has_atp_proc          TYPE string VALUE 'HAS_PROCESS_ATP',
+    has_icman_proc        TYPE string VALUE 'HAS_PROCESS_ICMAN',
+    has_vmc_proc          TYPE string VALUE 'HAS_PROCESS_VMC',
+    has_j2ee_proc         TYPE string VALUE 'HAS_PROCESS_J2EE',
+    is_dialog_proc        TYPE string VALUE 'IS_PROCESS_DIALOG',
+    is_batch_proc         TYPE string VALUE 'IS_PROCESS_BATCH',
+    is_update_proc        TYPE string VALUE 'IS_PROCESS_UPDATE',
+    is_update2_proc       TYPE string VALUE 'IS_PROCESS_UPDATE2',
+    is_spool_proc         TYPE string VALUE 'IS_PROCESS_SPOOL',
+    is_enqueue_proc       TYPE string VALUE 'IS_PROCESS_ENQUEUE',
+    " GUI
+    is_gui_windows        TYPE string VALUE 'IS_GUI_WINDOWS',
+    is_gui_activex        TYPE string VALUE 'IS_GUI_ACTIVEX',
+    is_gui_java           TYPE string VALUE 'IS_GUI_JAVA',
+    is_gui_web            TYPE string VALUE 'IS_GUI_WEB',
+    " ECATT
+    is_ecatt_active       TYPE string VALUE 'IS_ECATT_ACTIVE',
+    is_ecatt_recording    TYPE string VALUE 'IS_ECATT_RECORDING',
+    is_ecatt_playback     TYPE string VALUE 'IS_ECATT_PLAYBACK'.
+
+  CONSTANTS:
+    BEGIN OF c_client,
+      production  TYPE string VALUE 'PRODUCTION',
+      test        TYPE string VALUE 'TEST',
+      demo        TYPE string VALUE 'DEMO',
+      training    TYPE string VALUE 'TRAINING',
+      sap         TYPE string VALUE 'SAP',
+      customizing TYPE string VALUE 'CUSTOMIZING',
+      unknown     TYPE string VALUE '<unknown>',
+    END OF c_client.
+
+  CONSTANTS:
+    c_undefined      TYPE string VALUE '<undefined>',
+    c_unknown        TYPE string VALUE '<unknown>',
+    c_todo           TYPE string VALUE '<todo>',
+    c_system_defined TYPE string VALUE '<system>', " read-only
+    c_user_defined   TYPE string VALUE '<user>'. " read/write
+
+  TYPES:
+    BEGIN OF ty_env,
+      name  TYPE string,
+      value TYPE string,
+      type  TYPE string,
+    END OF ty_env,
+    ty_environment TYPE HASHED TABLE OF ty_env WITH UNIQUE KEY name.
+
+  METHODS get
+    IMPORTING
+      !name         TYPE string
+    RETURNING
+      VALUE(result) TYPE string.
+
+  METHODS get_all
+    RETURNING
+      VALUE(result) TYPE string_table.
+
+  METHODS set
+    IMPORTING
+      !name         TYPE string
+      !value        TYPE string OPTIONAL
+      !type         TYPE string DEFAULT c_user_defined
+    RETURNING
+      VALUE(result) TYPE REF TO /apmg/if_apm_env
+    RAISING
+      /apmg/cx_apm_error.
+
+  METHODS delete
+    IMPORTING
+      !name         TYPE string
+    RETURNING
+      VALUE(result) TYPE REF TO /apmg/if_apm_env
+    RAISING
+      /apmg/cx_apm_error.
 
 ENDINTERFACE.
 
@@ -4632,57 +4828,6 @@ INTERFACE /apmg/if_apm_gui_asset_manager .
 
 ENDINTERFACE.
 
-INTERFACE /apmg/if_apm_gui_hotkeys .
-
-  TYPES:
-    BEGIN OF ty_hotkey_with_descr,
-      ui_component TYPE string,
-      action       TYPE string,
-      hotkey       TYPE string,
-      description  TYPE string,
-    END OF ty_hotkey_with_descr,
-    ty_hotkeys_with_descr TYPE STANDARD TABLE OF ty_hotkey_with_descr
-      WITH DEFAULT KEY
-      WITH UNIQUE SORTED KEY action COMPONENTS ui_component action.
-
-  METHODS get_hotkey_actions
-    RETURNING
-      VALUE(rt_hotkey_actions) TYPE ty_hotkeys_with_descr
-    RAISING
-      /apmg/cx_apm_error.
-
-ENDINTERFACE.
-
-INTERFACE /apmg/if_apm_gui_hotkey_ctl .
-
-  METHODS register_hotkeys
-    IMPORTING
-      !it_hotkeys TYPE /apmg/if_apm_gui_hotkeys=>ty_hotkeys_with_descr.
-
-  METHODS reset.
-
-  METHODS get_registered_hotkeys
-    RETURNING
-      VALUE(rt_registered_hotkeys) TYPE /apmg/if_apm_gui_hotkeys=>ty_hotkeys_with_descr
-    RAISING
-      /apmg/cx_apm_error.
-
-  METHODS set_visible
-    IMPORTING
-      !iv_visible TYPE abap_bool.
-
-ENDINTERFACE.
-
-INTERFACE /apmg/if_apm_gui_renderable .
-
-  METHODS render
-    RETURNING
-      VALUE(ri_html) TYPE REF TO /apmg/if_apm_html
-    RAISING
-      /apmg/cx_apm_error.
-
-ENDINTERFACE.
-
 INTERFACE /apmg/if_apm_persist_apm .
 
 ************************************************************************
@@ -4795,6 +4940,57 @@ INTERFACE /apmg/if_apm_persist_apm .
 
 ENDINTERFACE.
 
+INTERFACE /apmg/if_apm_gui_hotkeys .
+
+  TYPES:
+    BEGIN OF ty_hotkey_with_descr,
+      ui_component TYPE string,
+      action       TYPE string,
+      hotkey       TYPE string,
+      description  TYPE string,
+    END OF ty_hotkey_with_descr,
+    ty_hotkeys_with_descr TYPE STANDARD TABLE OF ty_hotkey_with_descr
+      WITH DEFAULT KEY
+      WITH UNIQUE SORTED KEY action COMPONENTS ui_component action.
+
+  METHODS get_hotkey_actions
+    RETURNING
+      VALUE(rt_hotkey_actions) TYPE ty_hotkeys_with_descr
+    RAISING
+      /apmg/cx_apm_error.
+
+ENDINTERFACE.
+
+INTERFACE /apmg/if_apm_gui_hotkey_ctl .
+
+  METHODS register_hotkeys
+    IMPORTING
+      !it_hotkeys TYPE /apmg/if_apm_gui_hotkeys=>ty_hotkeys_with_descr.
+
+  METHODS reset.
+
+  METHODS get_registered_hotkeys
+    RETURNING
+      VALUE(rt_registered_hotkeys) TYPE /apmg/if_apm_gui_hotkeys=>ty_hotkeys_with_descr
+    RAISING
+      /apmg/cx_apm_error.
+
+  METHODS set_visible
+    IMPORTING
+      !iv_visible TYPE abap_bool.
+
+ENDINTERFACE.
+
+INTERFACE /apmg/if_apm_gui_renderable .
+
+  METHODS render
+    RETURNING
+      VALUE(ri_html) TYPE REF TO /apmg/if_apm_html
+    RAISING
+      /apmg/cx_apm_error.
+
+ENDINTERFACE.
+
 INTERFACE /apmg/if_apm_gui_html_processo .
 
   METHODS process
@@ -4817,9 +5013,22 @@ INTERFACE /apmg/if_apm_settings .
 * SPDX-License-Identifier: MIT
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.0.0' ##NO_TEXT.
+  CONSTANTS c_version TYPE string VALUE '1.0.1' ##NO_TEXT.
 
   TYPES:
+    BEGIN OF ty_registry_settings,
+      name           TYPE string, " mandatory
+      url            TYPE string, " mandatory
+      rfcdest        TYPE rfcdest, " either rfc destination or the rest
+      user           TYPE string, " registry username
+      password       TYPE string, " password (only store if you're the only user on the system!)
+      token          TYPE string, " FUTURE: api token
+      ssl_id         TYPE ssfapplssl,
+      proxy_host     TYPE string,
+      proxy_service  TYPE string,
+      proxy_user     TYPE string,
+      proxy_password TYPE string,
+    END OF ty_registry_settings,
     BEGIN OF ty_gui_settings,
       adt_jump_enabled  TYPE abap_bool,
       activate_wo_popup TYPE abap_bool,
@@ -4855,6 +5064,7 @@ INTERFACE /apmg/if_apm_settings .
   TYPES:
     BEGIN OF ty_settings,
       registry              TYPE string,
+      registry_settings     TYPE SORTED TABLE OF ty_registry_settings WITH UNIQUE KEY name,
       last_package          TYPE devclass,
       show_last_package     TYPE abap_bool,
       experimental_features TYPE string,
@@ -4868,10 +5078,12 @@ INTERFACE /apmg/if_apm_settings .
   TYPES ty_name TYPE syst_uname.
 
   CONSTANTS:
-    c_registry   TYPE string VALUE 'https://registry.abappm.com',
-    c_playground TYPE string VALUE 'https://playground.abappm.com',
-    c_global     TYPE ty_name VALUE /apmg/if_apm_persist_apm=>c_key_name-global_settings,
-    c_user       TYPE ty_name VALUE /apmg/if_apm_persist_apm=>c_key_name-user_settings.
+    c_registry_name   TYPE string VALUE 'global',
+    c_playground_name TYPE string VALUE 'playground',
+    c_registry_url    TYPE string VALUE 'https://registry.abappm.com',
+    c_playground_url  TYPE string VALUE 'https://playground.abappm.com',
+    c_global          TYPE ty_name VALUE /apmg/if_apm_persist_apm=>c_key_name-global_settings,
+    c_user            TYPE ty_name VALUE /apmg/if_apm_persist_apm=>c_key_name-user_settings.
 
   METHODS get
     RETURNING
@@ -4951,7 +5163,7 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS set_title
     IMPORTING
-      !iv_title      TYPE string
+      !iv_title      TYPE csequence
     RETURNING
       VALUE(ri_self) TYPE REF TO /apmg/if_apm_html.
 
@@ -4974,15 +5186,15 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS add_a
     IMPORTING
-      !iv_txt        TYPE string
-      !iv_act        TYPE string
-      !iv_query      TYPE string OPTIONAL
+      !iv_txt        TYPE csequence
+      !iv_act        TYPE csequence
+      !iv_query      TYPE csequence OPTIONAL
       !iv_typ        TYPE c DEFAULT c_action_type-sapevent
       !iv_opt        TYPE clike OPTIONAL
-      !iv_class      TYPE string OPTIONAL
-      !iv_id         TYPE string OPTIONAL
-      !iv_style      TYPE string OPTIONAL
-      !iv_title      TYPE string OPTIONAL
+      !iv_class      TYPE csequence OPTIONAL
+      !iv_id         TYPE csequence OPTIONAL
+      !iv_style      TYPE csequence OPTIONAL
+      !iv_title      TYPE csequence OPTIONAL
     RETURNING
       VALUE(ri_self) TYPE REF TO /apmg/if_apm_html.
 
@@ -4995,44 +5207,44 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS a
     IMPORTING
-      !iv_txt       TYPE string
-      !iv_act       TYPE string
-      !iv_query     TYPE string OPTIONAL
+      !iv_txt       TYPE csequence
+      !iv_act       TYPE csequence
+      !iv_query     TYPE csequence OPTIONAL
       !iv_typ       TYPE c DEFAULT /apmg/if_apm_html=>c_action_type-sapevent
       !iv_opt       TYPE clike OPTIONAL
-      !iv_class     TYPE string OPTIONAL
-      !iv_id        TYPE string OPTIONAL
-      !iv_style     TYPE string OPTIONAL
-      !iv_title     TYPE string OPTIONAL
+      !iv_class     TYPE csequence OPTIONAL
+      !iv_id        TYPE csequence OPTIONAL
+      !iv_style     TYPE csequence OPTIONAL
+      !iv_title     TYPE csequence OPTIONAL
     RETURNING
       VALUE(rv_str) TYPE string.
 
   METHODS icon
     IMPORTING
-      !iv_name      TYPE string
-      !iv_hint      TYPE string OPTIONAL
-      !iv_class     TYPE string OPTIONAL
-      !iv_onclick   TYPE string OPTIONAL
+      !iv_name      TYPE csequence
+      !iv_hint      TYPE csequence OPTIONAL
+      !iv_class     TYPE csequence OPTIONAL
+      !iv_onclick   TYPE csequence OPTIONAL
     RETURNING
       VALUE(rv_str) TYPE string.
 
   METHODS add_icon
     IMPORTING
-      !iv_name       TYPE string
-      !iv_hint       TYPE string OPTIONAL
-      !iv_class      TYPE string OPTIONAL
-      !iv_onclick    TYPE string OPTIONAL
+      !iv_name       TYPE csequence
+      !iv_hint       TYPE csequence OPTIONAL
+      !iv_class      TYPE csequence OPTIONAL
+      !iv_onclick    TYPE csequence OPTIONAL
     RETURNING
       VALUE(ri_self) TYPE REF TO /apmg/if_apm_html.
 
   METHODS wrap
     IMPORTING
-      !iv_tag                TYPE string
-      !iv_content            TYPE string OPTIONAL
+      !iv_tag                TYPE csequence
+      !iv_content            TYPE csequence OPTIONAL
       !ii_content            TYPE REF TO /apmg/if_apm_html OPTIONAL
-      !iv_id                 TYPE string OPTIONAL
-      !iv_class              TYPE string OPTIONAL
-      !iv_hint               TYPE string OPTIONAL
+      !iv_id                 TYPE csequence OPTIONAL
+      !iv_class              TYPE csequence OPTIONAL
+      !iv_hint               TYPE csequence OPTIONAL
       !iv_format_single_line TYPE abap_bool DEFAULT abap_false
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
@@ -5041,11 +5253,11 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS td
     IMPORTING
-      !iv_content            TYPE string OPTIONAL
+      !iv_content            TYPE csequence OPTIONAL
       !ii_content            TYPE REF TO /apmg/if_apm_html OPTIONAL
-      !iv_id                 TYPE string OPTIONAL
-      !iv_class              TYPE string OPTIONAL
-      !iv_hint               TYPE string OPTIONAL
+      !iv_id                 TYPE csequence OPTIONAL
+      !iv_class              TYPE csequence OPTIONAL
+      !iv_hint               TYPE csequence OPTIONAL
       !iv_format_single_line TYPE abap_bool DEFAULT abap_true
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
@@ -5055,11 +5267,11 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS th
     IMPORTING
-      !iv_content            TYPE string OPTIONAL
+      !iv_content            TYPE csequence OPTIONAL
       !ii_content            TYPE REF TO /apmg/if_apm_html OPTIONAL
-      !iv_id                 TYPE string OPTIONAL
-      !iv_class              TYPE string OPTIONAL
-      !iv_hint               TYPE string OPTIONAL
+      !iv_id                 TYPE csequence OPTIONAL
+      !iv_class              TYPE csequence OPTIONAL
+      !iv_hint               TYPE csequence OPTIONAL
       !iv_format_single_line TYPE abap_bool DEFAULT abap_true
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
@@ -5069,10 +5281,10 @@ INTERFACE /apmg/if_apm_html .
 
   METHODS div
     IMPORTING
-      !iv_content    TYPE string OPTIONAL
+      !iv_content    TYPE csequence OPTIONAL
       !ii_content    TYPE REF TO /apmg/if_apm_html OPTIONAL
-      !iv_id         TYPE string OPTIONAL
-      !iv_class      TYPE string OPTIONAL
+      !iv_id         TYPE csequence OPTIONAL
+      !iv_class      TYPE csequence OPTIONAL
       !is_data_attr  TYPE ty_data_attr OPTIONAL
       !it_data_attrs TYPE ty_data_attrs OPTIONAL
         PREFERRED PARAMETER iv_content
@@ -5204,7 +5416,7 @@ INTERFACE /apmg/if_apm_http_agent .
 * SPDX-License-Identifier: MIT
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.0.1' ##NEEDED.
+  CONSTANTS c_version TYPE string VALUE '1.2.0' ##NEEDED.
 
   CONSTANTS:
     BEGIN OF c_method,
@@ -5237,9 +5449,7 @@ INTERFACE /apmg/if_apm_http_agent .
   METHODS request
     IMPORTING
       !url          TYPE string
-      !ssl_id       TYPE ssfapplssl DEFAULT 'ANONYM'
       !method       TYPE string DEFAULT c_method-get
-      !query        TYPE REF TO /apmg/cl_apm_string_map OPTIONAL
       !headers      TYPE REF TO /apmg/cl_apm_string_map OPTIONAL
       !payload      TYPE any OPTIONAL " can be char, string, xstring
     RETURNING
@@ -5570,7 +5780,7 @@ INTERFACE /apmg/if_apm_pacote .
 * SPDX-License-Identifier: MIT
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.0.0' ##NEEDED.
+  CONSTANTS c_version TYPE string VALUE '1.0.1' ##NEEDED.
 
   TYPES:
     BEGIN OF ty_pacote,
@@ -5601,6 +5811,10 @@ INTERFACE /apmg/if_apm_pacote .
       !with_deprecated TYPE abap_bool DEFAULT abap_false
     RETURNING
       VALUE(result)    TYPE /apmg/if_apm_types=>ty_versions.
+
+  METHODS get_dist_tags
+    RETURNING
+      VALUE(result) TYPE /apmg/if_apm_types=>ty_dist_tags.
 
   METHODS set
     IMPORTING
@@ -5807,6 +6021,7 @@ INTERFACE zif_abapgit_cts_api
   CONSTANTS:
     BEGIN OF c_transport_status,
       modifiable TYPE c LENGTH 1 VALUE 'D',
+      released   TYPE c LENGTH 1 VALUE 'R',
     END OF c_transport_status .
 
   METHODS confirm_transport_messages
@@ -6131,6 +6346,25 @@ INTERFACE zif_abapgit_longtexts
       VALUE(rt_longtexts) TYPE ty_longtexts
     RAISING
       zcx_abapgit_exception .
+  METHODS serialize_aff
+    IMPORTING
+      !iv_longtext_name   TYPE string DEFAULT 'LONGTEXTS'
+      !iv_object_name     TYPE clike
+      !iv_longtext_id     TYPE dokil-id
+      !it_dokil           TYPE zif_abapgit_definitions=>ty_dokil_tt OPTIONAL
+      !io_files           TYPE REF TO zcl_abapgit_objects_files
+    RETURNING
+      VALUE(rt_longtexts) TYPE ty_longtexts
+    RAISING
+      zcx_abapgit_exception .
+  METHODS deserialize_aff
+    IMPORTING
+      !iv_object_name   TYPE clike
+      !iv_longtext_id   TYPE dokil-id
+      !io_files         TYPE REF TO zcl_abapgit_objects_files
+      !iv_main_language TYPE sy-langu
+    RAISING
+      zcx_abapgit_exception .
   METHODS deserialize
     IMPORTING
       !iv_longtext_name TYPE string DEFAULT 'LONGTEXTS'
@@ -6146,6 +6380,23 @@ INTERFACE zif_abapgit_longtexts
       !iv_longtext_id TYPE dokil-id
     RAISING
       zcx_abapgit_exception .
+ENDINTERFACE.
+
+INTERFACE zif_abapgit_aff_docu_v1 .
+
+  TYPES:
+    BEGIN OF ty_line,
+      format TYPE c LENGTH 2,
+      line   TYPE c LENGTH 72,
+    END OF ty_line,
+    ty_lines TYPE STANDARD TABLE OF ty_line WITH DEFAULT KEY.
+
+  TYPES:
+    BEGIN OF ty_main,
+      format_version TYPE zif_abapgit_aff_types_v1=>ty_format_version,
+      lines          TYPE ty_lines,
+    END OF ty_main.
+
 ENDINTERFACE.
 
 INTERFACE zif_abapgit_lxe_texts
@@ -6296,6 +6547,7 @@ INTERFACE zif_abapgit_tadir
       !iv_pgmid    TYPE csequence DEFAULT 'R3TR'
       !iv_object   TYPE csequence
       !iv_obj_name TYPE csequence
+      !iv_no_throw TYPE abap_bool DEFAULT abap_false
     RAISING
       zcx_abapgit_exception.
 
@@ -6737,12 +6989,15 @@ INTERFACE /apmg/if_apm_constants .
 
   CONSTANTS:
     c_website       TYPE string VALUE 'https://abappm.com',
+    c_tutorial      TYPE string VALUE 'https://abappm.com/try-me',
+    c_contact       TYPE string VALUE 'https://abappm.com/contact',
     c_documentation TYPE string VALUE 'https://docs.abappm.com',
     c_registry      TYPE string VALUE 'https://registry.abappm.com',
+    c_playground    TYPE string VALUE 'https://playground.abappm.com',
     c_repository    TYPE string VALUE 'https://github.com/abapPM/abapPM',
+    c_changelog     TYPE string VALUE 'https://github.com/abapPM/abapPM/releases',
     c_new_issue     TYPE string VALUE 'https://github.com/abapPM/abapPM/issues/new/choose',
-    c_sponsor       TYPE string VALUE 'https://github.com/sponsors/abapPM',
-    c_changelog     TYPE string VALUE 'https://github.com/abapPM/abapPM/blob/main/CHANGELOG.md'.
+    c_sponsor       TYPE string VALUE 'https://github.com/sponsors/abapPM'.
 
 ENDINTERFACE.
 
@@ -6809,11 +7064,15 @@ INTERFACE /apmg/if_apm_gui_router .
       apm_home             TYPE string VALUE 'apm_home',
       apm_init             TYPE string VALUE 'apm_init',
       apm_install          TYPE string VALUE 'apm_install',
+      apm_login            TYPE string VALUE 'apm_login',
+      apm_logout           TYPE string VALUE 'apm_logout',
       apm_uninstall        TYPE string VALUE 'apm_uninstall',
       apm_publish          TYPE string VALUE 'apm_publish',
       apm_undeprecate      TYPE string VALUE 'apm_undeprecate',
       apm_unpublish        TYPE string VALUE 'apm_unpublish',
       apm_update           TYPE string VALUE 'apm_update',
+      apm_version          TYPE string VALUE 'apm_version',
+      apm_whoami           TYPE string VALUE 'apm_whoami',
       change_order_by      TYPE string VALUE 'change_order_by',
       changelog            TYPE string VALUE 'changelog',
       clipboard            TYPE string VALUE 'clipboard',
@@ -6826,10 +7085,10 @@ INTERFACE /apmg/if_apm_gui_router .
       go_debuginfo         TYPE string VALUE 'go_debuginfo',
       go_home              TYPE string VALUE 'go_home',
       go_package           TYPE string VALUE 'go_package',
-      go_settings          TYPE string VALUE 'go_settings',
+      go_settings_global   TYPE string VALUE 'go_settings_global',
       go_settings_personal TYPE string VALUE 'go_settings_personal',
       go_tree              TYPE string VALUE 'go_tree',
-      go_tutorial          TYPE string VALUE 'go_tutorial',
+      go_welcome           TYPE string VALUE 'go_welcome',
       goto_message         TYPE string VALUE 'goto_message',
       goto_source          TYPE string VALUE 'goto_source',
       homepage             TYPE string VALUE 'homepage',
@@ -6838,10 +7097,12 @@ INTERFACE /apmg/if_apm_gui_router .
       jump_transaction     TYPE string VALUE 'jump_transaction',
       jump_transport       TYPE string VALUE 'jump_transport',
       jump_user            TYPE string VALUE 'jump_user',
+      playground           TYPE string VALUE 'playground',
       registry             TYPE string VALUE 'registry',
       show_callstack       TYPE string VALUE 'show_callstack',
       show_hotkeys         TYPE string VALUE 'show_hotkeys',
       sponsor              TYPE string VALUE 'sponsor',
+      tutorial             TYPE string VALUE 'tutorial',
       url                  TYPE string VALUE 'url',
     END OF c_action.
 
@@ -6901,14 +7162,14 @@ INTERFACE /apmg/if_apm_semver_constants .
 * Ported to ABAP by apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: ISC
 ************************************************************************
-* Based on node semver package v7.7.3 (October 2025)
-* https://github.com/npm/node-semver/releases/tag/v7.7.3
+* Based on node semver package v7.8.4 (June 2026)
+* https://github.com/npm/node-semver/releases/tag/v7.8.4
 * not included yet:
-* https://github.com/npm/node-semver/compare/v7.7.3...main
+* https://github.com/npm/node-semver/compare/v7.8.4...main
 ************************************************************************
 
   " Package version
-  CONSTANTS version TYPE string VALUE '7.7.3' ##NEEDED.
+  CONSTANTS version TYPE string VALUE '7.8.4' ##NEEDED.
 
   " Note: this is the semver.org version of the spec that it implements
   " Not necessarily the package version of this code.
@@ -6947,7 +7208,7 @@ INTERFACE /apmg/if_apm_version .
 * SPDX-License-Identifier: MIT
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.0.0'.
+  CONSTANTS c_version TYPE string VALUE '1.1.0'.
 
 ENDINTERFACE.
 
@@ -7308,6 +7569,8 @@ CLASS /apmg/cl_apm_abapgit_objects DEFINITION
 *
 * Using ZCL_ABAPGIT_OBJECTS would drag in many other dependencies
 * which are unnecessary for apm (like the abapGit repo layer).
+* Eventually, abapGit should get refactored to clearly separate those
+* layers.
 ************************************************************************
   PUBLIC SECTION.
 
@@ -7569,6 +7832,8 @@ CLASS /apmg/cl_apm_abapgit_serialize DEFINITION
 *
 * Using ZCL_ABAPGIT_SERIALIZE would include APACK and TABUs which are
 * not supported in apm
+* Eventually, abapGit should get refactored to clearly separate those
+* layers.
 ************************************************************************
   PUBLIC SECTION.
 
@@ -8572,18 +8837,18 @@ CLASS /apmg/cl_apm_auth DEFINITION
         delete  TYPE activ_auth VALUE '06',
       END OF c_activity.
 
-    CLASS-METHODS is_package_allowed
-      IMPORTING
-        package       TYPE devclass
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
     CLASS-METHODS is_package_authorized
       IMPORTING
         package       TYPE devclass
         activity      TYPE activ_auth
       RETURNING
         VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS check_package_allowed
+      IMPORTING
+        package       TYPE devclass
+      RETURNING
+        VALUE(result) TYPE string.
 
     CLASS-METHODS check_package_authorized
       IMPORTING
@@ -8592,14 +8857,288 @@ CLASS /apmg/cl_apm_auth DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    CLASS-METHODS check_transport_required
+      IMPORTING
+        package       TYPE devclass
+      RETURNING
+        VALUE(result) TYPE string.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
+
+    CLASS-METHODS is_package_allowed
+      IMPORTING
+        package       TYPE devclass
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS is_package_transported
+      IMPORTING
+        package       TYPE devclass
+      RETURNING
+        VALUE(result) TYPE abap_bool.
 
     CLASS-METHODS _get_activity_text
       IMPORTING
         activity      TYPE activ_auth
       RETURNING
         VALUE(result) TYPE string.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_strust DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+************************************************************************
+* apm Trust Management
+*
+* Add, update, or remove certificates from ABAP Trust Management
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+* Note: This is a copy of package "strust" without the logging (because
+* that requires persistence). Once that is refactored to ABAP-logger
+* we can reconsider adding "strust" as dependency.
+* https://registry.abappm.com/package/strust
+************************************************************************
+  PUBLIC SECTION.
+
+    CONSTANTS c_version TYPE string VALUE '2.3.0' ##NEEDED.
+
+    CONSTANTS:
+      BEGIN OF c_context,
+        prog TYPE psecontext VALUE 'PROG', " Namespace of transaction STRUST
+        smim TYPE psecontext VALUE 'SMIM', " Namespace of table STRUSTSMIM
+        ssfa TYPE psecontext VALUE 'SSFA', " Namespace of table SSFARGS (SSFAPPLIC)
+        ssfv TYPE psecontext VALUE 'SSFV', " Namespace of table SSFVKEYDEF
+        sslc TYPE psecontext VALUE 'SSLC', " Namespace of table STRUSTSSL
+        ssls TYPE psecontext VALUE 'SSLS', " Namespace of table STRUSTSSLS
+        wsse TYPE psecontext VALUE 'WSSE', " Namespace of table STRUSTWSSE
+      END OF c_context,
+      BEGIN OF c_context_description,
+        prog TYPE ddtext VALUE 'System PSE',
+        smim TYPE ddtext VALUE 'SMIME Standard',
+        ssfa TYPE ddtext VALUE 'SSF',
+        ssfv TYPE ddtext VALUE 'SSF Key Versions',
+        sslc TYPE ddtext VALUE 'SSL Client',
+        ssls TYPE ddtext VALUE 'SSL Server',
+        wsse TYPE ddtext VALUE 'Web Service Security',
+      END OF c_context_description,
+      BEGIN OF c_application,
+        syst   TYPE ssfappl VALUE '<SYST>', " PROG
+        sncs   TYPE ssfappl VALUE '<SNCS>', " PROG
+        file   TYPE ssfappl VALUE '<FILE>', " PROG
+        ssls   TYPE ssfappl VALUE '<SSLS>', " PROG
+        spki   TYPE ssfappl VALUE '<SPKI>', " SSLC
+        dfault TYPE ssfappl VALUE 'DFAULT', " SSLC,SSLS,WSSE,SMIM
+        anonym TYPE ssfappl VALUE 'ANONYM', " SSLC
+        sapsup TYPE ssfappl VALUE 'SAPSUP', " SSLC
+        wsscrt TYPE ssfappl VALUE 'WSSCRT', " WSSE
+        wsskey TYPE ssfappl VALUE 'WSSKEY', " WSSE
+      END OF c_application,
+      BEGIN OF c_application_description,
+        syst   TYPE ddtext VALUE 'System PSE',
+        sncs   TYPE ddtext VALUE 'SNC SAP Cryptolib',
+        file   TYPE ddtext VALUE 'Files',
+        ssls   TYPE ddtext VALUE 'SSL backward compatibility',
+        spki   TYPE ddtext VALUE 'System PKI',
+        dfault TYPE ddtext VALUE 'SSL Client/Server, WSS, SMIME: Standard',
+        anonym TYPE ddtext VALUE 'SSL Client: Anonymous',
+        sapsup TYPE ddtext VALUE 'SSL Client: SAP Support Portal',
+        wsse   TYPE ddtext VALUE 'SSL Client: Web Service Security Test',
+        wsscrt TYPE ddtext VALUE 'Other System Encryption Certificates',
+        wsskey TYPE ddtext VALUE 'WS Security Keys',
+      END OF c_application_description.
+
+    TYPES:
+      ty_line        TYPE c LENGTH 80,
+      ty_certificate TYPE STANDARD TABLE OF ty_line WITH KEY table_line,
+      BEGIN OF ty_certattr,
+        subject     TYPE string,
+        issuer      TYPE string,
+        serialno    TYPE string,
+        validfrom   TYPE string,
+        validto     TYPE string,
+        date_from   TYPE d,
+        date_to     TYPE d,
+        certificate TYPE xstring,
+      END OF ty_certattr,
+      ty_certattr_tt TYPE STANDARD TABLE OF ty_certattr WITH KEY subject issuer serialno validfrom validto,
+      BEGIN OF ty_update_result,
+        added   TYPE ty_certattr_tt,
+        removed TYPE ty_certattr_tt,
+      END OF ty_update_result.
+
+    CLASS-METHODS create
+      IMPORTING
+        !context      TYPE psecontext
+        !application  TYPE ssfappl
+        !password     TYPE string OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_strust
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS constructor
+      IMPORTING
+        !context     TYPE psecontext
+        !application TYPE ssfappl
+        !password    TYPE string OPTIONAL
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS load
+      IMPORTING
+        !create       TYPE abap_bool DEFAULT abap_false
+        !id           TYPE ssfid OPTIONAL
+        !org          TYPE string OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_strust
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS add
+      IMPORTING
+        !certificate  TYPE ty_certificate
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_strust
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS add_pem
+      IMPORTING
+        !pem          TYPE string
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_strust
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS get_own_certificate
+      RETURNING
+        VALUE(result) TYPE ty_certattr
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS get_certificate_list
+      RETURNING
+        VALUE(result) TYPE ty_certattr_tt
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS remove
+      IMPORTING
+        !subject      TYPE string
+        !comment      TYPE string OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_strust
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS update
+      IMPORTING
+        !comment        TYPE string OPTIONAL
+        !remove_expired TYPE abap_bool DEFAULT abap_false
+          PREFERRED PARAMETER comment
+      RETURNING
+        VALUE(result)   TYPE ty_update_result
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS f4_context
+      RETURNING
+        VALUE(result) TYPE psecontext.
+
+    CLASS-METHODS f4_application
+      RETURNING
+        VALUE(result) TYPE ssfappl.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS:
+      BEGIN OF c_activity,
+        create  TYPE activ_auth VALUE '01',
+        change  TYPE activ_auth VALUE '02',
+        display TYPE activ_auth VALUE '03',
+        delete  TYPE activ_auth VALUE '06',
+      END OF c_activity.
+
+    DATA:
+      context       TYPE psecontext,
+      application   TYPE ssfappl,
+      psename       TYPE ssfpsename,
+      psetext       TYPE strustappltxt ##NEEDED,
+      distrib       TYPE ssfflag,
+      tempfile      TYPE localfile,
+      id            TYPE ssfid,
+      profile       TYPE ssfpab,
+      profilepw     TYPE ssfpabpw,
+      cert_own      TYPE xstring,
+      certs_new     TYPE ty_certattr_tt,
+      certs_removed TYPE ty_certattr_tt,
+      cert_current  TYPE ty_certattr,
+      certs_current TYPE ty_certattr_tt,
+      is_dirty      TYPE abap_bool.
+
+    METHODS _create
+      IMPORTING
+        !id  TYPE ssfid OPTIONAL
+        !org TYPE string OPTIONAL
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS _lock
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS _profile
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS _unlock
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS _save
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_certificates DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+************************************************************************
+* apm Certificates
+*
+* Copyright 2026 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS setup.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS:
+      c_sslc   TYPE psecontext VALUE 'SSLC',
+      c_anonym TYPE ssfappl VALUE 'ANONYM'.
+
+    CLASS-METHODS get_certificate_ca
+      RETURNING
+        VALUE(result) TYPE /apmg/cl_apm_strust=>ty_certificate.
+
+    CLASS-METHODS get_certificate_registry
+      RETURNING
+        VALUE(result) TYPE /apmg/cl_apm_strust=>ty_certificate.
+
+    CLASS-METHODS get_certificate_playground
+      RETURNING
+        VALUE(result) TYPE /apmg/cl_apm_strust=>ty_certificate.
 
 ENDCLASS.
 
@@ -8792,7 +9331,7 @@ CLASS /apmg/cl_apm_command_deprecate DEFINITION
   CREATE PRIVATE.
 
 ************************************************************************
-* apm Deprecate
+* apm Deprecate Command
 *
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
@@ -8891,6 +9430,7 @@ CLASS /apmg/cl_apm_command_install DEFINITION
         !registry      TYPE string
         !package       TYPE devclass
         !package_json  TYPE /apmg/if_apm_types=>ty_package_json
+        !transport     TYPE trkorr OPTIONAL
         !is_production TYPE abap_bool DEFAULT abap_false
         !is_force      TYPE abap_bool DEFAULT abap_false
         !is_dry_run    TYPE abap_bool DEFAULT abap_false
@@ -8919,6 +9459,7 @@ CLASS /apmg/cl_apm_command_install DEFINITION
         !registry      TYPE string
         !package       TYPE devclass
         !package_json  TYPE /apmg/if_apm_types=>ty_package_json
+        !transport     TYPE trkorr
         !is_production TYPE abap_bool
         !is_force      TYPE abap_bool
         !is_dry_run    TYPE abap_bool
@@ -9006,72 +9547,22 @@ CLASS /apmg/cl_apm_command_installer DEFINITION
         !package       TYPE devclass
         !name          TYPE string
         !version       TYPE string
+        !transport     TYPE trkorr
         !is_production TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
 
     CLASS-METHODS uninstall_package
       IMPORTING
-        !name    TYPE string
-        !version TYPE string
-        !package TYPE devclass
+        !name      TYPE string
+        !version   TYPE string
+        !package   TYPE devclass
+        !transport TYPE trkorr
       RAISING
         /apmg/cx_apm_error.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
-
-ENDCLASS.
-
-CLASS /apmg/cl_apm_command_integrity DEFINITION
-  FINAL
-  CREATE PUBLIC.
-
-************************************************************************
-* apm Command Integrity Checks
-*
-* Copyright 2024 apm.to Inc. <https://apm.to>
-* SPDX-License-Identifier: MIT
-************************************************************************
-* Note: This is a stateless class. Do not add any attributes!
-************************************************************************
-  PUBLIC SECTION.
-
-    CLASS-METHODS check_integrity
-      IMPORTING
-        !tarball TYPE xstring
-        !dist    TYPE /apmg/if_apm_types=>ty_dist
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_integrity
-      IMPORTING
-        !tarball      TYPE xstring
-      RETURNING
-        VALUE(result) TYPE /apmg/if_apm_types=>ty_dist
-      RAISING
-        /apmg/cx_apm_error.
-
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-
-    CONSTANTS c_initial_key TYPE xstring VALUE ''.
-
-    CLASS-METHODS calc_sha1
-      IMPORTING
-        !data         TYPE xstring
-      RETURNING
-        VALUE(result) TYPE string
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS calc_sha512
-      IMPORTING
-        !data         TYPE xstring
-      RETURNING
-        VALUE(result) TYPE string
-      RAISING
-        /apmg/cx_apm_error.
 
 ENDCLASS.
 
@@ -9080,7 +9571,7 @@ CLASS /apmg/cl_apm_command_login DEFINITION
   CREATE PRIVATE.
 
 ************************************************************************
-* apm Install Login
+* apm Login Command
 *
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
@@ -9122,6 +9613,73 @@ CLASS /apmg/cl_apm_command_login DEFINITION
 
 ENDCLASS.
 
+CLASS /apmg/cl_apm_command_logout DEFINITION
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm Logout Command
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS run
+      IMPORTING
+        !registry TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    TYPES:
+      BEGIN OF ty_response,
+        ok TYPE string,
+      END OF ty_response.
+
+    METHODS execute
+      IMPORTING
+        !registry TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_command_ping DEFINITION
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm Whoami Command
+*
+* Copyright 2026 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS run
+      IMPORTING
+        !registry     TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    METHODS execute
+      IMPORTING
+        !registry     TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
 CLASS /apmg/cl_apm_command_publish DEFINITION
   FINAL
   CREATE PRIVATE.
@@ -9141,6 +9699,7 @@ CLASS /apmg/cl_apm_command_publish DEFINITION
       IMPORTING
         !registry   TYPE string
         !package    TYPE devclass
+        !tag        TYPE string OPTIONAL
         !is_dry_run TYPE abap_bool DEFAULT abap_false
       RAISING
         /apmg/cx_apm_error.
@@ -9152,6 +9711,7 @@ CLASS /apmg/cl_apm_command_publish DEFINITION
       IMPORTING
         !registry   TYPE string
         !package    TYPE devclass
+        !tag        TYPE string
         !is_dry_run TYPE abap_bool
       RAISING
         /apmg/cx_apm_error ##NEEDED.
@@ -9245,7 +9805,8 @@ CLASS /apmg/cl_apm_command_uninstall DEFINITION
 
     CLASS-METHODS run
       IMPORTING
-        !package TYPE devclass
+        !package   TYPE devclass
+        !transport TYPE trkorr
       RAISING
         /apmg/cx_apm_error.
 
@@ -9254,7 +9815,8 @@ CLASS /apmg/cl_apm_command_uninstall DEFINITION
 
     METHODS execute
       IMPORTING
-        !package TYPE devclass
+        !package   TYPE devclass
+        !transport TYPE trkorr
       RAISING
         /apmg/cx_apm_error.
 
@@ -9379,6 +9941,9 @@ CLASS /apmg/cl_apm_command_update DEFINITION
       IMPORTING
         !registry      TYPE string
         !package       TYPE devclass
+        !to_version    TYPE string
+        !transport     TYPE trkorr OPTIONAL
+        !force         TYPE abap_bool DEFAULT abap_false
         !is_dry_run    TYPE abap_bool DEFAULT abap_false
         !is_production TYPE abap_bool DEFAULT abap_false
       RAISING
@@ -9391,6 +9956,9 @@ CLASS /apmg/cl_apm_command_update DEFINITION
       IMPORTING
         !registry      TYPE string
         !package       TYPE devclass
+        !to_version    TYPE string
+        !transport     TYPE trkorr
+        !force         TYPE abap_bool
         !is_dry_run    TYPE abap_bool
         !is_production TYPE abap_bool
       RAISING
@@ -9423,12 +9991,31 @@ CLASS /apmg/cl_apm_command_update DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
-    METHODS process_dependencies
+    METHODS get_dependencies_to_import
       IMPORTING
         !registry     TYPE string
         !dependencies TYPE /apmg/if_apm_importer=>ty_dependencies
+        !force        TYPE abap_bool
       RETURNING
         VALUE(result) TYPE /apmg/if_apm_importer=>ty_dependencies
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS add_dependencies
+      IMPORTING
+        !package       TYPE devclass
+        !dependencies  TYPE /apmg/if_apm_importer=>ty_dependencies
+        !transport     TYPE trkorr
+        !is_dry_run    TYPE abap_bool
+        !is_production TYPE abap_bool
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS remove_dependencies
+      IMPORTING
+        !dependencies TYPE /apmg/if_apm_importer=>ty_dependencies
+        !transport    TYPE trkorr
+        !is_dry_run   TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
 
@@ -9447,114 +10034,70 @@ CLASS /apmg/cl_apm_command_update DEFINITION
         !manifest TYPE /apmg/if_apm_types=>ty_manifest
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
-CLASS /apmg/cl_apm_command_utils DEFINITION
+CLASS /apmg/cl_apm_command_version DEFINITION
   FINAL
-  CREATE PUBLIC.
+  CREATE PRIVATE.
 
 ************************************************************************
-* apm Command Utilities
+* apm Version Command
 *
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
 ************************************************************************
-* Note: This is a stateless class. Do not add any attributes!
+  PUBLIC SECTION.
+
+    CLASS-METHODS run
+      IMPORTING
+        !package      TYPE devclass
+        !version      TYPE string OPTIONAL
+        !release_type TYPE string OPTIONAL
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    METHODS execute
+      IMPORTING
+        !package      TYPE devclass
+        !version      TYPE string
+        !release_type TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS check_package
+      IMPORTING
+        !package TYPE devclass
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS get_package_json
+      IMPORTING
+        !package      TYPE devclass
+      RETURNING
+        VALUE(result) TYPE /apmg/if_apm_types=>ty_package_json
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_command_whoami DEFINITION
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm Whoami Command
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
 ************************************************************************
   PUBLIC SECTION.
 
-    CLASS-METHODS fetch_registry
+    CLASS-METHODS run
       IMPORTING
         !registry     TYPE string
-        !url          TYPE string
-        !command      TYPE string OPTIONAL
-        !auth_type    TYPE string OPTIONAL
-        !username     TYPE string OPTIONAL
-        !password     TYPE string OPTIONAL
-        !method       TYPE string DEFAULT /apmg/if_apm_http_agent=>c_method-get
-        !payload      TYPE any OPTIONAL
-      RETURNING
-        VALUE(result) TYPE REF TO /apmg/if_apm_http_response
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_packument_from_registry
-      IMPORTING
-        !registry     TYPE string
-        !name         TYPE string
-        !write        TYPE abap_bool DEFAULT abap_false
-      RETURNING
-        VALUE(result) TYPE /apmg/if_apm_types=>ty_packument
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_manifest_from_registry
-      IMPORTING
-        !registry     TYPE string
-        !name         TYPE string
-        !version      TYPE string
-        !write        TYPE abap_bool DEFAULT abap_false
-      RETURNING
-        VALUE(result) TYPE /apmg/if_apm_types=>ty_manifest
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_tarball_from_registry
-      IMPORTING
-        !registry     TYPE string
-        !name         TYPE string
-        !tarball      TYPE string
-      RETURNING
-        VALUE(result) TYPE xstring
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_versions_from_packument
-      IMPORTING
-        packument     TYPE /apmg/if_apm_types=>ty_packument
-      RETURNING
-        VALUE(result) TYPE string_table
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_package_from_name
-      IMPORTING
-        name          TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
-    CLASS-METHODS get_scope_from_name
-      IMPORTING
-        name          TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
-    CLASS-METHODS get_name_from_scope_package
-      IMPORTING
-        scope         TYPE string OPTIONAL
-        package       TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
-    CLASS-METHODS check_response
-      IMPORTING
-        !response     TYPE REF TO /apmg/if_apm_http_response
-        !text         TYPE string DEFAULT 'Error'
-      RETURNING
-        VALUE(result) TYPE string
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_agent
-      IMPORTING
-        !host         TYPE string
-      RETURNING
-        VALUE(result) TYPE REF TO /apmg/if_apm_http_agent
-      RAISING
-        /apmg/cx_apm_error.
-
-    CLASS-METHODS get_abap_version
       RETURNING
         VALUE(result) TYPE string
       RAISING
@@ -9563,20 +10106,18 @@ CLASS /apmg/cl_apm_command_utils DEFINITION
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    CONSTANTS:
-      BEGIN OF c_header,
-        apm_command   TYPE string VALUE 'apm-command',
-        apm_auth_type TYPE string VALUE 'apm-auth-type',
-      END OF c_header.
+    TYPES:
+      BEGIN OF ty_response,
+        username TYPE string,
+      END OF ty_response.
 
-    CLASS-METHODS get_error
+    METHODS execute
       IMPORTING
-        !response     TYPE string
+        !registry     TYPE string
       RETURNING
         VALUE(result) TYPE string
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_emoji DEFINITION
@@ -9593,7 +10134,7 @@ CLASS /apmg/cl_apm_emoji DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    CONSTANTS c_version TYPE string VALUE '3.0.0' ##NEEDED.
+    CONSTANTS c_version TYPE string VALUE '3.0.1' ##NEEDED.
 
     TYPES:
       ty_code    TYPE string_table,
@@ -9614,23 +10155,23 @@ CLASS /apmg/cl_apm_emoji DEFINITION
 
     METHODS constructor.
 
-    METHODS get_emoji_css
+    METHODS get_css
       IMPORTING
         size_in_px    TYPE i DEFAULT 20
       RETURNING
         VALUE(result) TYPE ty_code.
 
-    METHODS get_emoji_list
+    METHODS get_list
       RETURNING
         VALUE(result) TYPE ty_code.
 
-    METHODS find_emoji
+    METHODS search
       IMPORTING
         !regex        TYPE string
       RETURNING
         VALUE(result) TYPE ty_results.
 
-    METHODS format_emoji
+    METHODS format
       IMPORTING
         !line         TYPE string
         !base_url     TYPE string OPTIONAL
@@ -9646,7 +10187,59 @@ CLASS /apmg/cl_apm_emoji DEFINITION
 
     DATA emojis TYPE ty_emojis.
 
-    METHODS init_emoji_list.
+    METHODS init_list.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_env DEFINITION
+  CREATE PRIVATE.
+
+************************************************************************
+* Environment
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    INTERFACES /apmg/if_apm_env.
+
+    DATA env TYPE /apmg/if_apm_env=>ty_environment READ-ONLY.
+
+    CLASS-METHODS create
+      IMPORTING
+        !env_type     TYPE string DEFAULT /apmg/if_apm_env=>c_env-abap
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_env.
+
+    METHODS constructor
+      IMPORTING
+        !env_type TYPE string.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    DATA env_type TYPE string.
+
+    METHODS init.
+
+    METHODS init_abap.
+
+    METHODS init_os.
+
+    METHODS init_profile.
+
+    METHODS get_value
+      IMPORTING
+        !name         TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS format
+      IMPORTING
+        !number       TYPE simple
+      RETURNING
+        VALUE(result) TYPE string.
 
 ENDCLASS.
 
@@ -9925,7 +10518,7 @@ CLASS /apmg/cl_apm_gui DEFINITION
         new_page_replacing  TYPE i VALUE 7,
       END OF c_event_state.
 
-    METHODS go_home
+    METHODS start
       IMPORTING
         !iv_action TYPE string
       RAISING
@@ -10108,6 +10701,10 @@ CLASS /apmg/cl_apm_gui_buttons DEFINITION
       RETURNING
         VALUE(result) TYPE string.
 
+    CLASS-METHODS refresh
+      RETURNING
+        VALUE(result) TYPE string.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -10186,18 +10783,21 @@ CLASS /apmg/cl_apm_gui_chunk_lib DEFINITION
         !iv_scrollable TYPE abap_bool DEFAULT abap_true
         !io_content    TYPE REF TO /apmg/if_apm_html
       RETURNING
-        VALUE(ri_html) TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(ri_html) TYPE REF TO /apmg/if_apm_html.
+
+    CLASS-METHODS render_registry
+      IMPORTING
+        !iv_registry   TYPE string
+      RETURNING
+        VALUE(ri_html) TYPE REF TO /apmg/if_apm_html.
 
     CLASS-METHODS render_registry_link
       IMPORTING
+        !iv_registry   TYPE string
         !iv_name       TYPE string
         !iv_version    TYPE string OPTIONAL
       RETURNING
-        VALUE(ri_html) TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(ri_html) TYPE REF TO /apmg/if_apm_html.
 
     CLASS-METHODS render_package_name
       IMPORTING
@@ -10612,21 +11212,24 @@ CLASS /apmg/cl_apm_gui_dlg_install DEFINITION
         package      TYPE devclass,
         name         TYPE string,
         version      TYPE string,
+        transport    TYPE trkorr,
         package_json TYPE /apmg/if_apm_types=>ty_package_json,
       END OF ty_params.
 
     CONSTANTS:
       BEGIN OF c_id,
-        package TYPE string VALUE 'package',
-        name    TYPE string VALUE 'name',
-        version TYPE string VALUE 'version',
+        package   TYPE string VALUE 'package',
+        name      TYPE string VALUE 'name',
+        version   TYPE string VALUE 'version',
+        transport TYPE string VALUE 'transport',
       END OF c_id.
 
     CONSTANTS:
       BEGIN OF c_action,
-        choose_package  TYPE string VALUE 'choose-package',
-        create_package  TYPE string VALUE 'create-package',
-        install_package TYPE string VALUE 'install-package',
+        choose_package   TYPE string VALUE 'choose-package',
+        create_package   TYPE string VALUE 'create-package',
+        install_package  TYPE string VALUE 'install-package',
+        choose_transport TYPE string VALUE 'choose-transport',
       END OF c_action .
 
     DATA:
@@ -10635,6 +11238,89 @@ CLASS /apmg/cl_apm_gui_dlg_install DEFINITION
       form_data      TYPE REF TO /apmg/cl_apm_string_map,
       form_util      TYPE REF TO /apmg/cl_apm_html_form_utils,
       validation_log TYPE REF TO /apmg/cl_apm_string_map.
+
+    METHODS get_form_schema
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_html_form.
+
+    METHODS get_parameters
+      IMPORTING
+        !form_data    TYPE REF TO /apmg/cl_apm_string_map
+      RETURNING
+        VALUE(result) TYPE ty_params.
+
+    METHODS validate_form
+      IMPORTING
+        !form_data    TYPE REF TO /apmg/cl_apm_string_map
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_string_map
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_dlg_login DEFINITION
+  INHERITING FROM /apmg/cl_apm_gui_component
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm GUI Dialog for Login Command
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    INTERFACES:
+      /apmg/if_apm_gui_event_handler,
+      /apmg/if_apm_gui_menu_provider,
+      /apmg/if_apm_gui_renderable.
+
+    CLASS-METHODS create
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_gui_renderable
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS constructor
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    TYPES:
+      BEGIN OF ty_params,
+        username TYPE string,
+        password TYPE string,
+      END OF ty_params.
+
+    CONSTANTS:
+      BEGIN OF c_id,
+        username TYPE string VALUE 'username',
+        password TYPE string VALUE 'password',
+      END OF c_id.
+
+    CONSTANTS:
+      BEGIN OF c_action,
+        login TYPE string VALUE 'login',
+      END OF c_action.
+
+    DATA:
+      settings       TYPE /apmg/if_apm_settings=>ty_settings,
+      defaults       TYPE /apmg/if_apm_settings=>ty_registry_settings,
+      focus_field    TYPE string,
+      form           TYPE REF TO /apmg/cl_apm_html_form,
+      form_data      TYPE REF TO /apmg/cl_apm_string_map,
+      form_util      TYPE REF TO /apmg/cl_apm_html_form_utils,
+      validation_log TYPE REF TO /apmg/cl_apm_string_map.
+
+    METHODS get_login_default
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_string_map
+      RAISING
+        /apmg/cx_apm_error.
 
     METHODS get_form_schema
       RETURNING
@@ -10696,6 +11382,7 @@ CLASS /apmg/cl_apm_gui_dlg_publish DEFINITION
         package TYPE devclass,
         name    TYPE string,
         version TYPE string,
+        tag     TYPE string,
       END OF ty_params.
 
     CONSTANTS:
@@ -10703,6 +11390,7 @@ CLASS /apmg/cl_apm_gui_dlg_publish DEFINITION
         package TYPE string VALUE 'package',
         name    TYPE string VALUE 'name',
         version TYPE string VALUE 'version',
+        tag     TYPE string VALUE 'tag',
       END OF c_id.
 
     CONSTANTS:
@@ -10753,7 +11441,6 @@ CLASS /apmg/cl_apm_gui_dlg_publish DEFINITION
         VALUE(result) TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_dlg_undepreca DEFINITION
@@ -10891,21 +11578,24 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall DEFINITION
 
     TYPES:
       BEGIN OF ty_params,
-        package TYPE devclass,
-        name    TYPE string,
-        version TYPE string,
+        package   TYPE devclass,
+        name      TYPE string,
+        version   TYPE string,
+        transport TYPE trkorr,
       END OF ty_params.
 
     CONSTANTS:
       BEGIN OF c_id,
-        package TYPE string VALUE 'package',
-        name    TYPE string VALUE 'name',
-        version TYPE string VALUE 'version',
+        package   TYPE string VALUE 'package',
+        name      TYPE string VALUE 'name',
+        version   TYPE string VALUE 'version',
+        transport TYPE string VALUE 'transport',
       END OF c_id.
 
     CONSTANTS:
       BEGIN OF c_action,
         choose_package    TYPE string VALUE 'choose-package',
+        choose_transport  TYPE string VALUE 'choose-transport',
         uninstall_package TYPE string VALUE 'uninstall-package',
         refresh           TYPE string VALUE 'refresh',
       END OF c_action.
@@ -11058,6 +11748,103 @@ CLASS /apmg/cl_apm_gui_dlg_unpublish DEFINITION
         !params       TYPE ty_params
       RETURNING
         VALUE(result) TYPE abap_bool
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_dlg_update DEFINITION
+  INHERITING FROM /apmg/cl_apm_gui_component
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm GUI Dialog for Update Command
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    INTERFACES:
+      /apmg/if_apm_gui_event_handler,
+      /apmg/if_apm_gui_menu_provider,
+      /apmg/if_apm_gui_renderable.
+
+    CLASS-METHODS create
+      IMPORTING
+        !package      TYPE devclass OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_gui_renderable
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS constructor
+      IMPORTING
+        !package TYPE devclass OPTIONAL
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    TYPES:
+      BEGIN OF ty_params,
+        package    TYPE devclass,
+        name       TYPE string,
+        version    TYPE string,
+        to_version TYPE string,
+        transport  TYPE trkorr,
+        force      TYPE abap_bool,
+      END OF ty_params.
+
+    CONSTANTS:
+      BEGIN OF c_id,
+        package    TYPE string VALUE 'package',
+        name       TYPE string VALUE 'name',
+        version    TYPE string VALUE 'version',
+        to_version TYPE string VALUE 'to-version',
+        transport  TYPE string VALUE 'transport',
+        force      TYPE string VALUE 'force',
+      END OF c_id.
+
+    CONSTANTS:
+      BEGIN OF c_action,
+        update_package   TYPE string VALUE 'update-package',
+        choose_transport TYPE string VALUE 'choose-transport',
+      END OF c_action .
+
+    DATA:
+      registry       TYPE string,
+      update_package TYPE devclass,
+      form           TYPE REF TO /apmg/cl_apm_html_form,
+      form_data      TYPE REF TO /apmg/cl_apm_string_map,
+      form_util      TYPE REF TO /apmg/cl_apm_html_form_utils,
+      validation_log TYPE REF TO /apmg/cl_apm_string_map.
+
+    METHODS get_form_schema
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_html_form.
+
+    METHODS get_parameters
+      IMPORTING
+        !form_data    TYPE REF TO /apmg/cl_apm_string_map
+      RETURNING
+        VALUE(result) TYPE ty_params.
+
+    METHODS read_package
+      IMPORTING
+        !package      TYPE devclass
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_string_map
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS validate_form
+      IMPORTING
+        !form_data    TYPE REF TO /apmg/cl_apm_string_map
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_string_map
       RAISING
         /apmg/cx_apm_error.
 
@@ -11402,6 +12189,8 @@ CLASS /apmg/cl_apm_gui_menus DEFINITION
         VALUE(result) TYPE REF TO /apmg/cl_apm_html_toolbar.
 
     CLASS-METHODS help
+      IMPORTING
+        with_welcome  TYPE abap_bool DEFAULT abap_true
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_apm_html_toolbar.
 
@@ -11792,6 +12581,12 @@ CLASS /apmg/cl_apm_gui_page_db_entry DEFINITION
       RETURNING
         VALUE(result) TYPE string.
 
+    METHODS validate_package_json
+      IMPORTING
+        !json TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_debuginf DEFINITION
@@ -11946,6 +12741,7 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
     CONSTANTS:
       c_page_id TYPE string VALUE 'apm-package-list',
       BEGIN OF c_action,
+        login            TYPE string VALUE 'login',
         select           TYPE string VALUE 'select',
         apply_filter     TYPE string VALUE 'apply_filter',
         label_filter     TYPE string VALUE 'label_filter',
@@ -11959,10 +12755,10 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
       c_raw_field_suffix    TYPE string VALUE '_RAW' ##NO_TEXT.
 
     DATA:
+      settings     TYPE /apmg/if_apm_settings=>ty_settings,
       packages     TYPE /apmg/if_apm_package_json=>ty_packages,
       all_labels   TYPE string_table,
-      label_colors TYPE REF TO /apmg/cl_apm_string_map,
-      settings     TYPE /apmg/if_apm_settings=>ty_settings.
+      label_colors TYPE REF TO /apmg/cl_apm_string_map.
 
     " PREPARE
 
@@ -12013,10 +12809,6 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
 
     " HEADER
 
-    METHODS render_action_toolbar
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
     METHODS render_header_bar
       IMPORTING
         !html TYPE REF TO /apmg/if_apm_html.
@@ -12034,6 +12826,10 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
         VALUE(result) TYPE string.
 
     METHODS render_registry
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html.
+
+    METHODS render_user_menu
       IMPORTING
         !html TYPE REF TO /apmg/if_apm_html.
 
@@ -12098,6 +12894,7 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
     METHODS save_settings
       RAISING
         /apmg/cx_apm_error.
+
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_package DEFINITION
@@ -12145,20 +12942,19 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
 
     CONSTANTS:
       BEGIN OF c_action,
-        view_readme         TYPE string VALUE 'view_readme',
-        view_readme_code    TYPE string VALUE 'view_readme_code',
-        view_readme_raw     TYPE string VALUE 'view_readme_raw',
-        edit_readme         TYPE string VALUE 'edit_readme',
-        copy_readme         TYPE string VALUE 'copy_readme',
-        download_readme     TYPE string VALUE 'download_readme',
-        view_json           TYPE string VALUE 'view_json',
-        edit_json           TYPE string VALUE 'edit_json',
-        copy_json           TYPE string VALUE 'copy_json',
-        download_json       TYPE string VALUE 'download_json',
-        view_dependencies   TYPE string VALUE 'view_dependencies',
-        add_dependency      TYPE string VALUE 'add_dependency',
-        remove_dependency   TYPE string VALUE 'remove_dependency',
-        update_dependencies TYPE string VALUE 'update_dependencies',
+        view_readme       TYPE string VALUE 'view_readme',
+        view_readme_code  TYPE string VALUE 'view_readme_code',
+        view_readme_raw   TYPE string VALUE 'view_readme_raw',
+        edit_readme       TYPE string VALUE 'edit_readme',
+        copy_readme       TYPE string VALUE 'copy_readme',
+        download_readme   TYPE string VALUE 'download_readme',
+        view_json         TYPE string VALUE 'view_json',
+        edit_json         TYPE string VALUE 'edit_json',
+        copy_json         TYPE string VALUE 'copy_json',
+        download_json     TYPE string VALUE 'download_json',
+        view_dependencies TYPE string VALUE 'view_dependencies',
+        add_dependency    TYPE string VALUE 'add_dependency',
+        remove_dependency TYPE string VALUE 'remove_dependency',
       END OF c_action.
 
     CONSTANTS:
@@ -12175,10 +12971,16 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
       END OF ty_markdown.
 
     DATA:
+      registry     TYPE string,
       package      TYPE devclass,
       view         TYPE string,
       markdown     TYPE ty_markdown,
+      settings     TYPE /apmg/if_apm_settings=>ty_settings,
       package_json TYPE /apmg/if_apm_types=>ty_package_json.
+
+    METHODS load_settings
+      RAISING
+        /apmg/cx_apm_error.
 
     METHODS get_toolbar
       RETURNING
@@ -12511,6 +13313,67 @@ CLASS /apmg/cl_apm_gui_page_tree DEFINITION
         /apmg/cx_apm_error.
 
     METHODS save_settings
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_page_welcome DEFINITION
+  INHERITING FROM /apmg/cl_apm_gui_component
+  FINAL
+  CREATE PRIVATE.
+
+************************************************************************
+* apm GUI Welcome Page
+*
+* Copyright 2026 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    INTERFACES:
+      /apmg/if_apm_gui_event_handler,
+      /apmg/if_apm_gui_menu_provider,
+      /apmg/if_apm_gui_renderable.
+
+    CLASS-METHODS create
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_gui_renderable
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS:
+      BEGIN OF c_action,
+        setup   TYPE string VALUE 'setup',
+        refresh TYPE string VALUE 'refresh',
+      END OF c_action.
+
+    CONSTANTS c_ping_pong TYPE string VALUE 'PONG'.
+
+    METHODS render_styles
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_welcome
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS render_connections
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS confirm_popup
+      RETURNING
+        VALUE(result) TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
 
@@ -13194,33 +14057,39 @@ CLASS /apmg/cl_apm_html DEFINITION
     CONSTANTS c_indent_size TYPE i VALUE 2 ##NO_TEXT.
 
     CLASS-METHODS class_constructor.
+
     CLASS-METHODS create
       IMPORTING
         !iv_initial_chunk  TYPE any OPTIONAL
       RETURNING
         VALUE(ri_instance) TYPE REF TO /apmg/if_apm_html.
+
     CLASS-METHODS icon
       IMPORTING
-        !iv_name      TYPE string
-        !iv_hint      TYPE string OPTIONAL
-        !iv_class     TYPE string OPTIONAL
-        !iv_onclick   TYPE string OPTIONAL
+        !iv_name      TYPE csequence
+        !iv_hint      TYPE csequence OPTIONAL
+        !iv_class     TYPE csequence OPTIONAL
+        !iv_onclick   TYPE csequence OPTIONAL
       RETURNING
         VALUE(rv_str) TYPE string.
+
     CLASS-METHODS checkbox
       IMPORTING
-        !iv_id         TYPE string OPTIONAL
+        !iv_id         TYPE csequence OPTIONAL
         !iv_checked    TYPE abap_bool OPTIONAL
       RETURNING
         VALUE(rv_html) TYPE string.
+
     CLASS-METHODS parse_data_attr
       IMPORTING
-        !iv_str             TYPE string OPTIONAL
+        !iv_str             TYPE csequence OPTIONAL
       RETURNING
         VALUE(rs_data_attr) TYPE /apmg/if_apm_html=>ty_data_attr.
+
     CLASS-METHODS set_debug_mode
       IMPORTING
         !iv_mode TYPE abap_bool.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -13262,11 +14131,11 @@ CLASS /apmg/cl_apm_html DEFINITION
     METHODS indent_line
       CHANGING
         !cs_context TYPE ty_indent_context
-        !cv_line    TYPE string.
+        !cv_line    TYPE csequence.
 
     METHODS study_line
       IMPORTING
-        !iv_line         TYPE string
+        !iv_line         TYPE csequence
         !is_context      TYPE ty_indent_context
       RETURNING
         VALUE(rs_result) TYPE ty_study_result.
@@ -13337,6 +14206,7 @@ CLASS /apmg/cl_apm_html_form DEFINITION
     METHODS render
       IMPORTING
         !iv_form_class     TYPE csequence DEFAULT 'dialog-form'
+        !iv_focus_field    TYPE string OPTIONAL
         !io_values         TYPE REF TO /apmg/cl_apm_string_map
         !io_validation_log TYPE REF TO /apmg/cl_apm_string_map OPTIONAL
       RETURNING
@@ -13676,6 +14546,7 @@ CLASS /apmg/cl_apm_html_table DEFINITION
           PREFERRED PARAMETER ii_renderer
       RETURNING
         VALUE(ro_instance)        TYPE REF TO /apmg/cl_apm_html_table.
+
     " maybe also th css_class
     METHODS define_column
       IMPORTING
@@ -13685,6 +14556,7 @@ CLASS /apmg/cl_apm_html_table DEFINITION
         !iv_sortable     TYPE abap_bool DEFAULT abap_true
       RETURNING
         VALUE(ro_self)   TYPE REF TO /apmg/cl_apm_html_table.
+
     METHODS define_column_group
       IMPORTING
         !iv_group_id    TYPE string OPTIONAL " not mandatory, but can be used for CSS (TODO data-gid)
@@ -13694,6 +14566,7 @@ CLASS /apmg/cl_apm_html_table DEFINITION
         VALUE(ro_self)  TYPE REF TO /apmg/cl_apm_html_table
       RAISING
         /apmg/cx_apm_error.
+
     " Maybe also data_provider
     " TODO record Limiter
     METHODS render
@@ -13709,17 +14582,20 @@ CLASS /apmg/cl_apm_html_table DEFINITION
         VALUE(ri_html)    TYPE REF TO /apmg/if_apm_html
       RAISING
         /apmg/cx_apm_error.
+
     " Sorting utils
     CLASS-METHODS detect_sorting_request
       IMPORTING
         !iv_event                 TYPE string
       RETURNING
         VALUE(rs_sorting_request) TYPE /apmg/if_apm_html_table=>ty_sorting_state.
+
     METHODS process_sorting_request
       IMPORTING
         !iv_event           TYPE string
       RETURNING
         VALUE(rv_processed) TYPE abap_bool.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -13902,31 +14778,51 @@ CLASS /apmg/cl_apm_http_agent DEFINITION
 
     CLASS-METHODS create
       IMPORTING
-        !proxy_host    TYPE string OPTIONAL
-        !proxy_service TYPE string OPTIONAL
-        !proxy_user    TYPE string OPTIONAL
-        !proxy_passwd  TYPE string OPTIONAL
+        !rfc_destination TYPE rfcdest OPTIONAL
+        !ssl_id          TYPE ssfapplssl DEFAULT 'ANONYM'
+        !proxy_host      TYPE string OPTIONAL
+        !proxy_service   TYPE string OPTIONAL
+        !proxy_user      TYPE string OPTIONAL
+        !proxy_password  TYPE string OPTIONAL
       RETURNING
-        VALUE(result)  TYPE REF TO /apmg/if_apm_http_agent.
+        VALUE(result)    TYPE REF TO /apmg/if_apm_http_agent.
 
     METHODS constructor
       IMPORTING
-        !proxy_host    TYPE string OPTIONAL
-        !proxy_service TYPE string OPTIONAL
-        !proxy_user    TYPE string OPTIONAL
-        !proxy_passwd  TYPE string OPTIONAL.
+        !rfc_destination TYPE rfcdest
+        !ssl_id          TYPE ssfapplssl
+        !proxy_host      TYPE string
+        !proxy_service   TYPE string
+        !proxy_user      TYPE string
+        !proxy_password  TYPE string.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
 
     DATA:
-      proxy_host     TYPE string,
-      proxy_service  TYPE string,
-      proxy_user     TYPE string,
-      proxy_passwd   TYPE string,
-      global_headers TYPE REF TO /apmg/cl_apm_string_map.
+      rfc_destination TYPE rfcdest,
+      ssl_id          TYPE ssfapplssl,
+      proxy_host      TYPE string,
+      proxy_service   TYPE string,
+      proxy_user      TYPE string,
+      proxy_password  TYPE string,
+      global_headers  TYPE REF TO /apmg/cl_apm_string_map.
 
-    CLASS-METHODS attach_payload
+    METHODS get_http_client
+      IMPORTING
+        !url          TYPE string
+      RETURNING
+        VALUE(result) TYPE REF TO if_http_client
+      RAISING
+        /apmg/cx_apm_error.
+
+    METHODS get_connection_longtext
+      IMPORTING
+        !host         TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS attach_payload
       IMPORTING
         request TYPE REF TO if_http_request
         payload TYPE any
@@ -13947,27 +14843,49 @@ CLASS /apmg/cl_apm_http_login_manage DEFINITION
 ************************************************************************
   PUBLIC SECTION.
 
-    CLASS-METHODS get
+    CLASS-METHODS get_auth
       IMPORTING
         !host         TYPE csequence
       RETURNING
         VALUE(result) TYPE string.
 
-    CLASS-METHODS set
+    CLASS-METHODS get_username
+      IMPORTING
+        !host         TYPE csequence
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS get_host
+      IMPORTING
+        !host         TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS set_basic
       IMPORTING
         !host         TYPE csequence
         !username     TYPE csequence
         !password     TYPE csequence
-        !is_basic     TYPE abap_bool DEFAULT abap_true
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS set_token
+      IMPORTING
+        !host         TYPE csequence
+        !username     TYPE csequence
+        !token        TYPE csequence
       RETURNING
         VALUE(result) TYPE string.
 
     CLASS-METHODS save
       IMPORTING
-        !host TYPE csequence
-        !auth TYPE csequence.
+        !host     TYPE csequence
+        !auth     TYPE csequence
+        !username TYPE csequence OPTIONAL.
 
-    CLASS-METHODS clear.
+    CLASS-METHODS clear
+      IMPORTING
+        !host TYPE csequence OPTIONAL.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -13976,20 +14894,16 @@ CLASS /apmg/cl_apm_http_login_manage DEFINITION
       BEGIN OF ty_auth,
         host TYPE string,
         auth TYPE string,
+        user TYPE string,
       END OF ty_auth.
 
     CLASS-DATA auths TYPE TABLE OF ty_auth WITH DEFAULT KEY.
 
-    CLASS-METHODS get_host
-      IMPORTING
-        !host         TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
     CLASS-METHODS append
       IMPORTING
         !host TYPE string
-        !auth TYPE string.
+        !auth TYPE string
+        !user TYPE string.
 
 ENDCLASS.
 
@@ -14115,7 +15029,7 @@ CLASS /apmg/cl_apm_installer DEFINITION
 * SPDX-License-Identifier: MIT
 ************************************************************************
 * TODO: This installer is a copy from Marc Bernard Tools
-* Some of the features are not relevant for apm and can be removed
+* Some of the features are not relevant for apm and might be removed!
 * TODO: Support for data config
 ************************************************************************
   PUBLIC SECTION.
@@ -14350,6 +15264,58 @@ CLASS /apmg/cl_apm_installer_files DEFINITION
     CLASS-METHODS _normalize_path
       CHANGING
         !files TYPE zif_abapgit_git_definitions=>ty_files_tt
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_integrity DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+************************************************************************
+* apm Integrity Checks
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+* Note: This is a stateless class. Do not add any attributes!
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS get
+      IMPORTING
+        !tarball      TYPE xstring
+      RETURNING
+        VALUE(result) TYPE /apmg/if_apm_types=>ty_dist
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS check
+      IMPORTING
+        !tarball TYPE xstring
+        !dist    TYPE /apmg/if_apm_types=>ty_dist
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS c_initial_key TYPE xstring VALUE ''.
+
+    CLASS-METHODS calc_sha1
+      IMPORTING
+        !data         TYPE xstring
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS calc_sha512
+      IMPORTING
+        !data         TYPE xstring
+      RETURNING
+        VALUE(result) TYPE string
       RAISING
         /apmg/cx_apm_error.
 
@@ -14651,6 +15617,9 @@ CLASS /apmg/cl_apm_markdown DEFINITION
 * - Remove variable prefixes, strict abaplint rules
 ************************************************************************
 * TODO: Add "copy-to-clipboard" for code blocks
+* TODO: More GFM - task lists, strikethrough (~~), autolinks, tagfilter
+*       https://github.github.com/gfm/
+* TODO: Support for footnotes
 ************************************************************************
   PUBLIC SECTION.
 
@@ -15755,6 +16724,12 @@ CLASS /apmg/cl_apm_package_json DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    CLASS-METHODS check_manifest
+      IMPORTING
+        !manifest TYPE /apmg/if_apm_types=>ty_manifest
+      RAISING
+        /apmg/cx_apm_error.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -15775,12 +16750,6 @@ CLASS /apmg/cl_apm_package_json DEFINITION
       key      TYPE /apmg/if_apm_persist_apm=>ty_key,
       package  TYPE devclass,
       manifest TYPE /apmg/if_apm_types=>ty_manifest.
-
-    CLASS-METHODS check_manifest
-      IMPORTING
-        !manifest TYPE /apmg/if_apm_types=>ty_manifest
-      RAISING
-        /apmg/cx_apm_error.
 
     CLASS-METHODS sort_manifest
       IMPORTING
@@ -16026,6 +16995,7 @@ CLASS /apmg/cl_apm_pacote DEFINITION
 
     METHODS request
       IMPORTING
+        !command      TYPE string
         !url          TYPE string
         !abbreviated  TYPE abap_bool DEFAULT abap_false
       RETURNING
@@ -16304,6 +17274,150 @@ CLASS /apmg/cl_apm_readme DEFINITION
 
 ENDCLASS.
 
+CLASS /apmg/cl_apm_registry DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+************************************************************************
+* apm Registry
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
+* Note: This is a stateless class. Do not add any attributes!
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS check_logged_in
+      IMPORTING
+        !registry TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS check_logged_out
+      IMPORTING
+        !registry TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS fetch
+      IMPORTING
+        !registry     TYPE string
+        !url          TYPE string
+        !command      TYPE string OPTIONAL
+        !auth_type    TYPE string OPTIONAL
+        !username     TYPE string OPTIONAL
+        !password     TYPE string OPTIONAL
+        !method       TYPE string DEFAULT /apmg/if_apm_http_agent=>c_method-get
+        !payload      TYPE any OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_http_response
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_packument
+      IMPORTING
+        !registry     TYPE string
+        !name         TYPE string
+        !write        TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(result) TYPE /apmg/if_apm_types=>ty_packument
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_manifest
+      IMPORTING
+        !registry     TYPE string
+        !name         TYPE string
+        !version      TYPE string
+        !write        TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(result) TYPE /apmg/if_apm_types=>ty_manifest
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_tarball
+      IMPORTING
+        !registry     TYPE string
+        !name         TYPE string
+        !tarball      TYPE string
+      RETURNING
+        VALUE(result) TYPE xstring
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_latest_version
+      IMPORTING
+        !registry     TYPE string
+        !name         TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_versions_from_packument
+      IMPORTING
+        packument     TYPE /apmg/if_apm_types=>ty_packument
+      RETURNING
+        VALUE(result) TYPE string_table
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_package_from_name
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS get_scope_from_name
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS get_name_from_scope_package
+      IMPORTING
+        scope         TYPE string OPTIONAL
+        package       TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS check_response
+      IMPORTING
+        !response     TYPE REF TO /apmg/if_apm_http_response
+        !text         TYPE string DEFAULT 'Error'
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS get_agent
+      IMPORTING
+        !host         TYPE string
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_http_agent
+      RAISING
+        /apmg/cx_apm_error.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    CONSTANTS:
+      BEGIN OF c_header,
+        apm_command   TYPE string VALUE 'apm-command',
+        apm_auth_type TYPE string VALUE 'apm-auth-type',
+      END OF c_header.
+
+    CLASS-METHODS get_error
+      IMPORTING
+        !response     TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+ENDCLASS.
+
 CLASS /apmg/cl_apm_roadmap DEFINITION
   FINAL
   CREATE PUBLIC.
@@ -16418,6 +17532,14 @@ CLASS /apmg/cl_apm_semver DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    METHODS truncate
+      IMPORTING
+        !release_type TYPE string
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_semver
+      RAISING
+        /apmg/cx_apm_error.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -16434,6 +17556,18 @@ CLASS /apmg/cl_apm_semver DEFINITION
         identifier_base TYPE string OPTIONAL
       RAISING
         /apmg/cx_apm_error.
+
+    METHODS _is_prerelease_identifier
+      IMPORTING
+        identifier    TYPE string
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    METHODS _get_prerelease_base
+      IMPORTING
+        identifier    TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
 
 ENDCLASS.
 
@@ -16461,6 +17595,7 @@ CLASS /apmg/cl_apm_semver_cli DEFINITION
   PRIVATE SECTION.
 
     CLASS-DATA:
+      warnings        TYPE string_table,
       argv            TYPE string_table,
       versions        TYPE string_table,
       ranges          TYPE string_table,
@@ -16473,6 +17608,8 @@ CLASS /apmg/cl_apm_semver_cli DEFINITION
       coerce          TYPE abap_bool,
       rtl             TYPE abap_bool,
       reverse         TYPE abap_bool.
+
+    CLASS-METHODS _clear.
 
     CLASS-METHODS _argv
       IMPORTING
@@ -16726,6 +17863,18 @@ CLASS /apmg/cl_apm_semver_fixtures DEFINITION
       RETURNING
         VALUE(result) TYPE ty_valid_versions.
 
+    TYPES:
+      BEGIN OF ty_truncate,
+        version TYPE string,
+        release TYPE string,
+        res     TYPE string,
+      END OF ty_truncate,
+      ty_truncates TYPE STANDARD TABLE OF ty_truncate WITH KEY version release res.
+
+    CLASS-METHODS truncations
+      RETURNING
+        VALUE(result) TYPE ty_truncates.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -16748,9 +17897,7 @@ CLASS /apmg/cl_apm_semver_functions DEFINITION
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(result) TYPE string
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(result) TYPE string.
 
     CLASS-METHODS cmp
       IMPORTING
@@ -16771,9 +17918,7 @@ CLASS /apmg/cl_apm_semver_functions DEFINITION
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(result) TYPE REF TO /apmg/cl_apm_semver
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(result) TYPE REF TO /apmg/cl_apm_semver.
 
     CLASS-METHODS compare
       IMPORTING
@@ -16916,7 +18061,14 @@ CLASS /apmg/cl_apm_semver_functions DEFINITION
         version       TYPE any
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
-        throw_errors  TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/cl_apm_semver.
+
+    CLASS-METHODS parse_throw
+      IMPORTING
+        version       TYPE any
+        loose         TYPE abap_bool DEFAULT abap_false
+        incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_apm_semver
       RAISING
@@ -16937,9 +18089,7 @@ CLASS /apmg/cl_apm_semver_functions DEFINITION
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(result) TYPE string_table
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(result) TYPE string_table.
 
     CLASS-METHODS rcompare
       IMPORTING
@@ -16979,13 +18129,20 @@ CLASS /apmg/cl_apm_semver_functions DEFINITION
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(result) TYPE abap_bool
-      RAISING
-        /apmg/cx_apm_error.
+        VALUE(result) TYPE abap_bool.
 
     CLASS-METHODS valid
       IMPORTING
         version       TYPE any
+        loose         TYPE abap_bool DEFAULT abap_false
+        incpre        TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS truncate
+      IMPORTING
+        version       TYPE any
+        release_type  TYPE string
         loose         TYPE abap_bool DEFAULT abap_false
         incpre        TYPE abap_bool DEFAULT abap_false
       RETURNING
@@ -17173,6 +18330,14 @@ CLASS /apmg/cl_apm_semver_range DEFINITION
         VALUE(result) TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
+
+    CLASS-METHODS is_invalid_x_range_order
+      IMPORTING
+        !major        TYPE string
+        !minor        TYPE string
+        !patch        TYPE string
+      RETURNING
+        VALUE(result) TYPE abap_bool.
 
     CLASS-METHODS parse_comparator
       IMPORTING
@@ -17682,13 +18847,19 @@ CLASS /apmg/cl_apm_settings DEFINITION
 
     CLASS-METHODS check_settings
       IMPORTING
-        !is_settings  TYPE /apmg/if_apm_settings=>ty_settings
+        !settings     TYPE /apmg/if_apm_settings=>ty_settings
+      RETURNING
+        VALUE(result) TYPE string_table.
+
+    CLASS-METHODS check_registry_url
+      IMPORTING
+        !registry_url TYPE string
       RETURNING
         VALUE(result) TYPE string_table.
 
     CLASS-METHODS merge_settings
       CHANGING
-        !cs_settings TYPE /apmg/if_apm_settings=>ty_settings.
+        !settings TYPE /apmg/if_apm_settings=>ty_settings.
 
 ENDCLASS.
 
@@ -18168,7 +19339,7 @@ CLASS /apmg/cl_apm_url DEFINITION  FINAL CREATE PUBLIC.
 ************************************************************************
   PUBLIC SECTION.
 
-    CONSTANTS c_version TYPE string VALUE '1.0.0' ##NEEDED.
+    CONSTANTS c_version TYPE string VALUE '1.0.1' ##NEEDED.
 
     TYPES:
       "! scheme://username:password@host:port/path?query#fragment
@@ -18346,6 +19517,51 @@ CLASS /apmg/cl_apm_url_params DEFINITION  FINAL CREATE PUBLIC.
         !value TYPE string.
 
     METHODS sort.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_utils DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+  PUBLIC SECTION.
+
+    "! Remove trailing slash
+    CLASS-METHODS remove_trailing_slash
+      IMPORTING
+        val           TYPE csequence
+      RETURNING
+        VALUE(result) TYPE string.
+
+    "! Return semantic version of SAP Basis
+    CLASS-METHODS get_abap_version
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    "! Return semantic version of SAP Kernel
+    CLASS-METHODS get_kernel_version
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    "! Return semantic version of database
+    CLASS-METHODS get_database_version
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    "! Return user agent for registry interactions
+    CLASS-METHODS get_user_agent
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -19491,6 +20707,7 @@ CLASS zcl_abapgit_longtexts DEFINITION
   PRIVATE SECTION.
 
     CONSTANTS c_docu_state_active TYPE dokstate VALUE 'A' ##NO_TEXT.
+    CONSTANTS c_docu_type_general TYPE dokil-typ VALUE 'E' ##NO_TEXT.
 
     METHODS escape_name
       IMPORTING
@@ -19580,6 +20797,7 @@ CLASS zcl_abapgit_lxe_texts DEFINITION
     DATA mi_xml_out     TYPE REF TO zif_abapgit_xml_output.
     DATA mi_xml_in      TYPE REF TO zif_abapgit_xml_input.
     DATA mo_files       TYPE REF TO zcl_abapgit_objects_files.
+    DATA mv_local_package TYPE abap_bool.
 
     METHODS serialize_xml
       IMPORTING
@@ -19634,14 +20852,14 @@ CLASS zcl_abapgit_lxe_texts DEFINITION
         ct_text_pairs_tmp TYPE ty_lxe_translation-text_pairs.
     METHODS read_lxe_object_text_pair
       IMPORTING
-        iv_s_lang                TYPE lxeisolang
-        iv_t_lang                TYPE lxeisolang
-        iv_custmnr               TYPE lxecustmnr
-        iv_objtype               TYPE trobjtype
-        iv_objname               TYPE lxeobjname
-        iv_read_only             TYPE abap_bool DEFAULT abap_true
+        iv_s_lang            TYPE lxeisolang
+        iv_t_lang            TYPE lxeisolang
+        iv_custmnr           TYPE lxecustmnr
+        iv_objtype           TYPE trobjtype
+        iv_objname           TYPE lxeobjname
+        iv_read_only         TYPE abap_bool DEFAULT abap_true
       RETURNING
-        VALUE(rt_text_pairs_tmp) TYPE ty_lxe_translation-text_pairs
+        VALUE(rt_text_pairs) TYPE ty_lxe_translation-text_pairs
       RAISING
         zcx_abapgit_exception.
     METHODS write_lxe_object_text_pair
@@ -19670,6 +20888,15 @@ CLASS zcl_abapgit_lxe_texts DEFINITION
         VALUE(rv_laiso) TYPE laiso
       RAISING
         zcx_abapgit_exception.
+
+    CLASS-METHODS laiso_to_langu_safe
+      IMPORTING
+        iv_laiso        TYPE laiso
+      RETURNING
+        VALUE(rv_langu) TYPE sy-langu
+      RAISING
+        zcx_abapgit_exception.
+
     CLASS-METHODS iso4_to_iso2
       IMPORTING
         iv_lxe_lang     TYPE lxeisolang
@@ -19685,6 +20912,39 @@ CLASS zcl_abapgit_lxe_texts DEFINITION
       EXPORTING
         et_intersection TYPE zif_abapgit_definitions=>ty_languages
         et_missfits     TYPE zif_abapgit_definitions=>ty_languages.
+
+    CLASS-METHODS is_local_package
+      IMPORTING
+        iv_package       TYPE tadir-obj_name
+      RETURNING
+        VALUE(rv_result) TYPE abap_bool.
+
+    METHODS get_devc_object_list
+      IMPORTING
+        iv_object_name     TYPE sobj_name
+      RETURNING
+        VALUE(rt_obj_list) TYPE lxe_tt_colob
+      RAISING
+        zcx_abapgit_exception.
+
+    METHODS read_devc_text_pair
+      IMPORTING
+        iv_s_lang            TYPE sy-langu
+        iv_t_lang            TYPE sy-langu
+        iv_package           TYPE devclass
+      RETURNING
+        VALUE(rt_text_pairs) TYPE ty_lxe_translation-text_pairs
+      RAISING
+        zcx_abapgit_exception.
+
+    METHODS write_devc_text_pair
+      IMPORTING
+        iv_t_lang  TYPE sy-langu
+        iv_package TYPE devclass
+        it_pcx_s1  TYPE ty_lxe_translation-text_pairs
+      RAISING
+        zcx_abapgit_exception.
+
 ENDCLASS.
 
 CLASS zcl_abapgit_sap_namespace DEFINITION
@@ -20492,9 +21752,10 @@ CLASS zcl_abapgit_objects_activation DEFINITION
 
     CLASS-METHODS add
       IMPORTING
-        !iv_type   TYPE trobjtype
-        !iv_name   TYPE clike
-        !iv_delete TYPE abap_bool DEFAULT abap_false
+        !iv_type       TYPE trobjtype
+        !iv_name       TYPE clike
+        !iv_delete     TYPE abap_bool DEFAULT abap_false
+        !iv_force_clif TYPE abap_bool DEFAULT abap_false
       RAISING
         zcx_abapgit_exception .
     CLASS-METHODS add_item
@@ -20539,7 +21800,7 @@ CLASS zcl_abapgit_objects_activation DEFINITION
       c_sqsc       TYPE c LENGTH 4  VALUE 'SQSC',
       c_stob       TYPE c LENGTH 4  VALUE 'STOB',
       c_ntab       TYPE c LENGTH 14 VALUE 'NTTT NTTB NTDT',
-      c_cds        TYPE c LENGTH 29 VALUE 'DDLS DRUL DTDC DTSC DTEB DESD',
+      c_cds        TYPE c LENGTH 35 VALUE 'DDLS DRUL DTDC DTSC DTEB DESD DTIX',
       c_switches   TYPE c LENGTH 24 VALUE 'SF01 SF02 SFSW SFBS SFBF',
       c_para       TYPE c LENGTH 4  VALUE 'PARA', " can be referenced by DTEL
       c_enhd       TYPE c LENGTH 4  VALUE 'ENHD',
@@ -21014,11 +22275,22 @@ CLASS zcl_abapgit_objects_super DEFINITION
         !iv_longtext_name TYPE string DEFAULT 'LONGTEXTS'
       RAISING
         zcx_abapgit_exception .
+    METHODS serialize_longtexts_aff
+      IMPORTING
+        !iv_longtext_id TYPE dokil-id OPTIONAL
+        !it_dokil       TYPE zif_abapgit_definitions=>ty_dokil_tt OPTIONAL
+      RAISING
+        zcx_abapgit_exception .
     METHODS deserialize_longtexts
       IMPORTING
         !ii_xml           TYPE REF TO zif_abapgit_xml_input
         !iv_longtext_id   TYPE dokil-id OPTIONAL
         !iv_longtext_name TYPE string DEFAULT 'LONGTEXTS'
+      RAISING
+        zcx_abapgit_exception .
+    METHODS deserialize_longtexts_aff
+      IMPORTING
+        !iv_longtext_id TYPE dokil-id OPTIONAL
       RAISING
         zcx_abapgit_exception .
     METHODS delete_longtexts
@@ -21186,6 +22458,7 @@ CLASS zcl_abapgit_objects_program DEFINITION
       BEGIN OF c_state,
         active   TYPE r3state VALUE 'A',
         inactive TYPE r3state VALUE 'I',
+        off      TYPE r3state VALUE '',
       END OF c_state.
 
     CONSTANTS c_native_dynpro TYPE c LENGTH 2 VALUE 'IN'.
@@ -22441,8 +23714,20 @@ CLASS zcl_abapgit_object_doma DEFINITION  INHERITING FROM zcl_abapgit_objects_su
 
   PUBLIC SECTION.
     INTERFACES zif_abapgit_object.
+
+    METHODS constructor
+      IMPORTING
+        is_item        TYPE zif_abapgit_definitions=>ty_item
+        iv_language    TYPE spras
+        io_files       TYPE REF TO zcl_abapgit_objects_files OPTIONAL
+        io_i18n_params TYPE REF TO zcl_abapgit_i18n_params OPTIONAL
+      RAISING
+        zcx_abapgit_exception.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
+
+    DATA mv_aff_enabled TYPE abap_bool.
 
     TYPES:
       BEGIN OF ty_dd01_text,
@@ -22750,6 +24035,32 @@ CLASS zcl_abapgit_object_dtel DEFINITION  INHERITING FROM zcl_abapgit_objects_su
         !is_dd04v TYPE dd04v
       RAISING
         zcx_abapgit_exception .
+ENDCLASS.
+
+CLASS zcl_abapgit_object_dtix DEFINITION
+  INHERITING FROM zcl_abapgit_object_common_aff
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    METHODS zif_abapgit_object~changed_by            REDEFINITION.
+    METHODS zif_abapgit_object~get_deserialize_steps REDEFINITION.
+  PROTECTED SECTION.
+    METHODS get_additional_extensions                REDEFINITION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS zcl_abapgit_object_dtsc DEFINITION
+  INHERITING FROM zcl_abapgit_object_common_aff
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    METHODS zif_abapgit_object~changed_by            REDEFINITION.
+    METHODS zif_abapgit_object~get_deserialize_steps REDEFINITION.
+  PROTECTED SECTION.
+    METHODS get_additional_extensions                REDEFINITION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 CLASS zcl_abapgit_object_ecatt_super DEFINITION
@@ -23426,7 +24737,9 @@ CLASS zcl_abapgit_object_form DEFINITION  INHERITING FROM zcl_abapgit_objects_su
       IMPORTING
         is_header        TYPE ty_s_form_header
       RETURNING
-        VALUE(rv_result) TYPE string.
+        VALUE(rv_result) TYPE string
+      RAISING
+        zcx_abapgit_exception.
 
     METHODS build_extra_from_header_old
       IMPORTING
@@ -25214,6 +26527,25 @@ CLASS zcl_abapgit_object_sfpf DEFINITION
 
     CONSTANTS c_layout_file_ext TYPE string VALUE 'xdp'.
 
+    TYPES:
+      BEGIN OF ty_xml_field,
+        name  TYPE string,
+        value TYPE string,
+      END OF ty_xml_field,
+      ty_xml_fields TYPE STANDARD TABLE OF ty_xml_field WITH DEFAULT KEY,
+      BEGIN OF ty_context,
+        name     TYPE string,
+        state    TYPE string,
+        language TYPE string,
+        id       TYPE string,
+        fields   TYPE ty_xml_fields,
+      END OF ty_context,
+      ty_contexts TYPE STANDARD TABLE OF ty_context WITH DEFAULT KEY.
+
+    CLASS-METHODS sort_contexts
+      IMPORTING
+        !ii_document TYPE REF TO if_ixml_document .
+
     METHODS:
       check_ads_connection
         RAISING
@@ -26448,6 +27780,7 @@ CLASS zcl_abapgit_object_suso DEFINITION  INHERITING FROM zcl_abapgit_objects_su
   PROTECTED SECTION.
   PRIVATE SECTION.
     CONSTANTS c_longtext_id_suso TYPE dokil-id VALUE 'UO'.
+    CONSTANTS c_abap_language_table TYPE tabname VALUE 'TOBJ_ATTR'.
 
     DATA:
       mv_objectname TYPE tobj-objct.
@@ -28428,12 +29761,6 @@ CLASS zcl_abapgit_version DEFINITION
         zcx_abapgit_exception.
   PROTECTED SECTION.
   PRIVATE SECTION.
-
-    CLASS-METHODS version_to_numeric
-      IMPORTING
-        !iv_version       TYPE string
-      RETURNING
-        VALUE(rv_version) TYPE i.
 ENDCLASS.
 
 CLASS zcl_abapgit_xml_pretty DEFINITION
@@ -35258,6 +36585,23 @@ ENDCLASS.
 
 CLASS /apmg/cl_apm_auth IMPLEMENTATION.
 
+  METHOD check_package_allowed.
+
+    CHECK package IS NOT INITIAL.
+
+    TRY.
+        zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        result = error->get_text( ).
+        RETURN.
+    ENDTRY.
+
+    IF NOT is_package_allowed( package ).
+      result = |Package { package } not allowed (SAP is responsible user)|.
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD check_package_authorized.
 
     IF NOT is_package_authorized( package = package activity = activity ).
@@ -35265,6 +36609,18 @@ CLASS /apmg/cl_apm_auth IMPLEMENTATION.
         EXPORTING
           text = |Not authorized to { _get_activity_text( activity ) } package { package }|.
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD check_transport_required.
+
+    CHECK package IS NOT INITIAL.
+
+    IF is_package_transported( package ).
+      result = 'A transport is required for this package'.
+    ENDIF.
+
+    " TODO: Potentially check type of transport required and auth to use transport
 
   ENDMETHOD.
 
@@ -35281,13 +36637,22 @@ CLASS /apmg/cl_apm_auth IMPLEMENTATION.
   METHOD is_package_authorized.
 
     AUTHORITY-CHECK OBJECT 'S_DEVELOP'
-     ID 'DEVCLASS' FIELD package
-     ID 'OBJTYPE' FIELD 'DEVC'
-     ID 'OBJNAME' FIELD package
-     ID 'P_GROUP' FIELD '*'
-     ID 'ACTVT' FIELD activity.
+      ID 'DEVCLASS' FIELD package
+      ID 'OBJTYPE' FIELD 'DEVC'
+      ID 'OBJNAME' FIELD package
+      ID 'P_GROUP' FIELD '*'
+      ID 'ACTVT' FIELD activity.
 
     result = xsdbool( sy-subrc = 0 ).
+
+  ENDMETHOD.
+
+  METHOD is_package_transported.
+
+    TRY.
+        result = xsdbool( zcl_abapgit_factory=>get_sap_package( package )->are_changes_recorded_in_tr_req( ) = abap_true ).
+      CATCH zcx_abapgit_exception.
+    ENDTRY.
 
   ENDMETHOD.
 
@@ -35299,6 +36664,787 @@ CLASS /apmg/cl_apm_auth IMPLEMENTATION.
     ENDIF.
 
     result = to_lower( result ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_strust IMPLEMENTATION.
+
+  METHOD add.
+
+    DATA cert_new TYPE ty_certattr.
+
+    CONCATENATE LINES OF certificate INTO DATA(certb64).
+    CONDENSE certb64 NO-GAPS.
+
+    " Remove Header and Footer
+    TRY.
+        FIND REGEX '-{5}.{0,}BEGIN.{0,}-{5}(.*)-{5}.{0,}END.{0,}-{5}' IN certb64 SUBMATCHES DATA(base64) ##REGEX_POSIX.
+        IF sy-subrc = 0.
+          ASSIGN base64 TO FIELD-SYMBOL(<data>).
+          ASSERT sy-subrc = 0.
+        ELSE.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Inconsistent certificate format'(010).
+        ENDIF.
+      CATCH cx_sy_regex_too_complex.
+        " e.g. multiple PEM frames in file
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Inconsistent certificate format'(010).
+    ENDTRY.
+
+    TRY.
+        DATA(certobj) = NEW cl_abap_x509_certificate( <data> ).
+
+        cert_new-certificate = certobj->get_certificate( ).
+
+        CALL FUNCTION 'SSFC_PARSE_CERTIFICATE'
+          EXPORTING
+            certificate         = cert_new-certificate
+          IMPORTING
+            subject             = cert_new-subject
+            issuer              = cert_new-issuer
+            serialno            = cert_new-serialno
+            validfrom           = cert_new-validfrom
+            validto             = cert_new-validto
+          EXCEPTIONS
+            ssf_krn_error       = 1
+            ssf_krn_nomemory    = 2
+            ssf_krn_nossflib    = 3
+            ssf_krn_invalid_par = 4
+            OTHERS              = 5.
+        IF sy-subrc <> 0.
+          _unlock( ).
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+        ENDIF.
+
+        cert_new-date_from = cert_new-validfrom(8).
+        cert_new-date_to   = cert_new-validto(8).
+        APPEND cert_new TO certs_new.
+
+      CATCH cx_abap_x509_certificate.
+        _unlock( ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDTRY.
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD add_pem.
+
+    DATA certificate TYPE ty_certificate.
+
+    SPLIT pem AT |\n| INTO TABLE certificate.
+
+    add( certificate ).
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+
+    DATA profile TYPE localfile.
+
+    me->context     = context.
+    me->application = application.
+    profilepw       = password.
+
+    cl_abap_pse=>authority_check(
+      iv_context  = context
+      iv_applic   = application
+      iv_activity = c_activity-display ).
+
+    CALL FUNCTION 'SSFPSE_FILENAME'
+      EXPORTING
+        context       = context
+        applic        = application
+      IMPORTING
+        psename       = psename
+        psetext       = psetext
+        distrib       = distrib
+        profile       = profile
+      EXCEPTIONS
+        pse_not_found = 1
+        OTHERS        = 2.
+    IF sy-subrc <> 0.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    me->profile = profile.
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    result = NEW #(
+      context     = context
+      application = application
+      password    = password ).
+
+  ENDMETHOD.
+
+  METHOD f4_application.
+
+    TYPES:
+      BEGIN OF ty_value,
+        field TYPE ssfappl,
+        text  TYPE ddtext,
+      END OF ty_value,
+      ty_values TYPE STANDARD TABLE OF ty_value WITH KEY field.
+
+    DATA:
+      value_tab  TYPE ty_values,
+      return_tab TYPE STANDARD TABLE OF ddshretval WITH KEY shlpname fieldname recordpos.
+
+    FIELD-SYMBOLS:
+      <field>  TYPE ty_value-field,
+      <text>   TYPE ty_value-text,
+      <value>  LIKE LINE OF value_tab,
+      <return> LIKE LINE OF return_tab.
+
+    DO.
+      ASSIGN COMPONENT sy-index OF STRUCTURE c_application TO <field>.
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+      ASSIGN COMPONENT sy-index OF STRUCTURE c_application_description TO <text>.
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+      APPEND INITIAL LINE TO value_tab ASSIGNING <value>.
+      <value>-field = <field>.
+      <value>-text  = <text>.
+    ENDDO.
+
+    CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+      EXPORTING
+        retfield        = 'FIELD'
+        window_title    = 'Application'
+        value_org       = 'S' "single
+      TABLES
+        value_tab       = value_tab
+        return_tab      = return_tab
+      EXCEPTIONS
+        parameter_error = 1
+        no_values_found = 2
+        OTHERS          = 3 ##NO_TEXT.
+    CHECK sy-subrc = 0.
+
+    READ TABLE return_tab ASSIGNING <return> INDEX 1.
+    IF sy-subrc = 0.
+      result = <return>-fieldval.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD f4_context.
+
+    TYPES:
+      BEGIN OF ty_value,
+        field TYPE psecontext,
+        text  TYPE ddtext,
+      END OF ty_value,
+      ty_values TYPE STANDARD TABLE OF ty_value WITH KEY field.
+
+    DATA:
+      value_tab  TYPE ty_values,
+      return_tab TYPE STANDARD TABLE OF ddshretval WITH KEY shlpname fieldname recordpos.
+
+    FIELD-SYMBOLS:
+      <field>  TYPE ty_value-field,
+      <text>   TYPE ty_value-text,
+      <value>  LIKE LINE OF value_tab,
+      <return> LIKE LINE OF return_tab.
+
+    DO.
+      ASSIGN COMPONENT sy-index OF STRUCTURE c_context TO <field>.
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+      ASSIGN COMPONENT sy-index OF STRUCTURE c_context_description TO <text>.
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+      APPEND INITIAL LINE TO value_tab ASSIGNING <value>.
+      <value>-field = <field>.
+      <value>-text  = <text>.
+    ENDDO.
+
+    CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+      EXPORTING
+        retfield        = 'FIELD'
+        window_title    = 'Context'
+        value_org       = 'S' "single
+      TABLES
+        value_tab       = value_tab
+        return_tab      = return_tab
+      EXCEPTIONS
+        parameter_error = 1
+        no_values_found = 2
+        OTHERS          = 3 ##NO_TEXT.
+    CHECK sy-subrc = 0.
+
+    READ TABLE return_tab ASSIGNING <return> INDEX 1.
+    IF sy-subrc = 0.
+      result = <return>-fieldval.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_certificate_list.
+
+    DATA:
+      certlist    TYPE ssfbintab,
+      certificate TYPE ty_certattr.
+
+    _profile( ).
+
+    CALL FUNCTION 'SSFC_GET_CERTIFICATELIST'
+      EXPORTING
+        profile               = profile
+        profilepw             = profilepw
+      IMPORTING
+        certificatelist       = certlist
+      EXCEPTIONS
+        ssf_krn_error         = 1
+        ssf_krn_nomemory      = 2
+        ssf_krn_nossflib      = 3
+        ssf_krn_invalid_par   = 4
+        ssf_krn_nocertificate = 5
+        OTHERS                = 6.
+    IF sy-subrc <> 0.
+      _unlock( ).
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    LOOP AT certlist ASSIGNING FIELD-SYMBOL(<certlist>).
+
+      CLEAR certificate.
+
+      CALL FUNCTION 'SSFC_PARSE_CERTIFICATE'
+        EXPORTING
+          certificate         = <certlist>
+        IMPORTING
+          subject             = certificate-subject
+          issuer              = certificate-issuer
+          serialno            = certificate-serialno
+          validfrom           = certificate-validfrom
+          validto             = certificate-validto
+        EXCEPTIONS
+          ssf_krn_error       = 1
+          ssf_krn_nomemory    = 2
+          ssf_krn_nossflib    = 3
+          ssf_krn_invalid_par = 4
+          OTHERS              = 5.
+      IF sy-subrc <> 0.
+        _unlock( ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+      ENDIF.
+
+      certificate-date_from = certificate-validfrom(8).
+      certificate-date_to   = certificate-validto(8).
+      APPEND certificate TO certs_current.
+
+    ENDLOOP.
+
+    result = certs_current.
+
+  ENDMETHOD.
+
+  METHOD get_own_certificate.
+
+    _profile( ).
+
+    CALL FUNCTION 'SSFC_GET_OWNCERTIFICATE'
+      EXPORTING
+        profile               = profile
+        profilepw             = profilepw
+      IMPORTING
+        certificate           = cert_own
+      EXCEPTIONS
+        ssf_krn_error         = 1
+        ssf_krn_nomemory      = 2
+        ssf_krn_nossflib      = 3
+        ssf_krn_invalid_par   = 4
+        ssf_krn_nocertificate = 5
+        OTHERS                = 6.
+    IF sy-subrc <> 0.
+      _unlock( ).
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    CALL FUNCTION 'SSFC_PARSE_CERTIFICATE'
+      EXPORTING
+        certificate         = cert_own
+      IMPORTING
+        subject             = cert_current-subject
+        issuer              = cert_current-issuer
+        serialno            = cert_current-serialno
+        validfrom           = cert_current-validfrom
+        validto             = cert_current-validto
+      EXCEPTIONS
+        ssf_krn_error       = 1
+        ssf_krn_nomemory    = 2
+        ssf_krn_nossflib    = 3
+        ssf_krn_invalid_par = 4
+        OTHERS              = 5.
+    IF sy-subrc <> 0.
+      _unlock( ).
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    cert_current-date_from = cert_current-validfrom(8).
+    cert_current-date_to   = cert_current-validto(8).
+
+    result = cert_current.
+
+  ENDMETHOD.
+
+  METHOD load.
+
+    CLEAR: is_dirty, certs_removed, certs_current.
+
+    _lock( ).
+
+    CALL FUNCTION 'SSFPSE_LOAD'
+      EXPORTING
+        psename           = psename
+      IMPORTING
+        id                = me->id
+        fname             = tempfile
+      EXCEPTIONS
+        authority_missing = 1
+        database_failed   = 2
+        file_write_failed = 3
+        OTHERS            = 4.
+    IF sy-subrc <> 0.
+      IF create = abap_true.
+        _create(
+          id  = id
+          org = org ).
+      ELSE.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+      ENDIF.
+    ENDIF.
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD remove.
+
+    _profile( ).
+
+    " Remove certificates
+    LOOP AT certs_current ASSIGNING FIELD-SYMBOL(<cert>) WHERE subject = subject.
+
+      CALL FUNCTION 'SSFC_REMOVECERTIFICATE'
+        EXPORTING
+          profile               = profile
+          profilepw             = profilepw
+          subject               = <cert>-subject
+          issuer                = <cert>-issuer
+          serialno              = <cert>-serialno
+        EXCEPTIONS
+          ssf_krn_error         = 1
+          ssf_krn_nomemory      = 2
+          ssf_krn_nossflib      = 3
+          ssf_krn_invalid_par   = 4
+          ssf_krn_nocertificate = 5
+          OTHERS                = 6.
+      IF sy-subrc <> 0.
+        _unlock( ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+      ENDIF.
+
+      is_dirty = abap_true.
+
+    ENDLOOP.
+
+    _save( ).
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD update.
+
+    CLEAR certs_removed.
+
+    _profile( ).
+
+    " Remove expired certificates
+    IF remove_expired = abap_true.
+      LOOP AT certs_current ASSIGNING FIELD-SYMBOL(<cert>).
+
+        LOOP AT certs_new ASSIGNING FIELD-SYMBOL(<cert_new>) WHERE subject = <cert>-subject.
+          DATA(tabix) = sy-tabix.
+
+          IF <cert_new>-date_to > <cert>-date_to.
+            cl_abap_pse=>authority_check(
+              iv_context  = context
+              iv_applic   = application
+              iv_activity = c_activity-delete ).
+
+            " Certificate is newer, so remove the old certificate
+            CALL FUNCTION 'SSFC_REMOVECERTIFICATE'
+              EXPORTING
+                profile               = profile
+                profilepw             = profilepw
+                subject               = <cert>-subject
+                issuer                = <cert>-issuer
+                serialno              = <cert>-serialno
+              EXCEPTIONS
+                ssf_krn_error         = 1
+                ssf_krn_nomemory      = 2
+                ssf_krn_nossflib      = 3
+                ssf_krn_invalid_par   = 4
+                ssf_krn_nocertificate = 5
+                OTHERS                = 6.
+            IF sy-subrc <> 0.
+              _unlock( ).
+              RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+            ENDIF.
+
+            " Track removed certificate
+            APPEND <cert> TO certs_removed.
+
+            is_dirty = abap_true.
+          ELSE.
+            " Certificate already exists, no update necessary
+            DELETE certs_new INDEX tabix.
+          ENDIF.
+
+        ENDLOOP.
+
+      ENDLOOP.
+    ENDIF.
+
+    " Add new certificates
+    LOOP AT certs_new ASSIGNING <cert_new>.
+
+      CALL FUNCTION 'SSFC_PUT_CERTIFICATE'
+        EXPORTING
+          profile             = profile
+          profilepw           = profilepw
+          certificate         = <cert_new>-certificate
+        EXCEPTIONS
+          ssf_krn_error       = 1
+          ssf_krn_nomemory    = 2
+          ssf_krn_nossflib    = 3
+          ssf_krn_invalid_par = 4
+          ssf_krn_certexists  = 5
+          OTHERS              = 6.
+
+      IF sy-subrc = 5.
+        " SAP message is misleading so use a better text
+        _unlock( ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = |Certificate { <cert_new>-subject } already exists|.
+      ELSEIF sy-subrc <> 0.
+        _unlock( ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+      ENDIF.
+
+      is_dirty = abap_true.
+
+    ENDLOOP.
+
+    _save( ).
+
+    result-added   = certs_new.
+    result-removed = certs_removed.
+
+  ENDMETHOD.
+
+  METHOD _create.
+
+    DATA:
+      license_num TYPE c LENGTH 10,
+      new_id      TYPE ssfid,
+      subject     TYPE certsubjct,
+      psepath     TYPE trfile.
+
+    cl_abap_pse=>authority_check(
+      iv_context  = context
+      iv_applic   = application
+      iv_activity = c_activity-create ).
+
+    " Create new PSE (using RSA-SHA256 2048 which is the default in STRUST in recent releases)
+    IF id IS INITIAL.
+      CASE application.
+        WHEN 'DFAULT'.
+          new_id = `CN=%SID SSL client SSL Client (Standard), ` &&
+                   `OU=I%LIC, OU=SAP Web AS, O=SAP Trust Community, C=DE` ##NO_TEXT.
+        WHEN 'ANONYM'.
+          new_id = 'CN=anonymous' ##NO_TEXT.
+      ENDCASE.
+    ELSE.
+      new_id = id.
+    ENDIF.
+
+    CALL FUNCTION 'SLIC_GET_LICENCE_NUMBER'
+      IMPORTING
+        license_number = license_num.
+
+    REPLACE '%SID' IN new_id WITH sy-sysid.
+    REPLACE '%LIC' IN new_id WITH license_num.
+    REPLACE '%ORG' IN new_id WITH org.
+    CONDENSE new_id.
+
+    subject = new_id.
+
+    CALL FUNCTION 'SSFPSE_CREATE'
+      EXPORTING
+        dn                = subject
+        alg               = 'R'
+        keylen            = 2048
+      IMPORTING
+        psepath           = psepath
+      EXCEPTIONS
+        ssf_unknown_error = 1
+        OTHERS            = 2.
+    IF sy-subrc <> 0.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    tempfile = psepath.
+
+    _save( ).
+
+  ENDMETHOD.
+
+  METHOD _lock.
+
+    CALL FUNCTION 'SSFPSE_ENQUEUE'
+      EXPORTING
+        psename         = psename
+      EXCEPTIONS
+        database_failed = 1
+        foreign_lock    = 2
+        internal_error  = 3
+        OTHERS          = 4.
+    IF sy-subrc <> 0.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD _profile.
+
+    IF tempfile IS NOT INITIAL.
+      profile = tempfile.
+    ENDIF.
+
+    IF profile IS INITIAL.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Missing profile. Call "load" first'(011).
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD _save.
+
+    DATA cred_name TYPE icm_credname.
+
+    CHECK is_dirty = abap_true.
+
+    cl_abap_pse=>authority_check(
+      iv_context  = context
+      iv_applic   = application
+      iv_activity = c_activity-change ).
+
+    " Store PSE
+    CALL FUNCTION 'SSFPSE_STORE'
+      EXPORTING
+        fname             = tempfile
+        psepin            = profilepw
+        psename           = psename
+        id                = id
+        b_newdn           = abap_false
+        b_distribute      = distrib
+      EXCEPTIONS
+        file_load_failed  = 1
+        storing_failed    = 2
+        authority_missing = 3
+        OTHERS            = 4.
+    IF sy-subrc <> 0.
+      _unlock( ).
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+    IF profile(3) = 'SSL'.
+      cred_name = psename.
+
+      CALL FUNCTION 'ICM_SSL_PSE_CHANGED'
+        EXPORTING
+          global              = 1
+          cred_name           = cred_name
+        EXCEPTIONS
+          icm_op_failed       = 1
+          icm_get_serv_failed = 2
+          icm_auth_failed     = 3
+          OTHERS              = 4.
+      IF sy-subrc = 0.
+        MESSAGE s086(trust).
+      ELSE.
+        MESSAGE s085(trust).
+      ENDIF.
+    ELSE.
+      MESSAGE 'Certificate was saved successfully' TYPE 'S'.
+    ENDIF.
+
+    _unlock( ).
+
+  ENDMETHOD.
+
+  METHOD _unlock.
+
+    " Drop temporary file
+    TRY.
+        DELETE DATASET tempfile.
+      CATCH cx_sy_file_open.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = 'Error deleting file'(020) && | { tempfile }|.
+      CATCH cx_sy_file_authority.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = 'Not authorized to delete file'(030) && | { tempfile }|.
+    ENDTRY.
+
+    " Unlock PSE
+    CALL FUNCTION 'SSFPSE_DEQUEUE'
+      EXPORTING
+        psename         = psename
+      EXCEPTIONS
+        database_failed = 1
+        foreign_lock    = 2
+        internal_error  = 3
+        OTHERS          = 4.
+    IF sy-subrc <> 0.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_certificates IMPLEMENTATION.
+
+  METHOD get_certificate_ca.
+
+    " Subject       CN=WE1, O=Google Trust Services, C=US
+    " Issuer        CN=GTS Root R4, O=Google Trust Services LLC, C=US
+    " Serial Number 7F:F3:19:77:97:2C:22:4A:76:15:5D:13:B6:D6:85:E3
+    " Valid From    2023-12-13 09:00:00 to     2029-02-20 14:00:00
+
+    result = VALUE #(
+      ( '-----BEGIN CERTIFICATE-----' )
+      ( 'MIICnzCCAiWgAwIBAgIQf/MZd5csIkp2FV0TttaF4zAKBggqhkjOPQQDAzBHMQsw' )
+      ( 'CQYDVQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2VzIExMQzEU' )
+      ( 'MBIGA1UEAxMLR1RTIFJvb3QgUjQwHhcNMjMxMjEzMDkwMDAwWhcNMjkwMjIwMTQw' )
+      ( 'MDAwWjA7MQswCQYDVQQGEwJVUzEeMBwGA1UEChMVR29vZ2xlIFRydXN0IFNlcnZp' )
+      ( 'Y2VzMQwwCgYDVQQDEwNXRTEwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARvzTr+' )
+      ( 'Z1dHTCEDhUDCR127WEcPQMFcF4XGGTfn1XzthkubgdnXGhOlCgP4mMTG6J7/EFmP' )
+      ( 'LCaY9eYmJbsPAvpWo4H+MIH7MA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggr' )
+      ( 'BgEFBQcDAQYIKwYBBQUHAwIwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU' )
+      ( 'kHeSNWfE/6jMqeZ72YB5e8yT+TgwHwYDVR0jBBgwFoAUgEzW63T/STaj1dj8tT7F' )
+      ( 'avCUHYwwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzAChhhodHRwOi8vaS5wa2ku' )
+      ( 'Z29vZy9yNC5jcnQwKwYDVR0fBCQwIjAgoB6gHIYaaHR0cDovL2MucGtpLmdvb2cv' )
+      ( 'ci9yNC5jcmwwEwYDVR0gBAwwCjAIBgZngQwBAgEwCgYIKoZIzj0EAwMDaAAwZQIx' )
+      ( 'AOcCq1HW90OVznX+0RGU1cxAQXomvtgM8zItPZCuFQ8jSBJSjz5keROv9aYsAm5V' )
+      ( 'sQIwJonMaAFi54mrfhfoFNZEfuNMSQ6/bIBiNLiyoX46FohQvKeIoJ99cx7sUkFN' )
+      ( '7uJW' )
+      ( '-----END CERTIFICATE-----' ) ).
+
+  ENDMETHOD.
+
+  METHOD get_certificate_playground.
+
+    " Subject       CN=playground.abappm.com
+    " Issuer        CN=WE1, O=Google Trust Services, C=US
+    " Serial Number 92:80:B6:16:2C:31:32:ED:0D:C1:A7:0B:54:08:F0:A4
+    " Valid From    2026-05-04 00:59:08 to     2026-08-02 01:58:57
+
+    result = VALUE #(
+      ( '-----BEGIN CERTIFICATE-----' )
+      ( 'MIIDrDCCA1GgAwIBAgIRAJKAthYsMTLtDcGnC1QI8KQwCgYIKoZIzj0EAwIwOzEL' )
+      ( 'MAkGA1UEBhMCVVMxHjAcBgNVBAoTFUdvb2dsZSBUcnVzdCBTZXJ2aWNlczEMMAoG' )
+      ( 'A1UEAxMDV0UxMB4XDTI2MDUwNDAwNTkwOFoXDTI2MDgwMjAxNTg1N1owIDEeMBwG' )
+      ( 'A1UEAxMVcGxheWdyb3VuZC5hYmFwcG0uY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D' )
+      ( 'AQcDQgAE2/CJf8KhhFRGqqWErZS5PeT863zl/LLtQfgxSGdQeIZwnMLFXhKTgv7x' )
+      ( 'evfxPH2/p7DBgYShZlBomaXYhbV96aOCAk8wggJLMA4GA1UdDwEB/wQEAwIHgDAT' )
+      ( 'BgNVHSUEDDAKBggrBgEFBQcDATAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBS9X5k+' )
+      ( 'jeHMJsnziTMRlaLs9IpvQTAfBgNVHSMEGDAWgBSQd5I1Z8T/qMyp5nvZgHl7zJP5' )
+      ( 'ODBeBggrBgEFBQcBAQRSMFAwJwYIKwYBBQUHMAGGG2h0dHA6Ly9vLnBraS5nb29n' )
+      ( 'L3Mvd2UxL2tvQTAlBggrBgEFBQcwAoYZaHR0cDovL2kucGtpLmdvb2cvd2UxLmNy' )
+      ( 'dDAgBgNVHREEGTAXghVwbGF5Z3JvdW5kLmFiYXBwbS5jb20wEwYDVR0gBAwwCjAI' )
+      ( 'BgZngQwBAgEwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2MucGtpLmdvb2cvd2Ux' )
+      ( 'Ly1BNFFJeGVCdEhJLmNybDCCAQUGCisGAQQB1nkCBAIEgfYEgfMA8QB2ANdtfRDR' )
+      ( 'p/V3wsfpX9cAv/mCyTNaZeHQswFzF8DIxWl3AAABnfC181oAAAQDAEcwRQIhAIno' )
+      ( 'pfd/AgeVocBoGoIRBr7BGgxnZ4+VtnqghojknjO+AiADXUQcFs3tNWs0Yd8y9PFo' )
+      ( 'fByhEmy+jBIjNLFUOutZtwB3AMijxH/Hs625NWsBP2p6Em3jOk5DpcZG+ZetOXWZ' )
+      ( 'Hc+aAAABnfC1828AAAQDAEgwRgIhAJRId1bGjSMCVIU3hyoIox78cD7b+F53eUIN' )
+      ( 'rDSz5IhzAiEA/z0gaNuUBENMzC7jWx8ki2l3xkamW2Q15fcYDGfVsdQwCgYIKoZI' )
+      ( 'zj0EAwIDSQAwRgIhALORzJ6uiz+VINsbnCJoUzpZTwNT78rIl0Fri0LuWEFPAiEA' )
+      ( 'mxJAdT4oRl1HNB2VUrZiXD/sIhoUwg+vQO7Uuz3I1Og=' )
+      ( '-----END CERTIFICATE-----' ) ).
+
+  ENDMETHOD.
+
+  METHOD get_certificate_registry.
+
+    " Subject       CN=registry.abappm.com
+    " Issuer        CN=WE1, O=Google Trust Services, C=US
+    " Serial Number 5B:50:77:60:12:7A:4B:DE:13:E7:33:FB:6B:3C:CA:04
+    " Valid From    2026-06-18 14:52:15 to     2026-09-16 15:52:14
+
+    result = VALUE #(
+      ( '-----BEGIN CERTIFICATE-----' )
+      ( 'MIIDezCCAyKgAwIBAgIQW1B3YBJ6S94T5zP7azzKBDAKBggqhkjOPQQDAjA7MQsw' )
+      ( 'CQYDVQQGEwJVUzEeMBwGA1UEChMVR29vZ2xlIFRydXN0IFNlcnZpY2VzMQwwCgYD' )
+      ( 'VQQDEwNXRTEwHhcNMjYwNjE4MTQ1MjE1WhcNMjYwOTE2MTU1MjE0WjAeMRwwGgYD' )
+      ( 'VQQDExNyZWdpc3RyeS5hYmFwcG0uY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcD' )
+      ( 'QgAE2FqPiAsCCrxQvD8Bmj52VLXrTs42wI8oL+GkWV3qE8aAYuhKf+XlQp5dqNVu' )
+      ( 'TcojvT1bUbhr2qm09ENhUW45gaOCAiMwggIfMA4GA1UdDwEB/wQEAwIHgDATBgNV' )
+      ( 'HSUEDDAKBggrBgEFBQcDATAMBgNVHRMBAf8EAjAAMB0GA1UdDgQWBBQxO6s4vsXK' )
+      ( '1KLx4/BWlDtBA0DhbDAfBgNVHSMEGDAWgBSQd5I1Z8T/qMyp5nvZgHl7zJP5ODA1' )
+      ( 'BggrBgEFBQcBAQQpMCcwJQYIKwYBBQUHMAKGGWh0dHA6Ly9pLnBraS5nb29nL3dl' )
+      ( 'MS5jcnQwHgYDVR0RBBcwFYITcmVnaXN0cnkuYWJhcHBtLmNvbTATBgNVHSAEDDAK' )
+      ( 'MAgGBmeBDAECATA2BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vYy5wa2kuZ29vZy93' )
+      ( 'ZTEvWmpjSHY4WmkyR0EuY3JsMIIBBAYKKwYBBAHWeQIEAgSB9QSB8gDwAHYA2AlV' )
+      ( 'O5RPev/IFhlvlE+Fq7D4/F6HVSYPFdEucrtFSxQAAAGe227b4wAABAMARzBFAiEA' )
+      ( 'tWQagbn/kEhqK+VMIdQU6iLdUVh+tbbNSnxGXsih0tcCIDJPzxV6U2qIrZ5Bu7Bq' )
+      ( 'ivQFdlK4T5IyCSPayWbT529AAHYAwjF+V0UZo0XufzjespBB68fCIVoiv3/Vta12' )
+      ( 'mtkOUs0AAAGe227buwAABAMARzBFAiEAvV6RziUFpZSTw6FVaD0wedLH308SmlqT' )
+      ( 'WuD/TMj54QYCIDdjuTfMsikbyGuN0yXlLORHDzmgoV1/PE1iPb9nGgKUMAoGCCqG' )
+      ( 'SM49BAMCA0cAMEQCIHwEc9wzctQOuTlVIKUH0vcI9QgwmqdGlNvfowUZLuZVAiBr' )
+      ( '+rWvF4Xfi9s5PbmFq5m1MhRnSRfQaLUmJsT1uwd/Gg==' )
+      ( '-----END CERTIFICATE-----' ) ).
+
+  ENDMETHOD.
+
+  METHOD setup.
+
+    TRY.
+        DATA(strust) = NEW /apmg/cl_apm_strust(
+          context     = c_sslc
+          application = c_anonym ).
+
+        strust->load( create = abap_true ).
+        strust->get_own_certificate( ).
+        strust->get_certificate_list( ).
+
+        " Root and apm certificates
+        strust->add( get_certificate_ca( ) ).
+        strust->add( get_certificate_registry( ) ).
+        strust->add( get_certificate_playground( ) ).
+
+        strust->update( ).
+
+      CATCH /apmg/cx_apm_error INTO DATA(error).
+        MESSAGE error TYPE 'I' DISPLAY LIKE 'E'.
+    ENDTRY.
 
   ENDMETHOD.
 ENDCLASS.
@@ -36016,13 +38162,14 @@ CLASS /apmg/cl_apm_command_deprecate IMPLEMENTATION.
       packument     = packument
       is_deprecated = abap_true ).
 
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'deprecate'
       registry = registry
       url      = |{ registry }/{ packument-name }/-rev/{ packument-_rev }|
       method   = /apmg/if_apm_http_agent=>c_method-put
       payload  = payload ).
 
-    result = /apmg/cl_apm_command_utils=>check_response(
+    result = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Error deprecating package version' ).
 
@@ -36030,8 +38177,11 @@ CLASS /apmg/cl_apm_command_deprecate IMPLEMENTATION.
 
   METHOD execute.
 
-    " 1. Get packument from registry
-    DATA(packument) = /apmg/cl_apm_command_utils=>get_packument_from_registry(
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
+    DATA(packument) = /apmg/cl_apm_registry=>get_packument(
       registry = registry
       name     = name
       write    = abap_true ).
@@ -36058,7 +38208,7 @@ CLASS /apmg/cl_apm_command_deprecate IMPLEMENTATION.
     DATA(command) = NEW /apmg/cl_apm_command_deprecate( ).
 
     command->execute(
-      registry     = registry
+      registry     = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       name         = name
       range        = range
       message_text = message_text ).
@@ -36100,7 +38250,8 @@ CLASS /apmg/cl_apm_command_init IMPLEMENTATION.
     DATA(package_json_service) = /apmg/cl_apm_package_json=>factory(
       package = package
       name    = package_json-name
-      version = package_json-version ).
+      version = package_json-version
+      private = package_json-private ).
 
     IF package_json_service->exists( ) = abap_true.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = |Package { package } is already initialized|.
@@ -36160,7 +38311,9 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
   METHOD check_dependencies.
 
     " Get all installed packages
-    DATA(list) = /apmg/cl_apm_package_json=>list( ).
+    DATA(list) = /apmg/cl_apm_package_json=>list(
+      instanciate = abap_true
+      is_bundle   = abap_false ).
 
     LOOP AT manifest-dependencies ASSIGNING FIELD-SYMBOL(<dependency>).
       IF NOT line_exists( manifest-bundle_dependencies[ table_line = <dependency>-key ] ).
@@ -36298,7 +38451,7 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
     READ TABLE manifest-engines ASSIGNING <dependency>
       WITH KEY key = 'abap'.
     IF sy-subrc = 0.
-      DATA(abap_version) = /apmg/cl_apm_command_utils=>get_abap_version( ).
+      DATA(abap_version) = /apmg/cl_apm_utils=>get_abap_version( ).
 
       check_semver(
         name     = 'ABAP'
@@ -36352,6 +38505,10 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
 
     DATA package_json_init TYPE /apmg/if_apm_types=>ty_package_json.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
     " Authorization check
     /apmg/cl_apm_auth=>check_package_authorized(
       package  = package
@@ -36366,7 +38523,7 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
       name    = package_json-name ).
 
     " 2. Get manifest
-    DATA(manifest) = /apmg/cl_apm_command_utils=>get_manifest_from_registry(
+    DATA(manifest) = /apmg/cl_apm_registry=>get_manifest(
       registry = registry
       name     = package_json-name
       version  = package_json-version ).
@@ -36397,6 +38554,7 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
       package       = package
       name          = package_json-name
       version       = package_json-version
+      transport     = transport
       is_production = is_production ).
 
     " 7. Save package.abap.json and readme
@@ -36415,9 +38573,10 @@ CLASS /apmg/cl_apm_command_install IMPLEMENTATION.
     DATA(command) = NEW /apmg/cl_apm_command_install( ).
 
     command->execute(
-      registry      = registry
+      registry      = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       package       = package
       package_json  = package_json
+      transport     = transport
       is_production = is_production
       is_force      = is_force
       is_dry_run    = is_dry_run ).
@@ -36429,15 +38588,12 @@ CLASS /apmg/cl_apm_command_installer IMPLEMENTATION.
 
   METHOD install_package.
 
-    " TODO: Currently hardcoded to local packages (no transport)
-    DATA transport TYPE trkorr.
-
-    DATA(tarball) = /apmg/cl_apm_command_utils=>get_tarball_from_registry(
+    DATA(tarball) = /apmg/cl_apm_registry=>get_tarball(
       registry = registry
       name     = name
       tarball  = manifest-dist-tarball ).
 
-    /apmg/cl_apm_command_integrity=>check_integrity(
+    /apmg/cl_apm_integrity=>check(
       tarball = tarball
       dist    = manifest-dist ).
 
@@ -36457,79 +38613,10 @@ CLASS /apmg/cl_apm_command_installer IMPLEMENTATION.
   METHOD uninstall_package.
 
     /apmg/cl_apm_installer=>uninstall(
-      name    = name
-      version = version
-      package = package ).
-
-  ENDMETHOD.
-ENDCLASS.
-
-CLASS /apmg/cl_apm_command_integrity IMPLEMENTATION.
-
-  METHOD calc_sha1.
-
-    TRY.
-        " Simple Shasum
-        cl_abap_hmac=>calculate_hmac_for_raw(
-          EXPORTING
-            if_algorithm  = 'SHA1'
-            if_key        = c_initial_key
-            if_data       = data
-          IMPORTING
-            ef_hmacstring = DATA(sha1) ).
-
-        result = to_lower( sha1 ).
-
-      CATCH cx_abap_message_digest INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
-
-  ENDMETHOD.
-
-  METHOD calc_sha512.
-
-    " Integrity Checksum (sha512)
-    " https://www.npmjs.com/package/ssri
-    " Note: It's not clear which ABAP kernel version is required for this
-
-    TRY.
-        cl_abap_hmac=>calculate_hmac_for_raw(
-          EXPORTING
-            if_algorithm     = 'SHA512'
-            if_key           = c_initial_key
-            if_data          = data
-          IMPORTING
-            ef_hmacb64string = DATA(sha512) ).
-
-        result = |sha512-{ sha512 }|.
-
-      CATCH cx_abap_message_digest INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
-
-  ENDMETHOD.
-
-  METHOD check_integrity.
-
-    DATA(shasum) = calc_sha1( tarball ).
-
-    IF shasum <> dist-shasum.
-      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Checksum error for tarball (sha1)'.
-    ENDIF.
-
-    DATA(integrity) = calc_sha512( tarball ).
-
-    IF integrity <> dist-integrity.
-      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Checksum error for tarball (sha512)'.
-    ENDIF.
-
-  ENDMETHOD.
-
-  METHOD get_integrity.
-
-    result = VALUE #(
-      shasum    = calc_sha1( tarball )
-      integrity = calc_sha512( tarball ) ).
+      name      = name
+      version   = version
+      package   = package
+      transport = transport ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -36538,14 +38625,15 @@ CLASS /apmg/cl_apm_command_login IMPLEMENTATION.
 
   METHOD execute.
 
+    /apmg/cl_apm_registry=>check_logged_out( registry ).
+
     DATA(login_request) = VALUE ty_request(
       name     = username
       password = password ).
 
     DATA(payload) = /apmg/cl_apm_json=>to_string( login_request ).
 
-    " Send login request
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
       command   = 'login'
       registry  = registry
       url       = |{ registry }/-/user/org.couchdb.user:{ username }|
@@ -36555,7 +38643,7 @@ CLASS /apmg/cl_apm_command_login IMPLEMENTATION.
       username  = username
       password  = password ).
 
-    DATA(message) = /apmg/cl_apm_command_utils=>check_response(
+    DATA(message) = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Login error' ).
 
@@ -36568,11 +38656,10 @@ CLASS /apmg/cl_apm_command_login IMPLEMENTATION.
         result = login_response ).
 
     " Set token for subsequent requests (overwrites basic authentication)
-    /apmg/cl_apm_http_login_manage=>set(
+    /apmg/cl_apm_http_login_manage=>set_token(
       host     = registry
       username = username
-      password = login_response-token
-      is_basic = abap_false ).
+      token    = login_response-token ).
 
     IF message IS INITIAL.
       MESSAGE login_response-ok TYPE 'S'.
@@ -36584,13 +38671,93 @@ CLASS /apmg/cl_apm_command_login IMPLEMENTATION.
 
   METHOD run.
 
+    IF auth_type <> 'legacy'.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Unsupported auth type'.
+    ENDIF.
+
     DATA(command) = NEW /apmg/cl_apm_command_login( ).
 
     command->execute(
-      registry  = registry
+      registry  = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       username  = username
       password  = password
       auth_type = auth_type ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_command_logout IMPLEMENTATION.
+
+  METHOD execute.
+
+    /apmg/cl_apm_registry=>check_logged_in( registry ).
+
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'logout'
+      registry = registry
+      url      = |{ registry }/-/user/token/$apm$|
+      method   = /apmg/if_apm_http_agent=>c_method-delete ).
+
+    DATA(message) = /apmg/cl_apm_registry=>check_response(
+      response = response
+      text     = 'Logout error' ).
+
+    DATA(logout_response) = VALUE ty_response( ).
+
+    /apmg/cl_apm_json=>to_abap(
+      EXPORTING
+        json   = response->cdata( )
+      CHANGING
+        result = logout_response ).
+
+    " Clear token
+    /apmg/cl_apm_http_login_manage=>clear( registry ).
+
+    IF message IS INITIAL.
+      MESSAGE logout_response-ok TYPE 'S'.
+    ELSE.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = message.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD run.
+
+    DATA(command) = NEW /apmg/cl_apm_command_logout( ).
+
+    command->execute( /apmg/cl_apm_utils=>remove_trailing_slash( registry ) ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_command_ping IMPLEMENTATION.
+
+  METHOD execute.
+
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'ping'
+      registry = registry
+      url      = |{ registry }/-/ping| ).
+
+    DATA(message) = /apmg/cl_apm_registry=>check_response(
+      response = response
+      text     = 'Ping error' ).
+
+    DATA(status) = response->cdata( ).
+
+    IF message IS INITIAL AND status CS '{}'.
+      result = 'PONG'.
+    ELSE.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = message.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD run.
+
+    DATA(command) = NEW /apmg/cl_apm_command_ping( ).
+
+    result = command->execute( /apmg/cl_apm_utils=>remove_trailing_slash( registry ) ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -36612,9 +38779,9 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
     DATA(tarball) = tar->gzip( tar->save( ) ).
 
-    DATA(dist) = /apmg/cl_apm_command_integrity=>get_integrity( tarball ).
+    DATA(dist) = /apmg/cl_apm_integrity=>get( tarball ).
 
-    DATA(package_name) = /apmg/cl_apm_command_utils=>get_package_from_name( packument-name ).
+    DATA(package_name) = /apmg/cl_apm_registry=>get_package_from_name( packument-name ).
     DATA(filename) = |{ package_name }-{ version }.tgz|.
 
     dist-file_count    = tar->file_count( ).
@@ -36640,7 +38807,7 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
     IF package_json_service->exists( ) = abap_false.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
         EXPORTING
-          text = |{ package } does not exist or is not initialized|.
+          text = |SAP package { package } does not exist or is not initialized|.
     ENDIF.
 
   ENDMETHOD.
@@ -36657,6 +38824,10 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
   METHOD execute.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
     " 1. Check if package exists and is initialized
     check_package( package ).
 
@@ -36664,12 +38835,20 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
     DATA(package_json) = get_package_json( package ).
 
     IF package_json-private = abap_true.
-      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Private packages can not be published'.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = 'Private packages can not be published'.
+    ENDIF.
+
+    IF /apmg/cl_apm_semver_functions=>prerelease( package_json-version ) IS NOT INITIAL AND tag IS INITIAL.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = 'You must specify a tag when publishing a prerelease version'.
     ENDIF.
 
     " 3. Get packument from registry
     TRY.
-        DATA(packument) = /apmg/cl_apm_command_utils=>get_packument_from_registry(
+        DATA(packument) = /apmg/cl_apm_registry=>get_packument(
           registry = registry
           name     = package_json-name
           write    = abap_true ).
@@ -36819,7 +38998,7 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
     version-manifest               = CORRESPONDING #( package_json ).
     version-manifest-_id           = |{ package_json-name }@{ package_json-version }|.
-    version-manifest-_abap_version = /apmg/cl_apm_command_utils=>get_abap_version( ).
+    version-manifest-_abap_version = /apmg/cl_apm_utils=>get_abap_version( ).
     version-manifest-_apm_version  = /apmg/if_apm_version=>c_version.
 
     INSERT version INTO TABLE result-versions.
@@ -36830,13 +39009,14 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
 
     DATA(json) = /apmg/cl_apm_pacote=>convert_packument_to_json( packument ).
 
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'publish'
       registry = registry
       url      = |{ registry }/{ packument-name }|
       method   = /apmg/if_apm_http_agent=>c_method-put
       payload  = json ).
 
-    result = /apmg/cl_apm_command_utils=>check_response(
+    result = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Error publishing package' ).
 
@@ -36847,8 +39027,9 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
     DATA(command) = NEW /apmg/cl_apm_command_publish( ).
 
     command->execute(
-      registry   = registry
+      registry   = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       package    = package
+      tag        = tag
       is_dry_run = is_dry_run ).
 
   ENDMETHOD.
@@ -36863,7 +39044,7 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
           only_local_objects = abap_false ).
 
         " Hardcoded to prefix folder logic and /src/ starting folder
-        " TODO!: Support full and mixed folder logic
+        " TODO: Support full and mixed folder logic
         DATA(dot_abapgit) = zcl_abapgit_dot_abapgit=>build_default( ).
 
         DATA(serializer) = NEW /apmg/cl_apm_abapgit_serialize(
@@ -36905,9 +39086,14 @@ CLASS /apmg/cl_apm_command_uninstall IMPLEMENTATION.
       activity = /apmg/cl_apm_auth=>c_activity-delete ).
 
     /apmg/cl_apm_command_installer=>uninstall_package(
-      name    = package_json-name
-      version = package_json-version
-      package = package ).
+      name      = package_json-name
+      version   = package_json-version
+      package   = package
+      transport = transport ).
+
+    /apmg/cl_apm_package_json=>factory( package )->delete( ).
+
+    /apmg/cl_apm_readme=>factory( package )->delete( ).
 
     MESSAGE 'Package successfully uninstalled' TYPE 'S'.
 
@@ -36917,7 +39103,9 @@ CLASS /apmg/cl_apm_command_uninstall IMPLEMENTATION.
 
     DATA(command) = NEW /apmg/cl_apm_command_uninstall( ).
 
-    command->execute( package ).
+    command->execute(
+      package   = package
+      transport = transport ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -36926,12 +39114,12 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   METHOD delete_tarball.
 
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
       registry = registry
       url      = |{ tarball }/-rev/{ packument-_rev }|
       method   = /apmg/if_apm_http_agent=>c_method-delete ).
 
-    result = /apmg/cl_apm_command_utils=>check_response(
+    result = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Error deleting tarball' ).
 
@@ -36939,8 +39127,12 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   METHOD execute.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
     " 1. Get packument from registry for update
-    DATA(packument) = /apmg/cl_apm_command_utils=>get_packument_from_registry(
+    DATA(packument) = /apmg/cl_apm_registry=>get_packument(
       registry = registry
       name     = name
       write    = abap_true ).
@@ -37067,7 +39259,7 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
     DATA(command) = NEW /apmg/cl_apm_command_unpublish( ).
 
     command->execute(
-      registry = registry
+      registry = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       name     = name
       version  = version ).
 
@@ -37075,12 +39267,13 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
   METHOD unpublish_complete_package.
 
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'unpublish'
       registry = registry
       url      = |{ registry }/{ packument-name }/-rev/{ packument-_rev }|
       method   = /apmg/if_apm_http_agent=>c_method-delete ).
 
-    result = /apmg/cl_apm_command_utils=>check_response(
+    result = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Error unpublishing complete package' ).
 
@@ -37090,13 +39283,14 @@ CLASS /apmg/cl_apm_command_unpublish IMPLEMENTATION.
 
     DATA(payload) = /apmg/cl_apm_pacote=>convert_packument_to_json( packument ).
 
-    DATA(response) = /apmg/cl_apm_command_utils=>fetch_registry(
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'unpublish'
       registry = registry
       url      = |{ registry }/{ packument-name }/-rev/{ packument-_rev }|
       method   = /apmg/if_apm_http_agent=>c_method-put
       payload  = payload ).
 
-    result = /apmg/cl_apm_command_utils=>check_response(
+    result = /apmg/cl_apm_registry=>check_response(
       response = response
       text     = 'Error unpublishing package version' ).
 
@@ -37119,7 +39313,23 @@ ENDCLASS.
 
 CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
 
+  METHOD add_dependencies.
+
+    /apmg/cl_apm_importer=>run(
+      package       = package
+      dependencies  = dependencies
+      transport     = transport
+      is_dry_run    = is_dry_run
+      is_production = is_production
+      is_logging    = abap_false ).
+
+  ENDMETHOD.
+
   METHOD execute.
+
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
 
     /apmg/cl_apm_auth=>check_package_authorized(
       package  = package
@@ -37128,47 +39338,60 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
     " 1. Check package is installed and get version details
     DATA(package_json) = get_package( package ).
 
-    " 2. Get updated manifest
-    DATA(manifest) = /apmg/cl_apm_command_utils=>get_manifest_from_registry(
-      registry = registry
-      name     = package_json-name
-      version  = package_json-version ).
+    " 2. Get manifest for target version
+    TRY.
+        DATA(manifest) = /apmg/cl_apm_registry=>get_manifest(
+          registry = registry
+          name     = package_json-name
+          version  = to_version ).
+      CATCH /apmg/cx_apm_error.
+        " If version does not exist in registry, use local definition
+        manifest = CORRESPONDING /apmg/if_apm_types=>ty_manifest( package_json ).
+    ENDTRY.
 
     " 3. Update the package
     DATA(is_newer) = is_newer(
       version_installed = package_json-version
       version_next      = manifest-version ).
 
-    " 4. Get vendored dependencies
+    " 4. Get bundled dependencies
     DATA(dependencies) = get_bundle_dependencies(
       package  = package
       manifest = manifest ).
 
     " 5. Add, remove, or update dependencies
-    DATA(import_dependencies) = process_dependencies(
+    DATA(import_dependencies) = get_dependencies_to_import(
       registry     = registry
-      dependencies = dependencies ).
+      dependencies = dependencies
+      force        = force ).
 
-    " 6. Import dependencies
-    /apmg/cl_apm_importer=>run(
+    " 6. Import bundled dependencies
+    add_dependencies(
       package       = package
       dependencies  = import_dependencies
+      transport     = transport
       is_dry_run    = is_dry_run
-      is_production = is_production
-      is_logging    = abap_false ).
+      is_production = is_production ).
 
-    " 7. Update package
-    IF is_newer = abap_true.
+    " 7. Uninstall bundled dependencies that have been removed
+    remove_dependencies(
+      dependencies = dependencies
+      transport    = transport
+      is_dry_run   = is_dry_run ).
+
+    " 8. Update package
+    IF is_newer = abap_true OR force = abap_true.
       /apmg/cl_apm_command_installer=>install_package(
         registry      = registry
         manifest      = manifest
         package       = package
         name          = manifest-name
         version       = manifest-version
+        transport     = transport
         is_production = is_production ).
     ENDIF.
 
-    " 8. Save package to apm
+    " 9. Save package to apm
     save_package(
       package  = package
       manifest = manifest ).
@@ -37180,6 +39403,8 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
   METHOD get_bundle_dependencies.
 
     " XXX: Major rewrite
+    " Instead of scanning sub-packages and comparing to list of installed packages (apm persistence),
+    " Use the existing package manifest and compare it to the new one from the registry
 
     " Get all installed packages
     DATA(list) = /apmg/cl_apm_package_json=>list( instanciate = abap_true ).
@@ -37238,11 +39463,50 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD get_dependencies_to_import.
+
+    " Install new or update existing dependencies
+    LOOP AT dependencies INTO DATA(dependency) WHERE action <> /apmg/if_apm_importer=>c_action-remove.
+
+      DATA(max_version) = get_max_satisfying_version(
+        registry = registry
+        name     = dependency-name
+        range    = dependency-range ).
+
+      IF max_version IS INITIAL.
+        " TODO: log errors and raise at end
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = |No matching version found in registry for package { dependency-name }| &&
+                   | and range { dependency-range }|.
+      ENDIF.
+
+      CASE dependency-action.
+        WHEN /apmg/if_apm_importer=>c_action-add.
+          " Install the maximum satisfying version
+          dependency-version = max_version.
+          INSERT dependency INTO TABLE result.
+        WHEN /apmg/if_apm_importer=>c_action-update.
+          DATA(is_newer) = is_newer(
+            version_installed = dependency-version
+            version_next      = max_version ).
+
+          IF is_newer = abap_true OR force = abap_true.
+            " Update to this newer version
+            dependency-version = max_version.
+            INSERT dependency INTO TABLE result.
+          ENDIF.
+      ENDCASE.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
   METHOD get_max_satisfying_version.
 
     DATA versions TYPE string_table.
 
-    DATA(packument) = /apmg/cl_apm_command_utils=>get_packument_from_registry(
+    DATA(packument) = /apmg/cl_apm_registry=>get_packument(
       registry = registry
       name     = name ).
 
@@ -37279,49 +39543,19 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD process_dependencies.
-
-    " Install new or update existing dependencies
-    LOOP AT dependencies ASSIGNING FIELD-SYMBOL(<dependency>)
-      WHERE action <> /apmg/if_apm_importer=>c_action-remove.
-
-      DATA(max_version) = get_max_satisfying_version(
-        registry = registry
-        name     = <dependency>-name
-        range    = <dependency>-range ).
-
-      IF max_version IS INITIAL.
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
-          EXPORTING
-            text = |No matching version found for package { <dependency>-name }| &&
-                   | and range { <dependency>-range }|.
-      ENDIF.
-
-      CASE <dependency>-action.
-        WHEN /apmg/if_apm_importer=>c_action-add.
-          <dependency>-version = max_version.
-          INSERT <dependency> INTO TABLE result.
-        WHEN /apmg/if_apm_importer=>c_action-update.
-          DATA(is_newer) = is_newer(
-            version_installed = <dependency>-version
-            version_next      = max_version ).
-
-          IF is_newer = abap_true.
-            " Update to this version
-            <dependency>-version = max_version.
-            INSERT <dependency> INTO TABLE result.
-          ENDIF.
-      ENDCASE.
-    ENDLOOP.
+  METHOD remove_dependencies.
 
     " Uninstall removed dependencies
-    LOOP AT dependencies ASSIGNING <dependency>
-      WHERE action = /apmg/if_apm_importer=>c_action-remove.
+    LOOP AT dependencies INTO DATA(dependency) WHERE action = /apmg/if_apm_importer=>c_action-remove.
 
-      /apmg/cl_apm_command_installer=>uninstall_package(
-        name    = <dependency>-name
-        version = <dependency>-version
-        package = <dependency>-package ).
+      IF is_dry_run = abap_false.
+        /apmg/cl_apm_command_installer=>uninstall_package(
+          name      = dependency-name
+          version   = dependency-version
+          package   = dependency-package
+          transport = transport ).
+      ENDIF.
+
     ENDLOOP.
 
   ENDMETHOD.
@@ -37331,8 +39565,11 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
     DATA(command) = NEW /apmg/cl_apm_command_update( ).
 
     command->execute(
-      registry      = registry
+      registry      = /apmg/cl_apm_utils=>remove_trailing_slash( registry )
       package       = package
+      to_version    = to_version
+      transport     = transport
+      force         = force
       is_dry_run    = is_dry_run
       is_production = is_production ).
 
@@ -37348,183 +39585,104 @@ CLASS /apmg/cl_apm_command_update IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS /apmg/cl_apm_command_utils IMPLEMENTATION.
+CLASS /apmg/cl_apm_command_version IMPLEMENTATION.
 
-  METHOD check_response.
+  METHOD check_package.
 
-    IF response->is_ok( ) = abap_false.
-      result = |{ text } ({ response->code( ) }): { get_error( response->error( ) ) }|.
+    DATA(package_json_service) = /apmg/cl_apm_package_json=>factory( package ).
+
+    IF package_json_service->exists( ) = abap_false.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |SAP package { package } does not exist or is not initialized|.
     ENDIF.
 
   ENDMETHOD.
 
-  METHOD fetch_registry.
+  METHOD execute.
 
-    DATA(headers) = /apmg/cl_apm_string_map=>create( ).
+    " 1. Check if package exists and is initialized
+    check_package( package ).
 
-    IF command IS NOT INITIAL.
-      headers->set(
-        iv_key = c_header-apm_command
-        iv_val = command ).
-    ENDIF.
-    IF auth_type IS NOT INITIAL.
-      headers->set(
-        iv_key = c_header-apm_auth_type
-        iv_val = auth_type ).
-    ENDIF.
+    " 2. Get package.abap.json
+    DATA(package_json) = get_package_json( package ).
 
-    IF username IS NOT INITIAL AND password IS NOT INITIAL.
-      /apmg/cl_apm_http_login_manage=>set(
-        host     = registry
-        username = username
-        password = password ).
-    ENDIF.
+    " 3. Initialize Package JSON service
+    DATA(package_json_service) = /apmg/cl_apm_package_json=>factory(
+      package = package
+      name    = package_json-name
+      version = package_json-version
+      private = package_json-private ).
 
-    /apmg/cl_apm_trace=>cdata( |{ method } { url }\n\n{ payload }| ).
-
-    result = get_agent( registry )->request(
-      url     = url
-      headers = headers
-      method  = method
-      payload = payload ).
-
-    /apmg/cl_apm_trace=>cdata( |{ result->code( ) }\n\n{ result->cdata( ) }| ).
-
-  ENDMETHOD.
-
-  METHOD get_abap_version.
-
-    TRY.
-        result = NEW /apmg/cl_apm_semver_sap( )->sap_component_to_semver( 'SAP_BASIS' ).
-      CATCH cx_abap_invalid_value INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
-
-  ENDMETHOD.
-
-  METHOD get_agent.
-
-    result = /apmg/cl_apm_http_agent=>create( ).
-
-    result->global_headers( )->set(
-      iv_key = /apmg/if_apm_http_agent=>c_header-accept
-      iv_val = /apmg/if_apm_http_agent=>c_content_type-json ).
-
-    result->global_headers( )->set(
-      iv_key = /apmg/if_apm_http_agent=>c_header-content_type
-      iv_val = /apmg/if_apm_http_agent=>c_content_type-json ).
-
-    " TODO: Add OS and DB
-    result->global_headers( )->set(
-      iv_key = /apmg/if_apm_http_agent=>c_header-user_agent
-      iv_val = |apm/{ /apmg/if_apm_version=>c_version } abap/{ get_abap_version( ) }| ).
-
-    DATA(url) = /apmg/cl_apm_url=>parse( host )->components.
-
-    " Authorization token
-    DATA(token) = /apmg/cl_apm_http_login_manage=>get( url-host ).
-
-    IF token IS NOT INITIAL.
-      result->global_headers( )->set(
-        iv_key = /apmg/if_apm_http_agent=>c_header-authorization
-        iv_val = token ).
-    ENDIF.
-
-  ENDMETHOD.
-
-  METHOD get_error.
-
-    CHECK response IS NOT INITIAL.
-
-    IF response(1) <> '{'.
-      result = response.
+    " 4. Update version
+    IF version IS INITIAL.
+      DATA(new_version) = /apmg/cl_apm_semver=>create( package_json-version ).
+      package_json-version = new_version->inc( release_type )->to_string( ).
     ELSE.
-      result = /apmg/cl_apm_json=>get(
-        json = response
-        path = '/error' ).
+      package_json-version = version.
     ENDIF.
 
-    IF result IS NOT INITIAL.
-      result = to_upper( result(1) ) && result+1.
-    ENDIF.
+    " 5. Save
+    package_json_service->set( package_json )->save( ).
+
+    MESSAGE |Package version changed to { package_json-version }| TYPE 'S'.
 
   ENDMETHOD.
 
-  METHOD get_manifest_from_registry.
+  METHOD get_package_json.
 
-    " The abbreviated manifest would be sufficient for installer
-    " however we also want to get the description and readme
-    DATA(pacote) = /apmg/cl_apm_pacote=>factory(
+    result = /apmg/cl_apm_package_json=>factory( package )->load( )->get( ).
+
+  ENDMETHOD.
+
+  METHOD run.
+
+    DATA(command) = NEW /apmg/cl_apm_command_version( ).
+
+    command->execute(
+      package      = package
+      version      = version
+      release_type = release_type ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_command_whoami IMPLEMENTATION.
+
+  METHOD execute.
+
+    /apmg/cl_apm_registry=>check_logged_in( registry ).
+
+    DATA(response) = /apmg/cl_apm_registry=>fetch(
+      command  = 'whoami'
       registry = registry
-      name     = name ).
+      url      = |{ registry }/-/whoami| ).
 
-    DATA(json) = pacote->manifest(
-      version = version
-      write   = write ).
+    DATA(message) = /apmg/cl_apm_registry=>check_response(
+      response = response
+      text     = 'Whoami error' ).
 
-    result = /apmg/cl_apm_package_json=>convert_json_to_manifest( json ).
+    DATA(whoami_response) = VALUE ty_response( ).
 
-  ENDMETHOD.
+    /apmg/cl_apm_json=>to_abap(
+      EXPORTING
+        json   = response->cdata( )
+      CHANGING
+        result = whoami_response ).
 
-  METHOD get_name_from_scope_package.
-
-    IF scope IS INITIAL.
-      result = package.
+    IF message IS INITIAL.
+      result = whoami_response-username.
     ELSE.
-      result = |{ scope }/{ package }|.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = message.
     ENDIF.
 
   ENDMETHOD.
 
-  METHOD get_package_from_name.
+  METHOD run.
 
-    IF name(1) = '@' AND name CA '/'.
-      result = substring_after( val = name sub = '/' ).
-    ELSE.
-      result = name.
-    ENDIF.
+    DATA(command) = NEW /apmg/cl_apm_command_whoami( ).
 
-  ENDMETHOD.
-
-  METHOD get_packument_from_registry.
-
-    " The abbreviated manifest would be sufficient for installer
-    " however we also want to get the description and readme
-    DATA(pacote) = /apmg/cl_apm_pacote=>factory(
-      registry = registry
-      name     = name ).
-
-    pacote->packument( write ).
-
-    result = pacote->get( ).
-
-  ENDMETHOD.
-
-  METHOD get_scope_from_name.
-
-    IF name(1) = '@' AND name CA '/'.
-      result = substring_before( val = name sub = '/' ).
-    ELSE.
-      result = ''.
-    ENDIF.
-
-  ENDMETHOD.
-
-  METHOD get_tarball_from_registry.
-
-    result = /apmg/cl_apm_pacote=>factory(
-      registry = registry
-      name     = name )->tarball( tarball ).
-
-  ENDMETHOD.
-
-  METHOD get_versions_from_packument.
-
-    LOOP AT packument-versions ASSIGNING FIELD-SYMBOL(<version>).
-      INSERT <version>-key INTO TABLE result.
-    ENDLOOP.
-
-    result = /apmg/cl_apm_semver_functions=>sort( result ).
+    result = command->execute( /apmg/cl_apm_utils=>remove_trailing_slash( registry ) ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -39580,7 +41738,7 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
 
   METHOD constructor.
 
-    init_emoji_list( ).
+    init_list( ).
 
   ENDMETHOD.
 
@@ -39594,20 +41752,7 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD find_emoji.
-
-    LOOP AT emojis ASSIGNING FIELD-SYMBOL(<emoji>).
-      IF find(
-           val   = <emoji>-name
-           regex = regex
-           case  = abap_false ) >= 0 ##REGEX_POSIX.
-        INSERT <emoji>-name INTO TABLE result.
-      ENDIF.
-    ENDLOOP.
-
-  ENDMETHOD.
-
-  METHOD format_emoji.
+  METHOD format.
 
     result = line.
 
@@ -39643,7 +41788,7 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD get_emoji_css.
+  METHOD get_css.
     INSERT `.emoji {` INTO TABLE result.
     INSERT `  display: inline-block;` INTO TABLE result.
     INSERT `  min-width: 1ch;` INTO TABLE result.
@@ -39658,7 +41803,7 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
     INSERT `}` INTO TABLE result.
   ENDMETHOD.
 
-  METHOD get_emoji_list.
+  METHOD get_list.
 
     LOOP AT emojis ASSIGNING FIELD-SYMBOL(<emoji>).
       INSERT <emoji>-name INTO TABLE result.
@@ -39666,9 +41811,1322 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD init_emoji_list.
+  METHOD init_list.
 
     emojis = lcl_github_emoji=>get( ).
+
+  ENDMETHOD.
+
+  METHOD search.
+
+    LOOP AT emojis ASSIGNING FIELD-SYMBOL(<emoji>).
+      IF find(
+           val   = <emoji>-name
+           regex = regex
+           case  = abap_false ) >= 0 ##REGEX_POSIX.
+        INSERT <emoji>-name INTO TABLE result.
+      ENDIF.
+    ENDLOOP.
+
+  ENDMETHOD.
+ENDCLASS.
+
+* == ABAP Enviroment
+CLASS lcl_abap_environment DEFINITION.
+
+  PUBLIC SECTION.
+
+    CLASS-METHODS new
+      RETURNING
+        VALUE(result) TYPE REF TO lcl_abap_environment.
+
+    METHODS get
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+  PROTECTED SECTION.
+
+    TYPES:
+      BEGIN OF ty_release_patch,
+        release  TYPE n LENGTH 3,
+        version  TYPE n LENGTH 5,
+        patch    TYPE n LENGTH 5,
+        platform TYPE c LENGTH 255,
+        other    TYPE c LENGTH 255,
+      END OF ty_release_patch.
+
+    METHODS get_kernel
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_database
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_hana
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_host
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_connection
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_license
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_language
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS is_gui
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS is_ecatt
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_client
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_timezone
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_spam
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS has_process
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS is_process
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+    METHODS get_other
+      IMPORTING
+        name          TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
+
+*    METHODS is_system_modifiable
+*      RETURNING
+*        VALUE(result) TYPE abap_bool
+*
+*    METHODS is_snote_allowed
+*      RETURNING
+*        VALUE(result) TYPE abap_bool
+*
+*    METHODS is_upgrage_running
+*      RETURNING
+*        VALUE(result) TYPE abap_bool
+*
+*    METHODS is_spam_locked
+*      RETURNING
+*        VALUE(result) TYPE abap_bool
+
+  PRIVATE SECTION.
+
+    METHODS get_database_release
+      RETURNING
+        VALUE(result) TYPE dbrelinfo.
+
+    METHODS get_hana_release
+      RETURNING
+        VALUE(result) TYPE ty_release_patch.
+
+    METHODS get_hana_license
+      RETURNING
+        VALUE(result) TYPE hdb_m_license.
+
+    METHODS get_spam_release
+      RETURNING
+        VALUE(result) TYPE ty_release_patch.
+
+    METHODS get_kernel_release
+      RETURNING
+        VALUE(result) TYPE ty_release_patch.
+
+    METHODS is_kernel_64bit
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    METHODS get_kernel_cryptolib
+      RETURNING
+        VALUE(result) TYPE ty_release_patch.
+
+    METHODS get_host_details
+      RETURNING
+        VALUE(result) TYPE msxxlist.
+
+    METHODS get_work_process
+      RETURNING
+        VALUE(result) TYPE wpinfo.
+
+    METHODS format
+      IMPORTING
+        !number       TYPE simple
+      RETURNING
+        VALUE(result) TYPE string.
+
+ENDCLASS.
+
+CLASS lcl_abap_environment IMPLEMENTATION.
+
+  METHOD new.
+    result = NEW #( ).
+  ENDMETHOD.
+
+  METHOD get.
+
+    IF name CP 'KERNEL*'.
+      result = get_kernel( name ).
+    ELSEIF name CP 'HOST*'.
+      result = get_host( name ).
+    ELSEIF name CP 'CONN*' OR name = /apmg/if_apm_env=>is_secure_conn.
+      result = get_connection( name ).
+    ELSEIF name CP 'LICENSE*' OR name = /apmg/if_apm_env=>hardware_key.
+      result = get_license( name ).
+    ELSEIF name CP 'DATABASE*' OR name CP 'DBSL*'.
+      result = get_database( name ).
+    ELSEIF name CP 'HANA*' OR name = /apmg/if_apm_env=>is_hana.
+      result = get_hana( name ).
+    ELSEIF name CP 'ABAP*' OR name CP 'IS_CLIENT*'.
+      result = get_client( name ).
+    ELSEIF name CP 'LANGUAGE*'.
+      result = get_language( name ).
+    ELSEIF name CP 'TIMEZONE*'.
+      result = get_timezone( name ).
+    ELSEIF name CP 'SPAM*'.
+      result = get_spam( name ).
+    ELSEIF name CP 'HAS_PROCESS*'.
+      result = has_process( name ).
+    ELSEIF name CP 'IS_PROCESS*'.
+      result = is_process( name ).
+    ELSEIF name CP 'IS_GUI*'.
+      result = is_gui( name ).
+    ELSEIF name CP 'IS_ECATT*'.
+      result = is_ecatt( name ).
+    ELSEIF name = /apmg/if_apm_env=>is_64bit.
+      result = is_kernel_64bit( ).
+    ELSE.
+      result = get_other( name ).
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_kernel.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>kernel_platform.
+        result = to_upper( sy-opsys ).
+      WHEN /apmg/if_apm_env=>kernel.
+        DATA(release) = format( get_kernel_release( )-release ).
+        DATA(patch) = format( get_kernel_release( )-patch ).
+        result = |{ release(1) }.{ release+1 }.{ patch }|.
+      WHEN /apmg/if_apm_env=>kernel_release.
+        result = format( get_kernel_release( )-release ).
+      WHEN /apmg/if_apm_env=>kernel_patch.
+        result = format( get_kernel_release( )-patch ).
+      WHEN /apmg/if_apm_env=>kernel_type.
+        result = get_kernel_release( )-platform.
+      WHEN /apmg/if_apm_env=>kernel_arch.
+        result = get_kernel_release( )-other.
+      WHEN /apmg/if_apm_env=>kernel_cryptolib.
+        result = get_kernel_cryptolib( ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_kernel_release.
+
+    DATA:
+      kern_rel          TYPE thllines-thline,
+      kern_make_variant TYPE thllines-thline,
+      kern_dblib        TYPE thllines-thline,
+      kern_patchlevel   TYPE thllines-thline.
+
+    CALL FUNCTION 'TH_SAPREL4'
+      IMPORTING
+        kern_rel          = kern_rel
+        kern_make_variant = kern_make_variant
+        kern_dblib        = kern_dblib
+        kern_patchlevel   = kern_patchlevel.
+
+    result-platform = kern_make_variant.
+    result-release  = kern_rel.
+    result-patch    = kern_patchlevel.
+
+  ENDMETHOD.
+
+  METHOD is_kernel_64bit.
+
+    DATA environment TYPE STANDARD TABLE OF thenv WITH KEY line.
+
+    CALL FUNCTION 'TH_ENVIRONMENT'
+      TABLES
+        environment = environment.
+
+    " Check MACHTYPE first since HOSTTYPE is not set on some shells
+
+    " Examples of MACHTYPE:
+    " x86_64-pc-linux-gnu, arm64-apple-darwin, sparc64-pc-linux
+    LOOP AT environment ASSIGNING FIELD-SYMBOL(<env>) WHERE line CS 'MACHTYPE='.
+      SPLIT <env>-line AT '=' INTO DATA(rest) DATA(machtype).
+      SPLIT machtype AT '-' INTO machtype rest.
+      IF machtype CS '64'.
+        result = abap_true.
+      ENDIF.
+      RETURN.
+    ENDLOOP.
+
+    " Examples of HOSTTYPE:
+    " x86_64, amd64, i686, powerpc, powerpc64
+    LOOP AT environment ASSIGNING <env> WHERE line CS 'HOSTTYPE='.
+      SPLIT <env>-line AT '=' INTO rest DATA(hosttype).
+      IF hosttype CS '64'.
+        result = abap_true.
+      ENDIF.
+      RETURN.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD get_kernel_cryptolib.
+
+    DATA version TYPE shlib_vers.
+
+    CALL FUNCTION 'GET_SH_LIBRARY_VERSION'
+      EXPORTING
+        lib_id         = 'CCL'
+      IMPORTING
+        version        = version
+      EXCEPTIONS
+        lib_id_unknown = 1
+        OTHERS         = 2.
+    IF sy-subrc = 0.
+      SPLIT version AT space INTO result DATA(rest) ##NEEDED.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_database.
+
+    DATA rest TYPE string.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>database_platform.
+        result = to_upper( sy-dbsys ).
+      WHEN /apmg/if_apm_env=>database.
+        result = get_database_release( )-srvrel.
+      WHEN /apmg/if_apm_env=>database_schema.
+        result = get_database_release( )-dbschema.
+      WHEN /apmg/if_apm_env=>database_host.
+        result = get_database_release( )-dbhost.
+      WHEN /apmg/if_apm_env=>database_name.
+        result = get_database_release( )-dbname.
+      WHEN /apmg/if_apm_env=>database_charset.
+        result = get_database_release( )-charset.
+      WHEN /apmg/if_apm_env=>database_release.
+        FIND FIRST OCCURRENCE OF REGEX '(\d+)\.\d+\.*' IN get_database_release( )-srvrel
+          SUBMATCHES result ##SUBRC_OK ##REGEX_POSIX.
+        result = format( result ).
+      WHEN /apmg/if_apm_env=>database_patch.
+        FIND FIRST OCCURRENCE OF REGEX '\d+\.(\d+)\.*' IN get_database_release( )-srvrel
+          SUBMATCHES result ##SUBRC_OK ##REGEX_POSIX.
+        result = format( result ).
+      WHEN /apmg/if_apm_env=>dbsl.
+        DATA(release) = get_database_release( )-dbsl_vers.
+        SPLIT release AT '.' INTO release DATA(patch).
+        result = |{ release(1) }.{ release+1 }.{ patch }|.
+      WHEN /apmg/if_apm_env=>dbsl_release.
+        SPLIT get_database_release( )-dbsl_vers AT '.' INTO result rest.
+        result = format( result ).
+      WHEN /apmg/if_apm_env=>dbsl_patch.
+        SPLIT get_database_release( )-dbsl_vers AT '.' INTO rest result.
+        result = format( result ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_database_release.
+
+    CALL FUNCTION 'DB_DBRELINFO'
+      IMPORTING
+        dbinfo = result.
+
+  ENDMETHOD.
+
+  METHOD get_hana.
+
+    IF sy-dbsys = 'HDB'.
+      DATA(adbc) = NEW cl_hdb_adbc( 'DEFAULT' ).
+    ENDIF.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>is_hana.
+        result = xsdbool( sy-dbsys = 'HDB' ).
+      WHEN /apmg/if_apm_env=>hana_release.
+        result = format( get_hana_release( )-release DIV 100 ).
+      WHEN /apmg/if_apm_env=>hana_sp.
+        result = format( get_hana_release( )-release MOD 100 ).
+      WHEN /apmg/if_apm_env=>hana_revision.
+        result = format( get_hana_release( )-version ).
+      WHEN /apmg/if_apm_env=>hana_patch.
+        result = format( get_hana_release( )-patch ).
+      WHEN /apmg/if_apm_env=>hana_platform.
+        TRY.
+            adbc->get_host_information( IMPORTING platform = result ).
+          CATCH cx_dba_adbc INTO DATA(error).
+            result = error->get_text( ).
+        ENDTRY.
+      WHEN /apmg/if_apm_env=>hana_hardware.
+        TRY.
+            adbc->get_host_information( IMPORTING hw_manufacturer = result ).
+          CATCH cx_dba_adbc INTO error.
+            result = error->get_text( ).
+        ENDTRY.
+      WHEN /apmg/if_apm_env=>hana_hardware_key.
+        result = get_hana_license( )-hardware_key.
+      WHEN /apmg/if_apm_env=>hana_license_number.
+        result = get_hana_license( )-install_no.
+      WHEN /apmg/if_apm_env=>hana_license_exp_date.
+        result = get_hana_license( )-expiration_date(10).
+      WHEN OTHERS.
+        result = /apmg/if_apm_env=>c_todo.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_hana_release.
+
+    DATA dbinfo TYPE dbrelinfo.
+
+    CALL FUNCTION 'DB_DBRELINFO'
+      IMPORTING
+        dbinfo = dbinfo.
+
+    IF dbinfo-dbsys = 'HDB'.
+      " First number in version is release, third one is revision level
+      FIND FIRST OCCURRENCE OF REGEX '(\d+)\.(\d+)\.(\d+)\.(\d*)\.\d*' IN dbinfo-srvrel
+        SUBMATCHES DATA(text_1) DATA(text_2) result-version result-patch ##REGEX_POSIX.
+      IF sy-subrc = 0.
+        DATA(hana_rel) = CONV i( text_1 ).
+        DATA(hana_sps) = CONV i( text_2 ). "= 0 (except SAP-internally)
+
+        CASE hana_rel.
+          WHEN 1.
+            IF result-version = 0.
+              hana_sps = 0.
+            ELSEIF result-version BETWEEN 1 AND 10 ##NUMBER_OK.
+              hana_sps = 1.
+            ELSEIF result-version BETWEEN 11 AND 18 ##NUMBER_OK.
+              hana_sps = 2.
+            ELSEIF result-version BETWEEN 19 AND 27 ##NUMBER_OK.
+              hana_sps = 3.
+            ELSEIF result-version BETWEEN 28 AND 44 ##NUMBER_OK.
+              hana_sps = 4.
+            ELSEIF result-version BETWEEN 45 AND 59 ##NUMBER_OK.
+              hana_sps = 5.
+            ELSE.
+              hana_sps = result-version DIV 10.
+            ENDIF.
+          WHEN OTHERS.
+            hana_sps = result-version DIV 10.
+        ENDCASE.
+
+        DATA(release) = 100 * hana_rel + hana_sps.
+        result-release = release.
+        IF result-patch > 1000. " it's the changelog for old revisions
+          result-patch = 0.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_hana_license.
+
+    DATA hdb_license TYPE STANDARD TABLE OF hdb_m_license WITH KEY hardware_key system_id system_no.
+
+    TRY.
+        DATA(system) = cl_db6_sys=>get_sys_ref( sy-sysid ).
+        DATA(rdi)    = cl_dba_rdi=>get_instance( system ).
+        rdi->query->reset( ).
+        rdi->query->get_snapshot(
+          EXPORTING
+            ddic_src = cl_hdb_rdi_meta=>co_ddic_m_license
+          IMPORTING
+            data     = hdb_license ).
+      CATCH cx_dba_root.
+        RETURN.
+    ENDTRY.
+
+    READ TABLE hdb_license INTO result INDEX 1 ##SUBRC_OK.
+
+  ENDMETHOD.
+
+  METHOD get_host.
+
+    DATA instance_number TYPE n LENGTH 2.
+
+    DATA(server) = get_host_details( ).
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>host_instance.
+        result = server-name.
+      WHEN /apmg/if_apm_env=>host_instance_no.
+        CALL FUNCTION 'GET_SYSTEM_NUMBER'
+          IMPORTING
+            instancenumber = instance_number.
+
+        result = instance_number.
+      WHEN /apmg/if_apm_env=>host_name.
+        result = server-host.
+      WHEN /apmg/if_apm_env=>host_state.
+        CASE server-state.
+          WHEN 1.
+            result = 'RUNNING'.
+          WHEN 2.
+            result = 'HIBERNATE'.
+          WHEN 3.
+            result = 'SHUTDOWN'.
+          WHEN 4.
+            result = 'STOP'.
+          WHEN 5.
+            result = 'STARTING'.
+          WHEN 6.
+            result = 'INIT'.
+          WHEN OTHERS.
+            result = /apmg/if_apm_env=>c_unknown.
+        ENDCASE.
+      WHEN OTHERS.
+        result = /apmg/if_apm_env=>c_todo.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_host_details.
+
+    DATA:
+      subrc       TYPE i,
+      server_name TYPE tpfet-pvalue,
+      server_list TYPE STANDARD TABLE OF msxxlist WITH KEY name.
+
+    CALL FUNCTION 'TH_GET_PARAMETER'
+      EXPORTING
+        parameter_name  = 'rdisp/myname'
+      IMPORTING
+        parameter_value = server_name
+        rc              = subrc
+      EXCEPTIONS
+        not_authorized  = 1
+        OTHERS          = 2.
+    CHECK sy-subrc = 0 AND subrc = 0.
+
+    CALL FUNCTION 'TH_SERVER_LIST'
+      TABLES
+        list           = server_list
+      EXCEPTIONS
+        no_server_list = 1
+        OTHERS         = 2.
+    IF sy-subrc = 0.
+      READ TABLE server_list INTO result WITH KEY name = server_name ##SUBRC_OK.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_connection.
+
+    DATA:
+      pname_appl TYPE rfcdessecu-pname_appl,
+      subrc      TYPE sy-subrc,
+      secure     TYPE abap_bool.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>conn_snc_name.
+        CALL FUNCTION 'SNC_GET_MY_INFO'
+          IMPORTING
+            pname_appl     = pname_appl
+            rc             = subrc
+          EXCEPTIONS
+            internal_error = 1
+            snc_not_active = 2
+            OTHERS         = 3.
+        IF sy-subrc = 0 AND subrc = 0.
+          result = pname_appl.
+        ENDIF.
+      WHEN /apmg/if_apm_env=>is_secure_conn.
+        CALL FUNCTION 'MS_SECURE_COMMUNICATION'
+          IMPORTING
+            secure = secure.
+
+        result = secure.
+      WHEN OTHERS.
+        result = /apmg/if_apm_env=>c_todo.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_license.
+
+    DATA:
+      license_hwkey  TYPE license-custkey,
+      license_date   TYPE sy-datum,
+      license_number TYPE c LENGTH 10.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>hardware_key.
+        CALL FUNCTION 'SLIC_GET_CUSTKEY'
+          IMPORTING
+            custkey            = license_hwkey
+          EXCEPTIONS
+            slic_bad_parameter = 1
+            OTHERS             = 2.
+        IF sy-subrc = 0.
+          result = license_hwkey.
+        ENDIF.
+      WHEN /apmg/if_apm_env=>license_exp_date.
+        CALL FUNCTION 'SLIC_GET_LICENCE_DATE'
+          IMPORTING
+            licence_date = license_date.
+
+        result = license_date.
+      WHEN /apmg/if_apm_env=>license_number.
+        CALL FUNCTION 'SLIC_GET_LICENCE_NUMBER'
+          IMPORTING
+            license_number = license_number.
+
+        result = license_number.
+      WHEN OTHERS.
+        result = /apmg/if_apm_env=>c_todo.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_language.
+
+    DATA langu TYPE sy-langu.
+    CASE name.
+      WHEN /apmg/if_apm_env=>language_primary.
+        cl_suid_tools=>get_language( IMPORTING ev_primary_language = langu ).
+        result = langu.
+      WHEN /apmg/if_apm_env=>language_secondary.
+        cl_suid_tools=>get_language( IMPORTING ev_secondary_language = langu ).
+        result = langu.
+      WHEN OTHERS.
+        result = /apmg/if_apm_env=>c_todo.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD is_gui.
+
+    DATA:
+      is_gui_running TYPE c LENGTH 1,
+      has_activex    TYPE c LENGTH 1,
+      has_javabeans  TYPE c LENGTH 1,
+      is_its         TYPE c LENGTH 1.
+
+    CALL FUNCTION 'GUI_IS_AVAILABLE'
+      IMPORTING
+        return = is_gui_running.
+
+    CALL FUNCTION 'GUI_HAS_ACTIVEX'
+      IMPORTING
+        return = has_activex.
+
+    IF has_activex IS INITIAL.
+      CALL FUNCTION 'GUI_HAS_JAVABEANS'
+        IMPORTING
+          return = has_javabeans.
+    ELSE.
+      CALL FUNCTION 'GUI_IS_ITS'
+        IMPORTING
+          return = is_its.
+    ENDIF.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>is_gui_windows.
+        result = xsdbool( is_gui_running = abap_true AND has_javabeans = abap_false AND is_its = abap_false ).
+      WHEN /apmg/if_apm_env=>is_gui_activex.
+        result = has_activex.
+      WHEN /apmg/if_apm_env=>is_gui_java.
+        result = has_javabeans.
+      WHEN /apmg/if_apm_env=>is_gui_web.
+        result = is_its.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD is_ecatt.
+
+    DATA is_active TYPE c LENGTH 1.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>is_ecatt_active.
+        CALL FUNCTION 'CAT_IS_ACTIVE'
+          IMPORTING
+            active = is_active.
+      WHEN /apmg/if_apm_env=>is_ecatt_recording.
+        CALL FUNCTION 'CAT_IS_ACTIVE'
+          IMPORTING
+            recording = is_active.
+      WHEN /apmg/if_apm_env=>is_ecatt_playback.
+        CALL FUNCTION 'CAT_IS_ACTIVE'
+          IMPORTING
+            playback = is_active.
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+    result = is_active.
+
+  ENDMETHOD.
+
+  METHOD get_client.
+
+    SELECT SINGLE cccategory FROM t000 INTO @DATA(client_type) WHERE mandt = @sy-mandt.
+    ASSERT sy-subrc = 0.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>abap_env.
+        CASE client_type.
+          WHEN 'P'.
+            result = /apmg/if_apm_env=>c_client-production.
+          WHEN 'T'.
+            result = /apmg/if_apm_env=>c_client-test.
+          WHEN 'D'.
+            result = /apmg/if_apm_env=>c_client-demo.
+          WHEN 'E'.
+            result = /apmg/if_apm_env=>c_client-training.
+          WHEN 'S'.
+            result = /apmg/if_apm_env=>c_client-sap.
+          WHEN 'C'.
+            result = /apmg/if_apm_env=>c_client-customizing.
+          WHEN OTHERS.
+            result = /apmg/if_apm_env=>c_client-unknown.
+        ENDCASE.
+      WHEN /apmg/if_apm_env=>is_production_client.
+        result = xsdbool( client_type = 'P' ).
+      WHEN /apmg/if_apm_env=>is_test_client.
+        result = xsdbool( client_type = 'T' ).
+      WHEN /apmg/if_apm_env=>is_demo_client.
+        result = xsdbool( client_type = 'D' ).
+      WHEN /apmg/if_apm_env=>is_training_client.
+        result = xsdbool( client_type = 'E' ).
+      WHEN /apmg/if_apm_env=>is_sap_client.
+        result = xsdbool( client_type = 'S' ).
+      WHEN /apmg/if_apm_env=>is_customzing_client.
+        result = xsdbool( client_type = 'C' ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_timezone.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>timezone_system.
+        result = cl_suid_tools=>get_system_time_zone( ).
+      WHEN /apmg/if_apm_env=>timezone_user.
+        SELECT SINGLE tzone FROM usr02 INTO @result WHERE bname = @sy-uname.
+        IF sy-subrc <> 0.
+          result = cl_suid_tools=>get_system_time_zone( ).
+        ENDIF.
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_spam.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>spam_release.
+        result = format( get_spam_release( )-release ).
+      WHEN /apmg/if_apm_env=>spam_version.
+        result = format( get_spam_release( )-version ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_spam_release.
+
+    DATA spam_vers TYPE n LENGTH 4.
+
+    TRY.
+        CALL FUNCTION 'SPAM_VERSION'
+          IMPORTING
+            version = spam_vers.
+
+        result-release = sy-saprl.                        "#EC SAPRL_OK
+        result-version = spam_vers.
+      CATCH cx_sy_dyn_call_illegal_func.
+        RETURN.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD has_process.
+
+    DATA:
+      th_bool      TYPE x LENGTH 1,
+      is_a_dialog  LIKE th_bool,
+      is_a_batch   LIKE th_bool,
+      is_a_update  LIKE th_bool,
+      is_a_update2 LIKE th_bool,
+      is_a_spool   LIKE th_bool,
+      is_a_enqueue LIKE th_bool,
+      is_a_atp     LIKE th_bool,
+      is_a_icman   LIKE th_bool,
+      is_a_vmc     LIKE th_bool,
+      is_a_j2ee    LIKE th_bool.
+
+    CONSTANTS th_true LIKE th_bool VALUE 1.
+
+    DATA(server) = get_host_details( ).
+
+    CALL FUNCTION 'TH_SERVER_TYPE'
+      EXPORTING
+        services     = server-msgtypes
+      IMPORTING
+        is_a_dialog  = is_a_dialog
+        is_a_batch   = is_a_batch
+        is_a_update  = is_a_update
+        is_a_update2 = is_a_update2
+        is_a_spool   = is_a_spool
+        is_a_enqueue = is_a_enqueue
+        is_a_atp     = is_a_atp
+        is_a_icman   = is_a_icman
+        is_a_vmc     = is_a_vmc
+        is_a_j2ee    = is_a_j2ee.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>has_dialog_proc.
+        result = xsdbool( is_a_dialog = th_true ).
+      WHEN /apmg/if_apm_env=>has_batch_proc.
+        result = xsdbool( is_a_batch = th_true ).
+      WHEN /apmg/if_apm_env=>has_update_proc.
+        result = xsdbool( is_a_update = th_true ).
+      WHEN /apmg/if_apm_env=>has_update2_proc.
+        result = xsdbool( is_a_update2 = th_true ).
+      WHEN /apmg/if_apm_env=>has_spool_proc.
+        result = xsdbool( is_a_spool = th_true ).
+      WHEN /apmg/if_apm_env=>has_enqueue_proc.
+        result = xsdbool( is_a_enqueue = th_true ).
+      WHEN /apmg/if_apm_env=>has_atp_proc.
+        result = xsdbool( is_a_atp = th_true ).
+      WHEN /apmg/if_apm_env=>has_icman_proc.
+        result = xsdbool( is_a_icman = th_true ).
+      WHEN /apmg/if_apm_env=>has_vmc_proc.
+        result = xsdbool( is_a_vmc = th_true ).
+      WHEN /apmg/if_apm_env=>has_j2ee_proc.
+        result = xsdbool( is_a_j2ee = th_true ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD is_process.
+
+    DATA(work_process) = get_work_process( ).
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>is_dialog_proc.
+        result = xsdbool( work_process-wp_typ = 'DIA' ).
+      WHEN /apmg/if_apm_env=>is_batch_proc.
+        result = xsdbool( work_process-wp_typ = 'BTC' ).
+      WHEN /apmg/if_apm_env=>is_update_proc.
+        result = xsdbool( work_process-wp_typ = 'UPD' ).
+      WHEN /apmg/if_apm_env=>is_update2_proc.
+        result = xsdbool( work_process-wp_typ = 'UP2' ).
+      WHEN /apmg/if_apm_env=>is_spool_proc.
+        result = xsdbool( work_process-wp_typ = 'SPO' ).
+      WHEN /apmg/if_apm_env=>is_enqueue_proc.
+        result = xsdbool( work_process-wp_typ = 'ENQ' ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD get_work_process.
+
+    DATA:
+      subrc   TYPE sy-subrc,
+      wp_no   TYPE wpinfo-wp_no,
+      wp_list TYPE STANDARD TABLE OF wpinfo WITH KEY wp_no.
+
+    CALL FUNCTION 'TH_GET_OWN_WP_NO'
+      IMPORTING
+        subrc = subrc
+        wp_no = wp_no.
+    CHECK subrc = 0.
+
+    CALL FUNCTION 'TH_WPINFO'
+      TABLES
+        wplist     = wp_list
+      EXCEPTIONS
+        send_error = 1
+        OTHERS     = 2.
+    CHECK sy-subrc = 0.
+
+    READ TABLE wp_list INTO result WITH TABLE KEY wp_no = wp_no ##SUBRC_OK.
+
+  ENDMETHOD.
+
+  METHOD get_other.
+
+    DATA codepage TYPE cpcodepage.
+
+    CASE name.
+      WHEN /apmg/if_apm_env=>endian.
+        result = cl_abap_char_utilities=>endian.
+      WHEN /apmg/if_apm_env=>is_unicode.
+        result = xsdbool( cl_abap_char_utilities=>charsize <> 1 ).
+      WHEN /apmg/if_apm_env=>codepage.
+        CALL FUNCTION 'SCP_GET_CODEPAGE_NUMBER'
+          EXPORTING
+            database_also = space
+          IMPORTING
+            appl_codepage = codepage.
+
+        result = codepage.
+      WHEN OTHERS.
+        WRITE: / '>>>', name, '(NOT IMPLEMENTED)'.
+        " ASSERT 0 = 1
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD format.
+
+    result = number.
+
+    SHIFT result LEFT DELETING LEADING '0'.
+    IF result IS INITIAL.
+      result = '0'.
+    ENDIF.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS /apmg/cl_apm_env IMPLEMENTATION.
+
+  METHOD /apmg/if_apm_env~delete.
+
+    DATA(env_name) = condense( val = name from = `` ).
+
+    READ TABLE env ASSIGNING FIELD-SYMBOL(<env>) WITH TABLE KEY name = env_name.
+    IF sy-subrc = 0.
+      IF <env>-type = /apmg/if_apm_env=>c_user_defined.
+        DELETE env WHERE name = env_name.
+      ELSE.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = |Cannot delete system-defined variable { env_name }|.
+      ENDIF.
+    ELSE.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |Variable { env_name } not found|.
+    ENDIF.
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_env~get.
+
+    READ TABLE env ASSIGNING FIELD-SYMBOL(<env>)
+      WITH TABLE KEY name = condense( val = name from = `` ).
+    IF sy-subrc = 0.
+      IF <env>-value = /apmg/if_apm_env=>c_undefined.
+        result = get_value( name ).
+        <env>-value = result.
+      ELSE.
+        result = <env>-value.
+      ENDIF.
+    ELSE.
+      result = /apmg/if_apm_env=>c_undefined.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_env~get_all.
+
+    LOOP AT env ASSIGNING FIELD-SYMBOL(<env>).
+      DATA(value) = ``.
+      IF <env>-value = /apmg/if_apm_env=>c_undefined.
+        TRY.
+            value = get_value( <env>-name ).
+          CATCH cx_root INTO DATA(error).
+            value = |Error: { error->get_text( ) }|.
+        ENDTRY.
+      ELSE.
+        value = <env>-value.
+      ENDIF.
+      INSERT |{ <env>-name }={ value }| INTO TABLE result.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_env~set.
+
+    DATA new_env TYPE /apmg/if_apm_env~ty_env.
+
+    IF name CS '='.
+      IF value IS INITIAL.
+        SPLIT name AT '=' INTO new_env-name new_env-value.
+      ELSE.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = 'Invalid format. Use "NAME=VALUE" or pass NAME and VALUE separately'.
+      ENDIF.
+    ELSE.
+      new_env = VALUE #(
+        name  = name
+        value = value
+        type  = type ).
+    ENDIF.
+
+    IF type <> /apmg/if_apm_env=>c_system_defined AND type <> /apmg/if_apm_env=>c_user_defined.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |Invalid type. Use "{ /apmg/if_apm_env=>c_user_defined }" or "{ /apmg/if_apm_env=>c_system_defined }"|.
+    ENDIF.
+
+    " Trim
+    new_env-name  = condense( val = new_env-name from = `` ).
+    new_env-value = condense( val = new_env-value from = `` ).
+
+    READ TABLE env ASSIGNING FIELD-SYMBOL(<env>) WITH TABLE KEY name = new_env-name.
+    IF sy-subrc = 0.
+      IF <env>-type = type.
+        <env>-value = new_env-value.
+      ELSE.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = |Cannot change type of variable { new_env-name }|.
+      ENDIF.
+    ELSE.
+      INSERT new_env INTO TABLE env.
+      ASSERT sy-subrc = 0.
+    ENDIF.
+
+    result = me.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+
+    me->env_type = env_type.
+
+    init( ).
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    result = NEW /apmg/cl_apm_env( env_type ).
+
+  ENDMETHOD.
+
+  METHOD format.
+
+    result = number.
+
+    SHIFT result LEFT DELETING LEADING '0'.
+    IF result IS INITIAL.
+      result = '0'.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_value.
+
+    " Other types don't have undefined values
+    ASSERT env_type = /apmg/if_apm_env=>c_env-abap.
+
+    result = lcl_abap_environment=>new( )->get( name ).
+
+  ENDMETHOD.
+
+  METHOD init.
+
+    CASE env_type.
+      WHEN /apmg/if_apm_env=>c_env-abap.
+        init_abap( ).
+      WHEN /apmg/if_apm_env=>c_env-os.
+        init_os( ).
+      WHEN /apmg/if_apm_env=>c_env-profile.
+        init_profile( ).
+    ENDCASE.
+
+    SORT env.
+
+  ENDMETHOD.
+
+  METHOD init_abap.
+
+    DATA:
+      components TYPE STANDARD TABLE OF comp_props WITH KEY component,
+      swproducts TYPE tt_instswprod_sps.
+
+    " Initialize all environment variables with "undefined"
+    " Getting the proper value for all variables would take too long
+    DATA(env_names) = VALUE string_table(
+                       ( `ABAP_ENV` )
+                       ( `CODEPAGE` )
+                       ( `CONN_SNC_NAME` )
+                       ( `DATABASE` )
+                       ( `DATABASE_CHARSET` )
+                       ( `DATABASE_HOST` )
+                       ( `DATABASE_NAME` )
+                       ( `DATABASE_PATCH` )
+                       ( `DATABASE_PLATFORM` )
+                       ( `DATABASE_RELEASE` )
+                       ( `DATABASE_SCHEMA` )
+                       ( `DBSL` )
+                       ( `DBSL_PATCH` )
+                       ( `DBSL_RELEASE` )
+                       ( `ENDIAN` )
+                       ( `HANA_HARDWARE` )
+                       ( `HANA_HARDWARE_KEY` )
+                       ( `HANA_LICENSE_EXP_DATE` )
+                       ( `HANA_LICENSE_NUMBER` )
+                       ( `HANA_PATCH` )
+                       ( `HANA_PLATFORM` )
+                       ( `HANA_RELEASE` )
+                       ( `HANA_REVISION` )
+                       ( `HANA_SP` )
+                       ( `HARDWARE_KEY` )
+                       ( `HAS_PROCESS_ATP` )
+                       ( `HAS_PROCESS_BATCH` )
+                       ( `HAS_PROCESS_DIALOG` )
+                       ( `HAS_PROCESS_ENQUEUE` )
+                       ( `HAS_PROCESS_ICMAN` )
+                       ( `HAS_PROCESS_J2EE` )
+                       ( `HAS_PROCESS_SPOOL` )
+                       ( `HAS_PROCESS_UPDATE` )
+                       ( `HAS_PROCESS_UPDATE2` )
+                       ( `HAS_PROCESS_VMC` )
+                       ( `HOST_INSTANCE` )
+                       ( `HOST_INSTANCE_NO` )
+                       ( `HOST_NAME` )
+                       ( `HOST_STATE` )
+                       ( `IS_64BIT` )
+                       ( `IS_PROCESS_BATCH` )
+                       ( `IS_CLIENT_CUSTOMIZING` )
+                       ( `IS_CLIENT_DEMO` )
+                       ( `IS_PROCESS_DIALOG` )
+                       ( `IS_ECATT_ACTIVE` )
+                       ( `IS_ECATT_PLAYBACK` )
+                       ( `IS_ECATT_RECORDING` )
+                       ( `IS_PROCESS_ENQUEUE` )
+                       ( `IS_GUI_ACTIVEX` )
+                       ( `IS_GUI_JAVA` )
+                       ( `IS_GUI_WEB` )
+                       ( `IS_GUI_WINDOWS` )
+                       ( `IS_HANA` )
+                       ( `IS_CLIENT_PRODUTION` )
+                       ( `IS_CLIENT_SAP` )
+                       ( `IS_SECURE_CONN` )
+                       ( `IS_PROCESS_SPOOL` )
+                       ( `IS_CLIENT_TEST` )
+                       ( `IS_CLIENT_TRAINING` )
+                       ( `IS_UNICODE` )
+                       ( `IS_PROCESS_UPDATE` )
+                       ( `IS_PROCESS_UPDATE2` )
+                       ( `KERNEL` )
+                       ( `KERNEL_ARCH` )
+                       ( `KERNEL_CRYPTOLIB` )
+                       ( `KERNEL_PATCH` )
+                       ( `KERNEL_PLATFORM` )
+                       ( `KERNEL_RELEASE` )
+                       ( `KERNEL_TYPE` )
+                       ( `LANGUAGE_PRIMARY` )
+                       ( `LANGUAGE_SECONDARY` )
+                       ( `LICENSE_EXP_DATE` )
+                       ( `LICENSE_NUMBER` )
+                       ( `SPAM_RELEASE` )
+                       ( `SPAM_VERSION` )
+                       ( `TIMEZONE_SYSTEM` )
+                       ( `TIMEZONE_USER` ) ).
+
+    LOOP AT env_names INTO DATA(env_name).
+      env_name = replace(
+        val  = env_name
+        sub  = ''''
+        with = ''
+        occ  = 0 ).
+      TRY.
+          /apmg/if_apm_env~set(
+            name  = env_name
+            value = /apmg/if_apm_env=>c_undefined
+            type  = /apmg/if_apm_env=>c_system_defined ).
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDLOOP.
+
+    " Add all software components
+    CALL FUNCTION 'OCS_GET_INSTALLED_COMPS'
+      TABLES
+        et_components    = components
+      EXCEPTIONS
+        no_release_found = 1
+        wrong_release    = 2
+        OTHERS           = 9.
+    ASSERT sy-subrc = 0.
+
+    LOOP AT components INTO DATA(component).
+      TRY.
+          /apmg/if_apm_env~set(
+            name  = |{ component-component }|
+            value = format( component-release )
+            type  = /apmg/if_apm_env=>c_system_defined ).
+
+          /apmg/if_apm_env~set(
+            name  = |{ component-component }_SP|
+            value = format( component-sp_level )
+            type  = /apmg/if_apm_env=>c_system_defined ).
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDLOOP.
+
+    " Add all software products
+    CALL FUNCTION 'OCS_GET_INSTALLED_SWPRODUCTS'
+      IMPORTING
+        et_swprod_spstack = swproducts
+      EXCEPTIONS
+        internal_error    = 1
+        OTHERS            = 2.
+    ASSERT sy-subrc = 0.
+
+    LOOP AT swproducts INTO DATA(product).
+      DATA(name) = replace(
+        val  = product-prod_name
+        sub  = ` `
+        with = `_`
+        occ  = 0 ).
+      TRY.
+          /apmg/if_apm_env~set(
+            name  = |{ name }|
+            value = format( product-prod_version )
+            type  = /apmg/if_apm_env=>c_system_defined ).
+
+          SPLIT product-stack_caption AT space INTO DATA(value) DATA(rest) ##NEEDED.
+
+          /apmg/if_apm_env~set(
+            name  = |{ name }_SP|
+            value = format( value )
+            type  = /apmg/if_apm_env=>c_system_defined ).
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD init_os.
+
+    DATA environment TYPE STANDARD TABLE OF thenv WITH KEY line.
+
+    CALL FUNCTION 'TH_ENVIRONMENT'
+      TABLES
+        environment = environment.
+
+    LOOP AT environment ASSIGNING FIELD-SYMBOL(<param>).
+      SPLIT <param> AT '=' INTO DATA(name) DATA(value).
+
+      TRY.
+          /apmg/if_apm_env~set(
+            name  = name
+            value = value
+            type  = /apmg/if_apm_env=>c_system_defined ).
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD init_profile.
+
+    DATA parameters_sub TYPE spfl_parameter_list_t.
+
+    cl_spfl_profile_parameter=>get_all_parameter( IMPORTING parameter_sub = parameters_sub ).
+
+    LOOP AT parameters_sub ASSIGNING FIELD-SYMBOL(<param>).
+      TRY.
+          CASE <param>-state.
+            WHEN '1' OR '3'.
+              /apmg/if_apm_env~set(
+                name  = <param>-name
+                value = <param>-user_value
+                type  = /apmg/if_apm_env=>c_system_defined ).
+            WHEN '2'.
+              /apmg/if_apm_env~set(
+                name  = <param>-name
+                value = <param>-default_value
+                type  = /apmg/if_apm_env=>c_system_defined ).
+            WHEN OTHERS.
+              ASSERT 0 = 1.
+          ENDCASE.
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDLOOP.
 
   ENDMETHOD.
 ENDCLASS.
@@ -41171,25 +44629,6 @@ CLASS /apmg/cl_apm_gui IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD go_home.
-
-    DATA ls_stack LIKE LINE OF mt_stack.
-
-    IF mi_router IS BOUND.
-      CLEAR: mt_stack, mt_event_handlers.
-      APPEND mi_router TO mt_event_handlers.
-
-      on_event( action = |{ iv_action }| ).
-    ELSE.
-      IF lines( mt_stack ) > 0.
-        READ TABLE mt_stack INTO ls_stack INDEX 1.
-        mi_cur_page = ls_stack-page.
-      ENDIF.
-      render( ).
-    ENDIF.
-
-  ENDMETHOD.
-
   METHOD handle_action.
 
     DATA:
@@ -41351,6 +44790,25 @@ CLASS /apmg/cl_apm_gui IMPLEMENTATION.
 
   METHOD set_focus.
     mi_html_viewer->set_focus( ).
+  ENDMETHOD.
+
+  METHOD start.
+
+    DATA ls_stack LIKE LINE OF mt_stack.
+
+    IF mi_router IS BOUND.
+      CLEAR: mt_stack, mt_event_handlers.
+      APPEND mi_router TO mt_event_handlers.
+
+      on_event( action = |{ iv_action }| ).
+    ELSE.
+      IF lines( mt_stack ) > 0.
+        READ TABLE mt_stack INTO ls_stack INDEX 1.
+        mi_cur_page = ls_stack-page.
+      ENDIF.
+      render( ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD startup.
@@ -41555,6 +45013,12 @@ CLASS /apmg/cl_apm_gui_buttons IMPLEMENTATION.
     result = /apmg/cl_apm_html=>icon(
       iv_name = 'bars'
       iv_hint = 'Package List' ) && ' Package List'.
+  ENDMETHOD.
+
+  METHOD refresh.
+    result = /apmg/cl_apm_html=>icon(
+      iv_name = 'redo-alt-solid'
+      iv_hint = 'Refresh' ).
   ENDMETHOD.
 
   METHOD settings.
@@ -41875,16 +45339,41 @@ CLASS /apmg/cl_apm_gui_chunk_lib IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD render_registry.
+
+    IF iv_registry = /apmg/if_apm_constants=>c_registry.
+      DATA(fav_class) = 'transport-box'. " green
+    ELSE.
+      fav_class = 'user-box'. " blue
+    ENDIF.
+
+    ri_html = /apmg/cl_apm_html=>create( ).
+
+    ri_html->add( |<span class="{ fav_class }">| ).
+    ri_html->add_a(
+      iv_title = 'Registry'
+      iv_txt   = iv_registry
+      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-url }?url={ iv_registry }| ).
+    ri_html->add( '</span>' ).
+
+  ENDMETHOD.
+
   METHOD render_registry_link.
 
     ri_html = /apmg/cl_apm_html=>create( ).
 
+    DATA(link) = |{ iv_registry }/package/{ iv_name }|.
+
+    IF iv_version IS NOT INITIAL.
+      link = link && |?v={ iv_version }|.
+    ENDIF.
+
     ri_html->add( |<span class="registry-link">| ).
-*    ri_html = ri_html->add_a(
-*      iv_txt   = shorten_repo_url( lv_url )
-*      iv_title = lv_url
-*      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-url }?url={ lv_url }|
-*      iv_class = 'url' )
+    ri_html = ri_html->add_a(
+      iv_txt   = ri_html->icon( 'link-solid' )
+      iv_title = link
+      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-url }?url={ link }|
+      iv_class = 'url' ).
     ri_html->add( '</span>' ).
 
   ENDMETHOD.
@@ -42392,6 +45881,10 @@ CLASS /apmg/cl_apm_gui_dlg_deprecate IMPLEMENTATION.
 
     registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD create.
@@ -42461,29 +45954,21 @@ CLASS /apmg/cl_apm_gui_dlg_deprecate IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
 
-      IF /apmg/cl_apm_auth=>is_package_allowed( package ) = abap_false.
-        result->set(
-          iv_key = c_id-package
-          iv_val = 'Package not allowed (responsible user = "SAP")' ).
-      ENDIF.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ).
       result->set(
         iv_key = c_id-name
         iv_val = 'Invalid name' ).
     ENDIF.
 
-    IF /apmg/cl_apm_semver_ranges=>valid_range( form_data->get( c_id-version ) ) = abap_false.
+    IF NOT /apmg/cl_apm_semver_ranges=>valid_range( form_data->get( c_id-version ) ).
       result->set(
         iv_key = c_id-version
         iv_val = 'Invalid version or range' ).
@@ -42692,33 +46177,21 @@ CLASS /apmg/cl_apm_gui_dlg_init IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
 
-          " Check if package owned by SAP is allowed (new packages are ok, since they are created automatically)
-          DATA(username) = zcl_abapgit_factory=>get_sap_package( package )->read_responsible( ).
-
-          IF sy-subrc = 0 AND username = 'SAP' AND
-            zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_false.
-            RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
-              EXPORTING
-                text = |Package { package } not allowed, responsible user = 'SAP'|.
-          ENDIF.
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ).
       result->set(
         iv_key = c_id-name
         iv_val = 'Invalid name' ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ).
       result->set(
         iv_key = c_id-version
         iv_val = 'Invalid version' ).
@@ -42769,6 +46242,19 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
           rs_handled-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
         ENDIF.
 
+      WHEN c_action-choose_transport.
+
+        form_data->set(
+          iv_key = c_id-transport
+          iv_val = /apmg/cl_apm_gui_factory=>get_popups( )->popup_to_select_transport( ) ).
+
+        IF form_data->get( c_id-transport ) IS NOT INITIAL.
+          validation_log = validate_form( form_data ).
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+        ELSE.
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+        ENDIF.
+
       WHEN c_action-install_package.
 
         validation_log = validate_form( form_data ).
@@ -42779,7 +46265,10 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
           /apmg/cl_apm_command_install=>run(
             registry     = registry
             package      = params-package
-            package_json = params-package_json ).
+            package_json = params-package_json
+            transport    = params-transport ).
+
+          " TODO: Set package to write-protected (see settings-package_settings)
 
           rs_handled-page  = /apmg/cl_apm_gui_page_package=>create( params-package ).
           rs_handled-state = /apmg/cl_apm_gui=>c_event_state-new_page_replacing.
@@ -42824,6 +46313,10 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
 
     registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD create.
@@ -42849,7 +46342,7 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
       iv_upper_case  = abap_true
       iv_label       = 'Package'
       iv_hint        = 'SAP package (should be a dedicated one)'
-      iv_placeholder = 'Z... / $...'
+      iv_placeholder = '$..., Z..., /NSPC/...'
       iv_min         = 2
       iv_max         = 30
     )->text(
@@ -42863,7 +46356,13 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
       iv_name        = c_id-version
       iv_required    = abap_true
       iv_label       = 'Version'
-      iv_hint        = 'Semantic version (x.y.z)' ).
+      iv_hint        = 'Semantic version (x.y.z)'
+    )->text(
+      iv_name        = c_id-transport
+      iv_side_action = c_action-choose_transport
+      iv_label       = 'Transport'
+      iv_upper_case  = abap_true
+      iv_max         = 20 ).
 
     result->command(
       iv_label       = 'Install Package'
@@ -42891,34 +46390,191 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
 
-          " Check if package owned by SAP is allowed (new packages are ok, since they are created automatically)
-          DATA(username) = zcl_abapgit_factory=>get_sap_package( package )->read_responsible( ).
-
-          IF sy-subrc = 0 AND username = 'SAP' AND
-            zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_false.
-            zcx_abapgit_exception=>raise( |Package { package } not allowed, responsible user = 'SAP'| ).
-          ENDIF.
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ) = abap_false.
+    DATA(transport) = CONV trkorr( form_data->get( c_id-transport ) ).
+
+    IF transport IS NOT INITIAL.
+      msg = /apmg/cl_apm_auth=>check_transport_required( package ).
+      IF msg IS NOT INITIAL.
+        result->set(
+          iv_key = c_id-transport
+          iv_val = msg ).
+      ENDIF.
+    ENDIF.
+
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ).
       result->set(
         iv_key = c_id-name
         iv_val = 'Invalid name' ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ).
       result->set(
         iv_key = c_id-version
         iv_val = 'Invalid version' ).
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_dlg_login IMPLEMENTATION.
+
+  METHOD /apmg/if_apm_gui_event_handler~on_event.
+
+    form_data = form_util->normalize_abapgit( ii_event->form_data( ) ).
+
+    CASE ii_event->mv_action.
+      WHEN c_action-login.
+
+        validation_log = validate_form( form_data ).
+
+        IF validation_log->is_empty( ) = abap_true.
+          DATA(params) = get_parameters( form_data ).
+
+          /apmg/cl_apm_command_login=>run(
+            registry = settings-registry
+            username = params-username
+            password = params-password ).
+
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
+        ELSE.
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render. " Display errors
+        ENDIF.
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_menu_provider~get_menu.
+
+    ro_toolbar = /apmg/cl_apm_gui_menus=>registry( settings-registry ).
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_renderable~render.
+
+    register_handlers( ).
+
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    html->add( '<div class="form-container">' ).
+    html->add( form->render(
+      iv_focus_field    = focus_field
+      io_values         = form_data
+      io_validation_log = validation_log ) ).
+    html->add( '</div>' ).
+
+    ri_html = html.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+
+    super->constructor( ).
+
+    validation_log = NEW #( ).
+    form_data      = NEW #( ).
+    form           = get_form_schema( ).
+    form_util      = /apmg/cl_apm_html_form_utils=>create( form ).
+
+    settings = /apmg/cl_apm_settings=>factory( )->get( ).
+
+    /apmg/cl_apm_registry=>check_logged_out( settings-registry ).
+
+    form_data = get_login_default( ).
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    DATA(component) = NEW /apmg/cl_apm_gui_dlg_login( ).
+
+    result = /apmg/cl_apm_gui_page_hoc=>create(
+      page_title      = 'Login'
+      child_component = component ).
+
+  ENDMETHOD.
+
+  METHOD get_form_schema.
+
+    result = /apmg/cl_apm_html_form=>create(
+      iv_form_id   = 'login-form'
+      iv_help_page = 'https://docs.abappm.com/' ). " TODO
+
+    result->text(
+      iv_name        = c_id-username
+      iv_required    = abap_true
+      iv_label       = 'User'
+      iv_hint        = 'Username for registry'
+      iv_max         = 30
+    )->text(
+      iv_name        = c_id-password
+      iv_required    = abap_true
+      iv_password    = abap_true
+      iv_label       = 'Password'
+      iv_min         = /apmg/if_apm_types=>c_package_name-min_length
+      iv_max         = /apmg/if_apm_types=>c_package_name-max_length
+    )->command(
+      iv_label       = 'Login'
+      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action      = c_action-login
+    )->command(
+      iv_label       = 'Back'
+      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+
+  ENDMETHOD.
+
+  METHOD get_login_default.
+
+    CHECK line_exists( settings-registry_settings[ url = settings-registry ] ).
+
+    defaults = settings-registry_settings[ url = settings-registry ].
+
+    IF defaults-user IS INITIAL.
+      focus_field = c_id-username.
+    ELSE.
+      focus_field = c_id-password.
+    ENDIF.
+
+    result = NEW #( ).
+
+    result->set(
+      iv_key = c_id-username
+      iv_val = defaults-user
+    )->set(
+      iv_key = c_id-password
+      iv_val = defaults-password ).
+
+  ENDMETHOD.
+
+  METHOD get_parameters.
+
+    form_data->to_struc( CHANGING cs_container = result ).
+
+    result = CORRESPONDING #( result ).
+
+  ENDMETHOD.
+
+  METHOD validate_form.
+
+    result = form_util->validate( form_data ).
+
+    DATA(username) = CONV devclass( form_data->get( c_id-username ) ).
+    IF username IS NOT INITIAL.
+      TRY.
+          "...
+        CATCH zcx_abapgit_exception INTO DATA(error).
+          result->set(
+            iv_key = c_id-username
+            iv_val = error->get_text( ) ).
+      ENDTRY.
     ENDIF.
 
   ENDMETHOD.
@@ -42958,8 +46614,9 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
 
           IF confirm_popup( params ) = abap_true.
             /apmg/cl_apm_command_publish=>run(
-              registry     = registry
-              package      = params-package ).
+              registry = registry
+              package  = params-package
+              tag      = params-tag ).
           ENDIF.
 
           rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
@@ -43035,6 +46692,10 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
 
     registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD create.
@@ -43069,7 +46730,11 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
     )->text(
       iv_name        = c_id-version
       iv_label       = 'Version'
-      iv_readonly    = abap_true ).
+      iv_readonly    = abap_true
+    )->text(
+      iv_name        = c_id-tag
+      iv_label       = 'Tag'
+      iv_hint        = 'Distribution Tag' ).
 
     result->command(
       iv_label       = 'Publish Package'
@@ -43106,6 +46771,20 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
       iv_key = c_id-version
       iv_val = package_json-version ).
 
+    DATA(prerelease) = /apmg/cl_apm_semver_functions=>prerelease( package_json-version ).
+
+    IF prerelease IS NOT INITIAL.
+      DATA(tag) = prerelease[ 1 ].
+
+      result->set(
+        iv_key = c_id-tag
+        iv_val = tag ).
+    ELSE.
+      result->set(
+        iv_key = c_id-tag
+        iv_val = 'latest' ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD validate_form.
@@ -43113,23 +46792,15 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
 
-          " Check if package owned by SAP is allowed (new packages are ok, since they are created automatically)
-          DATA(username) = zcl_abapgit_factory=>get_sap_package( package )->read_responsible( ).
-
-          IF sy-subrc = 0 AND username = 'SAP' AND
-            zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_false.
-            zcx_abapgit_exception=>raise( |Package { package } not allowed, responsible user = 'SAP'| ).
-          ENDIF.
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
+
+    " TODO: Validate dist-tag
 
   ENDMETHOD.
 ENDCLASS.
@@ -43240,6 +46911,10 @@ CLASS /apmg/cl_apm_gui_dlg_undepreca IMPLEMENTATION.
 
     registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD create.
@@ -43304,29 +46979,21 @@ CLASS /apmg/cl_apm_gui_dlg_undepreca IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
 
-      IF /apmg/cl_apm_auth=>is_package_allowed( package ) = abap_false.
-        result->set(
-          iv_key = c_id-package
-          iv_val = 'Package not allowed (responsible user = "SAP")' ).
-      ENDIF.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ).
       result->set(
         iv_key = c_id-name
         iv_val = 'Invalid name' ).
     ENDIF.
 
-    IF /apmg/cl_apm_semver_ranges=>valid_range( form_data->get( c_id-version ) ) = abap_false.
+    IF NOT /apmg/cl_apm_semver_ranges=>valid_range( form_data->get( c_id-version ) ).
       result->set(
         iv_key = c_id-version
         iv_val = 'Invalid version or range' ).
@@ -43355,6 +47022,19 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
         ENDIF.
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
 
+      WHEN c_action-choose_transport.
+
+        form_data->set(
+          iv_key = c_id-transport
+          iv_val = /apmg/cl_apm_gui_factory=>get_popups( )->popup_to_select_transport( ) ).
+
+        IF form_data->get( c_id-transport ) IS NOT INITIAL.
+          validation_log = validate_form( form_data ).
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+        ELSE.
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+        ENDIF.
+
       WHEN c_action-refresh.
 
         form_data = read_package( |{ form_data->get( c_id-package ) }| ).
@@ -43368,7 +47048,9 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
           DATA(params) = get_parameters( form_data ).
 
           IF confirm_popup( params ) = abap_true.
-            /apmg/cl_apm_command_uninstall=>run( params-package ).
+            /apmg/cl_apm_command_uninstall=>run(
+              package   = params-package
+              transport = params-transport ).
           ENDIF.
 
           rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
@@ -43471,7 +47153,13 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
     )->text(
       iv_name        = c_id-version
       iv_label       = 'Version'
-      iv_readonly    = abap_true ).
+      iv_readonly    = abap_true
+    )->text(
+      iv_name        = c_id-transport
+      iv_side_action = c_action-choose_transport
+      iv_label       = 'Transport'
+      iv_upper_case  = abap_true
+      iv_max         = 20 ).
 
     result->command(
       iv_label       = 'Uninstall Package'
@@ -43515,19 +47203,22 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
     result = form_util->validate( io_form_data ).
 
     DATA(package) = CONV devclass( io_form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
 
-      IF /apmg/cl_apm_auth=>is_package_allowed( package ) = abap_false.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
+    ENDIF.
+
+    DATA(transport) = CONV trkorr( form_data->get( c_id-transport ) ).
+
+    IF transport IS NOT INITIAL.
+      msg = /apmg/cl_apm_auth=>check_transport_required( package ).
+      IF msg IS NOT INITIAL.
         result->set(
-          iv_key = c_id-package
-          iv_val = 'Package not allowed (responsible user = "SAP")' ).
+          iv_key = c_id-transport
+          iv_val = msg ).
       ENDIF.
     ENDIF.
 
@@ -43688,6 +47379,10 @@ CLASS /apmg/cl_apm_gui_dlg_unpublish IMPLEMENTATION.
 
     registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD create.
@@ -43755,31 +47450,226 @@ CLASS /apmg/cl_apm_gui_dlg_unpublish IMPLEMENTATION.
     result = form_util->validate( form_data ).
 
     DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
-    IF package IS NOT INITIAL.
-      TRY.
-          zcl_abapgit_factory=>get_sap_package( package )->validate_name( ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          result->set(
-            iv_key = c_id-package
-            iv_val = error->get_text( ) ).
-      ENDTRY.
 
-      IF /apmg/cl_apm_auth=>is_package_allowed( package ) = abap_false.
-        result->set(
-          iv_key = c_id-package
-          iv_val = 'Package not allowed (responsible user = "SAP")' ).
-      ENDIF.
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_name( form_data->get( c_id-name ) ).
       result->set(
         iv_key = c_id-name
         iv_val = 'Invalid name' ).
     ENDIF.
 
-    IF /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ) = abap_false.
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-version ) ).
       result->set(
         iv_key = c_id-version
+        iv_val = 'Invalid version' ).
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_dlg_update IMPLEMENTATION.
+
+  METHOD /apmg/if_apm_gui_event_handler~on_event.
+
+    form_data = form_util->normalize_abapgit( ii_event->form_data( ) ).
+
+    CASE ii_event->mv_action.
+      WHEN c_action-choose_transport.
+
+        form_data->set(
+          iv_key = c_id-transport
+          iv_val = /apmg/cl_apm_gui_factory=>get_popups( )->popup_to_select_transport( ) ).
+
+        IF form_data->get( c_id-transport ) IS NOT INITIAL.
+          validation_log = validate_form( form_data ).
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+        ELSE.
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+        ENDIF.
+
+      WHEN c_action-update_package.
+
+        validation_log = validate_form( form_data ).
+
+        IF validation_log->is_empty( ) = abap_true.
+          DATA(params) = get_parameters( form_data ).
+
+          /apmg/cl_apm_command_update=>run(
+            registry   = registry
+            package    = params-package
+            to_version = params-to_version
+            transport  = params-transport
+            force      = params-force ).
+
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
+        ELSE.
+          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render. " Display errors
+        ENDIF.
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_menu_provider~get_menu.
+
+    ro_toolbar = /apmg/cl_apm_gui_menus=>registry( registry ).
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_renderable~render.
+
+    register_handlers( ).
+
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    html->add( '<div class="form-container">' ).
+    html->add( form->render(
+      io_values         = form_data
+      io_validation_log = validation_log ) ).
+    html->add( '</div>' ).
+
+    ri_html = html.
+
+  ENDMETHOD.
+
+  METHOD constructor.
+
+    super->constructor( ).
+
+    validation_log = NEW #( ).
+    form_data      = NEW #( ).
+    form           = get_form_schema( ).
+    form_util      = /apmg/cl_apm_html_form_utils=>create( form ).
+
+    update_package = package.
+    IF update_package IS NOT INITIAL.
+      form_data = read_package( update_package ).
+    ENDIF.
+
+    registry = /apmg/cl_apm_settings=>factory( )->get( )-registry.
+
+    IF registry = /apmg/if_apm_constants=>c_registry.
+      /apmg/cl_apm_registry=>check_logged_in( registry ).
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    DATA(component) = NEW /apmg/cl_apm_gui_dlg_update( package ).
+
+    result = /apmg/cl_apm_gui_page_hoc=>create(
+      page_title      = 'Update Package'
+      child_component = component ).
+
+  ENDMETHOD.
+
+  METHOD get_form_schema.
+
+    result = /apmg/cl_apm_html_form=>create(
+      iv_form_id   = 'update-package-form'
+      iv_help_page = 'https://docs.abappm.com/' ). " TODO
+
+    result->text(
+      iv_name        = c_id-package
+      iv_readonly    = abap_true
+      iv_label       = 'Package'
+    )->text(
+      iv_name        = c_id-name
+      iv_readonly    = abap_true
+      iv_label       = 'Name'
+    )->text(
+      iv_name        = c_id-version
+      iv_readonly    = abap_true
+      iv_label       = 'Current Version'
+    )->text(
+      iv_name        = c_id-to_version
+      iv_label       = 'Target Version'
+    )->text(
+      iv_name        = c_id-transport
+      iv_side_action = c_action-choose_transport
+      iv_label       = 'Transport'
+      iv_upper_case  = abap_true
+      iv_max         = 20
+    )->checkbox(
+      iv_name        = c_id-force
+      iv_label       = 'Force'
+      iv_hint        = 'Overwrite already installed dependencies' ).
+
+    result->command(
+      iv_label       = 'Update Package'
+      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action      = c_action-update_package
+    )->command(
+      iv_label       = 'Back'
+      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+
+  ENDMETHOD.
+
+  METHOD get_parameters.
+
+    form_data->to_struc( CHANGING cs_container = result ).
+
+  ENDMETHOD.
+
+  METHOD read_package.
+
+    DATA(package_json) = /apmg/cl_apm_package_json=>factory( package )->get( ).
+
+    DATA(latest) = /apmg/cl_apm_registry=>get_latest_version(
+      registry = registry
+      name     = package_json-name ).
+
+    result = NEW #( ).
+
+    result->set(
+      iv_key = c_id-package
+      iv_val = package
+    )->set(
+      iv_key = c_id-name
+      iv_val = package_json-name
+    )->set(
+      iv_key = c_id-version
+      iv_val = package_json-version
+    )->set(
+      iv_key = c_id-to_version
+      iv_val = latest ).
+
+  ENDMETHOD.
+
+  METHOD validate_form.
+
+    result = form_util->validate( form_data ).
+
+    DATA(package) = CONV devclass( form_data->get( c_id-package ) ).
+
+    DATA(msg) = /apmg/cl_apm_auth=>check_package_allowed( package ).
+    IF msg IS NOT INITIAL.
+      result->set(
+        iv_key = c_id-package
+        iv_val = msg ).
+    ENDIF.
+
+    DATA(transport) = CONV trkorr( form_data->get( c_id-transport ) ).
+
+    IF transport IS NOT INITIAL.
+      msg = /apmg/cl_apm_auth=>check_transport_required( package ).
+      IF msg IS NOT INITIAL.
+        result->set(
+          iv_key = c_id-transport
+          iv_val = msg ).
+      ENDIF.
+    ENDIF.
+
+    IF NOT /apmg/cl_apm_package_json_vali=>is_valid_version( form_data->get( c_id-to_version ) ).
+      result->set(
+        iv_key = c_id-to_version
         iv_val = 'Invalid version' ).
     ENDIF.
 
@@ -43833,11 +47723,13 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
 
       WHEN /apmg/if_apm_gui_router=>c_action-registry.
-        TRY.
-            DATA(registry) = /apmg/cl_apm_settings=>factory( )->get( )-registry.
-            call_browser( registry ).
-          CATCH /apmg/cx_apm_error ##NO_HANDLER.
-        ENDTRY.
+
+        call_browser( /apmg/if_apm_constants=>c_registry ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-playground.
+
+        call_browser( /apmg/if_apm_constants=>c_playground ).
         result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
 
       WHEN /apmg/if_apm_gui_router=>c_action-documentation.
@@ -43855,6 +47747,11 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         call_browser( /apmg/if_apm_constants=>c_sponsor ).
         result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
 
+      WHEN /apmg/if_apm_gui_router=>c_action-tutorial.
+
+        call_browser( /apmg/if_apm_constants=>c_tutorial ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+
     ENDCASE.
 
   ENDMETHOD.
@@ -43869,9 +47766,26 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
 
     DATA(id) = CONV /apmg/if_apm_package_json=>ty_package_id( event->query( )->get( 'KEY' ) ).
 
-    DATA(package) = /apmg/cl_apm_package_json=>get_package_from_id( id ).
+    DATA(package)  = /apmg/cl_apm_package_json=>get_package_from_id( id ).
+    DATA(registry) = /apmg/cl_apm_settings=>factory( )->get( )-registry.
 
     CASE event->mv_action.
+      WHEN /apmg/if_apm_gui_router=>c_action-apm_login.
+
+        result-page  = /apmg/cl_apm_gui_dlg_login=>create( ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-apm_logout.
+
+        /apmg/cl_apm_command_logout=>run( registry ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-apm_whoami.
+
+        DATA(whoami) = /apmg/cl_apm_command_whoami=>run( registry ).
+        MESSAGE |Registry { registry }, User { whoami }| TYPE 'S'.
+        result-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
       WHEN /apmg/if_apm_gui_router=>c_action-apm_init.
 
         result-page  = /apmg/cl_apm_gui_dlg_init=>create( ).
@@ -43880,6 +47794,11 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
       WHEN /apmg/if_apm_gui_router=>c_action-apm_install.
 
         result-page  = /apmg/cl_apm_gui_dlg_install=>create( ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-apm_update.
+
+        result-page  = /apmg/cl_apm_gui_dlg_update=>create( package ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
       WHEN /apmg/if_apm_gui_router=>c_action-apm_uninstall.
@@ -43907,6 +47826,16 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         result-page  = /apmg/cl_apm_gui_dlg_undepreca=>create( package ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
+      WHEN /apmg/if_apm_gui_router=>c_action-apm_version.
+
+        DATA(release_type) = event->query( )->get( 'RELEASE_TYPE' ).
+
+        /apmg/cl_apm_command_version=>run(
+          package      = package
+          release_type = release_type ).
+
+        result-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
     ENDCASE.
 
   ENDMETHOD.
@@ -43916,12 +47845,17 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
     CASE event->mv_action.
       WHEN /apmg/if_apm_gui_router=>c_action-go_home.
 
-        result-page  = /apmg/cl_apm_gui_page_list=>create( ). "TODO main_page( ).
+        result-page  = main_page( ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
       WHEN /apmg/if_apm_gui_router=>c_action-go_back.
 
         result-state = /apmg/cl_apm_gui=>c_event_state-go_back.
+
+      WHEN /apmg/if_apm_gui_router=>c_action-go_welcome.
+
+        result-page  = /apmg/cl_apm_gui_page_welcome=>create( ).
+        result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
       WHEN /apmg/if_apm_gui_router=>c_action-apm_home.
 
@@ -43938,11 +47872,13 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         result-page  = /apmg/cl_apm_gui_page_tree=>create( ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
-      WHEN /apmg/if_apm_gui_router=>c_action-go_settings.
+      WHEN /apmg/if_apm_gui_router=>c_action-go_settings_global.
 
         DATA(key) = /apmg/cl_apm_settings=>get_setting_key( /apmg/if_apm_settings=>c_global ).
         result-page  = /apmg/cl_apm_gui_page_db_entry=>create( key ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
+
+        /apmg/cl_apm_settings=>factory( /apmg/if_apm_settings=>c_global )->load( ).
 
       WHEN /apmg/if_apm_gui_router=>c_action-go_settings_personal.
 
@@ -43950,10 +47886,7 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
         result-page  = /apmg/cl_apm_gui_page_db_entry=>create( key ).
         result-state = /apmg/cl_apm_gui=>c_event_state-new_page.
 
-* FUTURE
-*      WHEN /apmg/if_apm_gui_router=>c_action-go_tutorial
-*        result-page  = /apmg/cl_apm_gui_page_tutorial=>create( )
-*        result-state = /apmg/cl_apm_gui=>c_event_state-new_page
+        /apmg/cl_apm_settings=>factory( )->load( ).
 
       WHEN /apmg/if_apm_gui_router=>c_action-favorite_package.
 
@@ -44065,14 +47998,14 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
       ENDTRY.
     ENDIF.
 
-    " Prio 2: Show list of packages
+    " Prio 2: Package list
     DATA(package_list) = /apmg/cl_apm_package_json=>list( ).
+
     IF package_list IS NOT INITIAL.
       result = /apmg/cl_apm_gui_page_list=>create( ).
     ELSE.
-      " TODO: Prio 3: Show tutorial
-      " ri_page = /apmg/cl_apm_gui_page_tutorial=>create( )
-      /apmg/cl_apm_roadmap=>planned( ).
+      " Prio 3: Welcome page
+      result = /apmg/cl_apm_gui_page_welcome=>create( ).
     ENDIF.
 
   ENDMETHOD.
@@ -45412,6 +49345,16 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  border-top: 1px solid;' ).
     lo_buf->add( '}' ).
     lo_buf->add( '.nav-container ul ul li.separator:first-child { border-top: none; }' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '/* Top-level toolbar separator - vertical divider between item groups */' ).
+    lo_buf->add( '.nav-container > ul > li.separator {' ).
+    lo_buf->add( '  width: 0;' ).
+    lo_buf->add( '  height: 18px;' ).
+    lo_buf->add( '  padding: 0;' ).
+    lo_buf->add( '  margin: 6px 0.6em;' ).
+    lo_buf->add( '  border-left: 1px solid;' ).
+    lo_buf->add( '  opacity: 0.25;' ).
+    lo_buf->add( '}' ).
     lo_buf->add( '' ).
     lo_buf->add( '/* NEWS ANNOUNCEMENT */' ).
     lo_buf->add( '' ).
@@ -47215,8 +51158,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '/* exported setKeyBindings */' ).
     lo_buf->add( '/* exported preparePatch */' ).
     lo_buf->add( '/* exported registerStagePatch */' ).
-    lo_buf->add( '/* exported toggleRepoListDetail */' ).
-    lo_buf->add( '/* exported onTagTypeChange */' ).
     lo_buf->add( '/* exported getIndocStyleSheet */' ).
     lo_buf->add( '/* exported addMarginBottom */' ).
     lo_buf->add( '/* exported enumerateJumpAllFiles */' ).
@@ -47296,10 +51237,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '// Output text to the debug div' ).
     lo_buf->add( 'function debugOutput(text, dstID) {' ).
-    lo_buf->add( '  var stdout  = document.getElementById(dstID || "debug-output");' ).
-    lo_buf->add( '  var wrapped = "<p>" + text + "</p>";' ).
+    lo_buf->add( '  var stdout    = document.getElementById(dstID || "debug-output");' ).
+    lo_buf->add( '  var paragraph = document.createElement("p");' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  stdout.innerHTML = stdout.innerHTML + wrapped;' ).
+    lo_buf->add( '  // text is trusted, server-generated debug markup (e.g. the Debug Info table),' ).
+    lo_buf->add( '  // so render it as HTML rather than escaping it' ).
+    lo_buf->add( '  paragraph.innerHTML = text;' ).
+    lo_buf->add( '  stdout.appendChild(paragraph);' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
     lo_buf->add( '// Use a supplied form, a pre-created form or create a hidden form' ).
@@ -47681,6 +51625,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.pageSeed        = params.seed;' ).
     lo_buf->add( '  this.formAction      = params.formAction;' ).
     lo_buf->add( '  this.patchAction     = params.patchAction;' ).
+    lo_buf->add( '  this.stageAllAction  = params.stageAllAction;' ).
     lo_buf->add( '  this.user            = params.user;' ).
     lo_buf->add( '  this.ids             = params.ids;' ).
     lo_buf->add( '  this.selectedCount   = 0;' ).
@@ -47690,16 +51635,16 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '  // DOM nodes' ).
     lo_buf->add( '  this.dom = {' ).
-    lo_buf->add( '    stageTab         : document.getElementById(params.ids.stageTab),' ).
-    lo_buf->add( '    commitAllBtn     : document.getElementById(params.ids.commitAllBtn),' ).
-    lo_buf->add( '    commitSelectedBtn: document.getElementById(params.ids.commitSelectedBtn),' ).
-    lo_buf->add( '    commitFilteredBtn: document.getElementById(params.ids.commitFilteredBtn),' ).
-    lo_buf->add( '    patchBtn         : document.getElementById(params.ids.patchBtn),' ).
-    lo_buf->add( '    objectSearch     : document.getElementById(params.ids.objectSearch),' ).
-    lo_buf->add( '    selectedCounter  : null,' ).
-    lo_buf->add( '    filteredCounter  : null,' ).
+    lo_buf->add( '    stageTab    : document.getElementById(params.ids.stageTab),' ).
+    lo_buf->add( '    commitBtn   : document.getElementById(params.ids.commitBtn),' ).
+    lo_buf->add( '    patchBtn    : document.getElementById(params.ids.patchBtn),' ).
+    lo_buf->add( '    objectSearch: document.getElementById(params.ids.objectSearch),' ).
     lo_buf->add( '  };' ).
-    lo_buf->add( '  this.findCounters();' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '  // Server-rendered "Add All and Commit (n)" / "Patch All (n)" labels' ).
+    lo_buf->add( '  // (commit label is empty if nothing to commit by default)' ).
+    lo_buf->add( '  this.commitAllLabel = this.dom.commitBtn.innerHTML;' ).
+    lo_buf->add( '  this.patchAllLabel  = this.dom.patchBtn.innerHTML;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  // Table columns (autodetection)' ).
     lo_buf->add( '  this.colIndex      = this.detectColumns();' ).
@@ -47712,7 +51657,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    remove : "R",' ).
     lo_buf->add( '    ignore : "I",' ).
     lo_buf->add( '    reset  : "?",' ).
-    lo_buf->add( '    isValid: function(status) { return "ARI?".indexOf(status) === -1 }' ).
+    lo_buf->add( '    isInvalid: function(status) { return "ARI?".indexOf(status) === -1 }' ).
     lo_buf->add( '  };' ).
     lo_buf->add( '' ).
     lo_buf->add( '  this.TEMPLATES = {' ).
@@ -47726,11 +51671,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  Hotkeys.addHotkeyToHelpSheet("^Enter", "Commit");' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
-    lo_buf->add( 'StageHelper.prototype.findCounters = function() {' ).
-    lo_buf->add( '  this.dom.selectedCounter = this.dom.commitSelectedBtn.querySelector("span.counter");' ).
-    lo_buf->add( '  this.dom.filteredCounter = this.dom.commitFilteredBtn.querySelector("span.counter");' ).
-    lo_buf->add( '};' ).
-    lo_buf->add( '' ).
     lo_buf->add( 'StageHelper.prototype.injectFilterMe = function() {' ).
     lo_buf->add( '  var tabFirstHead = this.dom.stageTab.tHead.rows[0];' ).
     lo_buf->add( '  if (!tabFirstHead || tabFirstHead.className !== "local") {' ).
@@ -47742,28 +51682,29 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '  var a = document.createElement("A");' ).
     lo_buf->add( '  a.appendChild(document.createTextNode("me"));' ).
-    lo_buf->add( '  a.onclick = this.onFilterMe.bind(this);' ).
-    lo_buf->add( '  a.href    = "#";' ).
+    lo_buf->add( '  a.onclick   = this.onFilterMe.bind(this);' ).
+    lo_buf->add( '  a.href      = "#";' ).
+    lo_buf->add( '  a.title     = "Filter changed by ";' ).
+    lo_buf->add( '  a.className = "command"; // expose to command palette (enumerateUiActions)' ).
     lo_buf->add( '  changedByHead.appendChild(a);' ).
     lo_buf->add( '  changedByHead.appendChild(document.createTextNode(")"));' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
     lo_buf->add( 'StageHelper.prototype.onFilterMe = function() {' ).
-    lo_buf->add( '  this.dom.objectSearch.value = this.user;' ).
+    lo_buf->add( '  this.dom.objectSearch.value = this.dom.objectSearch.value === this.user ? "" : this.user;' ).
     lo_buf->add( '  this.onFilter({ type: "keypress", which: 13, target: this.dom.objectSearch });' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
     lo_buf->add( '// Hook global click listener on table, load/unload actions' ).
     lo_buf->add( 'StageHelper.prototype.setHooks = function() {' ).
-    lo_buf->add( '  window.onkeypress                  = this.onCtrlEnter.bind(this);' ).
-    lo_buf->add( '  this.dom.stageTab.onclick          = this.onTableClick.bind(this);' ).
-    lo_buf->add( '  this.dom.commitSelectedBtn.onclick = this.submit.bind(this);' ).
-    lo_buf->add( '  this.dom.commitFilteredBtn.onclick = this.submitVisible.bind(this);' ).
-    lo_buf->add( '  this.dom.patchBtn.onclick          = this.submitPatch.bind(this);' ).
-    lo_buf->add( '  this.dom.objectSearch.oninput      = this.onFilter.bind(this);' ).
-    lo_buf->add( '  this.dom.objectSearch.onkeypress   = this.onFilter.bind(this);' ).
-    lo_buf->add( '  window.onbeforeunload              = this.onPageUnload.bind(this);' ).
-    lo_buf->add( '  window.onload                      = this.onPageLoad.bind(this);' ).
+    lo_buf->add( '  window.addEventListener("keypress", this.onCtrlEnter.bind(this));' ).
+    lo_buf->add( '  this.dom.stageTab.onclick        = this.onTableClick.bind(this);' ).
+    lo_buf->add( '  this.dom.commitBtn.onclick       = this.submitCommit.bind(this);' ).
+    lo_buf->add( '  this.dom.patchBtn.onclick        = this.submitPatch.bind(this);' ).
+    lo_buf->add( '  this.dom.objectSearch.oninput    = this.onFilter.bind(this);' ).
+    lo_buf->add( '  this.dom.objectSearch.onkeypress = this.onFilter.bind(this);' ).
+    lo_buf->add( '  window.addEventListener("beforeunload", this.onPageUnload.bind(this));' ).
+    lo_buf->add( '  window.addEventListener("load", this.onPageLoad.bind(this));' ).
     lo_buf->add( '' ).
     lo_buf->add( '  var self = this;' ).
     lo_buf->add( '  document.addEventListener("keypress", function(event) {' ).
@@ -47802,7 +51743,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var data = window.sessionStorage && JSON.parse(window.sessionStorage.getItem(this.pageSeed));' ).
     lo_buf->add( '' ).
     lo_buf->add( '  this.iterateStageTab(true, function(row) {' ).
-    lo_buf->add( '    var status = data && data[row.cells[this.colIndex["name"]].innerText];' ).
+    lo_buf->add( '    var status = data && data[this.getPlainText(row.cells[this.colIndex["name"]])];' ).
     lo_buf->add( '    this.updateRow(row, status || this.STATUS.reset);' ).
     lo_buf->add( '  });' ).
     lo_buf->add( '' ).
@@ -47849,12 +51790,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( 'StageHelper.prototype.onCtrlEnter = function(e) {' ).
     lo_buf->add( '  if (e.ctrlKey && (e.which === 10 || e.key === "Enter")) {' ).
-    lo_buf->add( '    var clickMap = {' ).
-    lo_buf->add( '      "default" : this.dom.commitAllBtn,' ).
-    lo_buf->add( '      "selected": this.dom.commitSelectedBtn,' ).
-    lo_buf->add( '      "filtered": this.dom.commitFilteredBtn' ).
-    lo_buf->add( '    };' ).
-    lo_buf->add( '    clickMap[this.calculateActiveCommitCommand()].click();' ).
+    lo_buf->add( '    this.submitCommit();' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
@@ -47875,6 +51811,19 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.updateMenu();' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
+    lo_buf->add( '// Get plain text of a cell, ignoring injected link-hint spans.' ).
+    lo_buf->add( '// innerText is not reliable for this: while the stage table is hidden' ).
+    lo_buf->add( '// (iterateStageTab change mode), it includes display:none descendants,' ).
+    lo_buf->add( '// so the link-hint codes would leak into the file names' ).
+    lo_buf->add( 'StageHelper.prototype.getPlainText = function(elem) {' ).
+    lo_buf->add( '  var clone = elem.cloneNode(true);' ).
+    lo_buf->add( '  var hints = clone.querySelectorAll("span.link-hint");' ).
+    lo_buf->add( '  for (var i = hints.length - 1; i >= 0; i--) {' ).
+    lo_buf->add( '    hints[i].parentNode.removeChild(hints[i]);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  return clone.textContent;' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( '' ).
     lo_buf->add( '// Apply filter to a single stage line - hide or show' ).
     lo_buf->add( 'StageHelper.prototype.applyFilterToRow = function(row, filter) {' ).
     lo_buf->add( '  // Collect data cells' ).
@@ -47888,7 +51837,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    if (elemA) elem = elemA;' ).
     lo_buf->add( '    return {' ).
     lo_buf->add( '      elem     : elem,' ).
-    lo_buf->add( '      plainText: elem.innerText.replace(/ /g, "\u00a0"), // without tags, with encoded spaces' ).
+    lo_buf->add( '      plainText: this.getPlainText(elem).replace(/ /g, "\u00a0"), // without tags, with encoded spaces' ).
     lo_buf->add( '      curHtml  : elem.innerHTML' ).
     lo_buf->add( '    };' ).
     lo_buf->add( '  }, this);' ).
@@ -47920,8 +51869,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'StageHelper.prototype.getStatusImpact = function(status) {' ).
     lo_buf->add( '  if (typeof status !== "string"' ).
     lo_buf->add( '    || status.length !== 1' ).
-    lo_buf->add( '    || this.STATUS.isValid(status)) {' ).
+    lo_buf->add( '    || this.STATUS.isInvalid(status)) {' ).
     lo_buf->add( '    alert("Unknown status");' ).
+    lo_buf->add( '    return 0; // avoid NaN propagating into the counters' ).
     lo_buf->add( '  } else {' ).
     lo_buf->add( '    return (status !== this.STATUS.reset) ? 1: 0;' ).
     lo_buf->add( '  }' ).
@@ -47975,16 +51925,23 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  return active;' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
-    lo_buf->add( '// Update menu items visibility' ).
+    lo_buf->add( '// Update commit/patch toolbar button labels according to the active command' ).
     lo_buf->add( 'StageHelper.prototype.updateMenu = function() {' ).
     lo_buf->add( '  var display = this.calculateActiveCommitCommand();' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  if (display === "selected") this.dom.selectedCounter.innerText = this.selectedCount.toString();' ).
-    lo_buf->add( '  if (display === "filtered") this.dom.filteredCounter.innerText = this.filteredCount.toString();' ).
+    lo_buf->add( '  var commitLabels = {' ).
+    lo_buf->add( '    "default" : this.commitAllLabel,' ).
+    lo_buf->add( '    "selected": "Commit <b>Selected</b> (" + this.selectedCount + ")",' ).
+    lo_buf->add( '    "filtered": "Add <b>Filtered</b> and Commit (" + this.filteredCount + ")"' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  this.dom.commitBtn.innerHTML = commitLabels[display];' ).
     lo_buf->add( '' ).
-    lo_buf->add( '  this.dom.commitAllBtn.style.display      = display === "default" ? "" : "none";' ).
-    lo_buf->add( '  this.dom.commitSelectedBtn.style.display = display === "selected" ? "" : "none";' ).
-    lo_buf->add( '  this.dom.commitFilteredBtn.style.display = display === "filtered" ? "" : "none";' ).
+    lo_buf->add( '  var patchLabels = {' ).
+    lo_buf->add( '    "default" : this.patchAllLabel,' ).
+    lo_buf->add( '    "selected": "Patch <b>Selected</b> (" + this.selectedCount + ")",' ).
+    lo_buf->add( '    "filtered": "Patch <b>Filtered</b> (" + this.filteredCount + ")"' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  this.dom.patchBtn.innerHTML = patchLabels[display];' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
     lo_buf->add( '// Submit stage state to the server' ).
@@ -47997,7 +51954,19 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  submitSapeventForm(this.collectData(), this.formAction);' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
+    lo_buf->add( '// Submit the active commit command (commit button in the page toolbar)' ).
+    lo_buf->add( 'StageHelper.prototype.submitCommit = function() {' ).
+    lo_buf->add( '  switch (this.calculateActiveCommitCommand()) {' ).
+    lo_buf->add( '  case "selected": this.submit(); break;' ).
+    lo_buf->add( '  case "filtered": this.submitVisible(); break;' ).
+    lo_buf->add( '  default: submitSapeventForm({}, this.stageAllAction);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( '' ).
     lo_buf->add( 'StageHelper.prototype.submitPatch = function() {' ).
+    lo_buf->add( '  if (this.calculateActiveCommitCommand() === "filtered") {' ).
+    lo_buf->add( '    this.markVisiblesAsAdded();' ).
+    lo_buf->add( '  }' ).
     lo_buf->add( '  submitSapeventForm(this.collectData(), this.patchAction);' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
@@ -48005,7 +51974,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'StageHelper.prototype.collectData = function() {' ).
     lo_buf->add( '  var data = {};' ).
     lo_buf->add( '  this.iterateStageTab(false, function(row) {' ).
-    lo_buf->add( '    data[row.cells[this.colIndex["name"]].innerText] = row.cells[this.colIndex["status"]].innerText;' ).
+    lo_buf->add( '    data[this.getPlainText(row.cells[this.colIndex["name"]])] = row.cells[this.colIndex["status"]].innerText;' ).
     lo_buf->add( '  });' ).
     lo_buf->add( '  return data;' ).
     lo_buf->add( '};' ).
@@ -48013,8 +51982,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'StageHelper.prototype.markVisiblesAsAdded = function() {' ).
     lo_buf->add( '  this.iterateStageTab(false, function(row) {' ).
     lo_buf->add( '    // TODO refactor, unify updateRow logic' ).
-    lo_buf->add( '    if (row.style.display === "" && row.className === "local") { // visible' ).
-    lo_buf->add( '      this.updateRow(row, this.STATUS.add);' ).
+    lo_buf->add( '    if (row.style.display === "") { // visible' ).
+    lo_buf->add( '      // Local rows are added, remote rows ("to remove or non-code") are removed' ).
+    lo_buf->add( '      this.updateRow(row, row.className === "local" ? this.STATUS.add : this.STATUS.remove);' ).
     lo_buf->add( '    } else {' ).
     lo_buf->add( '      this.updateRow(row, this.STATUS.reset);' ).
     lo_buf->add( '    }' ).
@@ -48062,9 +52032,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.id.onclick            = this.onClick.bind(this);' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
-    lo_buf->add( 'CheckListWrapper.prototype.onClick = function(e) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( 'CheckListWrapper.prototype.onClick = function(e) {' ).
     lo_buf->add( '  // Get nodes' ).
-    lo_buf->add( '  var target = event.target || event.srcElement;' ).
+    lo_buf->add( '  e          = e || window.event;' ).
+    lo_buf->add( '  var target = e.target || e.srcElement;' ).
     lo_buf->add( '  if (!target) return;' ).
     lo_buf->add( '  if (target.tagName !== "A") { target = target.parentNode } // icon clicked' ).
     lo_buf->add( '  if (target.tagName !== "A") return;' ).
@@ -48079,7 +52050,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var option   = nodeA.innerText;' ).
     lo_buf->add( '  var oldState = nodeLi.getAttribute("data-check");' ).
     lo_buf->add( '  if (oldState === null) return; // no data-check attribute - non-checkbox' ).
-    lo_buf->add( '  var newState = oldState === "X" ? false : true;' ).
+    lo_buf->add( '  var newState = oldState !== "X";' ).
     lo_buf->add( '' ).
     lo_buf->add( '  if (newState) {' ).
     lo_buf->add( '    nodeIcon.classList.remove("grey");' ).
@@ -48172,20 +52143,12 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    .map(function(item) {' ).
     lo_buf->add( '      var nodeIcon = item.children[0].children[0];' ).
     lo_buf->add( '' ).
-    lo_buf->add( '      if (state === true) {' ).
-    lo_buf->add( '        if (item.innerText === username) { // current user' ).
-    lo_buf->add( '          item.style.display = "";' ).
-    lo_buf->add( '          item.setAttribute("data-check", "X");' ).
-    lo_buf->add( '' ).
-    lo_buf->add( '          if (nodeIcon) {' ).
-    lo_buf->add( '            nodeIcon.classList.remove("grey");' ).
-    lo_buf->add( '            nodeIcon.classList.add("blue");' ).
-    lo_buf->add( '          }' ).
-    lo_buf->add( '        } else { // other users' ).
-    lo_buf->add( '          item.style.display = "none";' ).
-    lo_buf->add( '          item.setAttribute("data-check", "");' ).
-    lo_buf->add( '        }' ).
+    lo_buf->add( '      if (state === true && item.innerText !== username) {' ).
+    lo_buf->add( '        // hide other users' ).
+    lo_buf->add( '        item.style.display = "none";' ).
+    lo_buf->add( '        item.setAttribute("data-check", "");' ).
     lo_buf->add( '      } else {' ).
+    lo_buf->add( '        // show current user (filter on) or all users (filter off)' ).
     lo_buf->add( '        item.style.display = "";' ).
     lo_buf->add( '        item.setAttribute("data-check", "X");' ).
     lo_buf->add( '' ).
@@ -48201,13 +52164,11 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var jumpListItems = Array.prototype.slice.call(document.querySelectorAll("[id*=li_jump]"));' ).
     lo_buf->add( '' ).
     lo_buf->add( '  this.iterateDiffList(function(div) {' ).
-    lo_buf->add( '    if (state === true) { // switching on "Only my changes" filter' ).
-    lo_buf->add( '      if (div.getAttribute("data-changed-by") === username) {' ).
-    lo_buf->add( '        div.style.display = state ? "" : "none";' ).
-    lo_buf->add( '      } else {' ).
-    lo_buf->add( '        div.style.display = state ? "none" : "";' ).
-    lo_buf->add( '      }' ).
-    lo_buf->add( '    } else { // disabling' ).
+    lo_buf->add( '    if (state === true && div.getAttribute("data-changed-by") !== username) {' ).
+    lo_buf->add( '      // switching on "Only my changes" filter -> hide other users' ).
+    lo_buf->add( '      div.style.display = "none";' ).
+    lo_buf->add( '    } else {' ).
+    lo_buf->add( '      // current user when filter on, or all rows when filter off' ).
     lo_buf->add( '      div.style.display = "";' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '' ).
@@ -48328,6 +52289,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var splitCodeLeftColumnIdx     = 2;' ).
     lo_buf->add( '  var splitLineNumRightColumnIdx = 3;' ).
     lo_buf->add( '  var splitCodeRightColumnIdx    = 5;' ).
+    lo_buf->add( '  var range;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  if (e.button !== 0) return; // function is only valid for left button, not right button' ).
     lo_buf->add( '' ).
@@ -48369,7 +52331,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '        // document.getSelection().removeAllRanges() may trigger error' ).
     lo_buf->add( '        // so use this code which is equivalent but does not fail' ).
     lo_buf->add( '        // (https://stackoverflow.com/questions/22914075/javascript-error-800a025e-using-range-selector)' ).
-    lo_buf->add( '        var range = document.body.createTextRange();' ).
+    lo_buf->add( '        range = document.body.createTextRange();' ).
     lo_buf->add( '        range.collapse();' ).
     lo_buf->add( '        range.select();' ).
     lo_buf->add( '      } else {' ).
@@ -48420,20 +52382,20 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    var realThis = this;' ).
     lo_buf->add( '    var copySide = "";' ).
     lo_buf->add( '    [].forEach.call(nodes, function(tr, i) {' ).
-    lo_buf->add( '      var cellIdx = (i == 0 ? 0 : realThis.selectedColumnIdx);' ).
+    lo_buf->add( '      var cellIdx = (i === 0 ? 0 : realThis.selectedColumnIdx);' ).
     lo_buf->add( '      if (tr.cells.length > cellIdx) {' ).
     lo_buf->add( '        var tdSelected = tr.cells[cellIdx];' ).
     lo_buf->add( '        // decide which side to copy based on first line of selection' ).
-    lo_buf->add( '        if (i == 0) {' ).
+    lo_buf->add( '        if (i === 0) {' ).
     lo_buf->add( '          copySide = (tdSelected.classList.contains("new") ? "new" : "old" );' ).
     lo_buf->add( '        }' ).
     lo_buf->add( '        // copy is interesting only for one side of code, do not copy lines which exist on other side' ).
-    lo_buf->add( '        if (i == 0 || copySide == "new" && !tdSelected.classList.contains("old") || copySide == "old" && !tdSelected.classList.contains("new")) {' ).
+    lo_buf->add( '        if (i === 0 || copySide === "new" && !tdSelected.classList.contains("old") || copySide === "old" && !tdSelected.classList.contains("new")) {' ).
     lo_buf->add( '          text += newline + tdSelected.textContent;' ).
     lo_buf->add( '          // special processing for TD tag which sometimes contains newline' ).
     lo_buf->add( '          // (expl: /src/ui/zabapgit_js_common.w3mi.data.js) so do not add newline again in that case.' ).
     lo_buf->add( '          var lastChar = tdSelected.textContent[tdSelected.textContent.length - 1];' ).
-    lo_buf->add( '          if (lastChar == "\n") newline = "";' ).
+    lo_buf->add( '          if (lastChar === "\n") newline = "";' ).
     lo_buf->add( '          else newline = "\n";' ).
     lo_buf->add( '        }' ).
     lo_buf->add( '      }' ).
@@ -48464,7 +52426,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '  // navigate with arrows through list items and support pressing links with enter and space' ).
     lo_buf->add( '  var isHandled = false;' ).
-    lo_buf->add( '  if (event.key === "Enter" || event.key === "") {' ).
+    lo_buf->add( '  if (event.key === "Enter" || event.key === " ") {' ).
     lo_buf->add( '    isHandled = this.onEnterOrSpace();' ).
     lo_buf->add( '  } else if (/Down$/.test(event.key)) {' ).
     lo_buf->add( '    isHandled = this.onArrowDown();' ).
@@ -48585,7 +52547,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.linkHintHotKey    = linkHintHotKey;' ).
     lo_buf->add( '  this.areHintsDisplayed = false;' ).
     lo_buf->add( '  this.pendingPath       = ""; // already typed code prefix' ).
-    lo_buf->add( '  this.hintsMap          = this.deployHintContainers();' ).
+    lo_buf->add( '  this.hintsMap          = null; // deployed on each activation, the DOM changes after load' ).
     lo_buf->add( '  this.activatedDropdown = null;' ).
     lo_buf->add( '  this.yankModeActive    = false;' ).
     lo_buf->add( '}' ).
@@ -48611,7 +52573,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  // </span>' ).
     lo_buf->add( '  for (var i = 0, N = hintTargets.length; i < N; i++) {' ).
     lo_buf->add( '    // skip hidden fields' ).
-    lo_buf->add( '    if (hintTargets[i].type === "HIDDEN") {' ).
+    lo_buf->add( '    if (hintTargets[i].type === "hidden") {' ).
     lo_buf->add( '      continue;' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '' ).
@@ -48665,6 +52627,15 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  return hintsMap;' ).
     lo_buf->add( '};' ).
     lo_buf->add( '' ).
+    lo_buf->add( 'LinkHints.prototype.removeHintContainers = function() {' ).
+    lo_buf->add( '  if (!this.hintsMap) return;' ).
+    lo_buf->add( '  for (var i = this.hintsMap.first; i <= this.hintsMap.last; i++) {' ).
+    lo_buf->add( '    var container = this.hintsMap[i].container;' ).
+    lo_buf->add( '    if (container.parentNode) container.parentNode.removeChild(container);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  this.hintsMap = null;' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( '' ).
     lo_buf->add( 'LinkHints.prototype.getHandler = function() {' ).
     lo_buf->add( '  return this.handleKey.bind(this);' ).
     lo_buf->add( '};' ).
@@ -48685,6 +52656,12 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    if (this.areHintsDisplayed) this.yankModeActive = false;' ).
     lo_buf->add( '' ).
     lo_buf->add( '    this.pendingPath = "";' ).
+    lo_buf->add( '    if (!this.areHintsDisplayed) {' ).
+    lo_buf->add( '      // redeploy on each activation to catch links created or rewritten' ).
+    lo_buf->add( '      // after page load (e.g. stage table commands, filtered file names)' ).
+    lo_buf->add( '      this.removeHintContainers();' ).
+    lo_buf->add( '      this.hintsMap = this.deployHintContainers();' ).
+    lo_buf->add( '    }' ).
     lo_buf->add( '    this.displayHints(!this.areHintsDisplayed);' ).
     lo_buf->add( '' ).
     lo_buf->add( '  } else if (this.areHintsDisplayed) {' ).
@@ -49480,6 +53457,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '' ).
     lo_buf->add( '  this.elements.palette.style.display = tobeDisplayed ? "" : "none";' ).
     lo_buf->add( '  if (tobeDisplayed) {' ).
+    lo_buf->add( '    this.commands.forEach(function(cmd) {' ).
+    lo_buf->add( '      if (cmd.getTitle) cmd.title = cmd.getTitle();' ).
+    lo_buf->add( '    });' ).
     lo_buf->add( '    this.elements.input.value = "";' ).
     lo_buf->add( '    this.elements.input.focus();' ).
     lo_buf->add( '    this.applyFilter();' ).
@@ -49576,9 +53556,15 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      action = anchor.href.replace("sapevent:", "");' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '    var prefix = item[1];' ).
+    lo_buf->add( '    // title is re-read on each palette open, some labels change dynamically' ).
+    lo_buf->add( '    // (e.g. commit/patch buttons on the stage page)' ).
+    lo_buf->add( '    var getTitle = function() {' ).
+    lo_buf->add( '      return (prefix ? prefix + ": " : "") + anchor.innerText.trim();' ).
+    lo_buf->add( '    };' ).
     lo_buf->add( '    return {' ).
-    lo_buf->add( '      action: action,' ).
-    lo_buf->add( '      title : (prefix ? prefix + ": " : "") + anchor.innerText.trim()' ).
+    lo_buf->add( '      action  : action,' ).
+    lo_buf->add( '      getTitle: getTitle,' ).
+    lo_buf->add( '      title   : getTitle()' ).
     lo_buf->add( '    };' ).
     lo_buf->add( '  });' ).
     lo_buf->add( '' ).
@@ -49677,8 +53663,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'function memorizeScrollPosition(fn) {' ).
     lo_buf->add( '  return function() {' ).
     lo_buf->add( '    saveScrollPosition();' ).
-    lo_buf->add( '    return fn.call(this, fn.args);' ).
-    lo_buf->add( '  }.bind(this);' ).
+    lo_buf->add( '    return fn.apply(this, arguments);' ).
+    lo_buf->add( '  };' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
     lo_buf->add( '/**********************************************************' ).
@@ -49738,7 +53724,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '// Prevents keyboard navigation to elements outside the modal popup' ).
     lo_buf->add( '// eslint-disable-next-line no-unused-vars' ).
     lo_buf->add( 'function trapFocus() {' ).
-    lo_buf->add( '  const modal = document.getElementById("modal");' ).
+    lo_buf->add( '  var modal = document.getElementById("modal");' ).
     lo_buf->add( '  if (!modal) return;' ).
     lo_buf->add( '' ).
     lo_buf->add( '  var focusableSelectors = "button, [href], input, select, textarea, [tabindex]";' ).
@@ -50308,6 +54294,9 @@ CLASS /apmg/cl_apm_gui_menus IMPLEMENTATION.
       iv_txt = 'Database Utility'
       iv_act = /apmg/if_apm_gui_router=>c_action-go_db
     )->add(
+      iv_txt = 'Whoami'
+      iv_act = /apmg/if_apm_gui_router=>c_action-apm_whoami
+    )->add(
       iv_txt = 'Debug Info'
       iv_act = /apmg/if_apm_gui_router=>c_action-go_debuginfo ).
 
@@ -50335,7 +54324,7 @@ CLASS /apmg/cl_apm_gui_menus IMPLEMENTATION.
         IF /apmg/cl_apm_settings=>factory( )->get( )-experimental_features IS NOT INITIAL. "apm
           menu->add(
             iv_txt = /apmg/cl_apm_gui_buttons=>experimental( )
-            iv_act = /apmg/if_apm_gui_router=>c_action-go_settings ).
+            iv_act = /apmg/if_apm_gui_router=>c_action-go_settings_global ).
         ENDIF.
       CATCH /apmg/cx_apm_error ##NO_HANDLER.
     ENDTRY.
@@ -50346,32 +54335,47 @@ CLASS /apmg/cl_apm_gui_menus IMPLEMENTATION.
 
     result = /apmg/cl_apm_html_toolbar=>create( 'apm-toolbar-help' ).
 
+    IF with_welcome = abap_true.
+      result->add(
+        iv_txt = 'Welcome'
+        iv_act = /apmg/if_apm_gui_router=>c_action-go_welcome ).
+    ENDIF.
+
     result->add(
-      iv_txt = 'Feedback'
+      iv_txt   = 'Registry'
+      iv_title = 'Global apm registry'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-registry
+    )->add(
+      iv_txt   = 'Playground'
+      iv_title = 'Playground registry'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-playground
+    )->add(
+      iv_txt   = 'Tutorial'
+      iv_title = 'Instructions for trying apm features'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-tutorial
+    )->add(
+      iv_txt   = 'Documentation'
+      iv_title = 'Full documentation of apm registry and client'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-documentation
+    )->add(
+      iv_txt   = 'Changelog'
+      iv_title = 'Release notes for apm'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-changelog
+    )->add(
+      iv_txt   = 'Hotkeys'
+      iv_title = 'Keyboard shortcuts'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-show_hotkeys
+    )->add(
+      iv_txt   = 'Feedback'
+      iv_title = 'We are happy to hear from you, good or bad!'
       iv_class = 'red'
-      iv_act = /apmg/if_apm_gui_router=>c_action-feedback
-    )->add(
-      iv_txt = 'Registry'
-      iv_act = /apmg/if_apm_gui_router=>c_action-registry
-* FUTURE
-*    )->add(
-*      iv_txt = 'Tutorial'
-*      iv_act = /apmg/if_apm_gui_router=>c_action-go_tutorial
-    )->add(
-      iv_txt = 'Documentation'
-      iv_act = /apmg/if_apm_gui_router=>c_action-documentation
-    )->add(
-      iv_txt = 'Changelog'
-      iv_act = /apmg/if_apm_gui_router=>c_action-changelog
-    )->add(
-      iv_txt = 'Hotkeys'
-      iv_act = /apmg/if_apm_gui_router=>c_action-show_hotkeys ).
+      iv_act   = /apmg/if_apm_gui_router=>c_action-feedback ).
 
   ENDMETHOD.
 
   METHOD registry.
 
-    IF registry = /apmg/if_apm_settings=>c_registry.
+    IF registry = /apmg/if_apm_constants=>c_registry.
       DATA(fav_class) = `transport-box`. " green
     ELSE.
       fav_class = `user-box`. " blue
@@ -50391,7 +54395,7 @@ CLASS /apmg/cl_apm_gui_menus IMPLEMENTATION.
 
     result->add(
       iv_txt = 'Global'
-      iv_act = /apmg/if_apm_gui_router=>c_action-go_settings
+      iv_act = /apmg/if_apm_gui_router=>c_action-go_settings_global
     )->add(
       iv_txt = 'Personal'
       iv_act = /apmg/if_apm_gui_router=>c_action-go_settings_personal ).
@@ -51582,9 +55586,19 @@ CLASS /apmg/cl_apm_gui_page_db_entry IMPLEMENTATION.
 
       WHEN c_action-update.
 
+        DATA(key) = ii_event->form_data( )->get( 'KEYS' ).
+        DATA(val) = ii_event->form_data( )->get( 'VALUE' ).
+
+        " Validate manifest
+        " TODO: In case of errors, the editor reverts to the stored version and edits get lost
+        " Ideally, it should retain the edits without saving them... but how?
+        IF key CP 'PACKAGE:*:PACKAGE_JSON'.
+          validate_package_json( val ).
+        ENDIF.
+
         do_update(
-          key   = ii_event->form_data( )->get( 'KEYS' )
-          value = ii_event->form_data( )->get( 'VALUE' ) ).
+          key   = key
+          value = val ).
 
         edit_mode = abap_false.
         IF back_on_save = abap_true.
@@ -51748,8 +55762,11 @@ CLASS /apmg/cl_apm_gui_page_db_entry IMPLEMENTATION.
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
     html->set_title( cl_abap_typedescr=>describe_by_object_ref( me )->get_relative_name( ) ).
-    " TODO: Replace with
-    " html->add( lcl_json_editor=>get_javascript( ) )
+
+    " TODO: Replace with full-featured JSON editor; needs testing
+    " IF content_type = /apmg/if_apm_persist_apm=>c_content_type-json.
+      " html->add( lcl_json_editor=>get_javascript( ) )
+    " ENDIF.
 
     result = html.
 
@@ -51877,6 +55894,14 @@ CLASS /apmg/cl_apm_gui_page_db_entry IMPLEMENTATION.
 
     " Better not to use syntax highlighter so we see the actual, unmodified data
     html->add( |<pre class="syntax-hl">{ db_entry-value }</pre>| ).
+
+  ENDMETHOD.
+
+  METHOD validate_package_json.
+
+    DATA(manifest) = /apmg/cl_apm_package_json=>convert_json_to_manifest( json ).
+
+    /apmg/cl_apm_package_json=>check_manifest( manifest ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -52248,70 +56273,75 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     hotkey_action-ui_component = 'Package List'.
 
-    hotkey_action-description = |Global Settings|.
-    hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-go_settings.
-    hotkey_action-hotkey      = |x|.
+    hotkey_action-description = 'Global Settings'.
+    hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-go_settings_global.
+    hotkey_action-hotkey      = 'x'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Personal Settings|.
+    hotkey_action-description = 'Personal Settings'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-go_settings_personal.
-    hotkey_action-hotkey      = |p|.
+    hotkey_action-hotkey      = 'p'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Tree|.
+    hotkey_action-description = 'Tree'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-go_tree.
-    hotkey_action-hotkey      = |e|.
+    hotkey_action-hotkey      = 'e'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Refresh|.
+    hotkey_action-description = 'Refresh'.
     hotkey_action-action      = c_action-refresh.
-    hotkey_action-hotkey      = |r|.
+    hotkey_action-hotkey      = 'r'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Init|.
+    hotkey_action-description = 'Login'.
+    hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_login.
+    hotkey_action-hotkey      = 'l'.
+    INSERT hotkey_action INTO TABLE rt_hotkey_actions.
+
+    hotkey_action-description = 'Init'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_init.
-    hotkey_action-hotkey      = |t|.
+    hotkey_action-hotkey      = 't'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Install|.
+    hotkey_action-description = 'Install'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_install.
-    hotkey_action-hotkey      = |i|.
+    hotkey_action-hotkey      = 'i'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Uninstall|.
+    hotkey_action-description = 'Uninstall'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_uninstall.
-    hotkey_action-hotkey      = |u|.
+    hotkey_action-hotkey      = 'u'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Publish|.
+    hotkey_action-description = 'Publish'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_publish.
-    hotkey_action-hotkey      = |p|.
+    hotkey_action-hotkey      = 'p'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Unpublish|.
+    hotkey_action-description = 'Unpublish'.
     hotkey_action-action      = /apmg/if_apm_gui_router=>c_action-apm_unpublish.
-    hotkey_action-hotkey      = |q|.
+    hotkey_action-hotkey      = 'q'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
     " registered/handled in js
-    hotkey_action-description = |Previous Package|.
-    hotkey_action-action      = `#`.
-    hotkey_action-hotkey      = |4|.
+    hotkey_action-description = 'Previous Package'.
+    hotkey_action-action      = '#'.
+    hotkey_action-hotkey      = '4'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Next Package|.
-    hotkey_action-action      = `##`.
-    hotkey_action-hotkey      = |6|.
+    hotkey_action-description = 'Next Package'.
+    hotkey_action-action      = '##'.
+    hotkey_action-hotkey      = '6'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Show Package|.
-    hotkey_action-action      = `###`.
-    hotkey_action-hotkey      = |Enter|.
+    hotkey_action-description = 'Show Package'.
+    hotkey_action-action      = '###'.
+    hotkey_action-hotkey      = 'Enter'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
-    hotkey_action-description = |Focus Filter|.
-    hotkey_action-action      = `####`.
-    hotkey_action-hotkey      = |f|.
+    hotkey_action-description = 'Focus Filter'.
+    hotkey_action-action      = '####'.
+    hotkey_action-hotkey      = 'f'.
     INSERT hotkey_action INTO TABLE rt_hotkey_actions.
 
   ENDMETHOD.
@@ -52325,6 +56355,14 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     DATA(commands) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-list-commands' ).
 
     commands->add(
+      iv_txt      = 'Update'
+      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_update }{ c_dummy_key }|
+      iv_class    = c_action_class
+      iv_li_class = c_action_class
+    )->add(
+      iv_txt      = 'Registry'
+      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+    )->add(
       iv_txt      = 'Deprecate'
       iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_deprecate }{ c_dummy_key }|
       iv_class    = c_action_class
@@ -52370,7 +56408,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_txt      = /apmg/cl_apm_gui_buttons=>settings( )
       io_sub      = /apmg/cl_apm_gui_menus=>settings( )
     )->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'redo-alt-solid' )
+      iv_txt      = /apmg/cl_apm_gui_buttons=>refresh( )
       iv_act      = c_action-refresh
     )->add(
       iv_txt      = /apmg/cl_apm_gui_buttons=>advanced( )
@@ -52397,13 +56435,13 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     render_styles( html ).
 
-    html->add( |<div class="repo-overview">| ).
+    html->add( '<div class="repo-overview">' ).
 
     render_header_bar( html ).
     render_header_label_list( html ).
     render_package_list( html ).
 
-    html->add( |</div>| ).
+    html->add( '</div>' ).
 
     register_deferred_script( get_scripts( ) ).
     register_deferred_script( get_palette( c_action-select ) ).
@@ -52664,22 +56702,15 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD render_action_toolbar.
-
-    " FUTURE
-    html->add( '' ).
-
-  ENDMETHOD.
-
   METHOD render_filter_bar.
 
     html->add( |<form class="inline" method="post" action="sapevent:{ c_action-apply_filter }">| ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_text_input(
-      iv_name      = |filter|
+      iv_name      = 'filter'
       iv_label     = |Filter: { render_filter_help_hint( ) }|
       iv_value     = settings-list_settings-filter ) ).
-    html->add( |<input type="submit" class="hidden-submit">| ).
-    html->add( |</form>| ).
+    html->add( '<input type="submit" class="hidden-submit">' ).
+    html->add( '</form>' ).
 
     IF settings-list_settings-only_favorites = abap_true.
       DATA(icon_class) = `blue`.
@@ -52691,7 +56722,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     IF settings-list_settings-filter IS NOT INITIAL.
       html->add( html->a(
-        iv_txt   = |<i id="icon-clear-filter" class="icon icon-times-solid"></i>|
+        iv_txt   = '<i id="icon-clear-filter" class="icon icon-times-solid"></i>'
         iv_class = 'command'
         iv_act   = |{ c_action-clear_filter }| ) ).
     ENDIF.
@@ -52702,7 +56733,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_act   = |{ c_action-toggle_favorites }| ) ).
     html->add( html->a(
       iv_txt   = '<i id="icon-filter-detail" class="icon icon-check"></i> Detail'
-      iv_act   = |gHelper.toggleRepoListDetail()|
+      iv_act   = 'gHelper.toggleRepoListDetail()'
       iv_class = 'command'
       iv_typ   = /apmg/if_apm_html=>c_action_type-onclick ) ).
     html->add( '</span>' ).
@@ -52715,7 +56746,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     APPEND `Filter is applied to all text fields in the below table.` TO fragments.
     APPEND ` Search works for any portion of the text (so can be a mid part as well).` TO fragments.
-    APPEND `<br>Starting query from <code>label:xxx</code> will filter appropriate label.` TO fragments.
+    APPEND `<br>Starting query from <code>label:xyz</code> will filter appropriate label.` TO fragments.
     APPEND `Two "special" label queries are available:` TO fragments.
     APPEND ` <code>all</code> (to select all packages that have at least one label)` TO fragments.
     APPEND ` and <code>none</code> (to select unlabeled packages).` TO fragments.
@@ -52726,13 +56757,16 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
   METHOD render_header_bar.
 
-    html->add( |<div class="repo-overview-toolbar">| ).
+    html->add( '<div class="repo-overview-toolbar">' ).
 
     render_filter_bar( html ).
-    render_registry( html ).
-    render_action_toolbar( html ).
 
-    html->add( |</div>| ).
+    "html->add( '<span style="float:right">' ).
+    render_registry( html ).
+    "render_user_menu( html ).
+    "html->add( '</span' ).
+
+    html->add( '</div>' ).
 
   ENDMETHOD.
 
@@ -52742,43 +56776,33 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    html->add( |<div class="repo-label-catalog">| ).
+    html->add( '<div class="repo-label-catalog">' ).
     html->add( '<label>Filter by label:</label>' ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_label_list(
       it_labels           = all_labels
       io_label_colors     = label_colors
       iv_clickable_action = c_action-label_filter ) ).
-    html->add( |</div>| ).
+    html->add( '</div>' ).
 
   ENDMETHOD.
 
   METHOD render_package_list.
 
-    html->add( |<table>| ).
+    html->add( '<table>' ).
 
     render_table_header( html ).
     render_table_body( html ).
     render_table_footer( html ).
 
-    html->add( |</table>| ).
+    html->add( '</table>' ).
 
   ENDMETHOD.
 
   METHOD render_registry.
 
-    IF settings-registry = /apmg/if_apm_settings=>c_registry.
-      DATA(fav_class) = 'transport-box'. " green
-    ELSE.
-      fav_class = 'user-box'. " blue
-    ENDIF.
-
     html->add( '<span style="float:right">' ).
-    html->add( |<span class="{ fav_class }">| ).
-    html->add_a(
-      iv_title = 'Registry'
-      iv_txt   = settings-registry
-      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-url }?url={ settings-registry }| ).
-    html->add( '</span>' ).
+    html->add( /apmg/cl_apm_gui_chunk_lib=>render_registry( settings-registry ) ).
+    render_user_menu( html ).
     html->add( '</span>' ).
 
   ENDMETHOD.
@@ -52787,7 +56811,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     " Emoji Styles
     DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_emoji_css( )
+      table = /apmg/cl_apm_emoji=>create( )->get_css( )
       sep   = cl_abap_char_utilities=>newline ).
 
     html->add( '<style>' ).
@@ -52808,7 +56832,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
         package = <package> ).
     ENDLOOP.
 
-    html->add( |</tbody>| ).
+    html->add( '</tbody>' ).
 
   ENDMETHOD.
 
@@ -52898,7 +56922,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     " Description
     html->td(
       html->a(
-        iv_txt = /apmg/cl_apm_emoji=>create( )->format_emoji( package-description )
+        iv_txt = /apmg/cl_apm_emoji=>create( )->format( package-description )
         iv_act = |{ c_action-select }?key={ package-package }| ) ).
 
     " Details: changed by
@@ -52927,6 +56951,32 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
         iv_act   = |{ c_action-select }?key={ package-package }| ) ).
 
     html->add( `</tr>` ).
+
+  ENDMETHOD.
+
+  METHOD render_user_menu.
+
+    " Playground does not need login
+    CHECK settings-registry <> /apmg/if_apm_constants=>c_playground.
+
+    " TODO: Replace with get_username and show "User" with icon
+    DATA(auth) = /apmg/cl_apm_http_login_manage=>get_auth( settings-registry ).
+
+    html->add( '<span>' ).
+
+    IF auth IS INITIAL.
+      html->add_a(
+        iv_txt = 'Login'
+        iv_act = /apmg/if_apm_gui_router=>c_action-apm_login ).
+    ELSE.
+      " TODO: Change to "User" icon with drop-down menu:
+      " Links to user profile/account on www.abappm.com and logout
+      html->add_a(
+        iv_txt = 'Logout'
+        iv_act = /apmg/if_apm_gui_router=>c_action-apm_logout ).
+    ENDIF.
+
+    html->add( '</span>' ).
 
   ENDMETHOD.
 
@@ -53030,16 +57080,6 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
           data      = get_json_data( ) ).
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
 
-      WHEN c_action-update_dependencies.
-
-        DATA(registry) = /apmg/cl_apm_settings=>factory( )->get( )-registry.
-
-        /apmg/cl_apm_command_update=>run(
-          registry = registry
-          package  = package ).
-
-        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
-
       WHEN c_action-add_dependency OR c_action-remove_dependency.
 
         /apmg/cl_apm_roadmap=>planned( `The feature has not been implemented yet. `
@@ -53094,6 +57134,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     CONSTANTS:
       c_key          TYPE string VALUE `?key=`,
+      c_release_type TYPE string VALUE `&release_type=`,
       c_action_class TYPE string VALUE `action_link`.
 
     DATA(commands) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-view-commands' ).
@@ -53101,6 +57142,24 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
     DATA(id) = /apmg/cl_apm_package_json=>get_id_from_package( package ).
 
     commands->add(
+      iv_txt      = 'Version'
+      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+    )->add(
+      iv_txt      = '+ Major'
+      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }major|
+    )->add(
+      iv_txt      = '+ Minor'
+      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }minor|
+    )->add(
+      iv_txt      = '+ Patch'
+      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }patch|
+    )->add(
+      iv_txt      = 'Update to Latest'
+      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_update }{ c_key }{ id }|
+    )->add(
+      iv_txt      = 'Registry'
+      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+    )->add(
       iv_txt      = 'Publish'
       iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_publish }{ c_key }{ id }|
     )->add(
@@ -53169,6 +57228,8 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
   METHOD constructor.
 
     super->constructor( ).
+
+    load_settings( ).
 
     IF package IS INITIAL.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Missing package'.
@@ -53382,10 +57443,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
           iv_act = |{ c_action-add_dependency }?key={ package }|
         )->add(
           iv_txt = 'Remove'
-          iv_act = |{ c_action-remove_dependency }?key={ package }|
-        )->add(
-          iv_txt = 'Update'
-          iv_act = |{ c_action-update_dependencies }?key={ package }| ).
+          iv_act = |{ c_action-remove_dependency }?key={ package }| ).
 
       WHEN c_action-view_json.
 
@@ -53402,6 +57460,17 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
       WHEN OTHERS.
         ASSERT 0 = 1.
     ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD load_settings.
+
+    TRY.
+        settings = /apmg/cl_apm_settings=>factory( )->get( ).
+      CATCH /apmg/cx_apm_error.
+        " Settings didn't exist, so save the defaults
+        /apmg/cl_apm_settings=>factory( )->set( settings )->save( ).
+    ENDTRY.
 
   ENDMETHOD.
 
@@ -53589,7 +57658,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
       CASE <engine>-key.
         WHEN /apmg/if_apm_types=>c_engine-abap.
-          DATA(version) = /apmg/cl_apm_command_utils=>get_abap_version( ).
+          DATA(version) = /apmg/cl_apm_utils=>get_abap_version( ).
         WHEN /apmg/if_apm_types=>c_engine-apm.
           version = /apmg/if_apm_version=>c_version.
         WHEN OTHERS.
@@ -53715,7 +57784,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     " Output with Emoji
     html->add( '<div class="html">' ).
-    html->add( /apmg/cl_apm_emoji=>create( )->format_emoji( markdown_text ) ).
+    html->add( /apmg/cl_apm_emoji=>create( )->format( markdown_text ) ).
     html->add( '</div>' ).
 
   ENDMETHOD.
@@ -53776,7 +57845,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     " Emoji Styles
     DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_emoji_css( )
+      table = /apmg/cl_apm_emoji=>create( )->get_css( )
       sep   = cl_abap_char_utilities=>newline ).
 
     html->add( '<style>' ).
@@ -53792,6 +57861,9 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
   METHOD render_top.
 
+    " TODO: Add 'favorite' (star icon), 'write_protected' (lock icon) with toggles
+    " FUTURE: Add 'labels'
+    " See settings-package_settings
     html->add( '<div class="paddings">' ).
 
     html->add( '<table class="w100"><tr>' ).
@@ -53802,12 +57874,12 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
       name  = package_json-name
       value = package_json-version ) ).
     html->add( '</span>' ).
-    " TODO: link to apm registry
-*    html->add( '<span class="indent5em">' )
-*    html->add( /apmg/cl_apm_gui_chunk_lib=>render_registry_link(
-*      iv_name    = package_json-name
-*      iv_version = package_json-version ) )
-*    html->add( '</span>' )
+    html->add( '<span class="indent5em">' ).
+    html->add( /apmg/cl_apm_gui_chunk_lib=>render_registry_link(
+      iv_registry = settings-registry
+      iv_name     = package_json-name
+      iv_version  = package_json-version ) ).
+    html->add( '</span>' ).
     html->add( '</td>' ).
     html->add( '<td class="right">' ).
     html->add( get_toolbar( )->render( iv_right = abap_true ) ).
@@ -54215,7 +58287,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
   METHOD render_registry.
 
-    IF settings-registry = /apmg/if_apm_settings=>c_registry.
+    IF settings-registry = /apmg/if_apm_constants=>c_registry.
       DATA(fav_class) = 'transport-box'. " green
     ELSE.
       fav_class = 'user-box'. " blue
@@ -54236,7 +58308,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
     " Emoji Styles
     DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_emoji_css( )
+      table = /apmg/cl_apm_emoji=>create( )->get_css( )
       sep   = cl_abap_char_utilities=>newline ).
 
     html->add( '<style>' ).
@@ -54311,9 +58383,9 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
         iv_class   = 'top' ).
     ELSE.
       DATA(error_count) = lines( node->errors ).
-      DATA(error_text) = 'error'.
+      DATA(error_text) = `error`.
       IF error_count <> 1.
-        error_text = 'errors'.
+        error_text = `errors`.
       ENDIF.
       html->td(
         iv_content = |<span class="boxed red-filled-set">{ error_count } { error_text }</span>|
@@ -54388,6 +58460,248 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
     settings-tree_settings-order_descending = order_descending.
     save_settings( ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
+
+  METHOD /apmg/if_apm_gui_event_handler~on_event.
+
+    CASE ii_event->mv_action.
+      WHEN c_action-refresh.
+
+        " Re-runs connection check
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN c_action-setup.
+
+        IF confirm_popup( ) = abap_true.
+          /apmg/cl_apm_certificates=>setup( ).
+        ENDIF.
+
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN OTHERS.
+        ASSERT 1 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_menu_provider~get_menu.
+
+    DATA(toolbar) = /apmg/cl_apm_html_toolbar=>create( 'apm-welcome' ).
+
+    toolbar->add(
+      iv_txt = /apmg/cl_apm_html=>icon( 'file' ) && ' Init'
+      iv_act = /apmg/if_apm_gui_router=>c_action-apm_init
+    )->add(
+      iv_txt = /apmg/cl_apm_html=>icon( 'download-solid' ) && ' Install'
+      iv_act = /apmg/if_apm_gui_router=>c_action-apm_install
+    )->add(
+      iv_txt = /apmg/cl_apm_gui_buttons=>refresh( )
+      iv_act = c_action-refresh
+    )->add(
+      iv_txt = /apmg/cl_apm_gui_buttons=>help( )
+      io_sub = /apmg/cl_apm_gui_menus=>help( abap_false ) ).
+
+    ro_toolbar = toolbar.
+
+  ENDMETHOD.
+
+  METHOD /apmg/if_apm_gui_renderable~render.
+
+    register_handlers( ).
+
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    render_styles( html ).
+
+    render_welcome( html ).
+    render_connections( html ).
+
+    ri_html = html.
+
+  ENDMETHOD.
+
+  METHOD confirm_popup.
+
+    DATA(question) = |This will install certificates for the apm Registry and Playground|.
+
+    DATA(answer) = /apmg/cl_apm_gui_factory=>get_popups( )->popup_to_confirm(
+      iv_titlebar              = 'Setup'
+      iv_text_question         = question
+      iv_text_button_1         = 'Install Certificates'
+      iv_icon_button_1         = 'ICON_EXPORT'
+      iv_text_button_2         = 'Cancel'
+      iv_icon_button_2         = 'ICON_CANCEL'
+      iv_default_button        = '2'
+      iv_display_cancel_button = abap_false
+      iv_popup_type            = 'ICON_MESSAGE_WARNING' ).
+
+    IF answer = '2'.
+      MESSAGE 'Setup cancelled' TYPE 'S'.
+      RETURN.
+    ENDIF.
+
+    result = abap_true.
+
+  ENDMETHOD.
+
+  METHOD create.
+
+    DATA(component) = NEW /apmg/cl_apm_gui_page_welcome( ).
+
+    result = /apmg/cl_apm_gui_page_hoc=>create(
+      page_title         = 'Welcome!'
+      page_menu_provider = component
+      child_component    = component ).
+
+  ENDMETHOD.
+
+  METHOD render_connections.
+
+    DATA(emoji) = /apmg/cl_apm_emoji=>create( ).
+
+    html->add( '<div style="padding:10px 150px 30px;font-size:large;">' ).
+    html->add( '<h3>' ).
+    html->add( 'Connection Check' ).
+    html->add( '</h3>' ).
+
+    html->add( '<table class="repo_tab w100 paddings">' ).
+    html->add( '<tbody>' ).
+
+    DATA(missing_certificates) = abap_false.
+
+    DO 2 TIMES.
+      IF sy-index = 2.
+        DATA(name)     = 'Playground'.
+        DATA(registry) = /apmg/if_apm_constants=>c_playground.
+        DATA(action)   = /apmg/if_apm_gui_router=>c_action-playground.
+      ELSE.
+        name     = 'Registry'.
+        registry = /apmg/if_apm_constants=>c_registry.
+        action   = /apmg/if_apm_gui_router=>c_action-registry.
+      ENDIF.
+
+      TRY.
+          DATA(ping) = /apmg/cl_apm_command_ping=>run( registry ).
+        CATCH /apmg/cx_apm_error INTO DATA(error).
+          ping = error->get_text( ).
+          IF ping CS '421'.
+            missing_certificates = abap_true.
+          ENDIF.
+      ENDTRY.
+
+      html->add( '<tr>' ).
+      html->td( name ).
+      html->td( html->a( iv_txt = registry iv_act = action ) ).
+
+      IF ping = c_ping_pong.
+        html->td( emoji->format( ':heavy_check_mark:' ) ).
+      ELSE.
+        html->td( emoji->format( ':x:' ) ).
+        html->add( '<tr>' ).
+        html->td( '' ).
+        html->td(
+          iv_content   = ping
+          is_data_attr = VALUE #( name = 'colspan' value = 2 ) ).
+        html->add( '</tr>' ).
+        html->add( '</tr>' ).
+      ENDIF.
+    ENDDO.
+
+    IF missing_certificates = abap_true.
+      html->add( '<tr>' ).
+      html->td( '' ).
+      html->td(
+        iv_content   = html->a(
+          iv_txt = 'Install missing certificates...'
+          iv_act = c_action-setup )
+        is_data_attr = VALUE #( name = 'colspan' value = 2 ) ).
+      html->add( '</tr>' ).
+    ENDIF.
+
+    html->add( '</tbody>' ).
+    html->add( '</table>' ).
+    html->add( '</div>' ).
+
+  ENDMETHOD.
+
+  METHOD render_styles.
+
+    " Emoji Styles
+    DATA(emoji_styles) = concat_lines_of(
+      table = /apmg/cl_apm_emoji=>create( )->get_css( )
+      sep   = cl_abap_char_utilities=>newline ).
+
+    html->add( '<style>' ).
+    html->add( emoji_styles ).
+    html->add( '</style>' ).
+
+  ENDMETHOD.
+
+  METHOD render_welcome.
+
+    DATA(emoji) = /apmg/cl_apm_emoji=>create( ).
+
+    DATA(apm) = |<strong>apm</strong>|.
+
+    DATA(first_package) = html->a(
+      iv_txt   = 'first package'
+      iv_title = 'Tutorial'
+      iv_act   = /apmg/if_apm_gui_router=>c_action-tutorial ).
+
+    html->add( '<div style="padding:20px 150px 0;font-size:large;">' ).
+    html->add( '<h1>' ).
+    html->add( emoji->format( 'Welcome to apm :wave:' ) ).
+    html->add( '</h1>' ).
+    html->add( '<p>' ).
+    html->add( |You're looking at something that, until recently, didn't exist: a real package manager for ABAP.| ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |abapGit gave ABAP its git. For over 10 years we could share code we but were missing solid no| ).
+    html->add( |versioning, dependencies, and automatic installs. We had git, but no npm.| ).
+    html->add( |Now, finally, ABAP has both.| ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |That's why I built { apm } and why a growing community of ABAP open-source developers| ).
+    html->add( |is building it with you. Whatever you do here, you're now part of that.| ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |From here you can:| ).
+    html->add( '</p>' ).
+    html->add( '<ul>' ).
+    html->add( '<li>' ).
+    html->add( emoji->format( ':mag_right:' ) ).
+    html->add( |Browse the registry and find packages to solve problems you'd otherwise build from scratch| ).
+    html->add( '</li>' ).
+    html->add( '<li>' ).
+    html->add( emoji->format( ':package:' ) ).
+    html->add( |Install packages with a few clicks, dependencies resolve automatically| ).
+    html->add( '</li>' ).
+    html->add( '<li>' ).
+    html->add( emoji->format( ':rocket:' ) ).
+    html->add( |Publish & share your own ABAP code with a manifest and a version number, for the whole| ).
+    html->add( |ecosystem to use| ).
+    html->add( '</li>' ).
+    html->add( '</ul>' ).
+    html->add( '<p>' ).
+    html->add( |No complex setup. One ABAP report. You're already up and running.| ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |Thanks for being here early. { apm } is new, so expect a few hiccups along the way, and please| ).
+    html->add( |keep the feedback coming. This ecosystem grows because of developers like you.| ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |Now go install your { first_package }. Welcome aboard.| ).
+    html->add( emoji->format( ':tada:' ) ).
+    html->add( '</p>' ).
+    html->add( '<p>' ).
+    html->add( |Marc & the ABAP open-source community<br>| ).
+    html->add( emoji->format( 'Made with :heart: in Canada' ) ).
+    html->add( '</p>' ).
+    html->add( '</div>' ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -56196,13 +60510,13 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
 
   METHOD /apmg/if_apm_html~div.
     /apmg/if_apm_html~wrap(
-      iv_tag   = 'div'
-      iv_content = iv_content
-      ii_content = ii_content
+      iv_tag        = 'div'
+      iv_content    = iv_content
+      ii_content    = ii_content
       is_data_attr  = is_data_attr
       it_data_attrs = it_data_attrs
-      iv_id    = iv_id
-      iv_class = iv_class ).
+      iv_id         = iv_id
+      iv_class      = iv_class ).
     ri_self = me.
   ENDMETHOD.
 
@@ -56251,28 +60565,28 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
   METHOD /apmg/if_apm_html~td.
     /apmg/if_apm_html~wrap(
       iv_format_single_line = iv_format_single_line
-      iv_tag   = 'td'
-      iv_content = iv_content
-      ii_content = ii_content
-      iv_id    = iv_id
-      iv_class = iv_class
-      is_data_attr  = is_data_attr
-      it_data_attrs = it_data_attrs
-      iv_hint  = iv_hint ).
+      iv_tag                = 'td'
+      iv_content            = iv_content
+      ii_content            = ii_content
+      iv_id                 = iv_id
+      iv_class              = iv_class
+      is_data_attr          = is_data_attr
+      it_data_attrs         = it_data_attrs
+      iv_hint               = iv_hint ).
     ri_self = me.
   ENDMETHOD.
 
   METHOD /apmg/if_apm_html~th.
     /apmg/if_apm_html~wrap(
       iv_format_single_line = iv_format_single_line
-      iv_tag   = 'th'
-      iv_content = iv_content
-      ii_content = ii_content
-      iv_id    = iv_id
-      iv_class = iv_class
-      is_data_attr  = is_data_attr
-      it_data_attrs = it_data_attrs
-      iv_hint  = iv_hint ).
+      iv_tag                = 'th'
+      iv_content            = iv_content
+      ii_content            = ii_content
+      iv_id                 = iv_id
+      iv_class              = iv_class
+      is_data_attr          = is_data_attr
+      it_data_attrs         = it_data_attrs
+      iv_hint               = iv_hint ).
     ri_self = me.
   ENDMETHOD.
 
@@ -56643,7 +60957,7 @@ CLASS /apmg/cl_apm_html_form IMPLEMENTATION.
     DATA: ls_hotkey_action LIKE LINE OF rt_hotkey_actions.
     FIELD-SYMBOLS: <ls_command> TYPE /apmg/if_apm_html_form=>ty_command.
 
-    ls_hotkey_action-ui_component = |Form-{ mv_form_id }|.
+    ls_hotkey_action-ui_component = |form-{ mv_form_id }|.
 
     READ TABLE mt_commands ASSIGNING <ls_command> WITH KEY cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main.
     IF sy-subrc = 0.
@@ -56843,7 +61157,10 @@ CLASS /apmg/cl_apm_html_form IMPLEMENTATION.
       EXIT.
     ENDLOOP.
 
-    lv_autofocus = abap_true.
+    IF iv_focus_field IS INITIAL.
+      lv_autofocus = abap_true.
+    ENDIF.
+
     LOOP AT mt_fields ASSIGNING <ls_field>.
       AT FIRST.
         IF <ls_field>-type <> /apmg/if_apm_html_form=>c_field_type-field_group.
@@ -56866,6 +61183,10 @@ CLASS /apmg/cl_apm_html_form IMPLEMENTATION.
         ri_html->add( |<legend{ lv_hint }>{ <ls_field>-label }</legend>| ).
         ri_html->add( |<ul>| ).
         CONTINUE.
+      ENDIF.
+
+      IF iv_focus_field = <ls_field>-name.
+        lv_autofocus = abap_true.
       ENDIF.
 
       render_field(
@@ -57977,8 +62298,8 @@ CLASS /apmg/cl_apm_html_table IMPLEMENTATION.
       ENDIF.
 
       rv_text = mi_html->a(
-        iv_txt   = is_col-column_title
-        iv_act   = |{ c_sort_by_event_prefix }{ is_col-column_id }:{ lv_direction }| ).
+        iv_txt = is_col-column_title
+        iv_act = |{ c_sort_by_event_prefix }{ is_col-column_id }:{ lv_direction }| ).
 
       rv_text = rv_text && |<span class="{ mv_sort_span_class }{ lv_sort_active }">{ lv_arrow }</span>|.
 
@@ -58038,10 +62359,10 @@ CLASS /apmg/cl_apm_html_table IMPLEMENTATION.
       ENDIF.
 
       mi_html->td(
-        iv_content = ls_render-content
-        ii_content = ls_render-html
+        iv_content    = ls_render-content
+        ii_content    = ls_render-html
         it_data_attrs = lt_attrs
-        iv_class   = ls_render-css_class ).
+        iv_class      = ls_render-css_class ).
     ENDLOOP.
 
   ENDMETHOD.
@@ -58482,46 +62803,12 @@ CLASS /apmg/cl_apm_http_agent IMPLEMENTATION.
 
   METHOD /apmg/if_apm_http_agent~request.
 
-    DATA:
-      http_client TYPE REF TO if_http_client,
-      status_code TYPE i,
-      message     TYPE string.
-
-    cl_http_client=>create_by_url(
-      EXPORTING
-        url                = url
-        ssl_id             = ssl_id
-        proxy_host         = proxy_host
-        proxy_service      = proxy_service
-        proxy_user         = proxy_user
-        proxy_passwd       = proxy_passwd
-      IMPORTING
-        client             = http_client
-      EXCEPTIONS
-        argument_not_found = 1
-        plugin_not_active  = 2
-        internal_error     = 3
-        pse_not_found      = 4
-        pse_not_distrib    = 5
-        pse_errors         = 6
-        OTHERS             = 7 ).
-
-    IF sy-subrc <> 0.
-      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100.
-    ENDIF.
+    DATA(http_client) = get_http_client( url ).
 
     http_client->request->set_version( if_http_request=>co_protocol_version_1_1 ).
     http_client->request->set_method( method ).
 
-    IF query IS BOUND.
-      LOOP AT query->mt_entries ASSIGNING FIELD-SYMBOL(<entry>).
-        http_client->request->set_form_field(
-          name  = <entry>-k
-          value = <entry>-v ).
-      ENDLOOP.
-    ENDIF.
-
-    LOOP AT global_headers->mt_entries ASSIGNING <entry>.
+    LOOP AT global_headers->mt_entries ASSIGNING FIELD-SYMBOL(<entry>).
       http_client->request->set_header_field(
         name  = <entry>-k
         value = <entry>-v ).
@@ -58543,6 +62830,11 @@ CLASS /apmg/cl_apm_http_agent IMPLEMENTATION.
         payload = payload ).
     ENDIF.
 
+    " If "Authorization" header is set, disable standard SAP login popup
+    IF http_client->request->get_header_field( /apmg/if_apm_http_agent=>c_header-authorization ) IS NOT INITIAL.
+      http_client->propertytype_logon_popup = http_client->co_disabled.
+    ENDIF.
+
     http_client->send(
       EXCEPTIONS
         http_communication_failure = 1
@@ -58562,8 +62854,8 @@ CLASS /apmg/cl_apm_http_agent IMPLEMENTATION.
     IF sy-subrc <> 0.
       http_client->get_last_error(
         IMPORTING
-          code    = status_code
-          message = message ).
+          code    = DATA(status_code)
+          message = DATA(message) ).
 
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
         EXPORTING
@@ -58595,10 +62887,12 @@ CLASS /apmg/cl_apm_http_agent IMPLEMENTATION.
 
   METHOD constructor.
 
-    me->proxy_host    = proxy_host.
-    me->proxy_service = proxy_service.
-    me->proxy_user    = proxy_user.
-    me->proxy_passwd  = proxy_passwd.
+    me->rfc_destination = rfc_destination.
+    me->ssl_id          = ssl_id.
+    me->proxy_host      = proxy_host.
+    me->proxy_service   = proxy_service.
+    me->proxy_user      = proxy_user.
+    me->proxy_password  = proxy_password.
 
     global_headers = NEW #( ).
 
@@ -58607,10 +62901,107 @@ CLASS /apmg/cl_apm_http_agent IMPLEMENTATION.
   METHOD create.
 
     result = NEW /apmg/cl_apm_http_agent(
-      proxy_host    = proxy_host
-      proxy_service = proxy_service
-      proxy_user    = proxy_user
-      proxy_passwd  = proxy_passwd ).
+      rfc_destination = rfc_destination
+      ssl_id          = ssl_id
+      proxy_host      = proxy_host
+      proxy_service   = proxy_service
+      proxy_user      = proxy_user
+      proxy_password  = proxy_password ).
+
+  ENDMETHOD.
+
+  METHOD get_connection_longtext.
+
+    " TODO: Replace with full link once docs are available
+    CONSTANTS c_docs TYPE string VALUE 'https://docs.abappm.com/'.
+
+    IF rfc_destination IS INITIAL.
+      IF proxy_host IS NOT INITIAL.
+        DATA(proxy) = | via proxy <b>{ proxy_host }:{ proxy_service }</b>|.
+      ENDIF.
+
+      result = |The system is trying to connect to <b>{ host }</b> |
+        && |using SSL certificates under <b>{ ssl_id }</b>{ proxy }. |.
+    ELSE.
+      result = |The system is trying to connect using RFC destination <b>{ rfc_destination }</b>. |.
+    ENDIF.
+
+    result = result
+      && |Check system parameters (transaction |
+      && |<a href="sapevent:jump_transaction?transaction=RZ10" class="no-pad">RZ10</a>|
+      && |), SSL setup (transaction |
+      && |<a href="sapevent:jump_transaction?transaction=STRUST" class="no-pad">STRUST</a>|
+      && |), Internet connection monitor (transaction |
+      && |<a href="sapevent:jump_transaction?transaction=SMICM" class="no-pad">SMICM</a>|
+      && |)|.
+
+    IF rfc_destination IS NOT INITIAL.
+      result = result
+        && |, and RFC configuration (|
+        && |<a href="sapevent:jump_transaction??transaction=SM59" class="no-pad">SM59</a>|
+        && |)|.
+    ENDIF.
+
+    IF proxy IS NOT INITIAL.
+      result = result
+        && |, and proxy configuration (|
+        && |<a href="sapevent:go_settings" class="no-pad">personal settings</a>|
+        && |)|.
+    ENDIF.
+
+    result = result
+      && |. It's recommended to get your SAP Basis and network teams involved. |
+      && |For more information and troubleshooting, see the |
+      && |<a href="sapevent:url?url={ c_docs }" class="no-pad">documentation</a>|
+      && |.|.
+
+  ENDMETHOD.
+
+  METHOD get_http_client.
+
+    IF rfc_destination IS INITIAL.
+
+      cl_http_client=>create_by_url(
+        EXPORTING
+          url                = url
+          ssl_id             = ssl_id
+          proxy_host         = proxy_host
+          proxy_service      = proxy_service
+          proxy_user         = proxy_user
+          proxy_passwd       = proxy_password
+        IMPORTING
+          client             = result
+        EXCEPTIONS
+          argument_not_found = 1
+          plugin_not_active  = 2
+          internal_error     = 3
+          pse_not_found      = 4
+          pse_not_distrib    = 5
+          pse_errors         = 6
+          OTHERS             = 7 ).
+
+    ELSE.
+
+      cl_http_client=>create_by_destination(
+        EXPORTING
+          destination              = rfc_destination
+        IMPORTING
+          client                   = result
+        EXCEPTIONS
+          argument_not_found       = 1
+          destination_not_found    = 2
+          destination_no_authority = 3
+          plugin_not_active        = 4
+          internal_error           = 5
+          OTHERS                   = 6 ).
+
+    ENDIF.
+
+    IF sy-subrc <> 0.
+      DATA(longtext) = get_connection_longtext( /apmg/cl_apm_http_login_manage=>get_host( url ) ).
+
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_t100 EXPORTING longtext = longtext.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.
@@ -58625,17 +63016,22 @@ CLASS /apmg/cl_apm_http_login_manage IMPLEMENTATION.
       APPEND INITIAL LINE TO auths ASSIGNING FIELD-SYMBOL(<auth>).
       <auth>-host = hostname.
       <auth>-auth = auth.
+      <auth>-user = user.
     ENDIF.
 
   ENDMETHOD.
 
   METHOD clear.
 
-    CLEAR auths.
+    IF host IS INITIAL.
+      CLEAR auths.
+    ELSE.
+      DELETE auths WHERE host = get_host( host ) ##SUBRC_OK.
+    ENDIF.
 
   ENDMETHOD.
 
-  METHOD get.
+  METHOD get_auth.
 
     READ TABLE auths INTO DATA(auth) WITH KEY host = get_host( host ).
     IF sy-subrc = 0.
@@ -58660,16 +63056,26 @@ CLASS /apmg/cl_apm_http_login_manage IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD save.
+  METHOD get_username.
 
-    IF auth IS NOT INITIAL.
-      append( host = host
-              auth = auth ).
+    READ TABLE auths INTO DATA(auth) WITH KEY host = get_host( host ).
+    IF sy-subrc = 0.
+      result = auth-user.
     ENDIF.
 
   ENDMETHOD.
 
-  METHOD set.
+  METHOD save.
+
+    IF auth IS NOT INITIAL.
+      append( host = host
+              auth = auth
+              user = |{ username }| ).
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD set_basic.
 
     ASSERT host IS NOT INITIAL.
 
@@ -58677,14 +63083,27 @@ CLASS /apmg/cl_apm_http_login_manage IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF is_basic = abap_true.
-      result = |Basic { cl_http_utility=>encode_base64( |{ username }:{ password }| ) }|.
-    ELSE.
-      result = |Bearer { password }|.
-    ENDIF.
+    result = |Basic { cl_http_utility=>encode_base64( |{ username }:{ password }| ) }|.
 
     append( host = host
-            auth = result ).
+            auth = result
+            user = username ).
+
+  ENDMETHOD.
+
+  METHOD set_token.
+
+    ASSERT host IS NOT INITIAL.
+
+    IF token IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    result = |Bearer { token }|.
+
+    append( host = host
+            auth = result
+            user = username ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -58754,6 +63173,8 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
 
   METHOD get_packages.
 
+    DATA dependency LIKE LINE OF dependencies.
+
     DATA(list) = /apmg/cl_apm_package_json=>list(
       instanciate = abap_true
       is_bundle   = abap_false ).
@@ -58766,14 +63187,10 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
     ENDIF.
 
     LOOP AT rules ASSIGNING FIELD-SYMBOL(<rule>).
-      IF dependencies IS NOT INITIAL.
-        READ TABLE dependencies ASSIGNING FIELD-SYMBOL(<dependency>)
-          WITH KEY name = <rule>-name.
-        IF sy-subrc <> 0.
-          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
-            EXPORTING
-              text = |Package { <rule>-name } used in IMPORT statement but not a dependency|.
-        ENDIF.
+      READ TABLE dependencies INTO dependency
+        WITH KEY name = <rule>-name.
+      IF sy-subrc <> 0.
+        CLEAR dependency.
       ENDIF.
 
       " TODO!: Instead of using the globally installed package as a source,
@@ -58793,16 +63210,19 @@ CLASS /apmg/cl_apm_importer IMPLEMENTATION.
           target_package = <rule>-target_package
           parent_package = <rule>-parent_package ).
 
+        " Latest, fixed version, or dist-tag
         CASE <rule>-version.
           WHEN /apmg/if_apm_types=>c_latest_version.
-            IF dependencies IS NOT INITIAL.
-              package-version = <dependency>-version.
+            IF dependency IS NOT INITIAL.
+              package-version = dependency-version.
             ELSE.
               package-version = <package_json>-version.
             ENDIF.
           WHEN <package_json>-version.
             " TODO: better error
             RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Version mismatch'.
+          WHEN OTHERS.
+            " TODO: check if it's a tag
         ENDCASE.
 
         INSERT package INTO TABLE result.
@@ -59230,6 +63650,7 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
           main_language = main_language ).
 
         " TODO: Support data config
+        " _deserialize_data( ... )
 
       CATCH cx_root INTO DATA(error).
         _transport_reset( ).
@@ -59267,6 +63688,9 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
 
         _confirm_messages( ).
 
+        " TODO: Support data config
+        " _delete_data( ... )
+
         " A few tries to tackle dependencies
         DO 3 TIMES.
           DATA(tadir) = zcl_abapgit_factory=>get_tadir( )->read( package ).
@@ -59287,8 +63711,6 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
               transport = transport ).
           ENDIF.
         ENDDO.
-
-        " TODO: Support data config
 
       CATCH cx_root INTO DATA(error).
         _transport_reset( ).
@@ -59547,7 +63969,10 @@ CLASS /apmg/cl_apm_installer IMPLEMENTATION.
       CATCH cx_root ##NO_HANDLER.
     ENDTRY.
 
-    DELETE FROM clmcus WHERE username = @sy-uname ##SUBRC_OK.
+    DELETE FROM clmcus
+      WHERE username = @sy-uname
+        AND ( obj_type = 'CLAS' OR obj_type = 'INTF' OR obj_type = 'METH' ) ##SUBRC_OK.
+
     INSERT clmcus FROM TABLE @clmcus_backup ##SUBRC_OK.
 
   ENDMETHOD.
@@ -60156,6 +64581,76 @@ CLASS /apmg/cl_apm_installer_files IMPLEMENTATION.
         <file>-path = <file>-path+length.
       ENDLOOP.
     ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_integrity IMPLEMENTATION.
+
+  METHOD calc_sha1.
+
+    TRY.
+        " Simple Shasum
+        cl_abap_hmac=>calculate_hmac_for_raw(
+          EXPORTING
+            if_algorithm  = 'SHA1'
+            if_key        = c_initial_key
+            if_data       = data
+          IMPORTING
+            ef_hmacstring = DATA(sha1) ).
+
+        result = to_lower( sha1 ).
+
+      CATCH cx_abap_message_digest INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD calc_sha512.
+
+    " Integrity Checksum (sha512)
+    " https://www.npmjs.com/package/ssri
+    " Note: It's not clear which ABAP kernel version is required for this
+
+    TRY.
+        cl_abap_hmac=>calculate_hmac_for_raw(
+          EXPORTING
+            if_algorithm     = 'SHA512'
+            if_key           = c_initial_key
+            if_data          = data
+          IMPORTING
+            ef_hmacb64string = DATA(sha512) ).
+
+        result = |sha512-{ sha512 }|.
+
+      CATCH cx_abap_message_digest INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD check.
+
+    DATA(shasum) = calc_sha1( tarball ).
+
+    IF shasum <> dist-shasum.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Checksum error for tarball (sha1)'.
+    ENDIF.
+
+    DATA(integrity) = calc_sha512( tarball ).
+
+    IF integrity <> dist-integrity.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Checksum error for tarball (sha512)'.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get.
+
+    result = VALUE #(
+      shasum    = calc_sha1( tarball )
+      integrity = calc_sha512( tarball ) ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -64432,6 +68927,9 @@ CLASS /apmg/cl_apm_object_clas IMPLEMENTATION.
 
         " No test classes in production
         IF is_production = abap_true.
+          " TODO: If target class had tests, then removing tests leads to warning
+          " |Byte code of program [CLASS...==CP] does not contain test classes|
+          " We need to update metadata in this case
           CLEAR import_metadata-with_unit_tests.
         ENDIF.
 
@@ -65959,6 +70457,8 @@ CLASS lcl_validate IMPLEMENTATION.
       ENDIF.
       IF NOT line_exists( manifest-dependencies[ key = value ] ).
         INSERT |Bundle dependency { value } not included in dependencies| INTO TABLE result.
+      ELSEIF NOT /apmg/cl_apm_package_json_vali=>is_valid_version( manifest-dependencies[ key = value ]-range ).
+        INSERT |Bundle dependency { value } must be pinned to a version| INTO TABLE result.
       ENDIF.
     ENDLOOP.
     IF lines( manifest-bundle_dependencies ) <> lines( values ).
@@ -66219,7 +70719,7 @@ CLASS /apmg/cl_apm_package_json_vali IMPLEMENTATION.
   METHOD is_valid_version.
 
     " Check if it is a semantic version
-    result = /apmg/cl_apm_semver_functions=>valid( version ).
+    result = xsdbool( /apmg/cl_apm_semver_functions=>valid( version ) IS NOT INITIAL ).
 
   ENDMETHOD.
 
@@ -66367,6 +70867,12 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD /apmg/if_apm_pacote~get_dist_tags.
+
+    result = pacote-packument-dist_tags.
+
+  ENDMETHOD.
+
   METHOD /apmg/if_apm_pacote~get_json.
 
     result = pacote-json.
@@ -66375,7 +70881,9 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
   METHOD /apmg/if_apm_pacote~get_version.
 
-    result = pacote-packument-versions[ key = version ]-manifest.
+    IF line_exists( pacote-packument-versions[ key = version ] ).
+      result = pacote-packument-versions[ key = version ]-manifest.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -66401,6 +70909,7 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
   METHOD /apmg/if_apm_pacote~manifest.
 
     result = request(
+      command     = 'package'
       url         = |{ registry }/{ pacote-name }/{ version }{ write_request( write ) }|
       abbreviated = abbreviated )->cdata( ).
 
@@ -66410,7 +70919,9 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
   METHOD /apmg/if_apm_pacote~packument.
 
-    result = request( |{ registry }/{ pacote-name }{ write_request( write ) }| )->cdata( ).
+    result = request(
+      command = 'package'
+      url     = |{ registry }/{ pacote-name }{ write_request( write ) }| )->cdata( ).
 
     check_result( result ).
 
@@ -66446,7 +70957,9 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
   METHOD /apmg/if_apm_pacote~tarball.
 
-    DATA(response) = request( filename ).
+    DATA(response) = request(
+      command = 'tarball'
+      url     = filename ).
 
     IF response->is_ok( ) = abap_false.
       check_result( response->cdata( ) ).
@@ -66720,7 +71233,7 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
     DATA(components) = /apmg/cl_apm_url=>parse( url )->components.
 
     " Get/set auth token
-    DATA(auth) = /apmg/cl_apm_http_login_manage=>get( components-host ).
+    DATA(auth) = /apmg/cl_apm_http_login_manage=>get_auth( components-host ).
 
     IF auth IS NOT INITIAL.
       result->global_headers( )->set(
@@ -66759,17 +71272,23 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
   METHOD request.
 
-    IF abbreviated IS INITIAL.
-      result = get_agent( registry )->request( url ).
-    ELSE.
-      DATA(headers) = NEW /apmg/cl_apm_string_map( )->set(
+    DATA(headers) = NEW /apmg/cl_apm_string_map( ).
+
+    IF command IS NOT INITIAL.
+      headers->set(
+        iv_key = 'apm-command'
+        iv_val = command ).
+    ENDIF.
+
+    IF abbreviated IS NOT INITIAL.
+      headers->set(
         iv_key = 'Accept'
         iv_val = 'application/vnd.npm.install-v1+json' ).
-
-      result = get_agent( registry )->request(
-        url     = url
-        headers = headers ).
     ENDIF.
+
+    result = get_agent( registry )->request(
+      url     = url
+      headers = headers ).
 
   ENDMETHOD.
 
@@ -67242,6 +71761,12 @@ CLASS /apmg/cl_apm_persist_apm_setup IMPLEMENTATION.
       maskklen   = 2
       prim_table = abap_true ).
 
+    " TODO: Replace
+    RETURN. ">>>>>
+
+    " This raises "Object type L invalid" OZ(099) in 8.16
+    " Object ZAPM with object type L is not valid.
+    " Looks like we can't use this function
     CALL FUNCTION 'OBJ_GENERATE'
       EXPORTING
         iv_objectname         = objh-objectname
@@ -67742,6 +72267,211 @@ CLASS /apmg/cl_apm_readme IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
+CLASS /apmg/cl_apm_registry IMPLEMENTATION.
+
+  METHOD check_logged_in.
+
+    IF /apmg/cl_apm_http_login_manage=>get_username( registry ) IS INITIAL.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'This command requires you to be logged in.'.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD check_logged_out.
+
+    IF /apmg/cl_apm_http_login_manage=>get_username( registry ) IS NOT INITIAL.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'You have to log out to log in again.'.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD check_response.
+
+    IF response->is_ok( ) = abap_false.
+      result = |{ text } ({ response->code( ) }): { get_error( response->error( ) ) }|.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD fetch.
+
+    DATA(headers) = /apmg/cl_apm_string_map=>create( ).
+
+    " apm Headers
+    IF command IS NOT INITIAL.
+      headers->set(
+        iv_key = c_header-apm_command
+        iv_val = command ).
+    ENDIF.
+    IF auth_type IS NOT INITIAL.
+      headers->set(
+        iv_key = c_header-apm_auth_type
+        iv_val = auth_type ).
+    ENDIF.
+
+    IF username IS NOT INITIAL AND password IS NOT INITIAL.
+      /apmg/cl_apm_http_login_manage=>set_basic(
+        host     = registry
+        username = username
+        password = password ).
+    ENDIF.
+
+    /apmg/cl_apm_trace=>cdata( |{ method } { url }\n\n{ payload }| ).
+
+    result = get_agent( registry )->request(
+      url     = url
+      headers = headers
+      method  = method
+      payload = payload ).
+
+    /apmg/cl_apm_trace=>cdata( |{ result->code( ) }\n\n{ result->cdata( ) }| ).
+
+  ENDMETHOD.
+
+  METHOD get_agent.
+
+    " Based on host, get registry settings from user (rfcdest, username, password, proxy, ...)
+    " and pass these to the agent here
+    result = /apmg/cl_apm_http_agent=>create( ).
+
+    result->global_headers( )->set(
+      iv_key = /apmg/if_apm_http_agent=>c_header-accept
+      iv_val = /apmg/if_apm_http_agent=>c_content_type-json ).
+
+    result->global_headers( )->set(
+      iv_key = /apmg/if_apm_http_agent=>c_header-content_type
+      iv_val = /apmg/if_apm_http_agent=>c_content_type-json ).
+
+    result->global_headers( )->set(
+      iv_key = /apmg/if_apm_http_agent=>c_header-user_agent
+      iv_val = /apmg/cl_apm_utils=>get_user_agent( ) ).
+
+    " Authorization (Basic or Bearer)
+    DATA(auth) = /apmg/cl_apm_http_login_manage=>get_auth( host ).
+
+    IF auth IS NOT INITIAL.
+      result->global_headers( )->set(
+        iv_key = /apmg/if_apm_http_agent=>c_header-authorization
+        iv_val = auth ).
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_error.
+
+    CHECK response IS NOT INITIAL.
+
+    IF response(1) <> '{'.
+      result = response.
+    ELSE.
+      result = /apmg/cl_apm_json=>get(
+        json = response
+        path = '/error' ).
+    ENDIF.
+
+    IF result IS NOT INITIAL.
+      result = to_upper( result(1) ) && result+1.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_latest_version.
+
+    DATA(packument) = get_packument(
+      registry = registry
+      name     = name ).
+
+    DATA(tags) = packument-dist_tags.
+
+    IF line_exists( tags[ key = 'latest' ] ).
+      result = tags[ key = 'latest' ]-value.
+    ELSE.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+        EXPORTING
+          text = |"latest" tag is missing for package { name }. Please, open an issue on GitHub|.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_manifest.
+
+    " The abbreviated manifest would be sufficient for installer
+    " however we also want to get the description and readme
+    DATA(pacote) = /apmg/cl_apm_pacote=>factory(
+      registry = registry
+      name     = name ).
+
+    DATA(json) = pacote->manifest(
+      version = version
+      write   = write ).
+
+    result = /apmg/cl_apm_package_json=>convert_json_to_manifest( json ).
+
+  ENDMETHOD.
+
+  METHOD get_name_from_scope_package.
+
+    IF scope IS INITIAL.
+      result = package.
+    ELSE.
+      result = |{ scope }/{ package }|.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_package_from_name.
+
+    IF name(1) = '@' AND name CS '/'.
+      result = substring_after( val = name sub = '/' ).
+    ELSE.
+      result = name.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_packument.
+
+    " The abbreviated manifest would be sufficient for installer
+    " however we also want to get the description and readme
+    DATA(pacote) = /apmg/cl_apm_pacote=>factory(
+      registry = registry
+      name     = name ).
+
+    pacote->packument( write ).
+
+    result = pacote->get( ).
+
+  ENDMETHOD.
+
+  METHOD get_scope_from_name.
+
+    IF name(1) = '@' AND name CA '/'.
+      result = substring_before( val = name sub = '/' ).
+    ELSE.
+      result = ''.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_tarball.
+
+    result = /apmg/cl_apm_pacote=>factory(
+      registry = registry
+      name     = name )->tarball( tarball ).
+
+  ENDMETHOD.
+
+  METHOD get_versions_from_packument.
+
+    LOOP AT packument-versions ASSIGNING FIELD-SYMBOL(<version>).
+      INSERT <version>-key INTO TABLE result.
+    ENDLOOP.
+
+    result = /apmg/cl_apm_semver_functions=>sort( result ).
+
+  ENDMETHOD.
+ENDCLASS.
+
 CLASS /apmg/cl_apm_roadmap IMPLEMENTATION.
 
   METHOD not_implemented.
@@ -68100,8 +72830,9 @@ CLASS /apmg/cl_apm_semver IMPLEMENTATION.
             prerelease_tab = VALUE #( ( identifier ) ).
           ENDIF.
 
-          IF /apmg/cl_apm_semver_identifier=>compare_identifiers( a = prerelease[ 1 ] b = identifier ) = 0.
-            IF NOT /apmg/cl_apm_semver_utils=>is_numeric( VALUE #( prerelease[ 2 ] DEFAULT `-` ) ).
+          IF _is_prerelease_identifier( identifier ).
+            DATA(prerelease_base) = _get_prerelease_base( identifier ).
+            IF NOT /apmg/cl_apm_semver_utils=>is_numeric( prerelease_base ).
               prerelease = prerelease_tab.
             ENDIF.
           ELSE.
@@ -68131,6 +72862,44 @@ CLASS /apmg/cl_apm_semver IMPLEMENTATION.
 
   METHOD to_string.
     result = version.
+  ENDMETHOD.
+
+  METHOD truncate.
+
+    result = me.
+
+    CASE release_type.
+      WHEN 'major'.
+        minor = 0.
+        patch = 0.
+        CLEAR: prerelease, build.
+      WHEN 'minor'.
+        patch = 0.
+        CLEAR: prerelease, build.
+      WHEN 'patch'.
+        CLEAR: prerelease, build.
+      WHEN 'premajor' OR 'preminor' OR 'prepatch' OR 'prerelease' OR 'release'.
+        CLEAR build.
+      WHEN OTHERS.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
+          EXPORTING
+            text = |Invalid release type argument { release_type }|.
+    ENDCASE.
+
+    format( ).
+
+  ENDMETHOD.
+
+  METHOD _get_prerelease_base.
+
+    SPLIT identifier AT '.' INTO TABLE DATA(identifiers).
+
+    IF lines( identifiers ) + 1 > lines( prerelease ).
+      result = '-'.
+    ELSE.
+      result = prerelease[ lines( identifiers ) + 1 ].
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD _inc_check.
@@ -68166,11 +72935,36 @@ CLASS /apmg/cl_apm_semver IMPLEMENTATION.
     ENDIF.
 
   ENDMETHOD.
+
+  METHOD _is_prerelease_identifier.
+
+    result = abap_false.
+
+    SPLIT identifier AT '.' INTO TABLE DATA(identifiers).
+
+    IF lines( identifiers ) > lines( prerelease ).
+      RETURN.
+    ENDIF.
+
+    LOOP AT identifiers ASSIGNING FIELD-SYMBOL(<identifier>).
+      READ TABLE prerelease ASSIGNING FIELD-SYMBOL(<prerelease>) INDEX sy-tabix.
+      ASSERT sy-subrc = 0.
+
+      IF /apmg/cl_apm_semver_identifier=>compare_identifiers( a = <prerelease> b = <identifier> ) <> 0.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+
+    result = abap_true.
+
+  ENDMETHOD.
 ENDCLASS.
 
 CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
 
   METHOD main.
+
+    _clear( ).
 
     _argv( args ).
 
@@ -68185,10 +72979,6 @@ CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD _argv.
-
-    CLEAR:
-      argv, versions, ranges, inc, identifier, identifier_base,
-      help, loose, incpre, coerce, rtl, reverse.
 
     IF args IS INITIAL.
       help = abap_true.
@@ -68230,6 +73020,8 @@ CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
               inc = VALUE #( argv[ idx ] OPTIONAL ).
             WHEN OTHERS.
               inc = 'patch'.
+              DATA(inc_maybe_errant_value) = val.
+              DATA(inc_option)             = a.
           ENDCASE.
         WHEN '--preid'.
           idx = idx + 1.
@@ -68258,6 +73050,29 @@ CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
 
       idx = idx + 1.
     ENDDO.
+
+    IF inc IS NOT INITIAL AND inc_maybe_errant_value IS NOT INITIAL.
+      FIND inc_maybe_errant_value IN TABLE versions.
+      IF sy-subrc = 0.
+        DATA(valid) = /apmg/cl_apm_semver_functions=>valid(
+          version = inc_maybe_errant_value
+          loose   = loose
+          incpre  = incpre ).
+        IF valid IS INITIAL.
+          DATA(msg) = |WARN: Invalid value for { inc_option }; defaulting to 'patch'. |
+                   && |This may become a failure in future major versions.|.
+          INSERT msg INTO TABLE warnings.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD _clear.
+
+    CLEAR:
+      argv, versions, ranges, inc, identifier, identifier_base,
+      help, loose, incpre, coerce, rtl, reverse, warnings.
 
   ENDMETHOD.
 
@@ -68292,11 +73107,6 @@ CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
       ( `-l --loose` )
       ( `        Interpret versions and ranges loosely` )
       ( `` )
-      ( `-n <base>` )
-      ( `        Base number to be used for the prerelease identifier.` )
-      ( `        Can be either 0 or 1, or false to omit the number altogether.` )
-      ( `        Defaults to 0.` )
-      ( `` )
       ( `-p --include-prerelease` )
       ( `        Always include prerelease versions in range matching` )
       ( `` )
@@ -68310,15 +73120,24 @@ CLASS /apmg/cl_apm_semver_cli IMPLEMENTATION.
       ( `--ltr` )
       ( `        Coerce version strings left to right (default)` )
       ( `` )
+      ( `-n <base>` )
+      ( `        Base number to be used for the prerelease identifier.` )
+      ( `        Can be either 0 or 1, or false to omit the number altogether.` )
+      ( `        Defaults to 0.` )
+      ( `` )
       ( `Program exits successfully if any valid version satisfies` )
       ( `all supplied ranges, and prints all satisfying versions.` )
+      ( `` )
       ( `If no satisfying versions are found, then exits failure.` )
+      ( `` )
       ( `Versions are printed in ascending order, so supplying` )
       ( `multiple versions to the utility will just sort them.` ) ).
 
   ENDMETHOD.
 
   METHOD _success.
+
+    INSERT LINES OF warnings INTO TABLE result.
 
     IF reverse = abap_true.
       versions = /apmg/cl_apm_semver_functions=>rsort( versions ).
@@ -68792,173 +73611,176 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
 
     " inc(version, re, options, identifier, identifier_base) -> result
     result = VALUE #(
-      ( version         = '1.2.3'                 release         = 'major'      res = '2.0.0' )
-      ( version         = '1.2.3'                 release         = 'minor'      res = '1.3.0' )
-      ( version         = '1.2.3'                 release         = 'patch'      res = '1.2.4' )
-      ( version         = '1.2.3tag'              release         = 'major'      res = '2.0.0'                 loose      = abap_true )
-      ( version         = '1.2.3-tag'             release         = 'major'      res = '2.0.0' )
-      ( version         = '1.2.3'                 release         = 'fake'       res = '' )
-      ( version         = '1.2.0-0'               release         = 'patch'      res = '1.2.0' )
-      ( version         = 'fake'                  release         = 'major'      res = '' )
-      ( version         = '1.2.3-4'               release         = 'major'      res = '2.0.0' )
-      ( version         = '1.2.3-4'               release         = 'minor'      res = '1.3.0' )
-      ( version         = '1.2.3-4'               release         = 'patch'      res = '1.2.3' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'major'      res = '2.0.0' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'minor'      res = '1.3.0' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'patch'      res = '1.2.3' )
-      ( version         = '1.2.4'                 release         = 'prerelease' res = '1.2.5-0' )
-      ( version         = '1.2.3-0'               release         = 'prerelease' res = '1.2.3-1' )
-      ( version         = '1.2.3-alpha.0'         release         = 'prerelease' res = '1.2.3-alpha.1' )
-      ( version         = '1.2.3-alpha.1'         release         = 'prerelease' res = '1.2.3-alpha.2' )
-      ( version         = '1.2.3-alpha.2'         release         = 'prerelease' res = '1.2.3-alpha.3' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'prerelease' res = '1.2.3-alpha.1.beta' )
-      ( version         = '1.2.3-alpha.1.beta'    release         = 'prerelease' res = '1.2.3-alpha.2.beta' )
-      ( version         = '1.2.3-alpha.2.beta'    release         = 'prerelease' res = '1.2.3-alpha.3.beta' )
-      ( version         = '1.2.3-alpha.10.0.beta' release         = 'prerelease' res = '1.2.3-alpha.10.1.beta' )
-      ( version         = '1.2.3-alpha.10.1.beta' release         = 'prerelease' res = '1.2.3-alpha.10.2.beta' )
-      ( version         = '1.2.3-alpha.10.2.beta' release         = 'prerelease' res = '1.2.3-alpha.10.3.beta' )
-      ( version         = '1.2.3-alpha.10.beta.0' release         = 'prerelease' res = '1.2.3-alpha.10.beta.1' )
-      ( version         = '1.2.3-alpha.10.beta.1' release         = 'prerelease' res = '1.2.3-alpha.10.beta.2' )
-      ( version         = '1.2.3-alpha.10.beta.2' release         = 'prerelease' res = '1.2.3-alpha.10.beta.3' )
-      ( version         = '1.2.3-alpha.9.beta'    release         = 'prerelease' res = '1.2.3-alpha.10.beta' )
-      ( version         = '1.2.3-alpha.10.beta'   release         = 'prerelease' res = '1.2.3-alpha.11.beta' )
-      ( version         = '1.2.3-alpha.11.beta'   release         = 'prerelease' res = '1.2.3-alpha.12.beta' )
-      ( version         = '1.0.0'                 release         = 'prepatch'   res = '1.0.1-alpha.1.1a.0'    identifier = 'alpha.1.1a' )
-      ( version         = '1.2.0'                 release         = 'prepatch'   res = '1.2.1-0' )
-      ( version         = '1.2.0-1'               release         = 'prepatch'   res = '1.2.1-0' )
-      ( version         = '1.2.0'                 release         = 'preminor'   res = '1.3.0-0' )
-      ( version         = '1.2.3-1'               release         = 'preminor'   res = '1.3.0-0' )
-      ( version         = '1.2.0'                 release         = 'premajor'   res = '2.0.0-0' )
-      ( version         = '1.2.3-1'               release         = 'premajor'   res = '2.0.0-0' )
-      ( version         = '1.2.0-1'               release         = 'minor'      res = '1.2.0' )
-      ( version         = '1.0.0-1'               release         = 'major'      res = '1.0.0' )
-      ( version         = '1.0.0-1'               release         = 'release'    res = '1.0.0' )
-      ( version         = '1.2.0-1'               release         = 'release'    res = '1.2.0' )
-      ( version         = '1.2.3-1'               release         = 'release'    res = '1.2.3' )
-      ( version         = '1.2.3'                 release         = 'release'    res = '' )
+      ( version         = '1.2.3'                  release         = 'major'      res = '2.0.0' )
+      ( version         = '1.2.3'                  release         = 'minor'      res = '1.3.0' )
+      ( version         = '1.2.3'                  release         = 'patch'      res = '1.2.4' )
+      ( version         = '1.2.3tag'               release         = 'major'      res = '2.0.0'                 loose      = abap_true )
+      ( version         = '1.2.3-tag'              release         = 'major'      res = '2.0.0' )
+      ( version         = '1.2.3'                  release         = 'fake'       res = '' )
+      ( version         = '1.2.0-0'                release         = 'patch'      res = '1.2.0' )
+      ( version         = 'fake'                   release         = 'major'      res = '' )
+      ( version         = '1.2.3-4'                release         = 'major'      res = '2.0.0' )
+      ( version         = '1.2.3-4'                release         = 'minor'      res = '1.3.0' )
+      ( version         = '1.2.3-4'                release         = 'patch'      res = '1.2.3' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'major'      res = '2.0.0' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'minor'      res = '1.3.0' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'patch'      res = '1.2.3' )
+      ( version         = '1.2.4'                  release         = 'prerelease' res = '1.2.5-0' )
+      ( version         = '1.2.3-0'                release         = 'prerelease' res = '1.2.3-1' )
+      ( version         = '1.2.3-alpha.0'          release         = 'prerelease' res = '1.2.3-alpha.1' )
+      ( version         = '1.2.3-alpha.1'          release         = 'prerelease' res = '1.2.3-alpha.2' )
+      ( version         = '1.2.3-alpha.2'          release         = 'prerelease' res = '1.2.3-alpha.3' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'prerelease' res = '1.2.3-alpha.1.beta' )
+      ( version         = '1.2.3-alpha.1.beta'     release         = 'prerelease' res = '1.2.3-alpha.2.beta' )
+      ( version         = '1.2.3-alpha.2.beta'     release         = 'prerelease' res = '1.2.3-alpha.3.beta' )
+      ( version         = '1.2.3-alpha.10.0.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.1.beta' )
+      ( version         = '1.2.3-alpha.10.1.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.2.beta' )
+      ( version         = '1.2.3-alpha.10.2.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.3.beta' )
+      ( version         = '1.2.3-alpha.10.beta.0'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.1' )
+      ( version         = '1.2.3-alpha.10.beta.1'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.2' )
+      ( version         = '1.2.3-alpha.10.beta.2'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.3' )
+      ( version         = '1.2.3-alpha.9.beta'     release         = 'prerelease' res = '1.2.3-alpha.10.beta' )
+      ( version         = '1.2.3-alpha.10.beta'    release         = 'prerelease' res = '1.2.3-alpha.11.beta' )
+      ( version         = '1.2.3-alpha.11.beta'    release         = 'prerelease' res = '1.2.3-alpha.12.beta' )
+      ( version         = '1.0.0'                  release         = 'prepatch'   res = '1.0.1-alpha.1.1a.0'    identifier = 'alpha.1.1a' )
+      ( version         = '1.2.0'                  release         = 'prepatch'   res = '1.2.1-0' )
+      ( version         = '1.2.0-1'                release         = 'prepatch'   res = '1.2.1-0' )
+      ( version         = '1.2.0'                  release         = 'preminor'   res = '1.3.0-0' )
+      ( version         = '1.2.3-1'                release         = 'preminor'   res = '1.3.0-0' )
+      ( version         = '1.2.0'                  release         = 'premajor'   res = '2.0.0-0' )
+      ( version         = '1.2.3-1'                release         = 'premajor'   res = '2.0.0-0' )
+      ( version         = '1.2.0-1'                release         = 'minor'      res = '1.2.0' )
+      ( version         = '1.0.0-1'                release         = 'major'      res = '1.0.0' )
+      ( version         = '1.0.0-1'                release         = 'release'    res = '1.0.0' )
+      ( version         = '1.2.0-1'                release         = 'release'    res = '1.2.0' )
+      ( version         = '1.2.3-1'                release         = 'release'    res = '1.2.3' )
+      ( version         = '1.2.3'                  release         = 'release'    res = '' )
       " identifier
-      ( version         = '1.2.3'                 release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
-      ( version         = '1.2.3'                 release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
-      ( version         = '1.2.3'                 release         = 'patch'      res = '1.2.4'                 identifier = 'dev' )
-      ( version         = '1.2.3tag'              release         = 'major'      res = '2.0.0'                 identifier = 'dev'
+      ( version         = '1.2.3'                  release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
+      ( version         = '1.2.3'                  release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
+      ( version         = '1.2.3'                  release         = 'patch'      res = '1.2.4'                 identifier = 'dev' )
+      ( version         = '1.2.3tag'               release         = 'major'      res = '2.0.0'                 identifier = 'dev'
         loose           = abap_true )
-      ( version         = '1.2.3-tag'             release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
-      ( version         = '1.2.3'                 release         = 'fake'       res = ''                      identifier = 'dev' )
-      ( version         = '1.2.0-0'               release         = 'patch'      res = '1.2.0'                 identifier = 'dev' )
-      ( version         = 'fake'                  release         = 'major'      res = ''                      identifier = 'dev' )
-      ( version         = '1.2.3-4'               release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
-      ( version         = '1.2.3-4'               release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
-      ( version         = '1.2.3-4'               release         = 'patch'      res = '1.2.3'                 identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'patch'      res = '1.2.3'                 identifier = 'dev' )
-      ( version         = '1.2.4'                 release         = 'prerelease' res = '1.2.5-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-0'               release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0'         release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0'         release         = 'prerelease' res = '1.2.3-alpha.1'         identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.0.beta'    release         = 'prerelease' res = '1.2.3-alpha.1.beta'    identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.0.beta' release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.10.0.beta' release         = 'prerelease' res = '1.2.3-alpha.10.1.beta' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.1.beta' release         = 'prerelease' res = '1.2.3-alpha.10.2.beta' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.2.beta' release         = 'prerelease' res = '1.2.3-alpha.10.3.beta' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.beta.0' release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.10.beta.0' release         = 'prerelease' res = '1.2.3-alpha.10.beta.1' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.beta.1' release         = 'prerelease' res = '1.2.3-alpha.10.beta.2' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.beta.2' release         = 'prerelease' res = '1.2.3-alpha.10.beta.3' identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.9.beta'    release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-alpha.9.beta'    release         = 'prerelease' res = '1.2.3-alpha.10.beta'   identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.10.beta'   release         = 'prerelease' res = '1.2.3-alpha.11.beta'   identifier = 'alpha' )
-      ( version         = '1.2.3-alpha.11.beta'   release         = 'prerelease' res = '1.2.3-alpha.12.beta'   identifier = 'alpha' )
-      ( version         = '1.2.0'                 release         = 'prepatch'   res = '1.2.1-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.0-1'               release         = 'prepatch'   res = '1.2.1-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.0'                 release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-1'               release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.0'                 release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-1'               release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.3-1'               release         = 'premajor'   res = '2.0.0-dev.1'           identifier = 'dev'
+      ( version         = '1.2.3-tag'              release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
+      ( version         = '1.2.3'                  release         = 'fake'       res = ''                      identifier = 'dev' )
+      ( version         = '1.2.0-0'                release         = 'patch'      res = '1.2.0'                 identifier = 'dev' )
+      ( version         = 'fake'                   release         = 'major'      res = ''                      identifier = 'dev' )
+      ( version         = '1.2.3-4'                release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
+      ( version         = '1.2.3-4'                release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
+      ( version         = '1.2.3-4'                release         = 'patch'      res = '1.2.3'                 identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'major'      res = '2.0.0'                 identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'minor'      res = '1.3.0'                 identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'patch'      res = '1.2.3'                 identifier = 'dev' )
+      ( version         = '1.2.4'                  release         = 'prerelease' res = '1.2.5-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-0'                release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0'          release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0'          release         = 'prerelease' res = '1.2.3-alpha.1'         identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.0.beta'     release         = 'prerelease' res = '1.2.3-alpha.1.beta'    identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.0.beta'  release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.10.0.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.1.beta' identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.1.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.2.beta' identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.2.beta'  release         = 'prerelease' res = '1.2.3-alpha.10.3.beta' identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.beta.0'  release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.10.beta.0'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.1' identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.beta.1'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.2' identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.beta.2'  release         = 'prerelease' res = '1.2.3-alpha.10.beta.3' identifier = 'alpha' )
+      ( version         = '3.0.0-alpha.beta.5.4'   release         = 'prerelease' res = '3.0.0-alpha.beta.5.5'  identifier = 'alpha.beta' )
+      ( version         = '3.0.0-alpha.beta.5.4'   release         = 'prerelease' res = '3.0.0-alpha.beta.5.5'  identifier = 'alpha.beta.5' )
+      ( version         = '3.0.0-alpha.beta.gamma' release         = 'prerelease' res = '3.0.0-alpha.beta.0'    identifier = 'alpha.beta' )
+      ( version         = '1.2.3-alpha.9.beta'     release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-alpha.9.beta'     release         = 'prerelease' res = '1.2.3-alpha.10.beta'   identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.10.beta'    release         = 'prerelease' res = '1.2.3-alpha.11.beta'   identifier = 'alpha' )
+      ( version         = '1.2.3-alpha.11.beta'    release         = 'prerelease' res = '1.2.3-alpha.12.beta'   identifier = 'alpha' )
+      ( version         = '1.2.0'                  release         = 'prepatch'   res = '1.2.1-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.0-1'                release         = 'prepatch'   res = '1.2.1-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.0'                  release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-1'                release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.0'                  release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-1'                release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.3-1'                release         = 'premajor'   res = '2.0.0-dev.1'           identifier = 'dev'
         identifier_base = '1' )
-      ( version         = '1.2.0-1'               release         = 'minor'      res = '1.2.0'                 identifier = 'dev' )
-      ( version         = '1.0.0-1'               release         = 'major'      res = '1.0.0'                 identifier = 'dev' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.0-1'                release         = 'minor'      res = '1.2.0'                 identifier = 'dev' )
+      ( version         = '1.0.0-1'                release         = 'major'      res = '1.0.0'                 identifier = 'dev' )
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev' )
       " prerelease
-      ( version         = '1.2.3-0'               release         = 'prerelease' res = '1.2.3-1.0'             identifier = '1' )
-      ( version         = '1.2.3-1.0'             release         = 'prerelease' res = '1.2.3-1.1'             identifier = '1' )
-      ( version         = '1.2.3-1.1'             release         = 'prerelease' res = '1.2.3-1.2'             identifier = '1' )
-      ( version         = '1.2.3-1.1'             release         = 'prerelease' res = '1.2.3-2.0'             identifier = '2' )
-      ( version         = '1.2.0-1'               release         = 'prerelease' res = '1.2.0-alpha.0'         identifier = 'alpha'
+      ( version         = '1.2.3-0'                release         = 'prerelease' res = '1.2.3-1.0'             identifier = '1' )
+      ( version         = '1.2.3-1.0'              release         = 'prerelease' res = '1.2.3-1.1'             identifier = '1' )
+      ( version         = '1.2.3-1.1'              release         = 'prerelease' res = '1.2.3-1.2'             identifier = '1' )
+      ( version         = '1.2.3-1.1'              release         = 'prerelease' res = '1.2.3-2.0'             identifier = '2' )
+      ( version         = '1.2.0-1'                release         = 'prerelease' res = '1.2.0-alpha.0'         identifier = 'alpha'
         identifier_base = '0' )
-      ( version         = '1.2.1'                 release         = 'prerelease' res = '1.2.2-alpha.0'         identifier = 'alpha'
+      ( version         = '1.2.1'                  release         = 'prerelease' res = '1.2.2-alpha.0'         identifier = 'alpha'
         identifier_base = '0' )
-      ( version         = '0.2.0'                 release         = 'prerelease' res = '0.2.1-alpha.0'         identifier = 'alpha'
+      ( version         = '0.2.0'                  release         = 'prerelease' res = '0.2.1-alpha.0'         identifier = 'alpha'
         identifier_base = '0' )
-      ( version         = '1.2.2'                 release         = 'prerelease' res = '1.2.3-alpha.1'         identifier = 'alpha'
+      ( version         = '1.2.2'                  release         = 'prerelease' res = '1.2.3-alpha.1'         identifier = 'alpha'
         identifier_base = '1' )
-      ( version         = '1.2.3'                 release         = 'prerelease' res = '1.2.4-alpha.1'         identifier = 'alpha'
+      ( version         = '1.2.3'                  release         = 'prerelease' res = '1.2.4-alpha.1'         identifier = 'alpha'
         identifier_base = '1' )
-      ( version         = '1.2.4'                 release         = 'prerelease' res = '1.2.5-alpha.1'         identifier = 'alpha'
+      ( version         = '1.2.4'                  release         = 'prerelease' res = '1.2.5-alpha.1'         identifier = 'alpha'
         identifier_base = '1' )
-      ( version         = '1.2.0'                 release         = 'prepatch'   res = '1.2.1-dev.1'           identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'prepatch'   res = '1.2.1-dev.1'           identifier = 'dev'
         identifier_base = '1' )
-      ( version         = '1.2.0-1'               release         = 'prepatch'   res = '1.2.1-dev.1'           identifier = 'dev'
+      ( version         = '1.2.0-1'                release         = 'prepatch'   res = '1.2.1-dev.1'           identifier = 'dev'
         identifier_base = '1' )
-      ( version         = '1.2.0'                 release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev'
         identifier_base = '0' )
-      ( version         = '1.2.3-1'               release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev'
+      ( version         = '1.2.3-1'                release         = 'premajor'   res = '2.0.0-dev.0'           identifier = 'dev'
         identifier_base = '0' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev'
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.0'           identifier = 'dev'
         identifier_base = '0' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.1'           identifier = 'dev'
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.1'           identifier = 'dev'
         identifier_base = '1' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.bar.0'       identifier = ''
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.bar.0'       identifier = ''
         identifier_base = '0' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.bar.1'       identifier = ''
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.bar.1'       identifier = ''
         identifier_base = '1' )
-      ( version         = '1.2.0'                 release         = 'preminor'   res = '1.3.0-dev.1'           identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'preminor'   res = '1.3.0-dev.1'           identifier = 'dev'
         identifier_base = '1' )
-      ( version         = '1.2.3-1'               release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
-      ( version         = '1.2.0'                 release         = 'prerelease' res = '1.2.1-1'               identifier = ''
+      ( version         = '1.2.3-1'                release         = 'preminor'   res = '1.3.0-dev.0'           identifier = 'dev' )
+      ( version         = '1.2.0'                  release         = 'prerelease' res = '1.2.1-1'               identifier = ''
         identifier_base = '1' )
-      ( version         = '1.2.0-1'               release         = 'prerelease' res = '1.2.0-alpha'           identifier = 'alpha'
+      ( version         = '1.2.0-1'                release         = 'prerelease' res = '1.2.0-alpha'           identifier = 'alpha'
         identifier_base = 'false' )
-      ( version         = '1.2.1'                 release         = 'prerelease' res = '1.2.2-alpha'           identifier = 'alpha'
+      ( version         = '1.2.1'                  release         = 'prerelease' res = '1.2.2-alpha'           identifier = 'alpha'
         identifier_base = 'false' )
-      ( version         = '1.2.2'                 release         = 'prerelease' res = '1.2.3-alpha'           identifier = 'alpha'
+      ( version         = '1.2.2'                  release         = 'prerelease' res = '1.2.3-alpha'           identifier = 'alpha'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.0-1'               release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
+      ( version         = '1.2.0-1'                release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.3-1'               release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
+      ( version         = '1.2.3-1'                release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev'             identifier = 'dev'
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.3-dev.bar'         release         = 'prerelease' res = '1.2.3-dev.baz'         identifier = 'dev.baz'
+      ( version         = '1.2.3-dev.bar'          release         = 'prerelease' res = '1.2.3-dev.baz'         identifier = 'dev.baz'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'preminor'   res = '1.3.0-dev'             identifier = 'dev'
+      ( version         = '1.2.0'                  release         = 'preminor'   res = '1.3.0-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.3-1'               release         = 'preminor'   res = '1.3.0-dev'             identifier = 'dev'
+      ( version         = '1.2.3-1'                release         = 'preminor'   res = '1.3.0-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.3-dev'             release         = 'prerelease' res = ''                      identifier = 'dev'
+      ( version         = '1.2.3-dev'              release         = 'prerelease' res = ''                      identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.0-dev'             release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
+      ( version         = '1.2.0-dev'              release         = 'premajor'   res = '2.0.0-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.0-dev'             release         = 'preminor'   res = '1.3.0-beta'            identifier = 'beta'
+      ( version         = '1.2.0-dev'              release         = 'preminor'   res = '1.3.0-beta'            identifier = 'beta'
         identifier_base = 'false' )
-      ( version         = '1.2.0-dev'             release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
+      ( version         = '1.2.0-dev'              release         = 'prepatch'   res = '1.2.1-dev'             identifier = 'dev'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'prerelease' res = ''                      identifier = ''
+      ( version         = '1.2.0'                  release         = 'prerelease' res = ''                      identifier = ''
         identifier_base = 'false' )
-      ( version         = '1.0.0-rc.1+build.4'    release         = 'prerelease' res = '1.0.0-rc.2'            identifier = 'rc'
+      ( version         = '1.0.0-rc.1+build.4'     release         = 'prerelease' res = '1.0.0-rc.2'            identifier = 'rc'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'prerelease' res = ''                      identifier = 'invalid/preid'
+      ( version         = '1.2.0'                  release         = 'prerelease' res = ''                      identifier = 'invalid/preid'
         identifier_base = 'false' )
-      ( version         = '1.2.0'                 release         = 'prerelease' res = ''                      identifier = 'invalid+build'
+      ( version         = '1.2.0'                  release         = 'prerelease' res = ''                      identifier = 'invalid+build'
         identifier_base = 'false' )
-      ( version         = '1.2.0beta'             release         = 'prerelease' res = ''                      identifier = 'invalid/preid'
-        loose           = abap_true               identifier_base = 'false' ) ).
+      ( version         = '1.2.0beta'              release         = 'prerelease' res = ''                      identifier = 'invalid/preid'
+        loose           = abap_true                identifier_base = 'false' ) ).
 
   ENDMETHOD.
 
@@ -69078,6 +73900,8 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
       ( range = '>=2'                     version = '' )
       " incpre
       ( range = '2.x'                     version = '3.0.0-pre.0' incpre = abap_true )
+      ( range = '^0.0.3'                  version = '0.0.3-alpha' incpre = abap_true )
+      ( range = '^0.2.3'                  version = '0.2.3-alpha' incpre = abap_true )
       ( range = '^1.0.0'                  version = '1.0.0-rc1'   incpre = abap_true )
       ( range = '^1.0.0'                  version = '2.0.0-rc1'   incpre = abap_true )
       ( range = '^1.2.3-rc2'              version = '2.0.0'       incpre = abap_true )
@@ -69306,7 +74130,6 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
     " '*' is the return value from functions.validRange(), but
     " new Range().range will be '' in those cases
     result = VALUE #(
-      ( range = '1.x.x+build >2.x+build' res = '>=1.0.0 <2.0.0-0 >=3.0.0' )
       ( range = '1.0.0 - 2.0.0' res = '>=1.0.0 <=2.0.0' )
       ( range = '1.0.0 - 2.0.0' res = '>=1.0.0-0 <2.0.1-0' incpre = abap_true )
       ( range = '1 - 2' res = '>=1.0.0 <3.0.0-0' )
@@ -69339,6 +74162,12 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
       ( range = '2.x.x' res = '>=2.0.0 <3.0.0-0' )
       ( range = '1.2.x' res = '>=1.2.0 <1.3.0-0' )
       ( range = '1.2.x || 2.x' res = '>=1.2.0 <1.3.0-0||>=2.0.0 <3.0.0-0' )
+      ( range = '1.x.5' res = '' )
+      ( range = '1.*.5' res = '' )
+      ( range = '1.x.5 || 2.x' res = '' )
+      ( range = 'x.1' res = '' )
+      ( range = 'x.1.2' res = '' )
+      ( range = 'x.x.1' res = '' )
       ( range = 'x' res = '*' )
       ( range = '2.*.*' res = '>=2.0.0 <3.0.0-0' )
       ( range = '1.2.*' res = '>=1.2.0 <1.3.0-0' )
@@ -69419,7 +74248,59 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
       ( range = '1.x.x-alpha+build' res = '>=1.0.0 <2.0.0-0' )
       ( range = '>1.x.x-alpha+build' res = '>=2.0.0' )
       ( range = '>=1.x.x-alpha+build <2.x.x+build' res = '>=1.0.0 <2.0.0-0' )
-      ( range = '1.x.x-alpha+build || 2.x.x+build' res = '>=1.0.0 <2.0.0-0||>=2.0.0 <3.0.0-0' ) ).
+      ( range = '1.x.x-alpha+build || 2.x.x+build' res = '>=1.0.0 <2.0.0-0||>=2.0.0 <3.0.0-0' )
+      " long build metadata must be stripped, not bled into the version
+      ( range = '4.17.0+' && repeat( val = 'a' occ = 250 ) && '3' res = '4.17.0' loose = abap_true )
+      ( range = '4.17.0+' && repeat( val = 'a' occ = 251 ) res = '4.17.0' loose = abap_true )
+      ( range = 'v1.0+' && repeat( val = 'a' occ = 249 ) && 'x6' res = '>=1.0.0 <1.1.0-0' )
+      ( range = '1.2.3+' && repeat( val = 'a' occ = 251 ) && ' - 2.0.0' res = '>=1.2.3 <=2.0.0' )
+      ( range = '1.2.3+' && repeat( val = 'a' occ = 251 ) && ' - 2.0.0' res = '>=1.2.3 <=2.0.0' loose = abap_true )
+      ( range = '> 1.2.3+' && repeat( val = 'a' occ = 251 ) res = '>1.2.3' )
+      ( range = '>= 1.2.3+' && repeat( val = 'a' occ = 251 ) res = '>=1.2.3' loose = abap_true )
+      ( range = '~1.2.3+' && repeat( val = 'a' occ = 251 ) res = '>=1.2.3 <1.3.0-0' )
+      ( range = '^1.2.3+' && repeat( val = 'a' occ = 251 ) res = '>=1.2.3 <2.0.0-0' )
+      ( range = '1.2.3+sha512.' && repeat( val = 'a' occ = 251 ) res = '1.2.3' loose = abap_true )
+      ( range = '1.2.3+sha256.' && repeat( val = 'a' occ = 200 ) && '.' && repeat( val = 'b' occ = 200 )
+        res = '1.2.3' loose = abap_true )
+      ( range = '1.2.3+' && repeat( val = 'a' occ = 251 ) && ' || 2.0.0+' && repeat( val = 'b' occ = 251 )
+        res = '1.2.3||2.0.0' loose = abap_true ) ).
+
+  ENDMETHOD.
+
+  METHOD truncations.
+    " [version, releaseType, result]
+    " truncate(version, releaseType) -> result
+
+    result = VALUE #(
+      ( version = '1.2.3-foo'        release = 'patch'      res = '1.2.3' )
+      ( version = '1.2.3'            release = 'patch'      res = '1.2.3' )
+      ( version = '1.2.3'            release = 'minor'      res = '1.2.0' )
+      ( version = '1.2.3'            release = 'major'      res = '1.0.0' )
+      " invalid inputs
+      ( version = '1.2.3'            release = 'fake'       res = '' )
+      ( version = 'fake'             release = 'major'      res = '' )
+      " additional pre-release, build, and pre+build inputs
+      ( version = '4.5.6-rc2'        release = 'prerelease' res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2'        release = 'prepatch'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2'        release = 'preminor'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2'        release = 'premajor'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2'        release = 'patch'      res = '4.5.6' )
+      ( version = '4.5.6-rc2'        release = 'minor'      res = '4.5.0' )
+      ( version = '4.5.6-rc2'        release = 'major'      res = '4.0.0' )
+      ( version = '4.5.6+dadb0d'     release = 'prerelease' res = '4.5.6' )
+      ( version = '4.5.6+dadb0d'     release = 'prepatch'   res = '4.5.6' )
+      ( version = '4.5.6+dadb0d'     release = 'preminor'   res = '4.5.6' )
+      ( version = '4.5.6+dadb0d'     release = 'premajor'   res = '4.5.6' )
+      ( version = '4.5.6+dadb0d'     release = 'patch'      res = '4.5.6' )
+      ( version = '4.5.6+dadb0d'     release = 'minor'      res = '4.5.0' )
+      ( version = '4.5.6+dadb0d'     release = 'major'      res = '4.0.0' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'prerelease' res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'prepatch'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'preminor'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'premajor'   res = '4.5.6-rc2' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'patch'      res = '4.5.6' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'minor'      res = '4.5.0' )
+      ( version = '4.5.6-rc2+dadb0d' release = 'major'      res = '4.0.0' ) ).
 
   ENDMETHOD.
 
@@ -69463,7 +74344,6 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
   METHOD version_gt_range.
     " [range, version, options]
 
-    " Version should be greater than range
     result = VALUE #(
       ( range = '~1.2.2'          version = '1.3.0' )
       ( range = '~0.6.1-1'        version = '0.7.1-1' )
@@ -69527,7 +74407,6 @@ CLASS /apmg/cl_apm_semver_fixtures IMPLEMENTATION.
   METHOD version_lt_range.
     " [range, version, options]
 
-    " Version should be less than range
     result = VALUE #(
       ( range = '~1.2.2'          version = '1.2.1' )
       ( range = '~0.6.1-1'        version = '0.6.1-0' )
@@ -69973,8 +74852,8 @@ CLASS /apmg/cl_apm_semver_functions IMPLEMENTATION.
 
   METHOD diff.
 
-    DATA(v1) = parse( version = version_1 throw_errors = abap_true ).
-    DATA(v2) = parse( version = version_2 throw_errors = abap_true ).
+    DATA(v1) = parse_throw( version_1 ).
+    DATA(v2) = parse_throw( version_2 ).
 
     DATA(comparison) = v1->compare( v2 ).
 
@@ -70030,7 +74909,7 @@ CLASS /apmg/cl_apm_semver_functions IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " high and low are preleases
+    " high and low are prereleases
     result = 'prerelease'.
 
   ENDMETHOD.
@@ -70153,13 +75032,20 @@ CLASS /apmg/cl_apm_semver_functions IMPLEMENTATION.
 
     TRY.
         result = /apmg/cl_apm_semver=>create( version = version loose = loose incpre = incpre ).
-      CATCH /apmg/cx_apm_error INTO DATA(error).
-        IF throw_errors = abap_false.
-          RETURN.
-        ENDIF.
-
-        RAISE EXCEPTION error.
+      CATCH /apmg/cx_apm_error ##NO_HANDLER.
     ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD parse_throw.
+
+    DATA(kind) = cl_abap_typedescr=>describe_by_data( version )->type_kind.
+
+    IF kind = cl_abap_typedescr=>typekind_oref AND version IS INSTANCE OF /apmg/cl_apm_semver.
+      result ?= version.
+    ELSE.
+      result = /apmg/cl_apm_semver=>create( version = version loose = loose incpre = incpre ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -70255,16 +75141,27 @@ CLASS /apmg/cl_apm_semver_functions IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD valid.
+  METHOD truncate.
 
     TRY.
         DATA(semver) = parse( version = version loose = loose incpre = incpre ).
 
         CHECK semver IS BOUND.
 
-        result = semver->version.
-      CATCH /apmg/cx_apm_error ##NO_HANDLER.
+        result = semver->truncate( release_type )->version.
+      CATCH /apmg/cx_apm_error.
+        CLEAR result.
     ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD valid.
+
+    DATA(semver) = parse( version = version loose = loose incpre = incpre ).
+
+    CHECK semver IS BOUND.
+
+    result = semver->version.
 
   ENDMETHOD.
 ENDCLASS.
@@ -70273,7 +75170,7 @@ CLASS /apmg/cl_apm_semver_identifier IMPLEMENTATION.
 
   METHOD compare_identifiers.
 
-    " Using RTTI isn't faster and there's no built in typeof
+    " Using RTTI isn't faster and there's no built-in typeof
     " if (typeof a === 'number' && typeof b === 'number') {
     "  return a === b ? 0 : a < b ? -1 : 1
     " }
@@ -70453,6 +75350,10 @@ CLASS /apmg/cl_apm_semver_range IMPLEMENTATION.
     result = xsdbool( comp->value = '' ).
   ENDMETHOD.
 
+  METHOD is_invalid_x_range_order.
+    result = xsdbool( is_x( major ) AND NOT is_x( minor ) OR is_x( minor ) AND NOT is_x( patch ) ).
+  ENDMETHOD.
+
   METHOD is_null_set.
     result = xsdbool( comp->value = '<0.0.0-0' ).
   ENDMETHOD.
@@ -70511,7 +75412,10 @@ CLASS /apmg/cl_apm_semver_range IMPLEMENTATION.
       comp_values TYPE string_table,
       comparators TYPE ty_comparators.
 
-    DATA(range) = range_string.
+    DATA(range) = replace(
+      val   = range_string
+      regex = /apmg/cl_apm_semver_re=>token-build-src
+      with  = '' ) ##REGEX_POSIX.
 
     " memoize range parsing for performance
     " this is a very hot path, and fully deterministic
@@ -70686,9 +75590,9 @@ CLASS /apmg/cl_apm_semver_range IMPLEMENTATION.
           ELSE.
             IF ma = '0'.
               IF mi = '0'.
-                with = |>={ ma }.{ mi }.{ pa }{ z } <{ ma }.{ mi }.{ str( pa + 1 )  }-0|.
+                with = |>={ ma }.{ mi }.{ pa } <{ ma }.{ mi }.{ str( pa + 1 )  }-0|.
               ELSE.
-                with = |>={ ma }.{ mi }.{ pa }{ z } <{ ma }.{ str( mi + 1 ) }.0-0|.
+                with = |>={ ma }.{ mi }.{ pa } <{ ma }.{ str( mi + 1 ) }.0-0|.
               ENDIF.
             ELSE.
               with = |>={ ma }.{ mi }.{ pa } <{ str( ma + 1 ) }.0.0-0|.
@@ -70905,6 +75809,10 @@ CLASS /apmg/cl_apm_semver_range IMPLEMENTATION.
           DATA(pa) = m->get_submatch( 4 ).
           DATA(pr) = m->get_submatch( 5 ).
           "DATA(bi)  = m->get_submatch( 6 )
+
+          IF is_invalid_x_range_order( major = ma minor = mi patch = pa ).
+            RETURN.
+          ENDIF.
 
           DATA(xma) = is_x( ma ).
           DATA(xmi) = xsdbool( xma = abap_true OR is_x( mi ) ).
@@ -71469,7 +76377,7 @@ CLASS /apmg/cl_apm_semver_ranges IMPLEMENTATION.
     " - If LT
     "   - If LT.semver is greater than any < or <= comp in C, return false
     "   - If LT is <=, and LT.semver does not satisfy every C, return false
-    "   - If GT.semver has a prerelease, and not in prerelease mode
+    "   - If LT.semver has a prerelease, and not in prerelease mode
     "     - If no C has a prerelease and the LT.semver tuple, return false
     " - Else return true
 
@@ -71568,7 +76476,7 @@ CLASS /apmg/cl_apm_semver_re IMPLEMENTATION.
 
     " ## Pre-release Version Identifier
     " A numeric identifier, or a non-numeric identifier.
-    " Non-numberic identifiers include numeric identifiers but can be longer.
+    " Non-numeric identifiers include numeric identifiers but can be longer.
     " Therefore non-numeric identifiers must go first.
 
     create_token(
@@ -71645,7 +76553,7 @@ CLASS /apmg/cl_apm_semver_re IMPLEMENTATION.
       value = |((?:<\|>)?=?)| ).
 
     " Something like "2.*" or "1.2.x".
-    " Note that "x.x" is a valid xRange identifer, meaning "any version"
+    " Note that "x.x" is a valid xRange identifier, meaning "any version"
     " Only the first item is strictly required.
 
     create_token(
@@ -71979,12 +76887,11 @@ CLASS /apmg/cl_apm_semver_utils IMPLEMENTATION.
   METHOD trim.
     " Remove leading and trailing tab, cr, lf and spaces Like JavaScript trim
     result = condense(
-      val  = replace(
+      replace(
         val   = data
         regex = `[\t\n\r]`
         with  = ` `
-        occ   = 0 )
-      from = `` ) ##REGEX_POSIX.
+        occ   = 0 ) ) ##REGEX_POSIX.
   ENDMETHOD.
 
   METHOD version_trim.
@@ -72014,7 +76921,7 @@ CLASS /apmg/cl_apm_settings IMPLEMENTATION.
     result = settings.
 
     IF name <> /apmg/if_apm_settings=>c_global.
-      merge_settings( CHANGING cs_settings = result ).
+      merge_settings( CHANGING settings = result ).
     ENDIF.
 
   ENDMETHOD.
@@ -72101,26 +77008,36 @@ CLASS /apmg/cl_apm_settings IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD check_settings.
+  METHOD check_registry_url.
 
     TRY.
-        IF is_settings-registry IS NOT INITIAL.
-          DATA(url) = /apmg/cl_apm_url=>parse( is_settings-registry ).
+        IF registry_url IS NOT INITIAL.
+          DATA(url) = /apmg/cl_apm_url=>parse( registry_url ).
 
           IF url->components-path IS NOT INITIAL.
-            INSERT |Registry URL must not include any trailing slash or path: { is_settings-registry }|
+            INSERT |Registry URL must not include any trailing slash or path: { registry_url }|
               INTO TABLE result.
           ENDIF.
           IF url->components-query IS NOT INITIAL.
-            INSERT |Registry URL must not include any query: { is_settings-registry }| INTO TABLE result.
+            INSERT |Registry URL must not include any query: { registry_url }| INTO TABLE result.
           ENDIF.
           IF url->components-fragment IS NOT INITIAL.
-            INSERT |Registry URL must not include any fragment: { is_settings-registry }| INTO TABLE result.
+            INSERT |Registry URL must not include any fragment: { registry_url }| INTO TABLE result.
           ENDIF.
         ENDIF.
       CATCH /apmg/cx_apm_error.
-        INSERT |Invalid registry URL: { is_settings-registry }| INTO TABLE result.
+        INSERT |Invalid registry URL: { registry_url }| INTO TABLE result.
     ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD check_settings.
+
+    INSERT LINES OF check_registry_url( settings-registry ) INTO TABLE result.
+
+    LOOP AT settings-registry_settings ASSIGNING FIELD-SYMBOL(<registry>).
+      INSERT LINES OF check_registry_url( <registry>-url ) INTO TABLE result.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -72168,10 +77085,16 @@ CLASS /apmg/cl_apm_settings IMPLEMENTATION.
 
     " Default values for settings
     " TODO: Change to production registry
-    result-registry = /apmg/if_apm_settings=>c_playground.
+    result-registry = /apmg/if_apm_settings=>c_playground_url.
 
     result-list_settings-order_by = 'PACKAGE'.
     result-tree_settings-order_by = 'NAME'.
+
+    result-registry_settings = VALUE #(
+      ( name = /apmg/if_apm_settings=>c_registry_name
+        url  = /apmg/if_apm_settings=>c_registry_url )
+      ( name = /apmg/if_apm_settings=>c_playground_name
+        url  = /apmg/if_apm_settings=>c_playground_url ) ).
 
   ENDMETHOD.
 
@@ -72234,7 +77157,7 @@ CLASS /apmg/cl_apm_settings IMPLEMENTATION.
 
     DO.
       " Current settings
-      ASSIGN COMPONENT sy-index OF STRUCTURE cs_settings TO FIELD-SYMBOL(<value>).
+      ASSIGN COMPONENT sy-index OF STRUCTURE settings TO FIELD-SYMBOL(<value>).
       IF sy-subrc <> 0.
         EXIT.
       ENDIF.
@@ -74003,6 +78926,61 @@ CLASS /apmg/cl_apm_url_params IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
+CLASS /apmg/cl_apm_utils IMPLEMENTATION.
+
+  METHOD get_abap_version.
+
+    TRY.
+        result = NEW /apmg/cl_apm_semver_sap( )->sap_component_to_semver( 'SAP_BASIS' ).
+      CATCH cx_abap_invalid_value INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD get_database_version.
+
+    DATA(db) = /apmg/cl_apm_env=>create( )->get( /apmg/if_apm_env=>database ).
+
+    result = /apmg/cl_apm_semver_functions=>coerce(
+      version = db
+      loose   = abap_true )->to_string( ).
+
+  ENDMETHOD.
+
+  METHOD get_kernel_version.
+
+    DATA(kernel) = /apmg/cl_apm_env=>create( )->get( /apmg/if_apm_env=>kernel_release ).
+
+    TRY.
+        result = NEW /apmg/cl_apm_semver_sap( )->sap_release_to_semver( |{ kernel }| ).
+      CATCH cx_abap_invalid_value INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD get_user_agent.
+
+    DATA(env) = /apmg/cl_apm_env=>create( ).
+
+    DATA(os) = env->get( /apmg/if_apm_env=>kernel_platform ) && '@' && get_kernel_version( ).
+    DATA(db) = env->get( /apmg/if_apm_env=>database_platform ) && '@' && get_database_version( ).
+
+    result = to_lower( |apm/{ /apmg/if_apm_version=>c_version } abap/{ get_abap_version( ) } os/{ os } db/{ db }| ).
+
+  ENDMETHOD.
+
+  METHOD remove_trailing_slash.
+
+    result = replace(
+      val   = val
+      regex = '(.*)/$'
+      with  = '$1' ) ##REGEX_POSIX.
+
+  ENDMETHOD.
+ENDCLASS.
+
 CLASS zcl_abapgit_abap_language_vers IMPLEMENTATION.
 
   METHOD check_abap_language_version.
@@ -74401,6 +79379,8 @@ CLASS ZCL_ABAPGIT_AFF_REGISTRY IMPLEMENTATION.
     register( 'DSFI' ).
     register( 'DRAS' ).
     register( 'DSFD' ).
+    register( iv_obj_type     = 'DOMA'
+              iv_experimental = abap_true ).
     register( 'EVTB' ).
     register( 'EEEC' ).
     register( 'GSMP' ).
@@ -74415,6 +79395,8 @@ CLASS ZCL_ABAPGIT_AFF_REGISTRY IMPLEMENTATION.
     register( 'UIAD' ).
     register( 'UIPG' ).
     register( 'UIST' ).
+    register( 'DTSC' ).
+    register( 'DTIX' ).
   ENDMETHOD.
 
   METHOD register.
@@ -79819,7 +84801,8 @@ CLASS zcl_abapgit_longtexts IMPLEMENTATION.
           line    = ls_longtext-lines.
 
       IF iv_clear_fields = abap_true.
-        CLEAR: ls_longtext-head-tdfuser,
+        CLEAR: ls_longtext-dokil-dokstate,
+               ls_longtext-head-tdfuser,
                ls_longtext-head-tdfreles,
                ls_longtext-head-tdfdate,
                ls_longtext-head-tdftime,
@@ -79891,6 +84874,134 @@ CLASS zcl_abapgit_longtexts IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD zif_abapgit_longtexts~deserialize_aff.
+
+    DATA ls_docu         TYPE zif_abapgit_aff_docu_v1=>ty_main.
+    DATA ls_docu_info    TYPE dokil.
+    DATA ls_head         TYPE thead.
+    DATA lt_lines        TYPE tline_tab.
+    DATA lt_dokil        TYPE zif_abapgit_definitions=>ty_dokil_tt.
+    DATA lv_object       TYPE dokil-object.
+    DATA lv_docu_object  TYPE doku_obj.
+    DATA lv_json_string  TYPE string.
+    DATA lv_version      TYPE dokvers.
+    DATA lo_json_handler TYPE REF TO zcl_abapgit_json_handler.
+    DATA lx_exception    TYPE REF TO cx_root.
+
+    FIELD-SYMBOLS <ls_docu_line> TYPE zif_abapgit_aff_docu_v1=>ty_line.
+    FIELD-SYMBOLS <ls_line>      TYPE tline.
+    FIELD-SYMBOLS <ls_dokil>     TYPE dokil.
+
+    lv_object = escape_name(
+      iv_longtext_id = iv_longtext_id
+      iv_object_name = iv_object_name ).
+
+    IF io_files->contains_file( iv_extra = 'docu'
+                                iv_ext   = 'json' ) = abap_true.
+
+      lv_json_string = io_files->read_string(
+        iv_extra = 'docu'
+        iv_ext   = 'json' ).
+
+      CREATE OBJECT lo_json_handler.
+
+      TRY.
+          lo_json_handler->deserialize(
+            EXPORTING
+              iv_content = lv_json_string
+            IMPORTING
+              ev_data    = ls_docu ).
+        CATCH cx_root INTO lx_exception.
+          zcx_abapgit_exception=>raise_with_text( lx_exception ).
+      ENDTRY.
+
+      LOOP AT ls_docu-lines ASSIGNING <ls_docu_line>.
+        APPEND INITIAL LINE TO lt_lines ASSIGNING <ls_line>.
+        <ls_line>-tdformat = <ls_docu_line>-format.
+        <ls_line>-tdline   = <ls_docu_line>-line.
+      ENDLOOP.
+
+      lv_docu_object = iv_object_name.
+
+      CALL FUNCTION 'DOCU_INIT'
+        EXPORTING
+          id     = iv_longtext_id
+          langu  = iv_main_language
+          object = lv_docu_object
+          typ    = c_docu_type_general
+        IMPORTING
+          xdokil = ls_docu_info.
+
+      lv_version = ls_docu_info-version.
+
+      ls_head-tdobject = 'DOKU'.
+      ls_head-tdname   = iv_object_name.
+      ls_head-tdid     = iv_longtext_id.
+      ls_head-tdspras  = iv_main_language.
+
+      CALL FUNCTION 'DOCU_UPDATE'
+        EXPORTING
+          head    = ls_head
+          state   = c_docu_state_active
+          typ     = c_docu_type_general
+          version = lv_version
+        TABLES
+          line    = lt_lines.
+
+    ENDIF.
+
+    SELECT * FROM dokil
+      INTO TABLE lt_dokil
+      WHERE id = iv_longtext_id
+      AND object LIKE lv_object ESCAPE '#'
+      AND masterlang = abap_true
+      ORDER BY PRIMARY KEY.
+
+    LOOP AT lt_dokil ASSIGNING <ls_dokil>
+        WHERE langu <> iv_main_language
+        OR object <> iv_object_name
+        OR typ <> c_docu_type_general.
+
+      CALL FUNCTION 'DOCU_DEL'
+        EXPORTING
+          id       = <ls_dokil>-id
+          langu    = <ls_dokil>-langu
+          object   = <ls_dokil>-object
+          typ      = <ls_dokil>-typ
+        EXCEPTIONS
+          ret_code = 1
+          OTHERS   = 2.
+
+      IF sy-subrc <> 0.
+        zcx_abapgit_exception=>raise_t100( ).
+      ENDIF.
+
+    ENDLOOP.
+
+    IF ls_docu-lines IS INITIAL.
+      READ TABLE lt_dokil TRANSPORTING NO FIELDS WITH KEY
+        langu  = iv_main_language
+        object = iv_object_name
+        typ    = c_docu_type_general.
+      IF sy-subrc = 0.
+        CALL FUNCTION 'DOCU_DEL'
+          EXPORTING
+            id       = iv_longtext_id
+            langu    = iv_main_language
+            object   = iv_object_name
+            typ      = c_docu_type_general
+          EXCEPTIONS
+            ret_code = 1
+            OTHERS   = 2.
+
+        IF sy-subrc <> 0.
+          zcx_abapgit_exception=>raise_t100( ).
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD zif_abapgit_longtexts~deserialize.
 
     DATA: lt_longtexts    TYPE zif_abapgit_longtexts=>ty_longtexts,
@@ -79913,7 +85024,7 @@ CLASS zcl_abapgit_longtexts IMPLEMENTATION.
 
     LOOP AT lt_longtexts ASSIGNING <ls_longtext>.
 
-      lv_no_main_lang = boolc( iv_main_language <> <ls_longtext>-dokil-langu ).
+      lv_no_main_lang = boolc( <ls_longtext>-dokil-masterlang IS INITIAL ).
 
       CALL FUNCTION 'DOCU_UPDATE'
         EXPORTING
@@ -79974,6 +85085,53 @@ CLASS zcl_abapgit_longtexts IMPLEMENTATION.
 
     ii_xml->add( iv_name = iv_longtext_name
                  ig_data = rt_longtexts ).
+
+  ENDMETHOD.
+
+  METHOD zif_abapgit_longtexts~serialize_aff.
+
+    DATA ls_longtext     LIKE LINE OF rt_longtexts.
+    DATA ls_docu         TYPE zif_abapgit_aff_docu_v1=>ty_main.
+    DATA ls_tdline       LIKE LINE OF ls_longtext-lines.
+    DATA ls_line         LIKE LINE OF ls_docu-lines.
+    DATA lo_json_handler TYPE REF TO zcl_abapgit_json_handler.
+    DATA lv_xstr         TYPE xstring.
+    DATA lx_exception    TYPE REF TO cx_root.
+
+    rt_longtexts = read( iv_object_name    = iv_object_name
+                         iv_longtext_id    = iv_longtext_id
+                         it_dokil          = it_dokil
+                         iv_main_lang_only = abap_true ).
+
+    IF rt_longtexts IS SUPPLIED.
+      RETURN.
+    ENDIF.
+
+    READ TABLE rt_longtexts INDEX 1 INTO ls_longtext.
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    ls_docu-format_version = '1'.
+    LOOP AT ls_longtext-lines INTO ls_tdline.
+      CLEAR ls_line.
+      ls_line-format = ls_tdline-tdformat.
+      ls_line-line   = ls_tdline-tdline.
+      INSERT ls_line INTO TABLE ls_docu-lines.
+    ENDLOOP.
+
+    CREATE OBJECT lo_json_handler.
+
+    TRY.
+        lv_xstr = lo_json_handler->serialize( ls_docu ).
+      CATCH cx_root INTO lx_exception.
+        zcx_abapgit_exception=>raise_with_text( lx_exception ).
+    ENDTRY.
+
+    io_files->add_string(
+      iv_string = zcl_abapgit_convert=>xstring_to_string_utf8( lv_xstr )
+      iv_extra  = 'docu'
+      iv_ext    = 'json' ).
 
   ENDMETHOD.
 ENDCLASS.
@@ -80075,9 +85233,14 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
 
     FIELD-SYMBOLS <lv_lxe_object> LIKE LINE OF lt_obj_list.
 
-    lt_obj_list = get_lxe_object_list(
-      iv_object_name = iv_object_name
-      iv_object_type = iv_object_type ).
+    " Special handling for local packages which are not supported by LXE
+    IF mv_local_package = abap_true.
+      lt_obj_list = get_devc_object_list( iv_object_name ).
+    ELSE.
+      lt_obj_list = get_lxe_object_list(
+        iv_object_name = iv_object_name
+        iv_object_type = iv_object_type ).
+    ENDIF.
 
     IF lt_obj_list IS INITIAL.
       RETURN.
@@ -80101,13 +85264,21 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
 
       LOOP AT lt_obj_list ASSIGNING <lv_lxe_object>.
 
-        lt_text_pairs_tmp = read_lxe_object_text_pair(
-          iv_s_lang    = lv_main_lang
-          iv_t_lang    = lv_target_lang
-          iv_custmnr   = <lv_lxe_object>-custmnr
-          iv_objtype   = <lv_lxe_object>-objtype
-          iv_objname   = <lv_lxe_object>-objname
-          iv_read_only = abap_false ).
+        " Special handling for local packages which are not supported by LXE
+        IF mv_local_package = abap_true.
+          lt_text_pairs_tmp = read_devc_text_pair(
+            iv_s_lang  = mo_i18n_params->ms_params-main_language
+            iv_t_lang  = laiso_to_langu_safe( lv_lang )
+            iv_package = |{ <lv_lxe_object>-objname }| ).
+        ELSE.
+          lt_text_pairs_tmp = read_lxe_object_text_pair(
+            iv_s_lang    = lv_main_lang
+            iv_t_lang    = lv_target_lang
+            iv_custmnr   = <lv_lxe_object>-custmnr
+            iv_objtype   = <lv_lxe_object>-objtype
+            iv_objname   = <lv_lxe_object>-objname
+            iv_read_only = abap_false ).
+        ENDIF.
 
         li_po->translate(
           CHANGING
@@ -80115,14 +85286,22 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
             ct_text_pairs = lt_text_pairs_tmp ).
 
         IF lv_changed = abap_true AND lines( lt_text_pairs_tmp ) > 0.
-          " If lt_text_pairs_tmp is empty it raises error, while this is a practical case
-          write_lxe_object_text_pair(
-            iv_s_lang  = lv_main_lang
-            iv_t_lang  = lv_target_lang
-            iv_custmnr = <lv_lxe_object>-custmnr
-            iv_objtype = <lv_lxe_object>-objtype
-            iv_objname = <lv_lxe_object>-objname
-            it_pcx_s1  = lt_text_pairs_tmp ).
+          " Special handling for local packages which are not supported by LXE
+          IF mv_local_package = abap_true.
+            write_devc_text_pair(
+              iv_t_lang  = laiso_to_langu_safe( lv_lang )
+              iv_package = |{ <lv_lxe_object>-objname }|
+              it_pcx_s1  = lt_text_pairs_tmp ).
+          ELSE.
+            " If lt_text_pairs_tmp is empty it raises error, while this is a practical case
+            write_lxe_object_text_pair(
+              iv_s_lang  = lv_main_lang
+              iv_t_lang  = lv_target_lang
+              iv_custmnr = <lv_lxe_object>-custmnr
+              iv_objtype = <lv_lxe_object>-objtype
+              iv_objname = <lv_lxe_object>-objname
+              it_pcx_s1  = lt_text_pairs_tmp ).
+          ENDIF.
 
           rv_changed = abap_true.
         ENDIF.
@@ -80140,9 +85319,12 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       lt_text_pairs_tmp LIKE ls_lxe_item-text_pairs.
 
     mi_xml_in->read(
-      EXPORTING iv_name = iv_lxe_text_name
-      CHANGING  cg_data = lt_lxe_texts ).
+      EXPORTING
+        iv_name = iv_lxe_text_name
+      CHANGING
+        cg_data = lt_lxe_texts ).
 
+    " TODO: If this is ever used, add handling of local packages (see deserialize_po)
     LOOP AT lt_lxe_texts INTO ls_lxe_item.
       " Call Read first for buffer prefill
 
@@ -80174,7 +85356,25 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
         it_languages = it_languages
         it_installed = get_installed_languages( )
       IMPORTING
-        et_missfits = rt_unsupported_languages ).
+        et_missfits  = rt_unsupported_languages ).
+
+  ENDMETHOD.
+
+  METHOD get_devc_object_list.
+
+    DATA ls_colob LIKE LINE OF rt_obj_list.
+
+    ls_colob-objlist   = '00000'.
+    ls_colob-custmnr   = c_custmnr.
+    ls_colob-objtype   = 'DEVC'.
+    ls_colob-objname   = iv_object_name.
+    ls_colob-orig_lang = get_lang_iso4( langu_to_laiso_safe( mo_i18n_params->ms_params-main_language ) ).
+    ls_colob-colltyp   = 'R'.
+    ls_colob-collnam   = iv_object_name.
+    ls_colob-domatyp   = 'R'.
+    ls_colob-domanam   = 'ZZ'.
+
+    INSERT ls_colob INTO TABLE rt_obj_list.
 
   ENDMETHOD.
 
@@ -80258,6 +85458,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
   METHOD get_lxe_object_list.
 
     DATA lv_object_name TYPE trobj_name.
+    DATA lt_e071k TYPE STANDARD TABLE OF e071k WITH DEFAULT KEY ##NEEDED.
 
     lv_object_name = iv_object_name.
 
@@ -80267,6 +85468,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
         object          = iv_object_type
         obj_name        = lv_object_name
       TABLES
+        in_e071k        = lt_e071k " not optional in 702
         ex_colob        = rt_obj_list
       EXCEPTIONS
         unknown_object  = 1
@@ -80294,8 +85496,8 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       ELSE.
         check_langs_versus_installed(
           EXPORTING
-            it_languages = it_i18n_languages
-            it_installed = get_installed_languages( )
+            it_languages    = it_i18n_languages
+            it_installed    = get_installed_languages( )
           IMPORTING
             et_intersection = rt_languages ).
       ENDIF.
@@ -80311,6 +85513,34 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     rv_laiso = iv_lxe_lang+0(2).
   ENDMETHOD.
 
+  METHOD is_local_package.
+
+    DATA li_cts_api TYPE REF TO zif_abapgit_cts_api.
+
+    TRY.
+        li_cts_api = zcl_abapgit_factory=>get_cts_api( ).
+        rv_result = boolc( li_cts_api->is_chrec_possible_for_package( |{ iv_package }| ) = abap_false ).
+      CATCH zcx_abapgit_exception ##NO_HANDLER.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD laiso_to_langu_safe.
+
+    zcl_abapgit_convert=>language_sap2_to_sap1(
+      EXPORTING
+        im_lang_sap2  = iv_laiso
+      RECEIVING
+        re_lang_sap1  = rv_langu
+      EXCEPTIONS
+        no_assignment = 1
+        OTHERS        = 2 ).
+    IF sy-subrc <> 0.
+      zcx_abapgit_exception=>raise( |Could not convert lang [{ iv_laiso }] to ISO| ).
+    ENDIF.
+
+  ENDMETHOD.
+
   METHOD langu_to_laiso_safe.
 
     zcl_abapgit_convert=>language_sap1_to_sap2(
@@ -80324,6 +85554,23 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     IF sy-subrc <> 0.
       zcx_abapgit_exception=>raise( |Could not convert lang [{ iv_langu }] to ISO| ).
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD read_devc_text_pair.
+
+    DATA ls_text_pair TYPE LINE OF ty_lxe_translation-text_pairs.
+
+    ls_text_pair-textkey = 'CTEXT'.
+    ls_text_pair-unitmlt = 60.
+
+    SELECT SINGLE ctext FROM tdevct INTO ls_text_pair-s_text
+      WHERE devclass = iv_package AND spras = iv_s_lang ##SUBRC_OK.
+
+    SELECT SINGLE ctext FROM tdevct INTO ls_text_pair-t_text
+      WHERE devclass = iv_package AND spras = iv_t_lang ##SUBRC_OK.
+
+    INSERT ls_text_pair INTO TABLE rt_text_pairs.
 
   ENDMETHOD.
 
@@ -80344,7 +85591,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
           IMPORTING
             err_msg   = lv_error  " doesn't exist in NW <= 750
           TABLES
-            lt_pcx_s1 = rt_text_pairs_tmp.
+            lt_pcx_s1 = rt_text_pairs.
         IF lv_error IS NOT INITIAL.
           zcx_abapgit_exception=>raise( lv_error ).
         ENDIF.
@@ -80360,7 +85607,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
             objname   = iv_objname
             read_only = iv_read_only
           TABLES
-            lt_pcx_s1 = rt_text_pairs_tmp.
+            lt_pcx_s1 = rt_text_pairs.
 
     ENDTRY.
 
@@ -80368,7 +85615,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       EXPORTING
         iv_objtype        = iv_objtype
       CHANGING
-        ct_text_pairs_tmp = rt_text_pairs_tmp ).
+        ct_text_pairs_tmp = rt_text_pairs ).
 
   ENDMETHOD.
 
@@ -80383,9 +85630,14 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
       <lv_language>   LIKE LINE OF mo_i18n_params->ms_params-translation_languages,
       <lv_lxe_object> LIKE LINE OF lt_obj_list.
 
-    lt_obj_list = get_lxe_object_list(
-      iv_object_name = iv_object_name
-      iv_object_type = iv_object_type ).
+    " Special handling for local packages which are not supported by LXE
+    IF mv_local_package = abap_true.
+      lt_obj_list = get_devc_object_list( iv_object_name ).
+    ELSE.
+      lt_obj_list = get_lxe_object_list(
+        iv_object_name = iv_object_name
+        iv_object_type = iv_object_type ).
+    ENDIF.
 
     IF lt_obj_list IS INITIAL.
       RETURN.
@@ -80407,12 +85659,20 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
           CONTINUE. " if source = target -> skip
         ENDIF.
 
-        ls_lxe_text_item-text_pairs = read_lxe_object_text_pair(
-          iv_s_lang    = ls_lxe_text_item-source_lang
-          iv_t_lang    = ls_lxe_text_item-target_lang
-          iv_custmnr   = ls_lxe_text_item-custmnr
-          iv_objtype   = ls_lxe_text_item-objtype
-          iv_objname   = ls_lxe_text_item-objname ).
+        " Special handling for local packages which are not supported by LXE
+        IF mv_local_package = abap_true.
+          ls_lxe_text_item-text_pairs = read_devc_text_pair(
+            iv_s_lang  = mo_i18n_params->ms_params-main_language
+            iv_t_lang  = laiso_to_langu_safe( <lv_language> )
+            iv_package = |{ ls_lxe_text_item-objname }| ).
+        ELSE.
+          ls_lxe_text_item-text_pairs = read_lxe_object_text_pair(
+            iv_s_lang  = ls_lxe_text_item-source_lang
+            iv_t_lang  = ls_lxe_text_item-target_lang
+            iv_custmnr = ls_lxe_text_item-custmnr
+            iv_objtype = ls_lxe_text_item-objtype
+            iv_objname = ls_lxe_text_item-objname ).
+        ENDIF.
 
         IF ls_lxe_text_item-text_pairs IS NOT INITIAL.
           APPEND ls_lxe_text_item TO rt_text_items.
@@ -80439,8 +85699,8 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     FIELD-SYMBOLS <ls_translation> LIKE LINE OF lt_lxe_texts.
 
     lt_lxe_texts = read_text_items(
-      iv_object_name   = iv_object_name
-      iv_object_type   = iv_object_type ).
+      iv_object_name = iv_object_name
+      iv_object_type = iv_object_type ).
 
     LOOP AT mo_i18n_params->ms_params-translation_languages INTO lv_lang.
       lv_lang = to_lower( lv_lang ).
@@ -80466,14 +85726,34 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     DATA lt_lxe_texts TYPE ty_lxe_translations.
 
     lt_lxe_texts = read_text_items(
-      iv_object_name   = iv_object_name
-      iv_object_type   = iv_object_type ).
+      iv_object_name = iv_object_name
+      iv_object_type = iv_object_type ).
 
     IF lines( lt_lxe_texts ) > 0.
       mi_xml_out->add(
         iv_name = iv_lxe_text_name
         ig_data = lt_lxe_texts ).
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD write_devc_text_pair.
+
+    DATA ls_tdevct TYPE tdevct.
+
+    FIELD-SYMBOLS <ls_text_pair> LIKE LINE OF it_pcx_s1.
+
+    LOOP AT it_pcx_s1 ASSIGNING <ls_text_pair>.
+      CLEAR ls_tdevct.
+      ls_tdevct-devclass = iv_package.
+      ls_tdevct-spras    = iv_t_lang.
+      ls_tdevct-ctext    = <ls_text_pair>-t_text.
+
+      MODIFY tdevct FROM ls_tdevct.
+      IF sy-subrc <> 0.
+        zcx_abapgit_exception=>raise( 'Error updating package description' ).
+      ENDIF.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -80530,6 +85810,8 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     mi_xml_in      = ii_xml.
     mo_files       = io_files.
 
+    mv_local_package = boolc( iv_object_type = 'DEVC' AND is_local_package( iv_object_name ) = abap_true ).
+
     " MAYBE TODO: see comment in serialize
 
     IF 1 = 1.
@@ -80557,6 +85839,8 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
     mo_i18n_params = io_i18n_params.
     mi_xml_out     = ii_xml.
     mo_files       = io_files.
+
+    mv_local_package = boolc( iv_object_type = 'DEVC' AND is_local_package( iv_object_name ) = abap_true ).
 
     " MAYBE TODO
     " if other formats are needed, including the old in-XML approach
@@ -81658,7 +86942,7 @@ CLASS zcl_abapgit_tadir IMPLEMENTATION.
         change_of_class_not_allowed    = 23
         no_change_from_sap_to_tmp      = 24
         OTHERS                         = 25.
-    IF sy-subrc > 1.
+    IF sy-subrc > 1 AND iv_no_throw = abap_false.
       " No error if entry does not exist
       zcx_abapgit_exception=>raise_t100( ).
     ENDIF.
@@ -83438,7 +88722,7 @@ CLASS lcl_aff_filter IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS zcl_abapgit_json_handler IMPLEMENTATION.
+CLASS ZCL_ABAPGIT_JSON_HANDLER IMPLEMENTATION.
 
   METHOD deserialize.
     DATA lo_ajson TYPE REF TO /apmg/if_apm_ajson.
@@ -83547,6 +88831,9 @@ CLASS zcl_abapgit_json_handler IMPLEMENTATION.
       lv_original_language TYPE sy-langu.
 
     lv_original_language = co_ajson->get_string( '/header/originalLanguage' ).
+    IF lv_original_language IS INITIAL.
+      RETURN.
+    ENDIF.
 
     lv_bcp47_language = zcl_abapgit_convert=>language_sap1_to_bcp47( lv_original_language ).
 
@@ -84274,7 +89561,7 @@ CLASS zcl_abapgit_objects_activation IMPLEMENTATION.
     FIELD-SYMBOLS: <ls_object>  TYPE dwinactiv,
                    <ls_classes> LIKE LINE OF gt_classes.
 
-    IF iv_type = 'CLAS' OR iv_type = 'INTF'.
+    IF ( iv_type = 'CLAS' OR iv_type = 'INTF' ) AND iv_force_clif = abap_false.
       APPEND INITIAL LINE TO gt_classes ASSIGNING <ls_classes>.
       <ls_classes>-object  = iv_type.
       <ls_classes>-clsname = iv_name.
@@ -85806,6 +91093,16 @@ CLASS zcl_abapgit_objects_super IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD deserialize_longtexts_aff.
+
+    zcl_abapgit_factory=>get_longtexts( )->deserialize_aff(
+      iv_object_name   = ms_item-obj_name
+      iv_longtext_id   = iv_longtext_id
+      iv_main_language = mv_language
+      io_files         = mo_files ).
+
+  ENDMETHOD.
+
   METHOD exists_a_lock_entry_for.
 
     DATA: lt_lock_entries TYPE STANDARD TABLE OF seqg3.
@@ -85882,6 +91179,15 @@ CLASS zcl_abapgit_objects_super IMPLEMENTATION.
 
     rv_active = zcl_abapgit_objects_activation=>is_active( ms_item ).
 
+  ENDMETHOD.
+
+  METHOD serialize_longtexts_aff.
+    zcl_abapgit_factory=>get_longtexts( )->serialize_aff(
+      iv_object_name   = ms_item-obj_name
+*      iv_longtext_name = iv_longtext_name
+      iv_longtext_id   = iv_longtext_id
+      it_dokil         = it_dokil
+      io_files         = mo_files ).
   ENDMETHOD.
 
   METHOD serialize_longtexts.
@@ -86125,7 +91431,7 @@ CLASS zcl_abapgit_objects_program IMPLEMENTATION.
 
       " todo: kept for compatibility, remove after grace period #3680
       ls_dynpro-flow_logic = uncondense_flow(
-        it_flow = ls_dynpro-flow_logic
+        it_flow   = ls_dynpro-flow_logic
         it_spaces = ls_dynpro-spaces ).
 
       IF ls_dynpro-flow_logic IS INITIAL.
@@ -86261,14 +91567,13 @@ CLASS zcl_abapgit_objects_program IMPLEMENTATION.
         is_progdir = is_progdir
         it_source  = it_source
         iv_title   = lv_title
-        iv_state   = '' ).
+        iv_state   = c_state-off ).
     ELSE.
       insert_program(
         is_progdir = is_progdir
         it_source  = it_source
         iv_title   = lv_title
-        iv_package = iv_package
-        iv_state   = '' ).
+        iv_package = iv_package ).
     ENDIF.
 
   ENDMETHOD.
@@ -86879,17 +92184,17 @@ CLASS zcl_abapgit_objects_program IMPLEMENTATION.
 
     zcl_abapgit_language=>set_current_language( mv_language ).
 
-    CALL FUNCTION 'RPY_PROGRAM_UPDATE'
+    CALL FUNCTION 'RPY_INCLUDE_UPDATE'
       EXPORTING
-        program_name     = is_progdir-name
+        include_name     = is_progdir-name
         title_string     = iv_title
         save_inactive    = iv_state
       TABLES
         source_extended  = it_source
       EXCEPTIONS
-        cancelled        = 1
-        permission_error = 2
-        not_found        = 3
+        not_found        = 1
+        cancelled        = 2
+        permission_error = 3
         OTHERS           = 4.
 
     IF sy-subrc <> 0.
@@ -94511,9 +99816,11 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
       ls_item-obj_name = ls_tadir-obj_name.
 
       IF /apmg/cl_apm_abapgit_objects=>exists( ls_item ) = abap_false.
+        " Ignore errors since objects might be locked in unreleased transport (TR022)
         zcl_abapgit_factory=>get_tadir( )->delete_single(
-          iv_object    = ls_tadir-object
-          iv_obj_name  = ls_tadir-obj_name ).
+          iv_object   = ls_tadir-object
+          iv_obj_name = ls_tadir-obj_name
+          iv_no_throw = abap_true ).
       ENDIF.
     ENDLOOP.
 
@@ -95730,7 +101037,562 @@ CLASS zcl_abapgit_object_docv IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
+CLASS lcl_doma_data DEFINITION.
+  PUBLIC SECTION.
+    DATA ms_dd01v TYPE dd01v.
+    DATA ms_dd07v TYPE dd07v_tab.
+ENDCLASS.
+
+CLASS lcl_doma_data IMPLEMENTATION.
+ENDCLASS.
+
+CLASS lcl_aff_type_mapping DEFINITION.
+  PUBLIC SECTION.
+    INTERFACES zif_abapgit_aff_type_mapping.
+  PRIVATE SECTION.
+    METHODS:
+      map_data_type_to_aff
+        IMPORTING
+          iv_ddic_type       TYPE dd01v-datatype
+        RETURNING
+          VALUE(rv_aff_type) TYPE zif_abapgit_aff_doma_v1=>ty_data_type,
+      map_data_type_to_ddic
+        IMPORTING
+          iv_aff_type         TYPE zif_abapgit_aff_doma_v1=>ty_data_type
+        RETURNING
+          VALUE(rv_ddic_type) TYPE dd01v-datatype.
+ENDCLASS.
+
+CLASS lcl_aff_type_mapping IMPLEMENTATION.
+
+  METHOD zif_abapgit_aff_type_mapping~to_aff.
+    DATA lo_doma_data TYPE REF TO lcl_doma_data.
+    DATA ls_data_aff TYPE zif_abapgit_aff_doma_v1=>ty_main.
+
+    " Map fixed values and intervals
+    FIELD-SYMBOLS <ls_dd07v> TYPE dd07v.
+    DATA ls_single_value TYPE zif_abapgit_aff_doma_v1=>ty_single_value.
+    DATA ls_interval_value TYPE zif_abapgit_aff_doma_v1=>ty_intervals_value.
+
+    " Convert input data to DOMA structure
+    TRY.
+        lo_doma_data ?= iv_data.
+      CATCH cx_sy_move_cast_error.
+        " Handle error
+        RETURN.
+    ENDTRY.
+
+    " Set format version
+    ls_data_aff-format_version = '1'.
+
+    " Map header
+    ls_data_aff-header-description = lo_doma_data->ms_dd01v-ddtext.
+    ls_data_aff-header-original_language = lo_doma_data->ms_dd01v-ddlanguage.
+    ls_data_aff-header-abap_language_version = zif_abapgit_aff_types_v1=>co_abap_language_version-standard.
+
+    " Map format
+    ls_data_aff-format-data_type = map_data_type_to_aff( lo_doma_data->ms_dd01v-datatype ).
+    ls_data_aff-format-length = lo_doma_data->ms_dd01v-leng.
+    IF lo_doma_data->ms_dd01v-decimals IS NOT INITIAL.
+      ls_data_aff-format-decimals = lo_doma_data->ms_dd01v-decimals.
+    ENDIF.
+
+    " Map output characteristics
+    IF lo_doma_data->ms_dd01v-outputlen IS NOT INITIAL
+        OR lo_doma_data->ms_dd01v-convexit IS NOT INITIAL
+        OR lo_doma_data->ms_dd01v-lowercase IS NOT INITIAL
+        OR lo_doma_data->ms_dd01v-signflag IS NOT INITIAL.
+      IF lo_doma_data->ms_dd01v-outputlen IS NOT INITIAL.
+        ls_data_aff-output_characteristics-length = lo_doma_data->ms_dd01v-outputlen.
+      ENDIF.
+      IF lo_doma_data->ms_dd01v-convexit IS NOT INITIAL.
+        ls_data_aff-output_characteristics-conversion_routine = lo_doma_data->ms_dd01v-convexit.
+      ENDIF.
+      IF lo_doma_data->ms_dd01v-lowercase IS NOT INITIAL.
+        ls_data_aff-output_characteristics-case_sensitive = abap_true.
+      ENDIF.
+      IF lo_doma_data->ms_dd01v-signflag IS NOT INITIAL.
+        ls_data_aff-output_characteristics-negative_values = abap_true.
+      ENDIF.
+    ENDIF.
+
+    LOOP AT lo_doma_data->ms_dd07v ASSIGNING <ls_dd07v>.
+      IF <ls_dd07v>-domvalue_l = <ls_dd07v>-domvalue_h.
+        " Single value
+        ls_single_value-fixed_value = <ls_dd07v>-domvalue_l.
+        ls_single_value-description = <ls_dd07v>-ddtext.
+        APPEND ls_single_value TO ls_data_aff-fixed_values.
+      ELSE.
+        " Interval
+        ls_interval_value-low_limit = <ls_dd07v>-domvalue_l.
+        ls_interval_value-high_limit = <ls_dd07v>-domvalue_h.
+        ls_interval_value-description = <ls_dd07v>-ddtext.
+        APPEND ls_interval_value TO ls_data_aff-fixed_value_intervals.
+      ENDIF.
+    ENDLOOP.
+
+    " Map value table
+    IF lo_doma_data->ms_dd01v-entitytab IS NOT INITIAL.
+      ls_data_aff-value_table-name = lo_doma_data->ms_dd01v-entitytab.
+    ENDIF.
+
+    es_data = ls_data_aff.
+  ENDMETHOD.
+
+  METHOD zif_abapgit_aff_type_mapping~to_abapgit.
+    DATA ls_data_aff TYPE zif_abapgit_aff_doma_v1=>ty_main.
+    DATA lo_doma_data TYPE REF TO lcl_doma_data.
+    DATA ls_dd07v TYPE dd07v.
+    DATA lv_valpos TYPE i.
+    FIELD-SYMBOLS <ls_single_value> TYPE zif_abapgit_aff_doma_v1=>ty_single_value.
+    FIELD-SYMBOLS <ls_interval_value> TYPE zif_abapgit_aff_doma_v1=>ty_intervals_value.
+
+    ls_data_aff = iv_data.
+
+    CREATE OBJECT lo_doma_data.
+
+    " Map header
+    lo_doma_data->ms_dd01v-domname = to_upper( iv_object_name ).
+    lo_doma_data->ms_dd01v-ddtext = ls_data_aff-header-description.
+    lo_doma_data->ms_dd01v-ddlanguage = ls_data_aff-header-original_language.
+
+    " Map format
+    lo_doma_data->ms_dd01v-datatype = map_data_type_to_ddic( ls_data_aff-format-data_type ).
+    lo_doma_data->ms_dd01v-leng = ls_data_aff-format-length.
+    lo_doma_data->ms_dd01v-decimals = ls_data_aff-format-decimals.
+
+    " Map output characteristics
+    IF ls_data_aff-output_characteristics-length IS NOT INITIAL.
+      lo_doma_data->ms_dd01v-outputlen = ls_data_aff-output_characteristics-length.
+    ENDIF.
+    IF ls_data_aff-output_characteristics-conversion_routine IS NOT INITIAL.
+      lo_doma_data->ms_dd01v-convexit = ls_data_aff-output_characteristics-conversion_routine.
+    ENDIF.
+    IF ls_data_aff-output_characteristics-case_sensitive = abap_true.
+      lo_doma_data->ms_dd01v-lowercase = abap_true.
+    ENDIF.
+    IF ls_data_aff-output_characteristics-negative_values = abap_true.
+      lo_doma_data->ms_dd01v-signflag = abap_true.
+    ENDIF.
+
+    " Map fixed values
+    lv_valpos = 1.
+
+    LOOP AT ls_data_aff-fixed_values ASSIGNING <ls_single_value>.
+      CLEAR ls_dd07v.
+      ls_dd07v-domname = lo_doma_data->ms_dd01v-domname.
+      ls_dd07v-valpos = lv_valpos.
+      ls_dd07v-domvalue_l = <ls_single_value>-fixed_value.
+      ls_dd07v-domvalue_h = <ls_single_value>-fixed_value.
+      ls_dd07v-ddtext = <ls_single_value>-description.
+      ls_dd07v-ddlanguage = lo_doma_data->ms_dd01v-ddlanguage.
+      APPEND ls_dd07v TO lo_doma_data->ms_dd07v.
+      lv_valpos = lv_valpos + 1.
+    ENDLOOP.
+
+    " Map fixed value intervals
+    LOOP AT ls_data_aff-fixed_value_intervals ASSIGNING <ls_interval_value>.
+      CLEAR ls_dd07v.
+      ls_dd07v-domname = lo_doma_data->ms_dd01v-domname.
+      ls_dd07v-valpos = lv_valpos.
+      ls_dd07v-domvalue_l = <ls_interval_value>-low_limit.
+      ls_dd07v-domvalue_h = <ls_interval_value>-high_limit.
+      ls_dd07v-ddtext = <ls_interval_value>-description.
+      ls_dd07v-ddlanguage = lo_doma_data->ms_dd01v-ddlanguage.
+      APPEND ls_dd07v TO lo_doma_data->ms_dd07v.
+      lv_valpos = lv_valpos + 1.
+    ENDLOOP.
+
+    " Map value table
+    IF ls_data_aff-value_table-name IS NOT INITIAL.
+      lo_doma_data->ms_dd01v-entitytab = ls_data_aff-value_table-name.
+    ENDIF.
+
+    es_data = lo_doma_data.
+  ENDMETHOD.
+
+  METHOD map_data_type_to_aff.
+    CASE iv_ddic_type.
+      WHEN 'ACCP'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-accp.
+      WHEN 'CHAR'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-char.
+      WHEN 'CLNT'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-clnt.
+      WHEN 'CUKY'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-cuky.
+      WHEN 'CURR'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-curr.
+      WHEN 'DF16_DEC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df16_dec.
+      WHEN 'DF16_RAW'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df16_raw.
+      WHEN 'DF16_SCL'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df16_scl.
+      WHEN 'DECFLOAT16'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-decfloat16.
+      WHEN 'DF34_DEC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df34_dec.
+      WHEN 'DF34_RAW'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df34_raw.
+      WHEN 'DF34_SCL'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-df34_scl.
+      WHEN 'DECFLOAT34'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-decfloat34.
+      WHEN 'DATS'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-dats.
+      WHEN 'DATN'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-datn.
+      WHEN 'DEC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-dec.
+      WHEN 'FLTP'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-fltp.
+      WHEN 'GEOM_EWKB'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-geom_ewkb.
+      WHEN 'INT1'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-int1.
+      WHEN 'INT2'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-int2.
+      WHEN 'INT4'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-int4.
+      WHEN 'INT8'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-int8.
+      WHEN 'LANG'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-lang.
+      WHEN 'LCHR'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-lchr.
+      WHEN 'LRAW'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-lraw.
+      WHEN 'NUMC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-numc.
+      WHEN 'PREC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-prec.
+      WHEN 'QUAN'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-quan.
+      WHEN 'RAW'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-raw.
+      WHEN 'RAWSTRING'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-rawstring.
+      WHEN 'SSTRING'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-sstring.
+      WHEN 'STRING' OR 'STRG'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-string.
+      WHEN 'TIMS'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-tims.
+      WHEN 'TIMN'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-timn.
+      WHEN 'UNIT'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-unit.
+      WHEN 'UTCLONG'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-utclong.
+      WHEN 'VARC'.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-varc.
+      WHEN OTHERS.
+        rv_aff_type = zif_abapgit_aff_doma_v1=>co_data_type-char.
+    ENDCASE.
+  ENDMETHOD.
+
+  METHOD map_data_type_to_ddic.
+    CASE to_upper( iv_aff_type ).
+      WHEN 'ACCP'.
+        rv_ddic_type = 'ACCP'.
+      WHEN 'CHAR'.
+        rv_ddic_type = 'CHAR'.
+      WHEN 'CLNT'.
+        rv_ddic_type = 'CLNT'.
+      WHEN 'CUKY'.
+        rv_ddic_type = 'CUKY'.
+      WHEN 'CURR'.
+        rv_ddic_type = 'CURR'.
+      WHEN 'DF16_DEC'.
+        rv_ddic_type = 'DF16_DEC'.
+      WHEN 'DF16_RAW'.
+        rv_ddic_type = 'DF16_RAW'.
+      WHEN 'DF16_SCL'.
+        rv_ddic_type = 'DF16_SCL'.
+      WHEN 'DECFLOAT16'.
+        rv_ddic_type = 'DECFLOAT16'.
+      WHEN 'DF34_DEC'.
+        rv_ddic_type = 'DF34_DEC'.
+      WHEN 'DF34_RAW'.
+        rv_ddic_type = 'DF34_RAW'.
+      WHEN 'DF34_SCL'.
+        rv_ddic_type = 'DF34_SCL'.
+      WHEN 'DECFLOAT34'.
+        rv_ddic_type = 'DECFLOAT34'.
+      WHEN 'DATS'.
+        rv_ddic_type = 'DATS'.
+      WHEN 'DATN'.
+        rv_ddic_type = 'DATN'.
+      WHEN 'DEC'.
+        rv_ddic_type = 'DEC'.
+      WHEN 'FLTP'.
+        rv_ddic_type = 'FLTP'.
+      WHEN 'GEOM_EWKB'.
+        rv_ddic_type = 'GEOM_EWKB'.
+      WHEN 'INT1'.
+        rv_ddic_type = 'INT1'.
+      WHEN 'INT2'.
+        rv_ddic_type = 'INT2'.
+      WHEN 'INT4'.
+        rv_ddic_type = 'INT4'.
+      WHEN 'INT8'.
+        rv_ddic_type = 'INT8'.
+      WHEN 'LANG'.
+        rv_ddic_type = 'LANG'.
+      WHEN 'LCHR'.
+        rv_ddic_type = 'LCHR'.
+      WHEN 'LRAW'.
+        rv_ddic_type = 'LRAW'.
+      WHEN 'NUMC'.
+        rv_ddic_type = 'NUMC'.
+      WHEN 'PREC'.
+        rv_ddic_type = 'PREC'.
+      WHEN 'QUAN'.
+        rv_ddic_type = 'QUAN'.
+      WHEN 'RAW'.
+        rv_ddic_type = 'RAW'.
+      WHEN 'RAWSTRING'.
+        rv_ddic_type = 'RAWSTRING'.
+      WHEN 'SSTRING'.
+        rv_ddic_type = 'SSTRING'.
+      WHEN 'STRING'.
+        rv_ddic_type = 'STRG'.
+      WHEN 'TIMS'.
+        rv_ddic_type = 'TIMS'.
+      WHEN 'TIMN'.
+        rv_ddic_type = 'TIMN'.
+      WHEN 'UNIT'.
+        rv_ddic_type = 'UNIT'.
+      WHEN 'UTCLONG'.
+        rv_ddic_type = 'UTCLONG'.
+      WHEN 'VARC'.
+        rv_ddic_type = 'VARC'.
+      WHEN OTHERS.
+        rv_ddic_type = 'CHAR'.
+    ENDCASE.
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lcl_aff_metadata_handler DEFINITION.
+  PUBLIC SECTION.
+    CLASS-METHODS:
+      serialize
+        IMPORTING
+          is_dd01v       TYPE dd01v
+          it_dd07v       TYPE dd07v_tab
+        RETURNING
+          VALUE(rv_json) TYPE xstring
+        RAISING
+          zcx_abapgit_exception,
+      deserialize
+        IMPORTING
+          iv_json        TYPE xstring
+          iv_object_name TYPE sobj_name
+        EXPORTING
+          es_dd01v       TYPE dd01v
+          et_dd07v       TYPE dd07v_tab
+        RAISING
+          zcx_abapgit_exception.
+  PRIVATE SECTION.
+    CLASS-METHODS:
+      get_enum_mappings
+        RETURNING
+          VALUE(rt_result) TYPE zcl_abapgit_json_handler=>ty_enum_mappings.
+ENDCLASS.
+
+CLASS lcl_aff_metadata_handler IMPLEMENTATION.
+
+  METHOD serialize.
+    DATA lo_aff_handler TYPE REF TO zcl_abapgit_json_handler.
+    DATA lo_aff_mapper TYPE REF TO zif_abapgit_aff_type_mapping.
+    DATA ls_data_aff TYPE zif_abapgit_aff_doma_v1=>ty_main.
+    DATA lo_doma_data TYPE REF TO lcl_doma_data.
+    DATA lt_enum_mappings TYPE zcl_abapgit_json_handler=>ty_enum_mappings.
+    DATA lx_exception TYPE REF TO cx_root.
+    DATA lt_skip_paths TYPE zcl_abapgit_json_handler=>ty_skip_paths.
+    DATA ls_skip_path  TYPE zcl_abapgit_json_handler=>ty_path_value_pair.
+
+    CREATE OBJECT lo_doma_data.
+    lo_doma_data->ms_dd01v = is_dd01v.
+    lo_doma_data->ms_dd07v = it_dd07v.
+
+    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping.
+    lo_aff_mapper->to_aff(
+      EXPORTING
+        iv_data = lo_doma_data
+      IMPORTING
+        es_data = ls_data_aff ).
+
+    lt_enum_mappings = get_enum_mappings( ).
+
+    ls_skip_path-path  = '/format/decimals'.
+    ls_skip_path-value = '0'.
+    APPEND ls_skip_path TO lt_skip_paths.
+    ls_skip_path-path  = '/outputCharacteristics/style'.
+    ls_skip_path-value = '00'.
+    APPEND ls_skip_path TO lt_skip_paths.
+
+    CREATE OBJECT lo_aff_handler.
+
+    TRY.
+        rv_json = lo_aff_handler->serialize(
+          iv_data          = ls_data_aff
+          iv_enum_mappings = lt_enum_mappings
+          iv_skip_paths    = lt_skip_paths ).
+      CATCH cx_root INTO lx_exception.
+        zcx_abapgit_exception=>raise_with_text( lx_exception ).
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD deserialize.
+    DATA lo_json_handler TYPE REF TO zcl_abapgit_json_handler.
+    DATA lo_aff_mapper TYPE REF TO zif_abapgit_aff_type_mapping.
+    DATA ls_data_aff TYPE zif_abapgit_aff_doma_v1=>ty_main.
+    DATA lo_doma_data TYPE REF TO lcl_doma_data.
+    DATA lt_enum_mappings TYPE zcl_abapgit_json_handler=>ty_enum_mappings.
+    DATA lv_json_string TYPE string.
+    DATA lx_exception TYPE REF TO cx_root.
+
+    lt_enum_mappings = get_enum_mappings( ).
+
+    lv_json_string = zcl_abapgit_convert=>xstring_to_string_utf8( iv_json ).
+
+    CREATE OBJECT lo_json_handler.
+
+    TRY.
+        lo_json_handler->deserialize(
+          EXPORTING
+            iv_content       = lv_json_string
+            iv_enum_mappings = lt_enum_mappings
+          IMPORTING
+            ev_data          = ls_data_aff ).
+      CATCH cx_root INTO lx_exception.
+        zcx_abapgit_exception=>raise_with_text( lx_exception ).
+    ENDTRY.
+
+    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping.
+    lo_aff_mapper->to_abapgit(
+      EXPORTING
+        iv_data        = ls_data_aff
+        iv_object_name = iv_object_name
+      IMPORTING
+        es_data        = lo_doma_data ).
+
+    es_dd01v = lo_doma_data->ms_dd01v.
+    et_dd07v = lo_doma_data->ms_dd07v.
+
+  ENDMETHOD.
+
+  METHOD get_enum_mappings.
+    DATA ls_mapping TYPE zcl_abapgit_json_handler=>ty_enum_mapping.
+    DATA ls_json_abap_mapping TYPE zcl_abapgit_json_handler=>ty_json_abap_mapping.
+
+    " Map data types - all types map to themselves in uppercase
+    ls_mapping-path = '/format/dataType'.
+    CLEAR ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'ACCP'.
+    ls_json_abap_mapping-json = 'ACCP'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'CHAR'.
+    ls_json_abap_mapping-json = 'CHAR'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'CLNT'.
+    ls_json_abap_mapping-json = 'CLNT'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'CUKY'.
+    ls_json_abap_mapping-json = 'CUKY'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'CURR'.
+    ls_json_abap_mapping-json = 'CURR'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'DATS'.
+    ls_json_abap_mapping-json = 'DATS'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'DEC'.
+    ls_json_abap_mapping-json = 'DEC'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'FLTP'.
+    ls_json_abap_mapping-json = 'FLTP'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'INT1'.
+    ls_json_abap_mapping-json = 'INT1'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'INT2'.
+    ls_json_abap_mapping-json = 'INT2'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'INT4'.
+    ls_json_abap_mapping-json = 'INT4'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'INT8'.
+    ls_json_abap_mapping-json = 'INT8'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'LANG'.
+    ls_json_abap_mapping-json = 'LANG'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'NUMC'.
+    ls_json_abap_mapping-json = 'NUMC'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'QUAN'.
+    ls_json_abap_mapping-json = 'QUAN'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'RAW'.
+    ls_json_abap_mapping-json = 'RAW'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'RAWSTRING'.
+    ls_json_abap_mapping-json = 'RAWSTRING'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'STRING'.
+    ls_json_abap_mapping-json = 'STRING'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'TIMS'.
+    ls_json_abap_mapping-json = 'TIMS'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    ls_json_abap_mapping-abap = 'UNIT'.
+    ls_json_abap_mapping-json = 'UNIT'.
+    APPEND ls_json_abap_mapping TO ls_mapping-mappings.
+
+    APPEND ls_mapping TO rt_result.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS zcl_abapgit_object_doma IMPLEMENTATION.
+
+  METHOD constructor.
+
+    super->constructor(
+      is_item        = is_item
+      iv_language    = iv_language
+      io_files       = io_files
+      io_i18n_params = io_i18n_params ).
+
+    mv_aff_enabled = zcl_abapgit_aff_factory=>get_registry( )->is_supported_object_type( 'DOMA' ).
+
+  ENDMETHOD.
 
   METHOD adjust_exit.
 
@@ -95766,7 +101628,7 @@ CLASS zcl_abapgit_object_doma IMPLEMENTATION.
   METHOD deserialize_texts.
 
     DATA: lv_name       TYPE ddobjname,
-          lv_valpos     TYPE valpos,
+          lv_valpos     TYPE dd07v-valpos,
           ls_dd01v_tmp  TYPE dd01v,
           lt_dd07v_tmp  TYPE TABLE OF dd07v,
           lt_i18n_langs TYPE TABLE OF langu,
@@ -96002,14 +101864,34 @@ CLASS zcl_abapgit_object_doma IMPLEMENTATION.
           lv_done  TYPE abap_bool,
           ls_dd01v TYPE dd01v,
           ls_extra TYPE ty_extra,
-          lt_dd07v TYPE TABLE OF dd07v.
+          lt_dd07v TYPE TABLE OF dd07v,
+          lv_json  TYPE xstring.
 
     FIELD-SYMBOLS <ls_dd07v> TYPE dd07v.
 
-    io_xml->read( EXPORTING iv_name = 'DD01V'
-                  CHANGING  cg_data = ls_dd01v ).
-    io_xml->read( EXPORTING iv_name = 'DD07V_TAB'
-                  CHANGING  cg_data = lt_dd07v ).
+    IF mv_aff_enabled = abap_true.
+      " AFF/JSON deserialization
+      TRY.
+          lv_json = mo_files->read_raw( 'json' ).
+        CATCH zcx_abapgit_exception.
+      ENDTRY.
+    ENDIF.
+
+    IF lv_json IS NOT INITIAL.
+      lcl_aff_metadata_handler=>deserialize(
+        EXPORTING
+          iv_json        = lv_json
+          iv_object_name = ms_item-obj_name
+        IMPORTING
+          es_dd01v       = ls_dd01v
+          et_dd07v       = lt_dd07v ).
+    ELSE.
+      " If JSON file not found, fall back to XML
+      io_xml->read( EXPORTING iv_name = 'DD01V'
+                        CHANGING  cg_data = ls_dd01v ).
+      io_xml->read( EXPORTING iv_name = 'DD07V_TAB'
+                        CHANGING  cg_data = lt_dd07v ).
+    ENDIF.
 
     handle_dependencies(
       EXPORTING
@@ -96049,26 +101931,34 @@ CLASS zcl_abapgit_object_doma IMPLEMENTATION.
       zcx_abapgit_exception=>raise_t100( ).
     ENDIF.
 
-    " Fields that are not part of dd01v
-    io_xml->read( EXPORTING iv_name = 'DD01L_EXTRA'
-                  CHANGING  cg_data = ls_extra ).
+    IF mv_aff_enabled = abap_false.
+      io_xml->read( EXPORTING iv_name = 'DD01L_EXTRA'
+                    CHANGING  cg_data = ls_extra ).
 
-    TRY.
-        set_abap_language_version( CHANGING cv_abap_language_version = ls_extra-abap_language_version ).
+      TRY.
+          set_abap_language_version( CHANGING cv_abap_language_version = ls_extra-abap_language_version ).
 
-        UPDATE ('DD01L') SET abap_language_version = ls_extra-abap_language_version WHERE domname = lv_name.
-      CATCH cx_sy_dynamic_osql_semantics ##NO_HANDLER.
-    ENDTRY.
-
-    IF mo_i18n_params->is_lxe_applicable( ) = abap_false.
-      deserialize_texts(
-        ii_xml   = io_xml
-        is_dd01v = ls_dd01v
-        it_dd07v = lt_dd07v ).
+          UPDATE ('DD01L') SET abap_language_version = ls_extra-abap_language_version WHERE domname = lv_name.
+        CATCH cx_sy_dynamic_osql_semantics ##NO_HANDLER.
+      ENDTRY.
     ENDIF.
 
-    deserialize_longtexts( ii_xml         = io_xml
-                           iv_longtext_id = c_longtext_id_doma ).
+    IF mv_aff_enabled = abap_true.
+      deserialize_longtexts_aff( c_longtext_id_doma ).
+
+      " Note: Translation handling for AFF format not yet implemented
+      " Translation files would be handled similar to INTF deserialization
+    ELSE.
+      IF mo_i18n_params->is_lxe_applicable( ) = abap_false.
+        deserialize_texts(
+          ii_xml   = io_xml
+          is_dd01v = ls_dd01v
+          it_dd07v = lt_dd07v ).
+      ENDIF.
+
+      deserialize_longtexts( ii_xml         = io_xml
+                             iv_longtext_id = c_longtext_id_doma ).
+    ENDIF.
 
     zcl_abapgit_objects_activation=>add_item( ms_item ).
 
@@ -96130,7 +102020,8 @@ CLASS zcl_abapgit_object_doma IMPLEMENTATION.
           ls_dd01v   TYPE dd01v,
           ls_extra   TYPE ty_extra,
           lv_masklen TYPE c LENGTH 4,
-          lt_dd07v   TYPE TABLE OF dd07v.
+          lt_dd07v   TYPE TABLE OF dd07v,
+          lv_json    TYPE xstring.
 
     FIELD-SYMBOLS <ls_dd07v> TYPE dd07v.
     FIELD-SYMBOLS <lg_field> TYPE any.
@@ -96188,24 +102079,41 @@ CLASS zcl_abapgit_object_doma IMPLEMENTATION.
       CLEAR <ls_dd07v>-domname.
     ENDLOOP.
 
-    io_xml->add( iv_name = 'DD01V'
-                 ig_data = ls_dd01v ).
-    io_xml->add( iv_name = 'DD07V_TAB'
-                 ig_data = lt_dd07v ).
-
-    ls_extra-abap_language_version = get_abap_language_version( ).
-
-    io_xml->add( iv_name = 'DD01L_EXTRA'
-                 ig_data = ls_extra ).
-
-    IF mo_i18n_params->is_lxe_applicable( ) = abap_false.
-      serialize_texts(
-        ii_xml   = io_xml
+    IF mv_aff_enabled = abap_true.
+      " AFF/JSON serialization
+      lv_json = lcl_aff_metadata_handler=>serialize(
+        is_dd01v = ls_dd01v
         it_dd07v = lt_dd07v ).
-    ENDIF.
 
-    serialize_longtexts( ii_xml         = io_xml
-                         iv_longtext_id = c_longtext_id_doma ).
+      mo_files->add_raw(
+        iv_ext  = 'json'
+        iv_data = lv_json ).
+
+      serialize_longtexts_aff( iv_longtext_id = c_longtext_id_doma ).
+
+      " Note: Translation handling for AFF format not yet implemented
+      " Translation files would be handled similar to INTF serialization
+    ELSE.
+      " XML serialization (existing behavior)
+      io_xml->add( iv_name = 'DD01V'
+                   ig_data = ls_dd01v ).
+      io_xml->add( iv_name = 'DD07V_TAB'
+                   ig_data = lt_dd07v ).
+
+      ls_extra-abap_language_version = get_abap_language_version( ).
+
+      io_xml->add( iv_name = 'DD01L_EXTRA'
+                   ig_data = ls_extra ).
+
+      IF mo_i18n_params->is_lxe_applicable( ) = abap_false.
+        serialize_texts(
+          ii_xml   = io_xml
+          it_dd07v = lt_dd07v ).
+      ENDIF.
+
+      serialize_longtexts( ii_xml         = io_xml
+                           iv_longtext_id = c_longtext_id_doma ).
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.
@@ -97867,6 +103775,84 @@ CLASS zcl_abapgit_object_dtel IMPLEMENTATION.
                          iv_longtext_name = 'LONGTEXTS_' && c_longtext_id_dtel_suppl
                          iv_longtext_id   = c_longtext_id_dtel_suppl ).
 
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS ZCL_ABAPGIT_OBJECT_DTIX IMPLEMENTATION.
+
+  METHOD zif_abapgit_object~changed_by.
+
+    DATA: lo_dtix_handler TYPE REF TO object,
+          lv_object_key   TYPE seu_objkey,
+          lx_error        TYPE REF TO cx_root.
+
+    TRY.
+        lv_object_key = ms_item-obj_name.
+        CALL METHOD ('CL_DD_DTIX_AFF_OBJECT_HANDLER')=>('GET_DDIC_HANDLER')
+          EXPORTING
+            object_key = lv_object_key
+          RECEIVING
+            handler    = lo_dtix_handler.
+
+        CALL METHOD lo_dtix_handler->('IF_DD_DT_HANDLER~GET_CHANGED_BY')
+          RECEIVING
+            rv_changed_by = rv_user.
+
+      CATCH cx_root INTO lx_error.
+        zcx_abapgit_exception=>raise_with_text( lx_error ).
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD zif_abapgit_object~get_deserialize_steps.
+    APPEND zif_abapgit_object=>gc_step_id-ddic TO rt_steps.
+  ENDMETHOD.
+
+  METHOD get_additional_extensions.
+    DATA ls_additional_extension LIKE LINE OF rv_additional_extensions.
+    ls_additional_extension-extension = 'acds'.
+    CALL METHOD ('CL_CDS_AFF_FILE_NAME_MAPPER')=>for_cds
+      RECEIVING
+        result = ls_additional_extension-file_name_mapper.
+    APPEND ls_additional_extension TO rv_additional_extensions.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS ZCL_ABAPGIT_OBJECT_DTSC IMPLEMENTATION.
+
+  METHOD zif_abapgit_object~changed_by.
+
+    DATA: lo_dtsc_handler TYPE REF TO object,
+          lv_object_key   TYPE seu_objkey,
+          lx_error        TYPE REF TO cx_root.
+
+    TRY.
+        lv_object_key = ms_item-obj_name.
+        CALL METHOD ('CL_DTSC_AFF_OBJECT_HANDLER')=>('GET_DDIC_HANDLER')
+          EXPORTING
+            object_key = lv_object_key
+          RECEIVING
+            handler    = lo_dtsc_handler.
+
+        CALL METHOD lo_dtsc_handler->('IF_DD_DT_HANDLER~GET_CHANGED_BY')
+          RECEIVING
+            rv_changed_by = rv_user.
+
+      CATCH cx_root INTO lx_error.
+        zcx_abapgit_exception=>raise_with_text( lx_error ).
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD zif_abapgit_object~get_deserialize_steps.
+    APPEND zif_abapgit_object=>gc_step_id-ddic TO rt_steps.
+  ENDMETHOD.
+
+  METHOD get_additional_extensions.
+    DATA ls_additional_extension LIKE LINE OF rv_additional_extensions.
+    ls_additional_extension-extension = 'acds'.
+    CALL METHOD ('CL_CDS_AFF_FILE_NAME_MAPPER')=>for_cds
+      RECEIVING
+        result = ls_additional_extension-file_name_mapper.
+    APPEND ls_additional_extension TO rv_additional_extensions.
   ENDMETHOD.
 ENDCLASS.
 
@@ -101859,6 +107845,22 @@ CLASS zcl_abapgit_object_form IMPLEMENTATION.
 
     lv_tdspras = zcl_abapgit_convert=>conversion_exit_isola_output( is_header-tdspras ).
 
+    " Refuse to serialize inconsistent text-header data. An empty tdspras
+    " or a tdspras that ISO conversion cannot map (typically because the
+    " language is not maintained in T002) would otherwise produce a file
+    " name without a stable language suffix, leading to an
+    " ITAB_DUPLICATE_KEY dump on the second affected header. See #7714.
+    IF lv_tdspras IS INITIAL.
+      zcx_abapgit_exception=>raise(
+        iv_text     = |Inconsistent SAPscript header data for FORM { mv_form_name }|
+        iv_longtext = |The text header language 'tdspras' is empty or | &&
+                      |not maintained in T002, so ISO conversion | &&
+                      |returned blank and no stable file name suffix | &&
+                      |can be built. Please clean up the affected | &&
+                      |STXH entries (transaction SE71, then Goto -> | &&
+                      |Languages -> Overview) before serializing.| ).
+    ENDIF.
+
     rv_result = c_objectname_tdlines && '_' && lv_tdspras.
 
   ENDMETHOD.
@@ -102892,11 +108894,11 @@ CLASS zcl_abapgit_object_fugr IMPLEMENTATION.
       zcx_abapgit_exception=>raise_t100( ).
     ENDIF.
 
-    "FM is not reliable if Function Group is inconsistent, so cross-check results (#7147)
+    " FM RS_FUNCTION_POOL_CONTENTS is not reliable if Function Group is inconsistent, so cross-check results (#7147)
+    " Don't check active flag, or the includes become wrong (#7702)
     SELECT * FROM enlfdir
       INTO TABLE lt_enlfdir
       WHERE area = ms_item-obj_name
-        AND active = abap_true
       ORDER BY funcname.                                  "#EC CI_SUBRC
 
     LOOP AT lt_enlfdir ASSIGNING <ls_enlfdir>.
@@ -106804,7 +112806,7 @@ CLASS lcl_aff_helper IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS lcl_aff_type_mapping DEFINITION.
+CLASS LCL_AFF_TYPE_MAPPING_ DEFINITION.
   PUBLIC SECTION.
     INTERFACES zif_abapgit_aff_type_mapping.
   PRIVATE SECTION.
@@ -106815,7 +112817,7 @@ CLASS lcl_aff_type_mapping DEFINITION.
                 et_descriptions_sub TYPE zif_abapgit_oo_object_fnc=>ty_seosubcotx_tt.
 ENDCLASS.
 
-CLASS lcl_aff_type_mapping IMPLEMENTATION.
+CLASS LCL_AFF_TYPE_MAPPING_ IMPLEMENTATION.
 
   METHOD zif_abapgit_aff_type_mapping~to_aff.
     DATA:
@@ -106942,7 +112944,7 @@ CLASS lcl_aff_type_mapping IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS lcl_aff_metadata_handler DEFINITION.
+CLASS LCL_AFF_METADATA_HANDLER_ DEFINITION.
   PUBLIC SECTION.
 
     CLASS-METHODS serialize
@@ -106981,7 +112983,7 @@ CLASS lcl_aff_metadata_handler DEFINITION.
         RETURNING VALUE(rt_result) TYPE zif_abapgit_aff_intf_v1=>ty_main.
 ENDCLASS.
 
-CLASS lcl_aff_metadata_handler IMPLEMENTATION.
+CLASS LCL_AFF_METADATA_HANDLER_ IMPLEMENTATION.
 
   METHOD serialize.
     DATA:
@@ -106992,7 +112994,7 @@ CLASS lcl_aff_metadata_handler IMPLEMENTATION.
       lt_enum_mappings TYPE zcl_abapgit_json_handler=>ty_enum_mappings,
       lt_paths_to_skip TYPE zcl_abapgit_json_handler=>ty_skip_paths.
 
-    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping.
+    CREATE OBJECT lo_aff_mapper TYPE LCL_AFF_TYPE_MAPPING_.
     lo_aff_mapper->to_aff( EXPORTING iv_data = is_intf
                            IMPORTING es_data = ls_data_aff ).
 
@@ -107162,7 +113164,7 @@ CLASS lcl_aff_metadata_handler IMPLEMENTATION.
       lv_sap1 = zcl_abapgit_convert=>language_sap2_to_sap1( li_translation_file->lang( ) ).
       ls_aff_data-header-original_language = lv_sap1.
 
-      CREATE OBJECT lo_type_mapper TYPE lcl_aff_type_mapping.
+      CREATE OBJECT lo_type_mapper TYPE LCL_AFF_TYPE_MAPPING_.
       lo_type_mapper->to_abapgit(
         EXPORTING
           iv_data        = ls_aff_data
@@ -107238,23 +113240,22 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
         iv_id          = c_longtext_id-interface
         iv_object_name = lv_object
         iv_language    = mv_language ).
-      RETURN.
-    ENDIF.
-
-    mi_object_oriented_object_fct->create_documentation(
-      it_lines       = is_docu-lines
-      iv_id          = c_longtext_id-interface
-      iv_object_name = lv_object
-      iv_language    = mv_language ).
-
-    LOOP AT is_docu-i18n_lines INTO ls_i18n_lines.
+    ELSE.
       mi_object_oriented_object_fct->create_documentation(
-        it_lines         = ls_i18n_lines-lines
-        iv_id            = c_longtext_id-interface
-        iv_object_name   = lv_object
-        iv_language      = ls_i18n_lines-language
-        iv_no_masterlang = abap_true ).
-    ENDLOOP.
+        it_lines       = is_docu-lines
+        iv_id          = c_longtext_id-interface
+        iv_object_name = lv_object
+        iv_language    = mv_language ).
+
+      LOOP AT is_docu-i18n_lines INTO ls_i18n_lines.
+        mi_object_oriented_object_fct->create_documentation(
+          it_lines         = ls_i18n_lines-lines
+          iv_id            = c_longtext_id-interface
+          iv_object_name   = lv_object
+          iv_language      = ls_i18n_lines-language
+          iv_no_masterlang = abap_true ).
+      ENDLOOP.
+    ENDIF.
 
     deserialize_longtexts(
       ii_xml           = ii_xml
@@ -107374,9 +113375,9 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
     DATA lo_aff_mapper TYPE REF TO zif_abapgit_aff_type_mapping.
 
     lv_json_data = mo_files->read_string( 'json' ).
-    ls_intf_aff = lcl_aff_metadata_handler=>deserialize( lv_json_data ).
+    ls_intf_aff = LCL_AFF_METADATA_HANDLER_=>deserialize( lv_json_data ).
 
-    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping.
+    CREATE OBJECT lo_aff_mapper TYPE LCL_AFF_TYPE_MAPPING_.
     lo_aff_mapper->to_abapgit( EXPORTING iv_data        = ls_intf_aff
                                          iv_object_name = ms_item-obj_name
                                IMPORTING es_data        = rs_intf ).
@@ -107553,13 +113554,13 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
 
     " HERE: switch with feature flag for XML or JSON file format
     IF mv_aff_enabled = abap_true.
-      lv_serialized_data = lcl_aff_metadata_handler=>serialize( ls_intf ).
+      lv_serialized_data = LCL_AFF_METADATA_HANDLER_=>serialize( ls_intf ).
       mo_files->add_raw( iv_ext  = 'json'
                          iv_data = lv_serialized_data ).
 
       lt_languages_for_translation = extract_languages_for_transl( ls_intf ).
 
-      lt_i18n_file = lcl_aff_metadata_handler=>serialize_translations(
+      lt_i18n_file = LCL_AFF_METADATA_HANDLER_=>serialize_translations(
         is_intf     = ls_intf
         it_language = lt_languages_for_translation ).
 
@@ -107667,7 +113668,7 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
       IF mv_aff_enabled = abap_true.
         ls_intf = read_json( ).
 
-        lcl_aff_metadata_handler=>deserialize_translation(
+        LCL_AFF_METADATA_HANDLER_=>deserialize_translation(
           EXPORTING
             io_files           = mo_files
             is_item            = ms_item
@@ -114885,6 +120886,87 @@ CLASS zcl_abapgit_object_sfpf IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD sort_contexts.
+
+    DATA: li_node            TYPE REF TO if_ixml_node,
+          li_item            TYPE REF TO if_ixml_node,
+          li_field           TYPE REF TO if_ixml_node,
+          li_item_list       TYPE REF TO if_ixml_node_list,
+          li_iterator        TYPE REF TO if_ixml_node_iterator,
+          li_items           TYPE REF TO if_ixml_node_iterator,
+          lv_index           TYPE i,
+          ls_context         TYPE ty_context,
+          ls_field           TYPE ty_xml_field,
+          lt_contexts        TYPE ty_contexts,
+          li_node_collection TYPE REF TO if_ixml_node_collection.
+
+    FIELD-SYMBOLS: <ls_field> TYPE ty_xml_field,
+                   <lv_value> TYPE any.
+
+    li_node_collection = ii_document->get_elements_by_tag_name_ns( 'FPCONTEXTT' ).
+    IF li_node_collection IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    li_iterator = li_node_collection->create_iterator( ).
+    li_node = li_iterator->get_next( ).
+    WHILE li_node IS NOT INITIAL.
+
+      CLEAR lt_contexts.
+      li_item_list = li_node->get_children( ).
+      li_items = li_item_list->create_iterator( ).
+      DO.
+        li_item = li_items->get_next( ).
+        IF li_item IS INITIAL.
+          EXIT.
+        ENDIF.
+
+        CLEAR ls_context.
+        li_field = li_item->get_first_child( ).
+        WHILE li_field IS NOT INITIAL.
+          ls_field-name = li_field->get_name( ).
+          ls_field-value = li_field->get_value( ).
+          INSERT ls_field INTO TABLE ls_context-fields.
+
+          ASSIGN COMPONENT ls_field-name OF STRUCTURE ls_context TO <lv_value>.
+          IF sy-subrc = 0.
+            <lv_value> = ls_field-value.
+          ENDIF.
+
+          li_field = li_field->get_next( ).
+        ENDWHILE.
+        INSERT ls_context INTO TABLE lt_contexts.
+      ENDDO.
+
+      SORT lt_contexts BY name state language id.
+
+      lv_index = 1.
+      li_items = li_item_list->create_iterator( ).
+      DO.
+        li_item = li_items->get_next( ).
+        IF li_item IS INITIAL.
+          EXIT.
+        ENDIF.
+
+        READ TABLE lt_contexts INTO ls_context INDEX lv_index.
+        li_field = li_item->get_first_child( ).
+        WHILE li_field IS NOT INITIAL.
+          READ TABLE ls_context-fields ASSIGNING <ls_field>
+            WITH KEY name = li_field->get_name( ).
+          IF sy-subrc = 0.
+            li_field->set_value( |{ <ls_field>-value }| ).
+          ENDIF.
+          li_field = li_field->get_next( ).
+        ENDWHILE.
+
+        lv_index = lv_index + 1.
+      ENDDO.
+
+      li_node = li_iterator->get_next( ).
+    ENDWHILE.
+
+  ENDMETHOD.
+
   METHOD zif_abapgit_object~changed_by.
 
     SELECT SINGLE lastuser FROM fplayout
@@ -115095,6 +121177,7 @@ CLASS zcl_abapgit_object_sfpf IMPLEMENTATION.
     ENDIF.
 
     fix_oref( li_document ).
+    sort_contexts( li_document ).
     io_xml->set_raw( li_document->get_root_element( ) ).
 
   ENDMETHOD.
@@ -116726,6 +122809,7 @@ CLASS zcl_abapgit_object_shma IMPLEMENTATION.
 
     DATA: lv_area_name       TYPE shm_area_name,
           ls_area_attributes TYPE shma_attributes.
+    DATA lx_root TYPE REF TO cx_root.
 
     lv_area_name = ms_item-obj_name.
 
@@ -116746,8 +122830,10 @@ CLASS zcl_abapgit_object_shma IMPLEMENTATION.
             no_class_generation = abap_false
             silent_mode         = abap_true.
 
-      CATCH cx_root.
-        zcx_abapgit_exception=>raise( |Error serializing SHMA { ms_item-obj_name }| ).
+      CATCH cx_root INTO lx_root.
+        zcx_abapgit_exception=>raise(
+          iv_text     = |Error deserializing SHMA { ms_item-obj_name }|
+          ix_previous = lx_root ).
     ENDTRY.
 
   ENDMETHOD.
@@ -124200,9 +130286,9 @@ CLASS zcl_abapgit_object_sush IMPLEMENTATION.
                 ls_usobhash-object   = 'TRAN'.
                 ls_usobhash-obj_name = <lv_display_name>.
               WHEN 'RF'.
+                " No object name for function groups since hash is for function module
                 ls_usobhash-pgmid    = 'R3TR'.
                 ls_usobhash-object   = 'FUGR'.
-                ls_usobhash-obj_name = <lv_display_name>.
               WHEN 'HT'.
                 IF <lv_display_name> CP 'R3TR*'.
                   SPLIT <lv_display_name> AT space INTO ls_usobhash-pgmid ls_usobhash-object ls_usobhash-obj_name.
@@ -124223,6 +130309,7 @@ CLASS zcl_abapgit_object_sush IMPLEMENTATION.
             CALL METHOD lo_su22->('IF_SU22_ADT_OBJECT~CREATE')
               EXPORTING
                 iv_new_key = ls_usobhash
+                iv_task    = iv_transport
               RECEIVING
                 rs_key     = ls_key.
           ENDIF.
@@ -124395,7 +130482,7 @@ CLASS zcl_abapgit_object_sush IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_OBJECT_SUSO IMPLEMENTATION.
+CLASS zcl_abapgit_object_suso IMPLEMENTATION.
 
   METHOD constructor.
 
@@ -124592,6 +130679,7 @@ CLASS ZCL_ABAPGIT_OBJECT_SUSO IMPLEMENTATION.
           lt_tobjvordat TYPE TABLE OF tobjvordat,
           lt_tobjvor    TYPE TABLE OF tobjvor.
     DATA lv_abap_language_version TYPE uccheck.
+    DATA lv_tabname TYPE tabname.
     DATA lr_structdescr TYPE REF TO cl_abap_structdescr.
     DATA lr_tobj_attr TYPE REF TO data.
     FIELD-SYMBOLS <ls_tobj_attr> TYPE any.
@@ -124632,40 +130720,40 @@ CLASS ZCL_ABAPGIT_OBJECT_SUSO IMPLEMENTATION.
     DELETE FROM tobjvor WHERE objct = ms_item-obj_name.   "#EC CI_SUBRC
     INSERT tobjvor FROM TABLE lt_tobjvor.                 "#EC CI_SUBRC
 
-    TRY.
-        io_xml->read( EXPORTING iv_name = 'ABAP_LANGUAGE_VERSION'
-                      CHANGING  cg_data = lv_abap_language_version ).
+    io_xml->read( EXPORTING iv_name = 'ABAP_LANGUAGE_VERSION'
+                  CHANGING  cg_data = lv_abap_language_version ).
 
-        set_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
+    set_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
 
-        lr_structdescr ?= cl_abap_typedescr=>describe_by_name( p_name = 'TOBJ_ATTR' ).
-        CREATE DATA lr_tobj_attr TYPE HANDLE lr_structdescr.
-        ASSIGN lr_tobj_attr->* TO <ls_tobj_attr>.
+    SELECT SINGLE tabname FROM dd02l INTO lv_tabname WHERE tabname = c_abap_language_table. "#EC CI_NOORDER
+    IF sy-subrc = 0.
+      lr_structdescr ?= cl_abap_typedescr=>describe_by_name( p_name = c_abap_language_table ).
+      CREATE DATA lr_tobj_attr TYPE HANDLE lr_structdescr.
+      ASSIGN lr_tobj_attr->* TO <ls_tobj_attr>.
 
-        ASSIGN COMPONENT 'OBJCT' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
-        IF sy-subrc = 0.
-          <lv_field> = ms_item-obj_name.
-        ENDIF.
-        ASSIGN COMPONENT 'MODIFIER' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
-        IF sy-subrc = 0.
-          <lv_field> = sy-uname.
-        ENDIF.
-        ASSIGN COMPONENT 'MODDATE' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
-        IF sy-subrc = 0.
-          <lv_field> = sy-datum.
-        ENDIF.
-        ASSIGN COMPONENT 'MODTIME' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
-        IF sy-subrc = 0.
-          <lv_field> = sy-uzeit.
-        ENDIF.
-        ASSIGN COMPONENT 'ABAP_LANGUAGE_VERSION' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
-        IF sy-subrc = 0.
-          <lv_field> = lv_abap_language_version.
-        ENDIF.
+      ASSIGN COMPONENT 'OBJCT' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
+      IF sy-subrc = 0.
+        <lv_field> = ms_item-obj_name.
+      ENDIF.
+      ASSIGN COMPONENT 'MODIFIER' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
+      IF sy-subrc = 0.
+        <lv_field> = sy-uname.
+      ENDIF.
+      ASSIGN COMPONENT 'MODDATE' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
+      IF sy-subrc = 0.
+        <lv_field> = sy-datum.
+      ENDIF.
+      ASSIGN COMPONENT 'MODTIME' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
+      IF sy-subrc = 0.
+        <lv_field> = sy-uzeit.
+      ENDIF.
+      ASSIGN COMPONENT 'ABAP_LANGUAGE_VERSION' OF STRUCTURE <ls_tobj_attr> TO <lv_field>.
+      IF sy-subrc = 0.
+        <lv_field> = lv_abap_language_version.
+      ENDIF.
 
-        MODIFY ('TOBJ_ATTR') FROM <ls_tobj_attr>.
-      CATCH cx_root ##NO_HANDLER.
-    ENDTRY.
+      MODIFY (c_abap_language_table) FROM <ls_tobj_attr>.
+    ENDIF.
 
     deserialize_longtexts( ii_xml         = io_xml
                            iv_longtext_id = c_longtext_id_suso ).
@@ -124738,6 +130826,7 @@ CLASS ZCL_ABAPGIT_OBJECT_SUSO IMPLEMENTATION.
           lt_tobjvordat TYPE TABLE OF tobjvordat,
           lt_tobjvor    TYPE TABLE OF tobjvor.
     DATA lv_abap_language_version TYPE uccheck.
+    DATA lv_tabname TYPE tabname.
 
     SELECT SINGLE * FROM tobj INTO ls_tobj
       WHERE objct = ms_item-obj_name.
@@ -124782,18 +130871,18 @@ CLASS ZCL_ABAPGIT_OBJECT_SUSO IMPLEMENTATION.
     io_xml->add( ig_data = lt_tobjvor
                  iv_name = 'TOBJVOR' ).
 
-    TRY.
-        SELECT SINGLE ('ABAP_LANGUAGE_VERSION') FROM ('TOBJ_ATTR') INTO lv_abap_language_version
-          WHERE objct = ms_item-obj_name.
+    SELECT SINGLE tabname FROM dd02l INTO lv_tabname WHERE tabname = c_abap_language_table. "#EC CI_NOORDER
+    IF sy-subrc = 0.
+      SELECT SINGLE ('ABAP_LANGUAGE_VERSION') FROM (c_abap_language_table) INTO lv_abap_language_version
+        WHERE objct = ms_item-obj_name.
 
-        IF sy-subrc = 0.
-          clear_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
+      IF sy-subrc = 0.
+        clear_abap_language_version( CHANGING cv_abap_language_version = lv_abap_language_version ).
 
-          io_xml->add( iv_name = 'ABAP_LANGUAGE_VERSION'
-                       ig_data = lv_abap_language_version ).
-        ENDIF.
-      CATCH cx_root ##NO_HANDLER.
-    ENDTRY.
+        io_xml->add( iv_name = 'ABAP_LANGUAGE_VERSION'
+                     ig_data = lv_abap_language_version ).
+      ENDIF.
+    ENDIF.
 
     serialize_longtexts( ii_xml         = io_xml
                          iv_longtext_id = c_longtext_id_suso ).
@@ -131771,6 +137860,8 @@ CLASS zcl_abapgit_object_wapa IMPLEMENTATION.
 
   METHOD create_new_page.
 
+    DATA lv_exc TYPE string.
+
     cl_o2_api_pages=>create_new_page(
       EXPORTING
         p_pageattrs           = is_page_attributes
@@ -131782,8 +137873,24 @@ CLASS zcl_abapgit_object_wapa IMPLEMENTATION.
         error_occured         = 3
         o2appl_not_existing   = 4
         OTHERS                = 5 ).
+
     IF sy-subrc <> 0.
-      zcx_abapgit_exception=>raise( |Error { sy-subrc } from CL_O2_API_PAGES=>CREATE_NEW_PAGE| ).
+      CASE sy-subrc.
+        WHEN 1.
+          lv_exc = 'object_already_exists'.
+        WHEN 2.
+          lv_exc = 'invalid_name'.
+        WHEN 3.
+          lv_exc = 'error_occured'.
+        WHEN 4.
+          lv_exc = 'o2appl_not_existing'.
+        WHEN OTHERS.
+          lv_exc = 'unknown_error'.
+      ENDCASE.
+      zcx_abapgit_exception=>raise(
+        |CL_O2_API_PAGES=>CREATE_NEW_PAGE sy-subrc={ sy-subrc } ({ lv_exc })|
+        && | page='{ is_page_attributes-pagename }' pagekey='{ is_page_attributes-pagekey }'|
+        && | applname='{ is_page_attributes-applname }'| ).
     ENDIF.
 
   ENDMETHOD.
@@ -135930,7 +142037,7 @@ CLASS ZCL_ABAPGIT_PATH IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_PO_FILE IMPLEMENTATION.
+CLASS zcl_abapgit_po_file IMPLEMENTATION.
 
   METHOD build_po_body.
 
@@ -136084,6 +142191,7 @@ CLASS ZCL_ABAPGIT_PO_FILE IMPLEMENTATION.
     FIELD-SYMBOLS <ls_in> LIKE LINE OF it_text_pairs.
     FIELD-SYMBOLS <ls_out> LIKE LINE OF mt_pairs.
     DATA ls_comment LIKE LINE OF <ls_out>-comments.
+    DATA lv_objname TYPE lxeobjname.
 
     LOOP AT it_text_pairs ASSIGNING <ls_in>.
       CHECK <ls_in>-s_text IS NOT INITIAL.
@@ -136100,8 +142208,13 @@ CLASS ZCL_ABAPGIT_PO_FILE IMPLEMENTATION.
       ENDIF.
 
       IF mv_suppress_comments = abap_false.
+        IF iv_objtype = 'DEVC'.
+          lv_objname = 'PACKAGE'.
+        ELSE.
+          lv_objname = iv_objname.
+        ENDIF.
         ls_comment-kind = c_comment-reference.
-        ls_comment-text = condense( |{ iv_objtype }/{ iv_objname }/{ <ls_in>-textkey }| )
+        ls_comment-text = condense( |{ iv_objtype }/{ lv_objname }/{ <ls_in>-textkey }| )
           && |, maxlen={ <ls_in>-unitmlt }|.
         APPEND ls_comment TO <ls_out>-comments.
         ASSERT sy-subrc = 0.
@@ -136604,9 +142717,11 @@ CLASS zcl_abapgit_sotr_handler IMPLEMENTATION.
       SELECT SINGLE obj_name FROM tadir INTO lv_obj_name
         WHERE pgmid = 'R3TR' AND object = 'SOTR' AND obj_name = iv_package.
       IF sy-subrc = 0.
+        " Ignore errors since objects might be locked in unreleased transport (TR022)
         zcl_abapgit_factory=>get_tadir( )->delete_single(
           iv_object   = 'SOTR'
-          iv_obj_name = lv_obj_name ).
+          iv_obj_name = lv_obj_name
+          iv_no_throw = abap_true ).
 
         IF zcl_abapgit_factory=>get_sap_package( iv_package )->are_changes_recorded_in_tr_req( ) = abap_true.
 
@@ -137343,6 +143458,109 @@ CLASS zcl_abapgit_url IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
+CLASS lcl_utf8_utils DEFINITION.
+
+  PUBLIC SECTION.
+
+    CLASS-METHODS strip_incomplete_utf8_tail
+      IMPORTING
+        iv_bytes        TYPE xstring
+      RETURNING
+        VALUE(rv_bytes) TYPE xstring.
+
+ENDCLASS.
+
+CLASS lcl_utf8_utils IMPLEMENTATION.
+
+  METHOD strip_incomplete_utf8_tail.
+
+    CONSTANTS:
+      lc_mask_80 TYPE x LENGTH 1 VALUE '80',
+      lc_mask_c0 TYPE x LENGTH 1 VALUE 'C0',
+      lc_mask_e0 TYPE x LENGTH 1 VALUE 'E0',
+      lc_mask_f0 TYPE x LENGTH 1 VALUE 'F0',
+      lc_mask_f8 TYPE x LENGTH 1 VALUE 'F8',
+      lc_val_00  TYPE x LENGTH 1 VALUE '00',
+      lc_val_c0  TYPE x LENGTH 1 VALUE 'C0',
+      lc_val_e0  TYPE x LENGTH 1 VALUE 'E0',
+      lc_val_f0  TYPE x LENGTH 1 VALUE 'F0'.
+
+    DATA lv_len      TYPE i.
+    DATA lv_i        TYPE i.
+    DATA lv_b        TYPE x LENGTH 1.
+    DATA lv_and      TYPE x LENGTH 1.
+    DATA lv_expected TYPE i.
+    DATA lv_actual   TYPE i.
+    DATA lv_cut      TYPE i.
+
+    rv_bytes = iv_bytes.
+
+    lv_len = xstrlen( rv_bytes ).
+    IF lv_len = 0.
+      RETURN.
+    ENDIF.
+
+    lv_i = lv_len - 1.
+
+    WHILE lv_i >= 0.
+      lv_b = rv_bytes+lv_i(1).
+      lv_and = lv_b BIT-AND lc_mask_c0.
+      IF lv_and <> lc_mask_80.
+        EXIT.
+      ENDIF.
+      lv_i = lv_i - 1.
+    ENDWHILE.
+
+    IF lv_i < 0.
+      CLEAR rv_bytes.
+      RETURN.
+    ENDIF.
+
+    lv_b = rv_bytes+lv_i(1).
+
+    lv_and = lv_b BIT-AND lc_mask_80.
+    IF lv_and = lc_val_00.
+      lv_expected = 1.
+    ELSE.
+      lv_and = lv_b BIT-AND lc_mask_e0.
+      IF lv_and = lc_val_c0.
+        lv_expected = 2.
+      ELSE.
+        lv_and = lv_b BIT-AND lc_mask_f0.
+        IF lv_and = lc_val_e0.
+          lv_expected = 3.
+        ELSE.
+          lv_and = lv_b BIT-AND lc_mask_f8.
+          IF lv_and = lc_val_f0.
+            lv_expected = 4.
+          ELSE.
+            lv_cut = lv_i.
+            IF lv_cut > 0.
+              rv_bytes = rv_bytes(lv_cut).
+            ELSE.
+              CLEAR rv_bytes.
+            ENDIF.
+            RETURN.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+    lv_actual = lv_len - lv_i.
+
+    IF lv_actual < lv_expected.
+      lv_cut = lv_i.
+      IF lv_cut > 0.
+        rv_bytes = rv_bytes(lv_cut).
+      ELSE.
+        CLEAR rv_bytes.
+      ENDIF.
+    ENDIF.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS zcl_abapgit_utils IMPLEMENTATION.
 
   METHOD check_eol.
@@ -137370,11 +143588,11 @@ CLASS zcl_abapgit_utils IMPLEMENTATION.
       lc_binary_threshold TYPE i VALUE 10,
       lc_bytes_to_check   TYPE i VALUE 1000.
 
-    DATA: lv_string_data           TYPE string,
-          lv_non_printable_chars   TYPE i,
-          lv_percentage            TYPE i,
-          lv_data                  TYPE xstring,
-          lv_xlen                  TYPE i.
+    DATA: lv_string_data         TYPE string,
+          lv_non_printable_chars TYPE i,
+          lv_percentage          TYPE i,
+          lv_data                TYPE xstring,
+          lv_xlen                TYPE i.
 
     lv_xlen = xstrlen( iv_data ).
     IF lv_xlen = 0.
@@ -137382,10 +143600,12 @@ CLASS zcl_abapgit_utils IMPLEMENTATION.
     ENDIF.
 
     lv_xlen = nmin(
-                val1 = lv_xlen
-                val2 = lc_bytes_to_check ).
+      val1 = lv_xlen
+      val2 = lc_bytes_to_check ).
 
     lv_data = iv_data(lv_xlen).
+
+    lv_data = lcl_utf8_utils=>strip_incomplete_utf8_tail( lv_data ).
 
     TRY.
         lv_string_data = zcl_abapgit_convert=>xstring_to_string_utf8( lv_data ).
@@ -137399,7 +143619,7 @@ CLASS zcl_abapgit_utils IMPLEMENTATION.
     REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>newline IN lv_string_data WITH space.
 
     FIND ALL OCCURRENCES OF REGEX '[^[:print:]]' IN lv_string_data MATCH COUNT lv_non_printable_chars  ##REGEX_POSIX.
-    lv_percentage = lv_non_printable_chars  * 100 / strlen( lv_string_data ).
+    lv_percentage = lv_non_printable_chars * 100 / strlen( lv_string_data ).
     rv_is_binary = boolc( lv_percentage > lc_binary_threshold ).
 
   ENDMETHOD.
@@ -137630,18 +143850,6 @@ CLASS zcl_abapgit_version IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD version_to_numeric.
-
-    DATA: lv_major   TYPE n LENGTH 4,
-          lv_minor   TYPE n LENGTH 4,
-          lv_release TYPE n LENGTH 4.
-
-    SPLIT iv_version AT '.' INTO lv_major lv_minor lv_release.
-
-    " Calculated value of version number, empty version will become 0 which is OK
-    rv_version = lv_major * 1000000 + lv_minor * 1000 + lv_release.
-
-  ENDMETHOD.
 ENDCLASS.
 
 CLASS zcl_abapgit_xml_pretty IMPLEMENTATION.
@@ -137743,197 +143951,6 @@ SELECTION-SCREEN BEGIN OF SCREEN 1001.
 * dummy for triggering screen on Java SAP GUI
 SELECTION-SCREEN END OF SCREEN 1001.
 
-TABLES sscrfields.
-
-************************************************************************
-* apm Password Dialog
-*
-* Copyright (c) 2014 abapGit Contributors
-* SPDX-License-Identifier: MIT
-************************************************************************
-
-SELECTION-SCREEN BEGIN OF SCREEN 1002 TITLE sc_title.
-  SELECTION-SCREEN SKIP.
-  SELECTION-SCREEN BEGIN OF LINE.
-    SELECTION-SCREEN COMMENT 1(18) sc_url FOR FIELD p_url.
-    PARAMETERS p_url TYPE string LOWER CASE VISIBLE LENGTH 60 ##SEL_WRONG.
-  SELECTION-SCREEN END OF LINE.
-  SELECTION-SCREEN SKIP.
-  SELECTION-SCREEN BEGIN OF LINE.
-    SELECTION-SCREEN COMMENT 1(18) sc_user FOR FIELD p_user.
-    PARAMETERS p_user TYPE string LOWER CASE VISIBLE LENGTH 60 ##SEL_WRONG.
-  SELECTION-SCREEN END OF LINE.
-  SELECTION-SCREEN BEGIN OF LINE.
-    SELECTION-SCREEN COMMENT 1(18) sc_pass FOR FIELD p_pass.
-    PARAMETERS p_pass TYPE c LENGTH 255 LOWER CASE VISIBLE LENGTH 60 ##SEL_WRONG.
-  SELECTION-SCREEN END OF LINE.
-  SELECTION-SCREEN SKIP.
-  SELECTION-SCREEN BEGIN OF LINE.
-    SELECTION-SCREEN COMMENT 1(18) sc_cmnt FOR FIELD p_cmnt.
-    PARAMETERS p_cmnt TYPE c LENGTH 255 LOWER CASE VISIBLE LENGTH 60 ##SEL_WRONG.
-  SELECTION-SCREEN END OF LINE.
-SELECTION-SCREEN END OF SCREEN 1002.
-
-*-----------------------------------------------------------------------
-* LCL_PASSWORD_DIALOG
-*-----------------------------------------------------------------------
-CLASS lcl_password_dialog DEFINITION FINAL.
-
-**************
-* This class will remain local in the report
-**************
-
-  PUBLIC SECTION.
-
-    CONSTANTS c_dynnr TYPE c LENGTH 4 VALUE '1002'.
-
-    CLASS-METHODS popup
-      IMPORTING
-        url      TYPE string
-      CHANGING
-        username TYPE string
-        password TYPE string.
-
-    CLASS-METHODS on_screen_init.
-    CLASS-METHODS on_screen_output.
-    CLASS-METHODS on_screen_event
-      IMPORTING
-        command TYPE sy-ucomm.
-
-  PRIVATE SECTION.
-
-    CLASS-DATA is_confirmed TYPE abap_bool.
-
-    CLASS-METHODS enrich_title_by_hostname
-      IMPORTING
-        url TYPE string.
-
-ENDCLASS.
-
-CLASS lcl_password_dialog IMPLEMENTATION.
-
-  METHOD popup.
-
-    CLEAR p_pass.
-    p_url      = url.
-    p_user     = username.
-    is_confirmed = abap_false.
-
-    p_cmnt = 'Press F1 for Help'.
-
-    enrich_title_by_hostname( url ).
-
-    DATA(position) = /apmg/cl_apm_popups=>center(
-      iv_width  = 65
-      iv_height = 7 ) ##NEEDED.
-
-    CALL SELECTION-SCREEN c_dynnr
-      STARTING AT position-start_column position-start_row
-      ENDING AT position-end_column position-end_row.
-
-    IF is_confirmed = abap_true.
-      username = p_user.
-      password = p_pass.
-    ELSE.
-      CLEAR: username, password.
-    ENDIF.
-
-    CLEAR: p_url, p_user, p_pass.
-
-  ENDMETHOD.
-
-  METHOD on_screen_init.
-    sc_title = 'Login'.
-    sc_url   = 'Registry URL'.
-    sc_user  = 'User'.
-    sc_pass  = 'Password or Token'.
-    sc_cmnt  = 'Note'.
-  ENDMETHOD.
-
-  METHOD on_screen_output.
-
-    DATA excluded_commands TYPE STANDARD TABLE OF sy-ucomm WITH KEY table_line.
-
-    ASSERT sy-dynnr = c_dynnr.
-
-    LOOP AT SCREEN.
-      IF screen-name = 'P_URL' OR screen-name = 'P_CMNT'.
-        screen-input       = '0'.
-        screen-intensified = '1'.
-        screen-display_3d  = '0'.
-        MODIFY SCREEN.
-      ENDIF.
-      IF screen-name = 'P_CMNT' OR screen-name = 'SC_CMNT'.
-        screen-active    = '1'.
-        screen-invisible = '0'.
-        MODIFY SCREEN.
-      ENDIF.
-      IF screen-name = 'P_PASS'.
-        screen-invisible = '1'.
-        MODIFY SCREEN.
-      ENDIF.
-    ENDLOOP.
-
-    APPEND 'PICK' TO excluded_commands.
-
-    CALL FUNCTION 'RS_SET_SELSCREEN_STATUS'
-      EXPORTING
-        p_status  = 'DETL'
-        p_program = 'RSPFPAR'
-      TABLES
-        p_exclude = excluded_commands.
-
-    IF p_user IS NOT INITIAL.
-      SET CURSOR FIELD 'P_PASS'.
-    ENDIF.
-
-  ENDMETHOD.
-
-  METHOD on_screen_event.
-
-    ASSERT sy-dynnr = c_dynnr.
-
-    CASE command.
-      WHEN 'OK'. " Enter
-        is_confirmed = abap_true.
-        LEAVE TO SCREEN 0.
-      WHEN 'HELP'. " F1
-        " TODO: open help page
-      WHEN OTHERS. " Escape
-        is_confirmed = abap_false.
-        LEAVE TO SCREEN 0.
-    ENDCASE.
-
-  ENDMETHOD.
-
-  METHOD enrich_title_by_hostname.
-
-    FIND REGEX 'https?://([^/^:]*)' IN url SUBMATCHES DATA(host) ##REGEX_POSIX.
-    IF sy-subrc = 0 AND host IS NOT INITIAL.
-      CLEAR sc_title.
-      CONCATENATE 'Login:' host INTO sc_title IN CHARACTER MODE SEPARATED BY space.
-    ENDIF.
-
-  ENDMETHOD.
-
-ENDCLASS.
-
-FORM password_popup
-  USING
-    url      TYPE string
-  CHANGING
-    username TYPE string
-    password TYPE string.
-
-  lcl_password_dialog=>popup(
-    EXPORTING
-      url      = url
-    CHANGING
-      username = username
-      password = password ).
-
-ENDFORM.
-
 ************************************************************************
 * apm Forms
 *
@@ -137970,17 +143987,20 @@ FORM open_gui RAISING /apmg/cx_apm_error.
     MESSAGE s000(oo) WITH 'apm does not support background processing'.
   ELSE.
 
-    " TODO: Add startup option to jump to a specific package
     GET PARAMETER ID 'DBT' FIELD mode.
+
     CASE mode.
-      WHEN 'ZAPM'.
-        " Emergency mode: jump to database utility
+      WHEN 'INIT'.
+        " Initial mode: welcome page
+        action = /apmg/if_apm_gui_router=>c_action-go_welcome.
+      WHEN 'DB'.
+        " Emergency mode: database utility
         action = /apmg/if_apm_gui_router=>c_action-go_db.
       WHEN OTHERS.
         action = /apmg/if_apm_gui_router=>c_action-go_home.
     ENDCASE.
 
-    /apmg/cl_apm_gui_factory=>get_gui( )->go_home( action ).
+    /apmg/cl_apm_gui_factory=>get_gui( )->start( action ).
 
     CALL SELECTION-SCREEN 1001. " trigger screen
 
@@ -137989,6 +144009,8 @@ FORM open_gui RAISING /apmg/cx_apm_error.
 ENDFORM.
 
 FORM output.
+
+  " Hide Execute button from screen
 
   DATA excluded_commands TYPE STANDARD TABLE OF sy-ucomm WITH KEY table_line.
 
@@ -138013,9 +144035,12 @@ ENDFORM.
 
 FORM exit.
 
+  " SAP back command re-direction
+  "
   " The exit logic should only be applied for our 'main' selection screen 1001.
   " All other selection-screens are called as popups and shouldn't influence
-  " the gui navigation as it would lead to inpredictable behaviour like dumps.
+  " the gui navigation as it would lead to unpredictable behaviour like dumps.
+
   IF sy-dynnr <> 1001.
     RETURN.
   ENDIF.
@@ -138100,32 +144125,24 @@ ENDFORM.
 **********************************************************************
 
 INITIALIZATION.
+
   PERFORM adjust_toolbar USING '1001'.
-  lcl_password_dialog=>on_screen_init( ).
 
-* Hide Execute button from screen
 AT SELECTION-SCREEN OUTPUT.
-  IF sy-dynnr = lcl_password_dialog=>c_dynnr.
-    lcl_password_dialog=>on_screen_output( ).
-  ELSE.
-    PERFORM output.
-  ENDIF.
 
-* SAP back command re-direction
+  PERFORM output.
+
 AT SELECTION-SCREEN ON EXIT-COMMAND.
+
   PERFORM exit.
 
-AT SELECTION-SCREEN.
-  IF sy-dynnr = lcl_password_dialog=>c_dynnr.
-    lcl_password_dialog=>on_screen_event( sscrfields-ucomm ).
-  ENDIF.
-
 START-OF-SELECTION.
+
   PERFORM run.
 
 **********************************************************************
 INTERFACE lif_abapmerge_marker.
-  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-05-04T17:31:52Z`.
+  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-06-21T00:20:56Z`.
   CONSTANTS c_abapinst_version TYPE string VALUE `1.2.0`.
 ENDINTERFACE.
 **********************************************************************
