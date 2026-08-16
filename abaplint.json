@@ -43,7 +43,7 @@
     "7bit_ascii": true,
     "abapdoc": false,
     "add_test_attributes": true,
-    "align_parameters": true,
+    "align_parameters": false,
     "align_pseudo_comments": true,
     "align_type_expressions": true,
     "allowed_object_naming": true,
@@ -74,7 +74,7 @@
     },
     "check_ddic": true,
     "check_include": true,
-    "check_subrc": true,
+    "check_subrc": false,
     "check_syntax": true,
     "check_text_elements": true,
     "check_transformation_exists": true,
@@ -116,7 +116,7 @@
     "db_operation_in_loop": false,
     "definitions_top": true,
     "description_empty": true,
-    "double_space": true,
+    "double_space": false,
     "downport": true,
     "dynpro_checks": true,
     "easy_to_find_messages": true,
@@ -148,7 +148,7 @@
     },
     "form_tables_obsolete": true,
     "fully_type_constants": true,
-    "fully_type_itabs": true,
+    "fully_type_itabs": false,
     "function_module_recommendations": {
       "exclude": [
         "#apmg#cl_apm_progress_bar"
@@ -192,7 +192,7 @@
       ]
     },
     "line_only_punc": true,
-    "local_class_naming": true,
+    "local_class_naming": false,
     "local_testclass_consistency": true,
     "local_variable_names": false,
     "macro_naming": true,
@@ -235,15 +235,7 @@
       ]
     },
     "no_inline_in_optional_branches": false,
-    "no_prefixes": {
-      "data": "^[LGM].?_",
-      "statics": "^S.?_",
-      "fieldSymbols": "^<[LGM].?_",
-      "constants": "^[LGM]C_",
-      "types": "^.*_TY_",
-      "methodParameters": "^[ICER].?_",
-      "allowIsPrefixBoolean": true
-    },
+    "no_prefixes": false,
     "no_public_attributes": {
       "allowReadOnly": true,
       "ignoreTestClasses": false
@@ -295,13 +287,13 @@
     "parser_error": true,
     "parser_missing_space": true,
     "pragma_style": true,
-    "prefer_corresponding": true,
+    "prefer_corresponding": false,
     "prefer_inline": true,
-    "prefer_is_not": true,
+    "prefer_is_not": false,
     "prefer_pragmas": true,
     "prefer_raise_exception_new": true,
     "prefer_returning_to_exporting": true,
-    "prefer_xsdbool": true,
+    "prefer_xsdbool": false,
     "preferred_compare_operator": true,
     "prefix_is_current_class": true,
     "reduce_procedural_code": {
@@ -312,15 +304,7 @@
     "remove_descriptions": true,
     "rfc_error_handling": true,
     "select_add_order_by": false,
-    "select_performance": {
-      "exclude": [
-        "#apmg#cl_apm_installer",
-        "#apmg#cl_apm_persist_apm"
-      ],
-      "endSelect": true,
-      "selectStar": true,
-      "starOkayIfFewColumns": 10
-    },
+    "select_performance": false,
     "select_single_full_key": true,
     "selection_screen_naming": true,
     "sequential_blank": true,
@@ -329,8 +313,8 @@
     "slow_parameter_passing": true,
     "smim_consistency": true,
     "space_before_colon": true,
-    "space_before_dot": true,
-    "sql_escape_host_variables": true,
+    "space_before_dot": false,
+    "sql_escape_host_variables": false,
     "sql_value_conversion": true,
     "start_at_tab": true,
     "static_call_via_instance": true,
@@ -351,7 +335,7 @@
     "unknown_types": true,
     "unnecessary_chaining": true,
     "unnecessary_pragma": true,
-    "unnecessary_return": true,
+    "unnecessary_return": false,
     "unreachable_code": true,
     "unsecure_fae": {
       "exclude": [
@@ -365,8 +349,8 @@
     "unused_variables": true,
     "use_bool_expression": true,
     "use_class_based_exceptions": true,
-    "use_line_exists": true,
-    "use_new": true,
+    "use_line_exists": false,
+    "use_new": false,
     "when_others_last": true,
     "whitespace_end": true,
     "xml_consistency": true
