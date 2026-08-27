@@ -148,14 +148,7 @@
     "implement_methods": false,
     "implicit_start_of_selection": true,
     "in_statement_indentation": false,
-    "indentation": {
-      "ignoreExceptions": true,
-      "alignTryCatch": false,
-      "selectionScreenBlockIndentation": true,
-      "globalClassSkipFirst": false,
-      "ignoreGlobalClassDefinition": false,
-      "ignoreGlobalInterface": true
-    },
+    "indentation": false,
     "inline_data_old_versions": true,
     "intf_referencing_clas": {
       "allow": [
@@ -190,10 +183,7 @@
     },
     "method_parameter_names": false,
     "mix_returning": true,
-    "modify_only_own_db_tables": {
-      "ownTables": "^[Z|CLMCUS|SOTR_.*|OBJ*]",
-      "reportDynamic": false
-    },
+    "modify_only_own_db_tables": false,
     "msag_consistency": true,
     "names_no_dash": true,
     "nesting": {
@@ -202,7 +192,7 @@
       ]
     },
     "newline_between_methods": true,
-    "no_aliases": true,
+    "no_aliases": false,
     "no_chained_assignment": true,
     "no_external_form_calls": {
       "exclude": [
@@ -305,7 +295,7 @@
     "uncaught_exception": true,
     "unknown_types": true,
     "unnecessary_chaining": false,
-    "unnecessary_pragma": true,
+    "unnecessary_pragma": false,
     "unnecessary_return": false,
     "unreachable_code": true,
     "unsecure_fae": false,
