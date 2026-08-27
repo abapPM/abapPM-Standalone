@@ -69,7 +69,7 @@
       "break": true,
       "testSeams": true,
       "describeLines": true,
-      "exportToMemory": true,
+      "exportToMemory": false,
       "exportToDatabase": true
     },
     "begin_end_names": true,
@@ -79,7 +79,7 @@
     "cds_legacy_view": true,
     "cds_parser_error": true,
     "chain_mainly_declarations": true,
-    "change_if_to_case": true,
+    "change_if_to_case": false,
     "check_abstract": true,
     "check_comments": {
       "allowEndOfLine": true
@@ -369,7 +369,28 @@
   },
   "syntax": {
     "errorNamespace": "^(/APMG/|LCL_|TY_|LIF_)",
-    "globalConstants": [],
+    "globalConstants": [
+      "seoc_category_exception",
+      "seoc_category_webdynpro_class",
+      "seoc_exposure_private",
+      "seoc_exposure_protected",
+      "seoc_exposure_public",
+      "seoc_state_implemented",
+      "seoc_version_active",
+      "seoc_version_deleted",
+      "seoc_version_inactive",
+      "seok_access_free",
+      "seok_access_modify",
+      "seoo_cmptype_attribute",
+      "seoo_cmptype_event",
+      "seoo_cmptype_method",
+      "seoo_cmptype_type",
+      "seos_scotype_exception",
+      "seos_scotype_parameter",
+      "seox_false",
+      "srext_ext_class_pool",
+      "srext_ext_interface_pool"      
+    ],
     "globalMacros": [],
     "version": "v750"
   }
