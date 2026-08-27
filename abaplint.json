@@ -194,18 +194,14 @@
     "newline_between_methods": true,
     "no_aliases": false,
     "no_chained_assignment": true,
-    "no_external_form_calls": {
-      "exclude": [
-        "#apmg#apm_forms"
-      ]
-    },
+    "no_external_form_calls": false,
     "no_inline_in_optional_branches": false,
     "no_prefixes": false,
     "no_public_attributes": {
       "allowReadOnly": true,
       "ignoreTestClasses": false
     },
-    "no_yoda_conditions": true,
+    "no_yoda_conditions": false,
     "nrob_consistency": true,
     "object_naming": {
       "aqbg": "^Z",
