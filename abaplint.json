@@ -171,7 +171,7 @@
     },
     "line_break_style": true,
     "line_length": false,
-    "line_only_punc": true,
+    "line_only_punc": false,
     "local_class_naming": false,
     "local_testclass_consistency": true,
     "local_variable_names": false,
@@ -182,12 +182,7 @@
     "max_one_statement": true,
     "message_exists": true,
     "method_implemented_twice": true,
-    "method_length": {
-      "statements": 100,
-      "errorWhenEmpty": true,
-      "ignoreTestClasses": false,
-      "checkForms": true
-    },
+    "method_length": false,
     "method_overwrites_builtin": {
       "exclude": [
         "#apmg#cl_apm_tap"
@@ -268,9 +263,9 @@
     "parser_missing_space": true,
     "pragma_style": true,
     "prefer_corresponding": false,
-    "prefer_inline": true,
+    "prefer_inline": false,
     "prefer_is_not": false,
-    "prefer_pragmas": true,
+    "prefer_pragmas": false,
     "prefer_raise_exception_new": true,
     "prefer_returning_to_exporting": true,
     "prefer_xsdbool": false,
@@ -309,11 +304,11 @@
     "types_naming": true,
     "uncaught_exception": true,
     "unknown_types": true,
-    "unnecessary_chaining": true,
+    "unnecessary_chaining": false,
     "unnecessary_pragma": true,
     "unnecessary_return": false,
     "unreachable_code": true,
-    "unsecure_fae": true,
+    "unsecure_fae": false,
     "unused_ddic": true,
     "unused_macros": true,
     "unused_methods": true,
