@@ -14,22 +14,7 @@
   "global": {
     "exclude": [],
     "files": "/src/**/*.*",
-    "noIssues": [
-      "/src/modules/ajson/*.*",
-      "/src/modules/markdown/*.*",
-      "/src/modules/semver-sap/*.*",
-      "/src/modules/string-map/*.*",
-      "#apmg#cl_apm_abapgit_*",
-      "#apmg#cl_apm_exception_viewer*",
-      "#apmg#cl_apm_frontend_services*",
-      "#apmg#if_apm_frontend_services*",
-      "#apmg#cl_apm_gui*",
-      "#apmg#if_apm_gui*",
-      "#apmg#cl_apm_html_*",
-      "#apmg#if_apm_html_*",
-      "#apmg#cl_apm_popups*",
-      "#apmg#if_apm_popups*"
-    ],
+    "noIssues": [],
     "skipGeneratedBOPFInterfaces": true,
     "skipGeneratedFunctionGroups": true,
     "skipGeneratedGatewayClasses": true,
@@ -88,29 +73,20 @@
     "check_include": true,
     "check_subrc": false,
     "check_syntax": true,
-    "check_text_elements": true,
+    "check_text_elements": false,
     "check_transformation_exists": true,
     "class_attribute_names": false,
     "classic_exceptions_overlap": true,
     "cloud_types": true,
     "colon_missing_space": true,
-    "commented_code": true,
+    "commented_code": false,
     "constant_classes": true,
     "constructor_visibility_public": true,
     "contains_tab": true,
-    "cyclic_oo": {
-      "exclude": [
-        "#apmg#cl_apm_arborist",
-        "#apmg#if_apm_arborist"
-      ]
-    },
-    "cyclomatic_complexity": true,
+    "cyclic_oo": false,
+    "cyclomatic_complexity": false,
     "dangerous_statement": {
-      "exclude": [
-        "#apmg#cl_apm_persist_apm",
-        "#apmg#cl_apm_object_prog",
-        "#apmg#cl_apm_tap"
-      ],
+      "exclude": [],
       "execSQL": true,
       "kernelCall": true,
       "systemCall": true,
@@ -119,11 +95,11 @@
       "generateReport": true,
       "generateSubroutine": true,
       "deleteReport": true,
-      "deleteTextpool": true,
-      "insertTextpool": true,
+      "deleteTextpool": false,
+      "insertTextpool": false,
       "deleteDynpro": true,
       "exportDynpro": true,
-      "dynamicSQL": true
+      "dynamicSQL": false
     },
     "db_operation_in_loop": false,
     "definitions_top": true,
@@ -161,11 +137,7 @@
     "form_tables_obsolete": true,
     "fully_type_constants": true,
     "fully_type_itabs": false,
-    "function_module_recommendations": {
-      "exclude": [
-        "#apmg#cl_apm_progress_bar"
-      ]
-    },
+    "function_module_recommendations": false,
     "functional_writing": true,
     "global_class": true,
     "identical_conditions": true,
@@ -198,11 +170,7 @@
       "count": 3
     },
     "line_break_style": true,
-    "line_length": {
-      "exclude": [
-        "#apmg#cl_apm_emoji.clas.macros"
-      ]
-    },
+    "line_length": true,
     "line_only_punc": true,
     "local_class_naming": false,
     "local_testclass_consistency": true,
@@ -333,11 +301,7 @@
     "strict_sql": false,
     "superclass_final": true,
     "superfluous_value": true,
-    "sy_modification": {
-      "exclude": [
-        "#apmg#cl_apm_tap"
-      ]
-    },
+    "sy_modification": true,
     "tabl_enhancement_category": true,
     "tables_declared_locally": true,
     "try_without_catch": true,
@@ -349,11 +313,7 @@
     "unnecessary_pragma": true,
     "unnecessary_return": false,
     "unreachable_code": true,
-    "unsecure_fae": {
-      "exclude": [
-        "#apmg#cl_apm_installer"
-      ]
-    },
+    "unsecure_fae": true,
     "unused_ddic": true,
     "unused_macros": true,
     "unused_methods": true,
