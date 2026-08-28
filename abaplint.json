@@ -279,7 +279,7 @@
     "strict_sql": false,
     "superclass_final": true,
     "superfluous_value": true,
-    "sy_modification": true,
+    "sy_modification": false,
     "tabl_enhancement_category": true,
     "tables_declared_locally": true,
     "try_without_catch": true,
