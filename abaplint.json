@@ -197,10 +197,7 @@
     "no_external_form_calls": false,
     "no_inline_in_optional_branches": false,
     "no_prefixes": false,
-    "no_public_attributes": {
-      "allowReadOnly": true,
-      "ignoreTestClasses": false
-    },
+    "no_public_attributes": false,
     "no_yoda_conditions": false,
     "nrob_consistency": true,
     "object_naming": {
