@@ -22357,8 +22357,9 @@ CLASS zcl_abapgit_objects_generic DEFINITION
   PROTECTED SECTION.
 
     TYPES:
+      ty_numc3 TYPE n LENGTH 3,
       BEGIN OF ty_s_objkey,
-        num   TYPE n LENGTH 3,
+        num   TYPE ty_numc3,
         value TYPE c LENGTH 128,
       END OF ty_s_objkey .
     TYPES:
@@ -22392,7 +22393,7 @@ CLASS zcl_abapgit_objects_generic DEFINITION
       CHANGING
         !ct_objkey        TYPE ty_t_objkey
         !cs_objkey        TYPE ty_s_objkey
-        !cv_non_value_pos TYPE numc3 .
+        !cv_non_value_pos TYPE ty_numc3.
     METHODS get_key_fields
       IMPORTING
         !iv_table      TYPE objsl-tobj_name
@@ -22423,7 +22424,7 @@ CLASS zcl_abapgit_objects_generic DEFINITION
       CHANGING
         !ct_objkey        TYPE ty_t_objkey
         !cs_objkey        TYPE ty_s_objkey
-        !cv_non_value_pos TYPE numc3 .
+        !cv_non_value_pos TYPE ty_numc3.
     METHODS validate
       IMPORTING
         !io_xml TYPE REF TO zif_abapgit_xml_input
@@ -35836,7 +35837,7 @@ ENDCLASS.
 *  INITIALIZE REFS BY PATH
 **********************************************************************
 
-CLASS LCL_PATH_REFS_INIT_ DEFINITION.
+CLASS lcl_path_refs_init_ DEFINITION.
   PUBLIC SECTION.
     INTERFACES /apmg/if_apm_ajson_ref_initial.
 
@@ -35848,7 +35849,7 @@ CLASS LCL_PATH_REFS_INIT_ DEFINITION.
     DATA mt_data_refs TYPE /apmg/if_apm_ajson_ref_initial~tty_data_refs.
 ENDCLASS.
 
-CLASS LCL_PATH_REFS_INIT_ IMPLEMENTATION.
+CLASS lcl_path_refs_init_ IMPLEMENTATION.
 
   METHOD constructor.
     mt_data_refs = it_data_refs.
@@ -35870,7 +35871,7 @@ ENDCLASS.
 CLASS /apmg/cl_apm_ajson_ref_initial IMPLEMENTATION.
 
   METHOD create_path_refs_init.
-    CREATE OBJECT ri_refs_init TYPE LCL_PATH_REFS_INIT_
+    CREATE OBJECT ri_refs_init TYPE lcl_path_refs_init_
       EXPORTING
         it_data_refs = it_data_refs.
   ENDMETHOD.
@@ -47043,25 +47044,24 @@ CLASS /apmg/cl_apm_gui_dlg_login IMPLEMENTATION.
 
     form_data = form_util->normalize_abapgit( ii_event->form_data( ) ).
 
-    CASE ii_event->mv_action.
-      WHEN c_action-login.
+    IF ii_event->mv_action = c_action-login.
 
-        validation_log = validate_form( form_data ).
+      validation_log = validate_form( form_data ).
 
-        IF validation_log->is_empty( ) = abap_true.
-          DATA(params) = get_parameters( form_data ).
+      IF validation_log->is_empty( ) = abap_true.
+        DATA(params) = get_parameters( form_data ).
 
-          /apmg/cl_apm_command_login=>run(
-            registry = settings-registry
-            username = params-username
-            password = params-password ).
+        /apmg/cl_apm_command_login=>run(
+          registry = settings-registry
+          username = params-username
+          password = params-password ).
 
-          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
-        ELSE.
-          rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render. " Display errors
-        ENDIF.
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-go_back.
+      ELSE.
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render. " Display errors
+      ENDIF.
 
-    ENDCASE.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -59153,7 +59153,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS LCL_TABLE_SCHEME_ DEFINITION FINAL.
+CLASS lcl_table_scheme_ DEFINITION FINAL.
   " TODO: move to a global class, when table is separated as a component
   PUBLIC SECTION.
 
@@ -59169,11 +59169,11 @@ CLASS LCL_TABLE_SCHEME_ DEFINITION FINAL.
         allow_order_by TYPE any OPTIONAL
         width          TYPE string OPTIONAL
       RETURNING
-        VALUE(result)  TYPE REF TO LCL_TABLE_SCHEME_.
+        VALUE(result)  TYPE REF TO lcl_table_scheme_.
 
 ENDCLASS.
 
-CLASS LCL_TABLE_SCHEME_ IMPLEMENTATION.
+CLASS lcl_table_scheme_ IMPLEMENTATION.
 
   METHOD add_column.
 
@@ -59309,7 +59309,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
   METHOD build_table_scheme.
 
-    DATA(table_schema) = NEW LCL_TABLE_SCHEME_( ).
+    DATA(table_schema) = NEW lcl_table_scheme_( ).
 
     table_schema->add_column(
       tech_name      = 'NAME'
@@ -72156,7 +72156,7 @@ CLASS /apmg/cl_apm_package_json_vali IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS LCL_VALIDATE_ DEFINITION.
+CLASS lcl_validate_ DEFINITION.
 
   PUBLIC SECTION.
 
@@ -72186,7 +72186,7 @@ CLASS LCL_VALIDATE_ DEFINITION.
 
 ENDCLASS.
 
-CLASS LCL_VALIDATE_ IMPLEMENTATION.
+CLASS lcl_validate_ IMPLEMENTATION.
 
   METHOD validate_single_values.
 
@@ -72397,10 +72397,10 @@ CLASS /apmg/cl_apm_pacote IMPLEMENTATION.
 
     DATA(issues) = /apmg/cl_apm_package_json_vali=>check( manifest ).
 
-    INSERT LINES OF LCL_VALIDATE_=>validate_single_values( packument ) INTO TABLE issues.
-    INSERT LINES OF LCL_VALIDATE_=>validate_dist_tags( packument ) INTO TABLE issues.
-    INSERT LINES OF LCL_VALIDATE_=>validate_times( packument ) INTO TABLE issues.
-    INSERT LINES OF LCL_VALIDATE_=>validate_users( packument ) INTO TABLE issues.
+    INSERT LINES OF lcl_validate_=>validate_single_values( packument ) INTO TABLE issues.
+    INSERT LINES OF lcl_validate_=>validate_dist_tags( packument ) INTO TABLE issues.
+    INSERT LINES OF lcl_validate_=>validate_times( packument ) INTO TABLE issues.
+    INSERT LINES OF lcl_validate_=>validate_users( packument ) INTO TABLE issues.
 
     IF issues IS NOT INITIAL.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
@@ -81012,7 +81012,7 @@ CLASS lcl_in IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS LCL_OUT_ DEFINITION.
+CLASS lcl_out_ DEFINITION.
   PUBLIC SECTION.
     CLASS-METHODS convert
       IMPORTING
@@ -81026,7 +81026,7 @@ CLASS LCL_OUT_ DEFINITION.
     CLASS-DATA go_conv_old TYPE REF TO object.
 ENDCLASS.
 
-CLASS LCL_OUT_ IMPLEMENTATION.
+CLASS lcl_out_ IMPLEMENTATION.
   METHOD convert.
     DATA lx_error TYPE REF TO cx_root.
     DATA lv_class TYPE string.
@@ -81079,7 +81079,6 @@ CLASS lcl_bcp47_language_table DEFINITION CREATE PRIVATE.
              text       TYPE string,
            END OF ty_language_mapping,
            ty_language_mappings TYPE STANDARD TABLE OF ty_language_mapping WITH DEFAULT KEY.
-    CLASS-DATA gt_language_mappings TYPE ty_language_mappings.
     CLASS-METHODS:
       sap1_to_text
         IMPORTING
@@ -81116,6 +81115,8 @@ CLASS lcl_bcp47_language_table DEFINITION CREATE PRIVATE.
           zcx_abapgit_exception.
   PROTECTED SECTION.
   PRIVATE SECTION.
+    CLASS-DATA gt_language_mappings TYPE ty_language_mappings.
+
     CLASS-METHODS fill_language_mappings.
     CLASS-METHODS
       fill_language_mapping
@@ -82038,7 +82039,7 @@ CLASS zcl_abapgit_convert IMPLEMENTATION.
 
   METHOD string_to_xstring_utf8.
 
-    rv_xstring = LCL_OUT_=>convert( iv_string ).
+    rv_xstring = lcl_out_=>convert( iv_string ).
 
   ENDMETHOD.
 
@@ -92258,7 +92259,7 @@ CLASS zcl_abapgit_objects_generic IMPLEMENTATION.
           lv_objkey_length   TYPE i,
           lt_objkey          TYPE ty_t_objkey,
           ls_objkey          LIKE LINE OF lt_objkey,
-          lv_non_value_pos   TYPE numc3,
+          lv_non_value_pos   TYPE ty_numc3,
           lt_key_fields      TYPE ddfields.
 
     DATA: lv_is_asterix      TYPE abap_bool,
@@ -100764,8 +100765,8 @@ CLASS zcl_abapgit_object_ddls IMPLEMENTATION.
 
     DATA:
       lv_len       TYPE i,
-      lv_lastchar1 TYPE c,
-      lv_lastchar2 TYPE c.
+      lv_lastchar1 TYPE c LENGTH 1,
+      lv_lastchar2 TYPE c LENGTH 1.
 
     " New line included in 751+ by CL_DD_DDL_HANDLER=>ADD_BASEOBJS_INFO_TO_DDLS
     " Change for 750-
@@ -114708,7 +114709,7 @@ CLASS lcl_aff_helper IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS LCL_AFF_TYPE_MAPPING_ DEFINITION.
+CLASS lcl_aff_type_mapping_ DEFINITION.
   PUBLIC SECTION.
     INTERFACES zif_abapgit_aff_type_mapping.
   PRIVATE SECTION.
@@ -114719,7 +114720,7 @@ CLASS LCL_AFF_TYPE_MAPPING_ DEFINITION.
                 et_descriptions_sub TYPE zif_abapgit_oo_object_fnc=>ty_seosubcotx_tt.
 ENDCLASS.
 
-CLASS LCL_AFF_TYPE_MAPPING_ IMPLEMENTATION.
+CLASS lcl_aff_type_mapping_ IMPLEMENTATION.
 
   METHOD zif_abapgit_aff_type_mapping~to_aff.
     DATA:
@@ -114846,7 +114847,7 @@ CLASS LCL_AFF_TYPE_MAPPING_ IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS LCL_AFF_METADATA_HANDLER_ DEFINITION.
+CLASS lcl_aff_metadata_handler_ DEFINITION.
   PUBLIC SECTION.
 
     CLASS-METHODS serialize
@@ -114885,7 +114886,7 @@ CLASS LCL_AFF_METADATA_HANDLER_ DEFINITION.
         RETURNING VALUE(rt_result) TYPE zif_abapgit_aff_intf_v1=>ty_main.
 ENDCLASS.
 
-CLASS LCL_AFF_METADATA_HANDLER_ IMPLEMENTATION.
+CLASS lcl_aff_metadata_handler_ IMPLEMENTATION.
 
   METHOD serialize.
     DATA:
@@ -114896,7 +114897,7 @@ CLASS LCL_AFF_METADATA_HANDLER_ IMPLEMENTATION.
       lt_enum_mappings TYPE zcl_abapgit_json_handler=>ty_enum_mappings,
       lt_paths_to_skip TYPE zcl_abapgit_json_handler=>ty_skip_paths.
 
-    CREATE OBJECT lo_aff_mapper TYPE LCL_AFF_TYPE_MAPPING_.
+    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping_.
     lo_aff_mapper->to_aff( EXPORTING iv_data = is_intf
                            IMPORTING es_data = ls_data_aff ).
 
@@ -115066,7 +115067,7 @@ CLASS LCL_AFF_METADATA_HANDLER_ IMPLEMENTATION.
       lv_sap1 = zcl_abapgit_convert=>language_sap2_to_sap1( li_translation_file->lang( ) ).
       ls_aff_data-header-original_language = lv_sap1.
 
-      CREATE OBJECT lo_type_mapper TYPE LCL_AFF_TYPE_MAPPING_.
+      CREATE OBJECT lo_type_mapper TYPE lcl_aff_type_mapping_.
       lo_type_mapper->to_abapgit(
         EXPORTING
           iv_data        = ls_aff_data
@@ -115277,9 +115278,9 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
     DATA lo_aff_mapper TYPE REF TO zif_abapgit_aff_type_mapping.
 
     lv_json_data = mo_files->read_string( 'json' ).
-    ls_intf_aff = LCL_AFF_METADATA_HANDLER_=>deserialize( lv_json_data ).
+    ls_intf_aff = lcl_aff_metadata_handler_=>deserialize( lv_json_data ).
 
-    CREATE OBJECT lo_aff_mapper TYPE LCL_AFF_TYPE_MAPPING_.
+    CREATE OBJECT lo_aff_mapper TYPE lcl_aff_type_mapping_.
     lo_aff_mapper->to_abapgit( EXPORTING iv_data        = ls_intf_aff
                                          iv_object_name = ms_item-obj_name
                                IMPORTING es_data        = rs_intf ).
@@ -115456,13 +115457,13 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
 
     " HERE: switch with feature flag for XML or JSON file format
     IF mv_aff_enabled = abap_true.
-      lv_serialized_data = LCL_AFF_METADATA_HANDLER_=>serialize( ls_intf ).
+      lv_serialized_data = lcl_aff_metadata_handler_=>serialize( ls_intf ).
       mo_files->add_raw( iv_ext  = 'json'
                          iv_data = lv_serialized_data ).
 
       lt_languages_for_translation = extract_languages_for_transl( ls_intf ).
 
-      lt_i18n_file = LCL_AFF_METADATA_HANDLER_=>serialize_translations(
+      lt_i18n_file = lcl_aff_metadata_handler_=>serialize_translations(
         is_intf     = ls_intf
         it_language = lt_languages_for_translation ).
 
@@ -115570,7 +115571,7 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
       IF mv_aff_enabled = abap_true.
         ls_intf = read_json( ).
 
-        LCL_AFF_METADATA_HANDLER_=>deserialize_translation(
+        lcl_aff_metadata_handler_=>deserialize_translation(
           EXPORTING
             io_files           = mo_files
             is_item            = ms_item
@@ -132039,7 +132040,7 @@ CLASS zcl_abapgit_object_susc IMPLEMENTATION.
   METHOD put_delete_to_transport.
 
     DATA: lv_tr_object_name TYPE e071-obj_name,
-          lv_tr_return      TYPE char1,
+          lv_tr_return      TYPE c LENGTH 1,
           ls_package_info   TYPE tdevc.
 
     lv_tr_object_name = ms_item-obj_name.
@@ -138093,7 +138094,7 @@ CLASS zcl_abapgit_object_ueno IMPLEMENTATION.
 
     DATA ls_docu LIKE LINE OF it_docu.
     DATA lv_objname TYPE lxeobjname.
-    DATA lv_change_flag TYPE char1.
+    DATA lv_change_flag TYPE c LENGTH 1.
     DATA lv_error_status  TYPE lxestatprc.
 
     LOOP AT it_docu INTO ls_docu.
@@ -146204,7 +146205,7 @@ START-OF-SELECTION.
 
 **********************************************************************
 INTERFACE lif_abapmerge_marker.
-  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-08-27T23:10:26Z`.
+  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-08-28T01:14:29Z`.
   CONSTANTS c_abapinst_version TYPE string VALUE `1.2.0`.
 ENDINTERFACE.
 **********************************************************************
