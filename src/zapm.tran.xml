@@ -20,8 +20,9 @@
     <NAME>ZAPM</NAME>
     <TYPE>TR</TYPE>
     <DISPLAY_NAME>ZAPM</DISPLAY_NAME>
-    <STEXT>Report Transaction</STEXT>
+    <STEXT>apm - Standalone Version</STEXT>
     <CTYPE>R</CTYPE>
+    <CINFO>gA==</CINFO>
    </HEAD>
   </asx:values>
  </asx:abap>
