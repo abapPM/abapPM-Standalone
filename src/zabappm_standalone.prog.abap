@@ -1365,6 +1365,7 @@ ENDCLASS.
 
 ****** CLASSES DEFERRED ******
 
+CLASS /apmg/cl_apm_abapgit_convert DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_abapgit_objects DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_abapgit_serialize DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_ajson DEFINITION DEFERRED.
@@ -1435,6 +1436,7 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_tree DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_page_welcome DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_router DEFINITION DEFERRED.
+CLASS /apmg/cl_apm_gui_styles DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_gui_utils DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_highlighter DEFINITION DEFERRED.
 CLASS /apmg/cl_apm_highlighter_abap DEFINITION DEFERRED.
@@ -2469,6 +2471,15 @@ INTERFACE zif_abapgit_objects .
   TYPES:
     ty_types_tt TYPE SORTED TABLE OF tadir-object WITH UNIQUE KEY table_line.
   TYPES:
+    BEGIN OF ty_type_details,
+      obj_type         TYPE tadir-object,
+      description      TYPE string,
+      aff_supported    TYPE abap_bool,
+      aff_experimental TYPE abap_bool,
+    END OF ty_type_details.
+  TYPES:
+    ty_type_details_tt TYPE SORTED TABLE OF ty_type_details WITH UNIQUE KEY obj_type.
+  TYPES:
     ty_deserialization_step TYPE string.
   TYPES:
     ty_deserialization_step_tt TYPE STANDARD TABLE OF ty_deserialization_step WITH DEFAULT KEY.
@@ -2958,7 +2969,7 @@ INTERFACE zif_abapgit_sap_package
            parentcl  TYPE devclass,
            pdevclass TYPE c LENGTH 4,
            as4user   TYPE usnam,
-           packkind  TYPE uccheck,
+           packkind  TYPE uccheck, " ABAP language version
          END OF ty_create.
 
   METHODS get
@@ -3802,7 +3813,7 @@ INTERFACE /apmg/if_apm_types .
   CONSTANTS:
     "! Hardware Platforms
     BEGIN OF c_cpu,
-      x86_64   TYPE string VALUE 'x86-64',
+      x64      TYPE string VALUE 'x64',
       power_pc TYPE string VALUE 'power-pc',
       sparc    TYPE string VALUE 'sparc',
     END OF c_cpu.
@@ -5434,6 +5445,7 @@ INTERFACE /apmg/if_apm_html .
       !iv_format_single_line TYPE abap_bool DEFAULT abap_false
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
+      !iv_colspan            TYPE i OPTIONAL
     RETURNING
       VALUE(ri_self)         TYPE REF TO /apmg/if_apm_html.
 
@@ -5447,6 +5459,7 @@ INTERFACE /apmg/if_apm_html .
       !iv_format_single_line TYPE abap_bool DEFAULT abap_true
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
+      !iv_colspan            TYPE i OPTIONAL
         PREFERRED PARAMETER iv_content
     RETURNING
       VALUE(ri_self)         TYPE REF TO /apmg/if_apm_html.
@@ -5461,6 +5474,7 @@ INTERFACE /apmg/if_apm_html .
       !iv_format_single_line TYPE abap_bool DEFAULT abap_true
       !is_data_attr          TYPE ty_data_attr OPTIONAL
       !it_data_attrs         TYPE ty_data_attrs OPTIONAL
+      !iv_colspan            TYPE i OPTIONAL
         PREFERRED PARAMETER iv_content
     RETURNING
       VALUE(ri_self)         TYPE REF TO /apmg/if_apm_html.
@@ -7336,7 +7350,7 @@ INTERFACE /apmg/if_apm_constants .
 
   CONSTANTS:
     c_website       TYPE string VALUE 'https://abappm.com',
-    c_tutorial      TYPE string VALUE 'https://abappm.com/try-me',
+    c_tutorial      TYPE string VALUE 'https://abappm.com/tutorial',
     c_contact       TYPE string VALUE 'https://abappm.com/contact',
     c_documentation TYPE string VALUE 'https://docs.abappm.com',
     c_registry      TYPE string VALUE 'https://registry.abappm.com',
@@ -7555,7 +7569,7 @@ INTERFACE /apmg/if_apm_version .
 * SPDX-License-Identifier: MIT
 ************************************************************************
 
-  CONSTANTS c_version TYPE string VALUE '1.2.1'.
+  CONSTANTS c_version TYPE string VALUE '1.3.0'.
 
 ENDINTERFACE.
 
@@ -7943,6 +7957,74 @@ INTERFACE zif_abapgit_version .
 ENDINTERFACE.
 
 ****** CLASSES ******
+
+CLASS /apmg/cl_apm_abapgit_convert DEFINITION
+  CREATE PUBLIC.
+
+************************************************************************
+* apm abapGit Conversions
+*
+* Copyright 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS string_to_xstring_utf8
+      IMPORTING
+        !iv_string        TYPE string
+      RETURNING
+        VALUE(rv_xstring) TYPE xstring
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS string_to_xstring_utf8_bom
+      IMPORTING
+        !iv_string        TYPE string
+      RETURNING
+        VALUE(rv_xstring) TYPE xstring
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS xstring_to_string_utf8
+      IMPORTING
+        !iv_data         TYPE xsequence
+        !iv_length       TYPE i OPTIONAL
+      RETURNING
+        VALUE(rv_string) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS xstring_to_string_utf8_bom
+      IMPORTING
+        !iv_xstring      TYPE xstring
+      RETURNING
+        VALUE(rv_string) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS split_string
+      IMPORTING
+        !iv_string      TYPE string
+      RETURNING
+        VALUE(rt_lines) TYPE string_table.
+
+    CLASS-METHODS string_to_tab
+      IMPORTING
+        !iv_str  TYPE string
+      EXPORTING
+        !ev_size TYPE i
+        !et_tab  TYPE STANDARD TABLE.
+
+    CLASS-METHODS xstring_to_bintab
+      IMPORTING
+        !iv_xstr   TYPE xsequence
+      EXPORTING
+        !ev_size   TYPE i
+        !et_bintab TYPE STANDARD TABLE.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
 
 CLASS zcl_abapgit_xml DEFINITION
   ABSTRACT
@@ -10856,11 +10938,11 @@ CLASS /apmg/cl_apm_emoji DEFINITION
 
     METHODS constructor.
 
-    METHODS get_css
+    CLASS-METHODS styles
       IMPORTING
         size_in_px    TYPE i DEFAULT 20
       RETURNING
-        VALUE(result) TYPE ty_code.
+        VALUE(result) TYPE string.
 
     METHODS get_list
       RETURNING
@@ -11005,6 +11087,12 @@ ENDCLASS.
 CLASS /apmg/cl_apm_exception_viewer DEFINITION
   CREATE PUBLIC.
 
+************************************************************************
+* apm Exception Viewer
+*
+* Copyright 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     METHODS constructor
@@ -11482,6 +11570,12 @@ CLASS /apmg/cl_apm_gui_chunk_lib DEFINITION
   FINAL
   CREATE PUBLIC.
 
+************************************************************************
+* apm GUI Chunk Lib
+*
+* Copyright 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     TYPES:
@@ -11635,20 +11729,20 @@ CLASS /apmg/cl_apm_gui_chunk_lib DEFINITION
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    CLASS-DATA gv_time_zone TYPE timezone .
+    CLASS-DATA gv_time_zone TYPE timezone.
 
     CLASS-METHODS get_t100_text
       IMPORTING
         !iv_msgid      TYPE scx_t100key-msgid
         !iv_msgno      TYPE scx_t100key-msgno
       RETURNING
-        VALUE(rv_text) TYPE string .
+        VALUE(rv_text) TYPE string.
 
     CLASS-METHODS normalize_program_name
       IMPORTING
         !iv_program_name                  TYPE sy-repid
       RETURNING
-        VALUE(rv_normalized_program_name) TYPE string .
+        VALUE(rv_normalized_program_name) TYPE string.
 
 ENDCLASS.
 
@@ -11669,9 +11763,16 @@ CLASS /apmg/cl_apm_gui_component DEFINITION
       BEGIN OF c_html_parts,
         scripts      TYPE string VALUE 'scripts',
         hidden_forms TYPE string VALUE 'hidden_forms',
+        styles       TYPE string VALUE 'styles',
       END OF c_html_parts.
 
   PROTECTED SECTION.
+
+    METHODS register_styles
+      IMPORTING
+        part TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
 
     METHODS register_deferred_script
       IMPORTING
@@ -12076,28 +12177,28 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev DEFINITION
         !log       TYPE /apmg/if_apm_arborist=>ty_log
       RAISING
         /apmg/cx_apm_error.
-
   PROTECTED SECTION.
   PRIVATE SECTION.
 
     CONSTANTS:
       BEGIN OF c_id,
-        added     TYPE string VALUE 'added',
-        changed   TYPE string VALUE 'changed',
-        removed   TYPE string VALUE 'removed',
-        warnings  TYPE string VALUE 'warnings',
+        added    TYPE string VALUE 'added',
+        changed  TYPE string VALUE 'changed',
+        removed  TYPE string VALUE 'removed',
+        warnings TYPE string VALUE 'warnings',
       END OF c_id.
 
     CONSTANTS:
       BEGIN OF c_action,
-        confirm          TYPE string VALUE 'confirm-install',
-        create_packages  TYPE string VALUE 'create-packages',
+        confirm         TYPE string VALUE 'confirm-install',
+        create_packages TYPE string VALUE 'create-packages',
       END OF c_action.
 
     DATA registry TYPE string.
-    data transport TYPE trkorr.
+    DATA transport TYPE trkorr.
     DATA root_name TYPE /apmg/if_apm_types=>ty_name.
     DATA version TYPE /apmg/if_apm_types=>ty_version.
+    DATA package TYPE devclass.
     DATA diff TYPE REF TO /apmg/if_apm_arborist_diff.
     DATA log TYPE /apmg/if_apm_arborist=>ty_log.
     DATA changes TYPE /apmg/if_apm_arborist_diff=>ty_diff_refs.
@@ -12111,9 +12212,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev DEFINITION
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_apm_html_form.
 
-    METHODS initialize_form_data
-      IMPORTING
-        !transport TYPE trkorr.
+    METHODS initialize_form_data.
 
     METHODS get_assignments
       RETURNING
@@ -12831,6 +12930,12 @@ CLASS /apmg/cl_apm_gui_router DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    METHODS call_transaction
+      IMPORTING
+        !tcode TYPE csequence
+      RAISING
+        /apmg/cx_apm_error.
+
     METHODS main_page
       RETURNING
         VALUE(result) TYPE REF TO /apmg/if_apm_gui_renderable
@@ -13304,8 +13409,7 @@ CLASS /apmg/cl_apm_gui_page_db DEFINITION
         db_edit    TYPE string VALUE 'db_edit',
       END OF c_action.
 
-    CONSTANTS:
-      c_toc_filename TYPE string VALUE '#_Table_of_Content_#.txt'.
+    CONSTANTS c_toc_filename TYPE string VALUE '#_Table_of_Content_#.txt'.
 
     TYPES:
       BEGIN OF ty_list_item,
@@ -13359,7 +13463,6 @@ CLASS /apmg/cl_apm_gui_page_db DEFINITION
         !key          TYPE /apmg/if_apm_persist_apm=>ty_key
       RETURNING
         VALUE(result) TYPE string.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_db_entry DEFINITION
@@ -13410,8 +13513,7 @@ CLASS /apmg/cl_apm_gui_page_db_entry DEFINITION
         switch_mode TYPE string VALUE 'switch_mode',
       END OF c_action.
 
-    CONSTANTS:
-      c_edit_form_id TYPE string VALUE 'db_form'.
+    CONSTANTS c_edit_form_id TYPE string VALUE 'db_form'.
 
     CLASS-DATA db_persist TYPE REF TO /apmg/if_apm_persist_apm.
 
@@ -13475,7 +13577,6 @@ CLASS /apmg/cl_apm_gui_page_db_entry DEFINITION
         !json TYPE string
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_debuginf DEFINITION
@@ -13720,10 +13821,6 @@ CLASS /apmg/cl_apm_gui_page_list DEFINITION
 
     " CSS + JS
 
-    METHODS render_styles
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
-
     METHODS get_scripts
       RETURNING
         VALUE(result) TYPE REF TO /apmg/if_apm_html
@@ -13856,12 +13953,15 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
       END OF ty_markdown.
 
     DATA:
-      registry     TYPE string,
       package      TYPE devclass,
       view         TYPE string,
       markdown     TYPE ty_markdown,
       settings     TYPE /apmg/if_apm_settings=>ty_settings,
       package_json TYPE /apmg/if_apm_types=>ty_package_json.
+
+    METHODS get_styles
+      RETURNING
+        VALUE(result) TYPE string.
 
     METHODS load_settings
       RAISING
@@ -13921,12 +14021,6 @@ CLASS /apmg/cl_apm_gui_page_package DEFINITION
         !value        TYPE string OPTIONAL
       RETURNING
         VALUE(result) TYPE string.
-
-    METHODS render_styles
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
 
     METHODS render_top
       IMPORTING
@@ -14135,7 +14229,7 @@ CLASS /apmg/cl_apm_gui_page_tree DEFINITION
 
     METHODS render_table_footer
       IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
+        !html TYPE REF TO /apmg/if_apm_html ##NEEDED.
 
     " EDGES
 
@@ -14170,9 +14264,9 @@ CLASS /apmg/cl_apm_gui_page_tree DEFINITION
 
     " CSS + JS
 
-    METHODS render_styles
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html.
+    METHODS get_styles
+      RETURNING
+        VALUE(result) TYPE string.
 
     METHODS get_scripts
       RETURNING
@@ -14202,11 +14296,11 @@ CLASS /apmg/cl_apm_gui_page_tree DEFINITION
 
     METHODS apply_filter
       CHANGING
-        !packages TYPE /apmg/if_apm_package_json=>ty_packages.
+        !packages TYPE /apmg/if_apm_package_json=>ty_packages ##NEEDED ##CALLED.
 
     METHODS apply_order_by
       CHANGING
-        packages TYPE /apmg/if_apm_package_json=>ty_packages.
+        packages TYPE /apmg/if_apm_package_json=>ty_packages ##NEEDED ##CALLED.
 
     " INIT
 
@@ -14221,7 +14315,6 @@ CLASS /apmg/cl_apm_gui_page_tree DEFINITION
     METHODS save_settings
       RAISING
         /apmg/cx_apm_error.
-
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_page_welcome DEFINITION
@@ -14248,22 +14341,25 @@ CLASS /apmg/cl_apm_gui_page_welcome DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    METHODS constructor.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
     CONSTANTS:
       BEGIN OF c_action,
-        setup   TYPE string VALUE 'setup',
-        refresh TYPE string VALUE 'refresh',
+        setup_persistence  TYPE string VALUE 'setup_persistence',
+        setup_certificates TYPE string VALUE 'setup_certificates',
+        refresh            TYPE string VALUE 'refresh',
       END OF c_action.
 
     CONSTANTS c_ping_pong TYPE string VALUE 'PONG'.
 
-    METHODS render_styles
-      IMPORTING
-        !html TYPE REF TO /apmg/if_apm_html
-      RAISING
-        /apmg/cx_apm_error.
+    DATA emoji TYPE REF TO /apmg/cl_apm_emoji.
+
+    METHODS get_styles
+      RETURNING
+        VALUE(result) TYPE string.
 
     METHODS render_welcome
       IMPORTING
@@ -14277,12 +14373,46 @@ CLASS /apmg/cl_apm_gui_page_welcome DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    METHODS render_persistence
+      IMPORTING
+        !html TYPE REF TO /apmg/if_apm_html
+      RAISING
+        /apmg/cx_apm_error.
+
     METHODS confirm_popup
       RETURNING
         VALUE(result) TYPE abap_bool
       RAISING
         /apmg/cx_apm_error.
 
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_styles DEFINITION
+  FINAL
+  CREATE PUBLIC.
+
+************************************************************************
+* apm GUI Styles
+*
+* Copyright 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
+  PUBLIC SECTION.
+
+    CLASS-METHODS emoji
+      IMPORTING
+        styles        TYPE string OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_html.
+
+    CLASS-METHODS markdown
+      IMPORTING
+        styles        TYPE string OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO /apmg/if_apm_html.
+
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_utils DEFINITION
@@ -14470,16 +14600,16 @@ CLASS /apmg/cl_apm_highlighter_css DEFINITION
   PUBLIC SECTION.
 
     CONSTANTS:
-      " CSS Standard            https://www.w3.org/TR/css-2018/
+      " CSS Standard            https://www.w3.org/TR/css-2025/
       " CSS Reference           https://www.w3schools.com/cssref/default.asp
       " We used a mixture of above as reference for the keyword list
       " 1) CSS Properties       https://www.w3schools.com/cssref/default.asp
-      " 2) CSS Values & Units   https://www.w3schools.com/cssref/css_units.asp
-      " 3) CSS Selectors        https://www.w3.org/TR/css-2018/#selectors
+      " 2) CSS Values           https://www.w3.org/TR/css-values-4/
+      " 3) CSS Selectors        https://www.w3.org/TR/css-2025/#selectors
       " 4) CSS Functions        https://www.w3schools.com/cssref/css_functions.asp
       " 5) CSS Colors           https://www.w3schools.com/colors/colors_names.asp
       " 6) CSS Extensions
-      " 7) CSS At-Rules         https://www.w3.org/TR/css-2018/#at-rules
+      " 7) CSS At-Rules         https://www.w3.org/TR/css-2025/#at-rules
       " 8) HTML Tags
       BEGIN OF c_css,
         keyword    TYPE string VALUE 'keyword',
@@ -14514,13 +14644,17 @@ CLASS /apmg/cl_apm_highlighter_css DEFINITION
         comment   TYPE string VALUE '\/\*.*\*\/|\/\*|\*\/',
         " single or double quoted strings
         text      TYPE string VALUE '("[^"]*")|(''[^'']*'')|(`[^`]*`)',
-        " in general keywords don't contain numbers (except -ms-scrollbar-3dlight-color)
-        keyword   TYPE string VALUE '\b[a-z3@\-]+\b',
+        " Digits occur in HTML tags and CSS functions (h1, matrix3d)
+        keyword   TYPE string VALUE '--[a-z][a-z0-9\-]*\b|@-?[a-z][a-z0-9\-]*\b|\b[a-z][a-z0-9\-]*\b',
         " selectors begin with :
-        selectors TYPE string VALUE ':[:a-z]+\b',
-        " units
+        selectors TYPE string VALUE '::?[a-z][a-z0-9\-]*\b',
+        " CSS numbers followed by a unit or %, excluding the preceding identifier boundary
         units     TYPE string
-        VALUE '\b[0-9\. ]+(ch|cm|em|ex|in|mm|pc|pt|px|vh|vmax|vmin|vw)\b|\b[0-9\. ]+%',
+        VALUE '(^|[^a-z0-9_.-])([+-]?([0-9]+(\.[0-9]+)?|\.[0-9]+)(e[+-]?[0-9]+)?((' &
+        'cm|mm|q|in|pt|pc|px|' &
+        'em|rem|ex|rex|cap|rcap|ch|rch|ic|ric|lh|rlh|' &
+        '[sld]?v(w|h|i|b|min|max)|cqw|cqh|cqi|cqb|cqmin|cqmax|' &
+        'deg|grad|rad|turn|s|ms|hz|khz|dpi|dpcm|dppx|x|fr)\b|%))',
       END OF c_regex.
 
     CLASS-METHODS class_constructor.
@@ -14884,19 +15018,20 @@ CLASS /apmg/cl_apm_highlighter_xml DEFINITION
         " For XML tags, we will use a submatch
         " main pattern includes quoted strings so we can ignore < and > in attr values
         xml_tag  TYPE string VALUE '(?:"[^"]*")|(?:''[^'']*'')|(?:`[^`]*`)|([<>])',
-        attr     TYPE string VALUE '(?:^|\s)[-a-z:_0-9]+\s*(?==\s*["|''|`])',
+        attr     TYPE string VALUE '(?:^|\s)[-a-z:_.0-9]+\s*(?==\s*["''`])',
         attr_val TYPE string VALUE '("[^"]*")|(''[^'']*'')|(`[^`]*`)',
         " comments <!-- ... -->
-        comment  TYPE string VALUE '[\<]!--.*--[\>]|[\<]!--|--[\>]',
+        comment  TYPE string VALUE '<!--(?:(?!-->).)*-->|<!--|-->',
       END OF c_regex.
 
     METHODS constructor.
 
   PROTECTED SECTION.
 
-    CLASS-DATA comment TYPE abap_bool.
+    DATA comment TYPE abap_bool.
 
     METHODS order_matches REDEFINITION.
+    METHODS parse_line REDEFINITION.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -18044,6 +18179,18 @@ CLASS /apmg/cl_apm_persist_apm_setup DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
+    CLASS-METHODS table_exists
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS lock_exists
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    CLASS-METHODS logo_exists
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
     CLASS-METHODS uninstall
       RAISING
         /apmg/cx_apm_error.
@@ -18059,10 +18206,6 @@ CLASS /apmg/cl_apm_persist_apm_setup DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
-    CLASS-METHODS logo_exists
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
     CLASS-METHODS table_create
       RAISING
         /apmg/cx_apm_error.
@@ -18071,10 +18214,6 @@ CLASS /apmg/cl_apm_persist_apm_setup DEFINITION
       RAISING
         /apmg/cx_apm_error.
 
-    CLASS-METHODS table_exists
-      RETURNING
-        VALUE(result) TYPE abap_bool.
-
     CLASS-METHODS lock_create
       RAISING
         /apmg/cx_apm_error.
@@ -18082,10 +18221,6 @@ CLASS /apmg/cl_apm_persist_apm_setup DEFINITION
     CLASS-METHODS lock_delete
       RAISING
         /apmg/cx_apm_error.
-
-    CLASS-METHODS lock_exists
-      RETURNING
-        VALUE(result) TYPE abap_bool.
 
     CLASS-METHODS delete_ddic
       IMPORTING
@@ -20303,12 +20438,9 @@ CLASS /apmg/cl_apm_url DEFINITION  FINAL CREATE PUBLIC.
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
 ************************************************************************
-* TODO: Add support for International Domain Names for Application
-* (punycode)
-************************************************************************
   PUBLIC SECTION.
 
-    CONSTANTS c_version TYPE string VALUE '1.0.1' ##NEEDED.
+    CONSTANTS c_version TYPE string VALUE '1.1.0' ##NEEDED.
 
     TYPES:
       "! scheme://username:password@host:port/path?query#fragment
@@ -20354,6 +20486,55 @@ CLASS /apmg/cl_apm_url DEFINITION  FINAL CREATE PUBLIC.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
+
+    TYPES ty_codepoints TYPE STANDARD TABLE OF i WITH EMPTY KEY.
+
+    CLASS-METHODS unescape_host
+      IMPORTING
+        raw           TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS domain_to_ascii
+      IMPORTING
+        domain        TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS unicode_codepoints
+      IMPORTING
+        input         TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_codepoints
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS punycode_encode
+      IMPORTING
+        label         TYPE string
+      RETURNING
+        VALUE(result) TYPE string
+      RAISING
+        /apmg/cx_apm_error.
+
+    CLASS-METHODS punycode_delta
+      IMPORTING
+        delta         TYPE i
+        bias          TYPE i
+      RETURNING
+        VALUE(result) TYPE string.
+
+    CLASS-METHODS punycode_adapt
+      IMPORTING
+        delta         TYPE i
+        count         TYPE i
+        first         TYPE abap_bool
+      RETURNING
+        VALUE(result) TYPE i.
 
     CLASS-METHODS is_special_scheme
       IMPORTING
@@ -20816,11 +20997,6 @@ CLASS zcl_abapgit_convert DEFINITION
         !iv_string      TYPE string
       RETURNING
         VALUE(rt_lines) TYPE string_table .
-    CLASS-METHODS conversion_exit_isola_output
-      IMPORTING
-        !iv_spras       TYPE spras
-      RETURNING
-        VALUE(rv_spras) TYPE laiso .
     CLASS-METHODS string_to_xstring
       IMPORTING
         !iv_str        TYPE string
@@ -20845,54 +21021,6 @@ CLASS zcl_abapgit_convert DEFINITION
       EXPORTING
         !ev_size   TYPE i
         !et_bintab TYPE STANDARD TABLE .
-
-    CLASS-METHODS language_sap1_to_sap2
-      IMPORTING
-        im_lang_sap1        TYPE sy-langu
-      RETURNING
-        VALUE(re_lang_sap2) TYPE string
-      EXCEPTIONS
-        no_assignment.
-
-    CLASS-METHODS language_sap1_to_text
-      IMPORTING
-        im_lang_sap1   TYPE sy-langu
-      RETURNING
-        VALUE(re_text) TYPE string.
-
-    CLASS-METHODS language_sap2_to_sap1
-      IMPORTING
-        im_lang_sap2        TYPE laiso
-      RETURNING
-        VALUE(re_lang_sap1) TYPE sy-langu
-      EXCEPTIONS
-        no_assignment.
-
-    CLASS-METHODS language_sap1_to_bcp47
-      IMPORTING
-        im_lang_sap1         TYPE sy-langu
-      RETURNING
-        VALUE(re_lang_bcp47) TYPE string
-      EXCEPTIONS
-        no_assignment.
-
-    CLASS-METHODS language_bcp47_to_sap1
-      IMPORTING
-        im_lang_bcp47       TYPE string
-      RETURNING
-        VALUE(re_lang_sap1) TYPE sy-langu
-      EXCEPTIONS
-        no_assignment.
-
-    TYPES ty_char02 TYPE c LENGTH 2.
-    CLASS-METHODS uccp
-      IMPORTING
-        iv_uccp        TYPE string
-      RETURNING
-        VALUE(rv_char) TYPE ty_char02
-      EXCEPTIONS
-        no_assignment.
-
   PROTECTED SECTION.
   PRIVATE SECTION.
     CLASS-METHODS xstring_remove_bom
@@ -21964,15 +22092,16 @@ ENDCLASS.
 
 CLASS zcl_abapgit_sap_package DEFINITION
   CREATE PRIVATE
-   FRIENDS zcl_abapgit_factory .
+   FRIENDS zcl_abapgit_factory.
 
   PUBLIC SECTION.
 
-    INTERFACES zif_abapgit_sap_package .
+    INTERFACES zif_abapgit_sap_package.
 
     METHODS constructor
       IMPORTING
-        !iv_package TYPE devclass .
+        !iv_package TYPE devclass.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA mv_package TYPE devclass.
@@ -29121,12 +29250,31 @@ CLASS zcl_abapgit_object_tabl_compar DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
+" Maps between DD02V-VIEWREF (the database view name) and the CDS entity
+" name that DDL uses in @AbapCatalog.replacementObject. The lookup depends
+" on the objects present in the system, so unit tests replace it.
+INTERFACE lif_replacement_mapping.
+
+  METHODS to_entity
+    IMPORTING
+      !iv_view_name        TYPE ddobjname
+    RETURNING
+      VALUE(rv_entityname) TYPE string.
+  METHODS to_view
+    IMPORTING
+      !iv_entityname      TYPE ddobjname
+    RETURNING
+      VALUE(rv_view_name) TYPE string.
+
+ENDINTERFACE.
+
 CLASS zcl_abapgit_object_tabl_ddl DEFINITION
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
 
+    METHODS constructor .
     METHODS read_data
       IMPORTING
         !iv_name       TYPE tadir-obj_name
@@ -29182,6 +29330,7 @@ CLASS zcl_abapgit_object_tabl_ddl DEFINITION
     " serialized, so a table with many amount or quantity fields does not
     " trigger one DDIF_FIELDINFO_GET per field on every serialize call.
     DATA mt_reference TYPE ty_references.
+    DATA mi_replacement_mapping TYPE REF TO lif_replacement_mapping.
 
     METHODS tokenize
       IMPORTING
@@ -31164,6 +31313,79 @@ CLASS zcl_abapgit_xml_pretty DEFINITION
         ii_parser TYPE REF TO if_ixml_parser
       RAISING
         zcx_abapgit_exception.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_abapgit_convert IMPLEMENTATION.
+
+  METHOD split_string.
+
+    rt_lines = zcl_abapgit_convert=>split_string( iv_string ).
+
+  ENDMETHOD.
+
+  METHOD string_to_tab.
+
+    zcl_abapgit_convert=>string_to_tab(
+      EXPORTING
+        iv_str  = iv_str
+      IMPORTING
+        ev_size = ev_size
+        et_tab  = et_tab ).
+
+  ENDMETHOD.
+
+  METHOD string_to_xstring_utf8.
+
+    TRY.
+        rv_xstring = zcl_abapgit_convert=>string_to_xstring_utf8( iv_string ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD string_to_xstring_utf8_bom.
+
+    TRY.
+        rv_xstring = zcl_abapgit_convert=>string_to_xstring_utf8_bom( iv_string ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD xstring_to_bintab.
+
+    zcl_abapgit_convert=>xstring_to_bintab(
+      EXPORTING
+        iv_xstr   = iv_xstr
+      IMPORTING
+        ev_size   = ev_size
+        et_bintab = et_bintab ).
+
+  ENDMETHOD.
+
+  METHOD xstring_to_string_utf8.
+
+    TRY.
+        rv_string = zcl_abapgit_convert=>xstring_to_string_utf8(
+          iv_data   = iv_data
+          iv_length = iv_length ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD xstring_to_string_utf8_bom.
+
+    TRY.
+        rv_string = zcl_abapgit_convert=>xstring_to_string_utf8_bom( iv_xstring ).
+      CATCH zcx_abapgit_exception INTO DATA(error).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
+    ENDTRY.
+
+  ENDMETHOD.
 ENDCLASS.
 
 CLASS zcl_abapgit_xml IMPLEMENTATION.
@@ -38883,10 +39105,21 @@ CLASS /apmg/cl_apm_auth IMPLEMENTATION.
   METHOD is_package_allowed.
 
     " Check if package owned by SAP is allowed (new packages are ok, since they are created automatically)
-    DATA(username) = zcl_abapgit_factory=>get_sap_package( package )->read_responsible( ).
 
     " TODO: This uses abapGit exit. Replace with apm logic
-    result = xsdbool( username <> 'SAP' OR zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_true ).
+    IF zcl_abapgit_factory=>get_environment( )->is_sap_object_allowed( ) = abap_true.
+      result = abap_true.
+    ELSE.
+      DATA(sap_package) = zcl_abapgit_factory=>get_sap_package( package ).
+
+      IF sap_package IS BOUND AND sap_package->read_responsible( ) = 'SAP'.
+        result = abap_false.
+      ELSEIF sap_package IS BOUND AND sap_package->read_namespace( ) CP '/0SAP*/'.
+        result = abap_false.
+      ELSE.
+        result = abap_true.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -41059,7 +41292,7 @@ CLASS /apmg/cl_apm_command_login IMPLEMENTATION.
       username = username
       token    = login_response-token ).
 
-    MESSAGE login_response-ok TYPE 'S'.
+    MESSAGE |You're in, { username }. May the force be with you!| TYPE 'S'.
 
   ENDMETHOD.
 
@@ -41336,17 +41569,13 @@ CLASS /apmg/cl_apm_command_publish IMPLEMENTATION.
       manifest        = manifest
       is_package_json = abap_true ).
 
-    TRY.
-        tar->append(
-          name    = CONV string( /apmg/if_apm_types=>c_package_json_file )
-          content = zcl_abapgit_convert=>string_to_xstring_utf8( json ) ).
+    tar->append(
+      name    = CONV string( /apmg/if_apm_types=>c_package_json_file )
+      content = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( json ) ).
 
-        tar->append(
-          name    = /apmg/if_apm_types=>c_readme_file
-          content = zcl_abapgit_convert=>string_to_xstring_utf8( package_json-readme ) ).
-      CATCH zcx_abapgit_exception INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
+    tar->append(
+      name    = /apmg/if_apm_types=>c_readme_file
+      content = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( package_json-readme ) ).
 
     result = tar.
 
@@ -44166,7 +44395,7 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
     DATA(has_hex) = xsdbool( result CS '&#x' ).
 
     LOOP AT emojis ASSIGNING FIELD-SYMBOL(<emoji>).
-      DATA(html)  = |<img src="{ base }{ <emoji>-img }" class="emoji">|.
+      DATA(html)  = |<img src="{ base }{ <emoji>-img }" class="emoji" alt="{ <emoji>-name }">|.
 
       IF has_names = abap_true.
         DATA(emoji) = |:{ <emoji>-name }:|.
@@ -44183,21 +44412,6 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
-  ENDMETHOD.
-
-  METHOD get_css.
-    INSERT `.emoji {` INTO TABLE result.
-    INSERT `  display: inline-block;` INTO TABLE result.
-    INSERT `  min-width: 1ch;` INTO TABLE result.
-    INSERT `  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";` INTO TABLE result.
-    INSERT `  font-size: 1em;` INTO TABLE result.
-    INSERT `  font-style: normal !important;` INTO TABLE result.
-    INSERT `  font-weight: 400;` INTO TABLE result.
-    INSERT |  height: { size_in_px }px;| INTO TABLE result.
-    INSERT |  width: { size_in_px }px;| INTO TABLE result.
-    INSERT `  line-height: 1;` INTO TABLE result.
-    INSERT `  vertical-align: -3px;` INTO TABLE result.
-    INSERT `}` INTO TABLE result.
   ENDMETHOD.
 
   METHOD get_list.
@@ -44224,6 +44438,23 @@ CLASS /apmg/cl_apm_emoji IMPLEMENTATION.
         INSERT <emoji>-name INTO TABLE result.
       ENDIF.
     ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD styles.
+
+    result = |.emoji \{\n|
+      && |  display: inline-block;\n|
+      && |  min-width: 1ch;\n|
+      && |  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";\n|
+      && |  font-size: 1em;\n|
+      && |  font-style: normal !important;\n|
+      && |  font-weight: 400;\n|
+      && |  height: { size_in_px }px;|
+      && |  width: { size_in_px }px;|
+      && |  line-height: 1;\n|
+      && |  vertical-align: -3px;\n|
+      && |\}|.
 
   ENDMETHOD.
 ENDCLASS.
@@ -46030,13 +46261,7 @@ CLASS /apmg/cl_apm_file_importer IMPLEMENTATION.
 
     READ TABLE files ASSIGNING FIELD-SYMBOL(<file>) WITH KEY file COMPONENTS filename = filename.
     IF sy-subrc = 0.
-      TRY.
-          " TODO: Replace with ZCL_CONVERT
-          result = zcl_abapgit_convert=>xstring_to_string_utf8( <file>-data ).
-
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-      ENDTRY.
+      result = /apmg/cl_apm_abapgit_convert=>xstring_to_string_utf8( <file>-data ).
     ELSE.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = |File { filename } not found|.
     ENDIF.
@@ -46205,7 +46430,7 @@ CLASS /apmg/cl_apm_frontend_services IMPLEMENTATION.
     TYPES ty_hex TYPE x LENGTH 200.
     DATA lt_rawdata TYPE STANDARD TABLE OF ty_hex WITH DEFAULT KEY.
 
-    zcl_abapgit_convert=>xstring_to_bintab(
+    /apmg/cl_apm_abapgit_convert=>xstring_to_bintab(
       EXPORTING
         iv_xstr   = iv_xstr
       IMPORTING
@@ -46885,8 +47110,8 @@ CLASS /apmg/cl_apm_gui_event IMPLEMENTATION.
     CONSTANTS lc_nbsp TYPE xstring VALUE 'C2A0'. " &nbsp;
 
     TRY.
-        gv_non_breaking_space = zcl_abapgit_convert=>xstring_to_string_utf8( lc_nbsp ).
-      CATCH zcx_abapgit_exception.
+        gv_non_breaking_space = /apmg/cl_apm_abapgit_convert=>xstring_to_string_utf8( lc_nbsp ).
+      CATCH /apmg/cx_apm_error.
         " Fallback for non-Unicode systems
         IF cl_abap_char_utilities=>charsize < 2.
           gv_non_breaking_space = |X'A0'|.
@@ -47062,7 +47287,7 @@ CLASS /apmg/cl_apm_gui IMPLEMENTATION.
     ASSERT iv_text IS SUPPLIED OR iv_xdata IS SUPPLIED.
 
     IF iv_text IS SUPPLIED. " String input
-      zcl_abapgit_convert=>string_to_tab(
+      /apmg/cl_apm_abapgit_convert=>string_to_tab(
          EXPORTING
            iv_str  = iv_text
          IMPORTING
@@ -47080,7 +47305,7 @@ CLASS /apmg/cl_apm_gui IMPLEMENTATION.
         CHANGING
           ct_data_table   = lt_html ).
     ELSE. " Raw input
-      zcl_abapgit_convert=>xstring_to_bintab(
+      /apmg/cl_apm_abapgit_convert=>xstring_to_bintab(
         EXPORTING
           iv_xstr   = iv_xdata
         IMPORTING
@@ -47226,10 +47451,19 @@ CLASS /apmg/cl_apm_gui IMPLEMENTATION.
 
   METHOD cache_html.
 
-    rv_url = /apmg/if_apm_gui_services~cache_asset(
-      iv_text    = iv_text
-      iv_type    = 'text'
-      iv_subtype = 'html' ).
+    IF /apmg/cl_apm_gui_factory=>get_frontend_services( )->is_sapgui_for_java( ) = abap_true.
+      "Java GUI needs the UTF-8 payload length in bytes for non-ASCII HTML.
+      rv_url = /apmg/if_apm_gui_services~cache_asset(
+        iv_xdata   = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( iv_text )
+        iv_type    = 'text'
+        iv_subtype = 'html' ).
+    ELSE.
+      "Keep the character-based HTML processing for WebGUI and Windows.
+      rv_url = /apmg/if_apm_gui_services~cache_asset(
+        iv_text    = iv_text
+        iv_type    = 'text'
+        iv_subtype = 'html' ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -47540,11 +47774,7 @@ CLASS /apmg/cl_apm_gui_asset_manager IMPLEMENTATION.
           text = |Wrong subtype ({ iv_assert_subtype }): { iv_url }|.
     ENDIF.
 
-    TRY.
-        rv_asset = zcl_abapgit_convert=>xstring_to_string_utf8( ls_asset-content ).
-      CATCH zcx_abapgit_exception INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
+    rv_asset = /apmg/cl_apm_abapgit_convert=>xstring_to_string_utf8( ls_asset-content ).
 
   ENDMETHOD.
 
@@ -47557,15 +47787,11 @@ CLASS /apmg/cl_apm_gui_asset_manager IMPLEMENTATION.
     ls_asset-mime_name    = iv_mime_name.
     ls_asset-is_cacheable = iv_cacheable.
 
-    TRY.
-        IF iv_base64 IS NOT INITIAL.
-          ls_asset-content = zcl_abapgit_convert=>base64_to_xstring( iv_base64 ).
-        ELSEIF iv_inline IS NOT INITIAL.
-          ls_asset-content = zcl_abapgit_convert=>string_to_xstring( iv_inline ).
-        ENDIF.
-      CATCH zcx_abapgit_exception INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
+    IF iv_base64 IS NOT INITIAL.
+      ls_asset-content = cl_http_utility=>decode_x_base64( iv_base64 ).
+    ELSEIF iv_inline IS NOT INITIAL.
+      ls_asset-content = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( iv_inline ).
+    ENDIF.
 
     DELETE mt_asset_register WHERE url = iv_url.
     " TODO: Maybe forbid overwriting cacheable assets as they were probably already cached ... arguable
@@ -47753,14 +47979,14 @@ CLASS /apmg/cl_apm_gui_chunk_lib IMPLEMENTATION.
         system_response TYPE string VALUE `System response`,
         what_to_do      TYPE string VALUE `Procedure`,
         sys_admin       TYPE string VALUE `System administration`,
-      END OF c_section_text .
+      END OF c_section_text.
     CONSTANTS:
       BEGIN OF c_section_token,
         cause           TYPE string VALUE `&CAUSE&`,
         system_response TYPE string VALUE `&SYSTEM_RESPONSE&`,
         what_to_do      TYPE string VALUE `&WHAT_TO_DO&`,
         sys_admin       TYPE string VALUE `&SYS_ADMIN&`,
-      END OF c_section_token .
+      END OF c_section_token.
 
     DATA:
       lv_error_text          TYPE string,
@@ -48307,6 +48533,14 @@ CLASS /apmg/cl_apm_gui_component IMPLEMENTATION.
     gui_services( )->get_hotkeys_ctl( )->register_hotkeys( provider->get_hotkey_actions( ) ).
 
   ENDMETHOD.
+
+  METHOD register_styles.
+
+    gui_services( )->get_html_parts( )->add_part(
+      iv_collection = c_html_parts-styles
+      ii_part       = part ).
+
+  ENDMETHOD.
 ENDCLASS.
 
 CLASS /apmg/cl_apm_gui_css_processor IMPLEMENTATION.
@@ -48556,11 +48790,11 @@ CLASS /apmg/cl_apm_gui_dlg_deprecate IMPLEMENTATION.
       iv_help_page = 'https://docs.abappm.com/' ). " TODO
 
     result->text(
-      iv_name     = c_id-name
-      iv_label    = 'Name'
+      iv_name  = c_id-name
+      iv_label = 'Name'
     )->text(
-      iv_name     = c_id-version
-      iv_label    = 'Version or Range of Versions'
+      iv_name  = c_id-version
+      iv_label = 'Version or Range of Versions'
     )->textarea(
       iv_name     = c_id-message
       iv_label    = 'Message'
@@ -48572,8 +48806,8 @@ CLASS /apmg/cl_apm_gui_dlg_deprecate IMPLEMENTATION.
       iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
       iv_action   = c_action-deprecate
     )->command(
-      iv_label    = 'Back'
-      iv_action   = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -48708,13 +48942,13 @@ CLASS /apmg/cl_apm_gui_dlg_init IMPLEMENTATION.
 
     ASSERT 0 = 0.
     " FUTURE
-*    DATA(old_labels) = form_data->get( c_id-labels ).
+*    DATA(old_labels) = form_data->get( c_id-labels )
 *
-*    DATA(new_labels) = /apmg/cl_apm_ui_factory=>get_popups( )->popup_to_select_labels( old_labels ).
+*    DATA(new_labels) = /apmg/cl_apm_ui_factory=>get_popups( )->popup_to_select_labels( old_labels )
 *
 *    form_data->set(
 *      iv_key = c_id-labels
-*      iv_val = new_labels ).
+*      iv_val = new_labels )
 
   ENDMETHOD.
 
@@ -48755,20 +48989,20 @@ CLASS /apmg/cl_apm_gui_dlg_init IMPLEMENTATION.
       iv_placeholder = 'Z... / $...'
       iv_max         = 30
     )->text(
-      iv_name        = c_id-name
-      iv_required    = abap_true
-      iv_label       = 'Name'
-      iv_hint        = 'Unique name for package'
-      iv_min         = /apmg/if_apm_types=>c_package_name-min_length
-      iv_max         = /apmg/if_apm_types=>c_package_name-max_length
+      iv_name     = c_id-name
+      iv_required = abap_true
+      iv_label    = 'Name'
+      iv_hint     = 'Unique name for package'
+      iv_min      = /apmg/if_apm_types=>c_package_name-min_length
+      iv_max      = /apmg/if_apm_types=>c_package_name-max_length
     )->text(
-      iv_name        = c_id-version
-      iv_required    = abap_true
-      iv_label       = 'Version'
-      iv_hint        = 'Semantic version (x.y.z)'
+      iv_name     = c_id-version
+      iv_required = abap_true
+      iv_label    = 'Version'
+      iv_hint     = 'Semantic version (x.y.z)'
     )->text(
-      iv_name        = c_id-description
-      iv_label       = 'Description'
+      iv_name  = c_id-description
+      iv_label = 'Description'
 * FUTURE
 *    )->text(
 *      iv_name        = c_id-labels
@@ -48776,8 +49010,8 @@ CLASS /apmg/cl_apm_gui_dlg_init IMPLEMENTATION.
 *      iv_label       = |Labels (comma-separated, allowed chars: "{ /apmg/cl_apm_repo_labels=>c_allowed_chars }")|
 *      iv_hint        = 'Comma-separated labels for grouping and repo organization (optional)'
     )->checkbox(
-      iv_name        = c_id-private
-      iv_label       = 'Private Package (will not become public)' ).
+      iv_name  = c_id-private
+      iv_label = 'Private Package (will not become public)' ).
 
 * FUTURE
 *    IF /apmg/cl_apm_feature=>is_enabled( /apmg/cl_apm_abap_language_vers=>c_feature_flag ) = abap_true.
@@ -48804,15 +49038,15 @@ CLASS /apmg/cl_apm_gui_dlg_init IMPLEMENTATION.
 *    ENDIF
 
     result->command(
-      iv_label       = 'Init Package'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-init_package
+      iv_label    = 'Init Package'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-init_package
     )->command(
-      iv_label       = 'Create Package'
-      iv_action      = c_action-create_package
+      iv_label  = 'Create Package'
+      iv_action = c_action-create_package
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -48916,31 +49150,23 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
 
           /apmg/cl_apm_registry=>check_logged_in( registry ).
 
-          DATA(arborist) = /apmg/cl_apm_arborist=>factory(
-            registry                 = registry
-            with_bundle_dependencies = abap_false ).
+          DATA(arborist) = /apmg/cl_apm_arborist=>factory( registry ).
 
-          arborist->load_actual_tree( ).
           arborist->build_ideal_tree(
-            add_packages  = VALUE #(
-               ( name = params-name version = params-version ) )
+            add_packages  = VALUE #( ( name = params-name version = params-version ) )
             is_production = abap_true ).
 
           DATA(log) = arborist->get_log( ).
-          IF arborist->is_executable( ) = abap_false.
+
+          IF NOT arborist->is_executable( ).
             RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
               EXPORTING
                 text = get_planning_error( log ).
           ENDIF.
 
           DATA(diff) = arborist->get_diff( ).
-          IF diff IS NOT BOUND.
-            RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
-              EXPORTING
-                text = |No install changes were found for { params-name }|.
-          ENDIF.
 
-          IF diff->get_changes( params-name ) IS INITIAL.
+          IF diff IS NOT BOUND OR diff->get_changes( params-name ) IS INITIAL.
             RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
               EXPORTING
                 text = |No install changes were found for { params-name }|.
@@ -49025,17 +49251,17 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
       iv_min         = 2
       iv_max         = 30
     )->text(
-      iv_name        = c_id-name
-      iv_required    = abap_true
-      iv_label       = 'Name'
-      iv_hint        = 'Name of the package'
-      iv_min         = /apmg/if_apm_types=>c_package_name-min_length
-      iv_max         = /apmg/if_apm_types=>c_package_name-max_length
+      iv_name     = c_id-name
+      iv_required = abap_true
+      iv_label    = 'Name'
+      iv_hint     = 'Name of the package'
+      iv_min      = /apmg/if_apm_types=>c_package_name-min_length
+      iv_max      = /apmg/if_apm_types=>c_package_name-max_length
     )->text(
-      iv_name        = c_id-version
-      iv_required    = abap_true
-      iv_label       = 'Version'
-      iv_hint        = 'Semantic version (x.y.z)'
+      iv_name     = c_id-version
+      iv_required = abap_true
+      iv_label    = 'Version'
+      iv_hint     = 'Semantic version (x.y.z)'
     )->text(
       iv_name        = c_id-transport
       iv_side_action = c_action-choose_transport
@@ -49044,15 +49270,15 @@ CLASS /apmg/cl_apm_gui_dlg_install IMPLEMENTATION.
       iv_max         = 20 ).
 
     result->command(
-      iv_label       = 'Install Preview'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-install_package
+      iv_label    = 'Install Preview'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-install_package
     )->command(
-      iv_label       = 'Create Package'
-      iv_action      = c_action-create_package
+      iv_label  = 'Create Package'
+      iv_action = c_action-create_package
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -49131,16 +49357,21 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
 
     CASE ii_event->mv_action.
       WHEN c_action-create_packages.
-        validation_log = validate_form( require_existing = abap_false ).
-        IF validation_log->is_empty( ) = abap_true.
+
+        validation_log = validate_form( abap_false ).
+
+        IF validation_log->is_empty( ).
           create_missing_packages( ).
           validation_log = validate_form( ).
         ENDIF.
+
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
 
       WHEN c_action-confirm.
+
         validation_log = validate_form( ).
-        IF validation_log->is_empty( ) = abap_true.
+
+        IF validation_log->is_empty( ).
           DATA(assignments) = get_assignments( ).
 
           /apmg/cl_apm_command_install=>run(
@@ -49156,6 +49387,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
         ELSE.
           rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
         ENDIF.
+
     ENDCASE.
 
   ENDMETHOD.
@@ -49198,6 +49430,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
     super->constructor( ).
 
     me->registry  = registry.
+    me->package   = package.
     me->transport = transport.
     me->root_name = root_name.
     me->version   = version.
@@ -49210,7 +49443,9 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
           text = 'The Arborist diff is not available'.
     ENDIF.
 
+    " TODO: set sap package for root_name
     changes = diff->get_changes( root_name ).
+
     IF changes IS INITIAL.
       RAISE EXCEPTION TYPE /apmg/cx_apm_error_text
         EXPORTING
@@ -49221,7 +49456,8 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
     form_data      = NEW #( ).
     form           = get_form_schema( ).
     form_util      = /apmg/cl_apm_html_form_utils=>create( form ).
-    initialize_form_data( transport ).
+
+    initialize_form_data( ).
 
   ENDMETHOD.
 
@@ -49312,7 +49548,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
 
     result->table(
       iv_name  = c_id-changed
-      iv_label = 'Packages to Change'
+      iv_label = 'Packages to Update'
     )->column(
       iv_label    = 'Action'
       iv_readonly = abap_true
@@ -49396,7 +49632,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
 
         WHEN /apmg/if_apm_arborist=>c_diff_action-change.
           change_row = change_row + 1.
-          form_data->set( iv_key = |{ c_id-changed }-{ change_row }-1| iv_val = 'CHANGE' ).
+          form_data->set( iv_key = |{ c_id-changed }-{ change_row }-1| iv_val = 'UPDATE' ).
           form_data->set( iv_key = |{ c_id-changed }-{ change_row }-2| iv_val = ideal->name ).
           form_data->set( iv_key = |{ c_id-changed }-{ change_row }-3| iv_val = actual->version ).
           form_data->set( iv_key = |{ c_id-changed }-{ change_row }-4| iv_val = ideal->version ).
@@ -49432,7 +49668,7 @@ CLASS /apmg/cl_apm_gui_dlg_inst_prev IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      IF /apmg/cl_apm_package_json_vali=>is_valid_sap_package( <assignment>-package ) = abap_false.
+      IF NOT /apmg/cl_apm_package_json_vali=>is_valid_sap_package( <assignment>-package ).
         add_validation(
           target = result
           key    = c_id-added
@@ -49599,25 +49835,25 @@ CLASS /apmg/cl_apm_gui_dlg_login IMPLEMENTATION.
       iv_help_page = 'https://docs.abappm.com/' ). " TODO
 
     result->text(
-      iv_name        = c_id-username
-      iv_required    = abap_true
-      iv_label       = 'User'
-      iv_hint        = 'Username for registry'
-      iv_max         = 30
+      iv_name     = c_id-username
+      iv_required = abap_true
+      iv_label    = 'User'
+      iv_hint     = 'Username for registry'
+      iv_max      = 30
     )->text(
-      iv_name        = c_id-password
-      iv_required    = abap_true
-      iv_password    = abap_true
-      iv_label       = 'Password'
-      iv_min         = /apmg/if_apm_types=>c_package_name-min_length
-      iv_max         = /apmg/if_apm_types=>c_package_name-max_length
+      iv_name     = c_id-password
+      iv_required = abap_true
+      iv_password = abap_true
+      iv_label    = 'Password'
+      iv_min      = /apmg/if_apm_types=>c_package_name-min_length
+      iv_max      = /apmg/if_apm_types=>c_package_name-max_length
     )->command(
-      iv_label       = 'Login'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-login
+      iv_label    = 'Login'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-login
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -49810,28 +50046,28 @@ CLASS /apmg/cl_apm_gui_dlg_publish IMPLEMENTATION.
       iv_placeholder = 'Z... / $...'
       iv_max         = 30
     )->text(
-      iv_name        = c_id-name
-      iv_label       = 'Name'
-      iv_readonly    = abap_true
+      iv_name     = c_id-name
+      iv_label    = 'Name'
+      iv_readonly = abap_true
     )->text(
-      iv_name        = c_id-version
-      iv_label       = 'Version'
-      iv_readonly    = abap_true
+      iv_name     = c_id-version
+      iv_label    = 'Version'
+      iv_readonly = abap_true
     )->text(
-      iv_name        = c_id-tag
-      iv_label       = 'Tag'
-      iv_hint        = 'Distribution Tag' ).
+      iv_name  = c_id-tag
+      iv_label = 'Tag'
+      iv_hint  = 'Distribution Tag' ).
 
     result->command(
-      iv_label       = 'Publish Package'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-publish_package
+      iv_label    = 'Publish Package'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-publish_package
     )->command(
-      iv_label       = 'Refresh'
-      iv_action      = c_action-refresh
+      iv_label  = 'Refresh'
+      iv_action = c_action-refresh
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -50027,8 +50263,8 @@ CLASS /apmg/cl_apm_gui_dlg_undepreca IMPLEMENTATION.
       iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
       iv_action   = c_action-undeprecate
     )->command(
-      iv_label    = 'Back'
-      iv_action   = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -50229,13 +50465,13 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
       iv_placeholder = 'Z... / $...'
       iv_max         = 30
     )->text(
-      iv_name        = c_id-name
-      iv_label       = 'Name'
-      iv_readonly    = abap_true
+      iv_name     = c_id-name
+      iv_label    = 'Name'
+      iv_readonly = abap_true
     )->text(
-      iv_name        = c_id-version
-      iv_label       = 'Version'
-      iv_readonly    = abap_true
+      iv_name     = c_id-version
+      iv_label    = 'Version'
+      iv_readonly = abap_true
     )->text(
       iv_name        = c_id-transport
       iv_side_action = c_action-choose_transport
@@ -50244,15 +50480,15 @@ CLASS /apmg/cl_apm_gui_dlg_uninstall IMPLEMENTATION.
       iv_max         = 20 ).
 
     result->command(
-      iv_label       = 'Uninstall Package'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-uninstall_package
+      iv_label    = 'Uninstall Package'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-uninstall_package
     )->command(
-      iv_label       = 'Refresh'
-      iv_action      = c_action-refresh
+      iv_label  = 'Refresh'
+      iv_action = c_action-refresh
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -50493,11 +50729,11 @@ CLASS /apmg/cl_apm_gui_dlg_unpublish IMPLEMENTATION.
       iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
       iv_action   = c_action-unpublish_version
     )->command(
-      iv_label    = 'Unpublish Complete Package'
-      iv_action   = c_action-unpublish_package
+      iv_label  = 'Unpublish Complete Package'
+      iv_action = c_action-unpublish_package
     )->command(
-      iv_label    = 'Back'
-      iv_action   = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -50654,20 +50890,20 @@ CLASS /apmg/cl_apm_gui_dlg_update IMPLEMENTATION.
       iv_help_page = 'https://docs.abappm.com/' ). " TODO
 
     result->text(
-      iv_name        = c_id-package
-      iv_readonly    = abap_true
-      iv_label       = 'Package'
+      iv_name     = c_id-package
+      iv_readonly = abap_true
+      iv_label    = 'Package'
     )->text(
-      iv_name        = c_id-name
-      iv_readonly    = abap_true
-      iv_label       = 'Name'
+      iv_name     = c_id-name
+      iv_readonly = abap_true
+      iv_label    = 'Name'
     )->text(
-      iv_name        = c_id-version
-      iv_readonly    = abap_true
-      iv_label       = 'Current Version'
+      iv_name     = c_id-version
+      iv_readonly = abap_true
+      iv_label    = 'Current Version'
     )->text(
-      iv_name        = c_id-to_version
-      iv_label       = 'Target Version'
+      iv_name  = c_id-to_version
+      iv_label = 'Target Version'
     )->text(
       iv_name        = c_id-transport
       iv_side_action = c_action-choose_transport
@@ -50675,17 +50911,17 @@ CLASS /apmg/cl_apm_gui_dlg_update IMPLEMENTATION.
       iv_upper_case  = abap_true
       iv_max         = 20
     )->checkbox(
-      iv_name        = c_id-force
-      iv_label       = 'Force'
-      iv_hint        = 'Overwrite already installed dependencies' ).
+      iv_name  = c_id-force
+      iv_label = 'Force'
+      iv_hint  = 'Overwrite already installed dependencies' ).
 
     result->command(
-      iv_label       = 'Update Package'
-      iv_cmd_type    = /apmg/if_apm_html_form=>c_cmd_type-input_main
-      iv_action      = c_action-update_package
+      iv_label    = 'Update Package'
+      iv_cmd_type = /apmg/if_apm_html_form=>c_cmd_type-input_main
+      iv_action   = c_action-update_package
     )->command(
-      iv_label       = 'Back'
-      iv_action      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_label  = 'Back'
+      iv_action = /apmg/if_apm_gui_router=>c_action-go_back ).
 
   ENDMETHOD.
 
@@ -50836,6 +51072,30 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
   METHOD call_browser.
 
     /apmg/cl_apm_gui_factory=>get_frontend_services( )->execute( iv_document = |{ url }| ).
+
+  ENDMETHOD.
+
+  METHOD call_transaction.
+
+    DATA msg TYPE c LENGTH 200.
+
+    CALL FUNCTION 'ABAP4_CALL_TRANSACTION'
+      DESTINATION 'NONE'
+      STARTING NEW TASK 'ZAPM'
+      EXPORTING
+        tcode                 = tcode
+      EXCEPTIONS
+        communication_failure = 1 MESSAGE msg
+        system_failure        = 2 MESSAGE msg
+        resource_failure      = 3
+        OTHERS                = 4.
+    IF sy-subrc <> 0.
+      msg = |Error starting transaction { tcode }: { msg }|.
+      MESSAGE msg TYPE 'I'.
+    ELSE.
+      msg = |Transaction { tcode } opened in a new window|.
+      MESSAGE msg TYPE 'S'.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -51059,15 +51319,30 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
 
   METHOD main_page ##CALLED.
 
-    " Prio 1: Show last viewed package (if it exists)
+    DATA package TYPE devclass.
+
+    " Prio 1: Package parameter (if it exists)
+    GET PARAMETER ID 'DBT' FIELD package.
+
+    IF package IS NOT INITIAL.
+      TRY.
+          IF /apmg/cl_apm_package_json=>factory( package )->exists( ).
+            result = /apmg/cl_apm_gui_page_package=>create( package ).
+            RETURN.
+          ENDIF.
+        CATCH /apmg/cx_apm_error ##NO_HANDLER.
+      ENDTRY.
+    ENDIF.
+
+    " Prio 2: Show last viewed package (if it exists)
     DATA(settings) = /apmg/cl_apm_settings=>factory( )->get( ).
 
     IF settings-show_last_package = abap_true AND settings-last_package IS NOT INITIAL.
       TRY.
-          /apmg/cl_apm_package_json=>factory( settings-last_package )->load( ).
-
-          result = /apmg/cl_apm_gui_page_package=>create( settings-last_package ).
-          RETURN.
+          IF /apmg/cl_apm_package_json=>factory( settings-last_package )->exists( ).
+            result = /apmg/cl_apm_gui_page_package=>create( settings-last_package ).
+            RETURN.
+          ENDIF.
         CATCH /apmg/cx_apm_error.
           " Remove inconsistent value from settings
           CLEAR settings-last_package.
@@ -51075,15 +51350,16 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
       ENDTRY.
     ENDIF.
 
-    " Prio 2: Package list
+    " Prio 3: Package list
     DATA(package_list) = /apmg/cl_apm_package_json=>list( ).
 
     IF package_list IS NOT INITIAL.
       result = /apmg/cl_apm_gui_page_list=>create( ).
-    ELSE.
-      " Prio 3: Welcome page
-      result = /apmg/cl_apm_gui_page_welcome=>create( ).
+      RETURN.
     ENDIF.
+
+    " Prio 4: Welcome page
+    result = /apmg/cl_apm_gui_page_welcome=>create( ).
 
   ENDMETHOD.
 
@@ -51127,6 +51403,11 @@ CLASS /apmg/cl_apm_gui_router IMPLEMENTATION.
           line       = event->query( )->get( 'LINE' )
           new_window = event->query( )->get( 'NEW_WINDOW' ) ).
 
+        result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
+
+      WHEN zif_abapgit_definitions=>c_action-jump_transaction.
+
+        call_transaction( |{ event->query( )->get( 'TRANSACTION' ) }| ).
         result-state = /apmg/cl_apm_gui=>c_event_state-no_more_act.
 
       WHEN /apmg/if_apm_gui_router=>c_action-jump_transport.
@@ -51736,6 +52017,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '.w800px       { width: 800px }' ).
     lo_buf->add( '.w1000px      { width: 1000px }' ).
     lo_buf->add( '.wmax600px    { max-width: 600px }' ).
+    lo_buf->add( '.borders      { border: 1px solid }' ).
     lo_buf->add( '.auto-center  { /* use with max-width */' ).
     lo_buf->add( '  width: 100%;' ).
     lo_buf->add( '  margin-left: auto;' ).
@@ -51779,6 +52061,22 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'div.dummydiv {' ).
     lo_buf->add( '  padding:          0.5em 1em;' ).
     lo_buf->add( '  text-align:       center;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '/* The banner stays visible until the page scripts confirm they initialized,' ).
+    lo_buf->add( '   which takes a moment on every page load. Keep it collapsed for that moment,' ).
+    lo_buf->add( '   so it shows only when initialization failed, not as a flicker on every page' ).
+    lo_buf->add( '   switch. Without CSS animations it simply shows at once, as before. */' ).
+    lo_buf->add( '#js-error-banner {' ).
+    lo_buf->add( '  animation: js-error-banner-delay 2s;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '@keyframes js-error-banner-delay {' ).
+    lo_buf->add( '  from, to {' ).
+    lo_buf->add( '    visibility:     hidden;' ).
+    lo_buf->add( '    max-height:     0;' ).
+    lo_buf->add( '    padding-top:    0;' ).
+    lo_buf->add( '    padding-bottom: 0;' ).
+    lo_buf->add( '  }' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
     lo_buf->add( 'a.close-btn {' ).
@@ -52196,7 +52494,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
     lo_buf->add( 'table.diff_tab td.num::before {' ).
-    lo_buf->add( '  content: attr(line-num);' ).
+    lo_buf->add( '  content: attr(data-num);' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'table.diff_tab code {' ).
     lo_buf->add( '  font-family: inherit;' ).
@@ -52274,6 +52572,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  margin: 0px;' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
+    lo_buf->add( 'div.debug_container th {' ).
+    lo_buf->add( '  text-align: left;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
     lo_buf->add( '/* ACTION LINKS */' ).
     lo_buf->add( '' ).
     lo_buf->add( 'li.action_link.enabled{' ).
@@ -52282,7 +52584,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  display: block;' ).
     lo_buf->add( '}' ).
     lo_buf->add( '' ).
-    lo_buf->add( 'li.action_link:not(enabled){' ).
+    lo_buf->add( 'li.action_link:not(.enabled){' ).
     lo_buf->add( '  visibility: hidden;' ).
     lo_buf->add( '  position: fixed; /* so it does not take up space when hidden */' ).
     lo_buf->add( '  display: none;' ).
@@ -53472,7 +53774,42 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  box-sizing: border-box;' ).
     lo_buf->add( '  resize: none;' ).
     lo_buf->add( '  font-size: 12px;' ).
+    lo_buf->add( '  overflow-x: auto;' ).
+    lo_buf->add( '  overflow-y: auto;' ).
     lo_buf->add( '  white-space: pre;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '.webgui-busy-lock {' ).
+    lo_buf->add( '  position: fixed;' ).
+    lo_buf->add( '  top: 0;' ).
+    lo_buf->add( '  right: 0;' ).
+    lo_buf->add( '  bottom: 0;' ).
+    lo_buf->add( '  left: 0;' ).
+    lo_buf->add( '  z-index: 2147483647;' ).
+    lo_buf->add( '  cursor: wait;' ).
+    lo_buf->add( '  outline: none;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '.webgui-busy-lock[hidden] {' ).
+    lo_buf->add( '  display: none;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '.webgui-busy-lock span {' ).
+    lo_buf->add( '  position: absolute;' ).
+    lo_buf->add( '  top: 50%;' ).
+    lo_buf->add( '  left: 50%;' ).
+    lo_buf->add( '  transform: translate(-50%, -50%);' ).
+    lo_buf->add( '  padding: 1em 2em;' ).
+    lo_buf->add( '  background-color: var(--theme-container-background-color);' ).
+    lo_buf->add( '  color: var(--theme-primary-font-color);' ).
+    lo_buf->add( '  border: 1px solid var(--theme-container-border-color);' ).
+    lo_buf->add( '  border-radius: 4px;' ).
+    lo_buf->add( '  opacity: 0;' ).
+    lo_buf->add( '  animation: webgui-busy-message 0s 500ms forwards;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( '' ).
+    lo_buf->add( '@keyframes webgui-busy-message {' ).
+    lo_buf->add( '  to { opacity: 1; }' ).
     lo_buf->add( '}' ).
 
     li_asset_man->register_asset(
@@ -53773,10 +54110,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  color: #eee;' ).
     lo_buf->add( '  background-color: var(--theme-greyscale-medium);' ).
     lo_buf->add( '}' ).
-    lo_buf->add( 'table.diff_tab thead.nav_line {' ).
+    lo_buf->add( 'table.diff_tab tr.nav_line {' ).
     lo_buf->add( '  background-color: #edf2f9;' ).
     lo_buf->add( '}' ).
-    lo_buf->add( 'table.diff_tab thead.nav_line th {' ).
+    lo_buf->add( 'table.diff_tab tr.nav_line th {' ).
     lo_buf->add( '  color: var(--theme-greyscale-medium);' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'table.diff_tab td.num, th.num {' ).
@@ -54256,7 +54593,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '/* DIFF TABLE */' ).
     lo_buf->add( '' ).
     lo_buf->add( 'table.diff_tab td,th { color: #fff; }' ).
-    lo_buf->add( 'table.diff_tab thead.nav_line { background-color: var(--theme-container-background-color); }' ).
+    lo_buf->add( 'table.diff_tab tr.nav_line { background-color: var(--theme-container-background-color); }' ).
     lo_buf->add( '' ).
     lo_buf->add( '/* STYLES FOR SYNTAX HIGHLIGHTING */' ).
     lo_buf->add( '' ).
@@ -54435,7 +54772,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( ' *' ).
     lo_buf->add( ' **********************************************************/' ).
     lo_buf->add( '/* exported confirmInitialized' ).
-    lo_buf->add( '   -- zcl_abapgit_gui_page->zif_abapgit_gui_renderable~render */' ).
+    lo_buf->add( '   -- zcl_abapgit_gui_page->zif_abapgit_gui_renderable~render,' ).
+    lo_buf->add( '      which also renders the js-error-banner it hides */' ).
     lo_buf->add( '/* exported setEnvironment' ).
     lo_buf->add( '   -- zcl_abapgit_gui_page->render_environment */' ).
     lo_buf->add( '/* exported toggleBrowserControlWarning, displayBrowserControlFooter,' ).
@@ -54456,12 +54794,16 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '/* exported restoreScrollPosition, addMarginBottom, enumerateJumpAllFiles' ).
     lo_buf->add( '   -- zcl_abapgit_gui_page_diff_base->render_scripts,' ).
     lo_buf->add( '      which also does new CommandPalette( enumerateJumpAllFiles ) */' ).
+    lo_buf->add( '/* exported rememberScrollPosition' ).
+    lo_buf->add( '   -- zcl_abapgit_gui_page_repo_over, zcl_abapgit_gui_page_db */' ).
     lo_buf->add( '/* exported onDiffCollapse' ).
     lo_buf->add( '   -- zcl_abapgit_gui_page_diff_base->render_diff_head */' ).
     lo_buf->add( '/* exported preparePatch, registerStagePatch' ).
     lo_buf->add( '   -- zcl_abapgit_gui_page_patch->render_scripts */' ).
     lo_buf->add( '/* exported setKeyBindings' ).
     lo_buf->add( '   -- zcl_abapgit_gui_hotkey_ctl->render_scripts */' ).
+    lo_buf->add( '/* exported describeBrowserStorage' ).
+    lo_buf->add( '   -- zcl_abapgit_gui_page_debuginfo->render_scripts */' ).
     lo_buf->add( '/* exported perfOut, perfLog, perfClear' ).
     lo_buf->add( '    -- not called from ABAP, for frontend debugging */' ).
     lo_buf->add( '/* Constructors instantiated from ABAP. These need no "exported"' ).
@@ -54526,7 +54868,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( ' **********************************************************/' ).
     lo_buf->add( 'var gEnv = {' ).
     lo_buf->add( '  isWebGui          : false, // SAP GUI for HTML' ).
-    lo_buf->add( '  isSapGuiForWindows: false  // neither of the two: SAP GUI for Java' ).
+    lo_buf->add( '  isSapGuiForWindows: false, // neither of the two: SAP GUI for Java' ).
+    lo_buf->add( '  browserControl: "",' ).
+    lo_buf->add( '  isInternetExplorer: !!document.documentMode,' ).
+    lo_buf->add( '  sapeventPrefix: undefined' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'function setEnvironment(env) {' ).
     lo_buf->add( '  for (var key in env) {' ).
@@ -54536,22 +54881,23 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      window.console.log("abapGit: unknown environment key ''" + key + "''");' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '  }' ).
+    lo_buf->add( '  gEnv.browserControl = detectBrowserControl();' ).
     lo_buf->add( '}' ).
-    lo_buf->add( 'var gSapeventPrefix; // undefined until first probed' ).
+    lo_buf->add( 'function detectBrowserControl() {' ).
+    lo_buf->add( '  if (!gEnv.isSapGuiForWindows) return "";' ).
+    lo_buf->add( '  return /Edg/.test(window.navigator.userAgent) ? "Edge" : "IE";' ).
+    lo_buf->add( '}' ).
     lo_buf->add( 'function getSapeventPrefix() {' ).
-    lo_buf->add( '  if (gSapeventPrefix === undefined) {' ).
+    lo_buf->add( '  if (gEnv.sapeventPrefix === undefined) {' ).
     lo_buf->add( '    if (document.querySelector(''a[href*="file:///SAPEVENT:"]'')) {' ).
-    lo_buf->add( '      gSapeventPrefix = "file:///";' ).
+    lo_buf->add( '      gEnv.sapeventPrefix = "file:///";' ).
     lo_buf->add( '    } else if (document.querySelector(''a[href^="sap-cust"]'')) {' ).
-    lo_buf->add( '      gSapeventPrefix = "sap-cust://sap-place-holder/";' ).
+    lo_buf->add( '      gEnv.sapeventPrefix = "sap-cust://sap-place-holder/";' ).
     lo_buf->add( '    } else {' ).
-    lo_buf->add( '      gSapeventPrefix = ""; // No prefix for old IE control' ).
+    lo_buf->add( '      gEnv.sapeventPrefix = ""; // No prefix for old IE control' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '  }' ).
-    lo_buf->add( '  return gSapeventPrefix;' ).
-    lo_buf->add( '}' ).
-    lo_buf->add( 'function isEdgeControl() {' ).
-    lo_buf->add( '  return navigator.userAgent.includes("Edg");' ).
+    lo_buf->add( '  return gEnv.sapeventPrefix;' ).
     lo_buf->add( '}' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Common functions' ).
@@ -54561,6 +54907,46 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var paragraph = document.createElement("p");' ).
     lo_buf->add( '  paragraph.innerHTML = text;' ).
     lo_buf->add( '  stdout.appendChild(paragraph);' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( 'function describeBrowserStorage() {' ).
+    lo_buf->add( '  var probeKey   = "abapGitStorageProbe";' ).
+    lo_buf->add( '  var previewLen = 200;' ).
+    lo_buf->add( '  var rows       = [["Page URL", escapeHtmlText(String(window.location && window.location.href))]];' ).
+    lo_buf->add( '  var entries    = [];' ).
+    lo_buf->add( '  ["localStorage", "sessionStorage"].forEach(function(storageName) {' ).
+    lo_buf->add( '    var status;' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      var storage = window[storageName];' ).
+    lo_buf->add( '      if (!storage) {' ).
+    lo_buf->add( '        status = "not available";' ).
+    lo_buf->add( '      } else {' ).
+    lo_buf->add( '        var keys = [];' ).
+    lo_buf->add( '        for (var i = 0; i < storage.length; i++) keys.push(storage.key(i));' ).
+    lo_buf->add( '        keys.sort().forEach(function(key) {' ).
+    lo_buf->add( '          var value   = String(storage.getItem(key));' ).
+    lo_buf->add( '          var preview = value.length > previewLen ? value.substr(0, previewLen) + "\u2026" : value;' ).
+    lo_buf->add( '          entries.push([storageName, escapeHtmlText(String(key)), value.length, escapeHtmlText(preview)]);' ).
+    lo_buf->add( '        });' ).
+    lo_buf->add( '        storage.setItem(probeKey, "1");' ).
+    lo_buf->add( '        status = storage.getItem(probeKey) === "1" ? "read/write OK" : "write not read back";' ).
+    lo_buf->add( '        storage.removeItem(probeKey);' ).
+    lo_buf->add( '        status += ", " + keys.length + " entries";' ).
+    lo_buf->add( '      }' ).
+    lo_buf->add( '    } catch (error) {' ).
+    lo_buf->add( '      status = "error: " + escapeHtmlText(String(error && (error.name || error.message) || error));' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '    rows.push([storageName, status]);' ).
+    lo_buf->add( '  });' ).
+    lo_buf->add( '  var html = "<h2>Browser Storage</h2><table>" + rows.map(function(row) {' ).
+    lo_buf->add( '    return "<tr><td>" + row[0] + ":</td><td>" + row[1] + "</td></tr>";' ).
+    lo_buf->add( '  }).join("") + "</table>";' ).
+    lo_buf->add( '  if (entries.length) {' ).
+    lo_buf->add( '    html += "<br><table><tr><th>Storage</th><th>Key</th><th>Size</th><th>Value</th></tr>" + entries.map(function(entry) {' ).
+    lo_buf->add( '      return "<tr><td>" + entry[0] + "</td><td>" + entry[1] + "</td><td>" + entry[2]' ).
+    lo_buf->add( '        + "</td><td><code>" + entry[3] + "</code></td></tr>";' ).
+    lo_buf->add( '    }).join("") + "</table>";' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  return html;' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'var gSapeventNavPending = false;' ).
     lo_buf->add( 'function encodeItsParams(action) {' ).
@@ -54645,9 +55031,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  if (isSapEvent) gSapeventNavPending = true;' ).
     lo_buf->add( '  element.click();' ).
     lo_buf->add( '}' ).
-    lo_buf->add( 'function setInitialFocus(id) {' ).
-    lo_buf->add( '  document.getElementById(id).focus();' ).
-    lo_buf->add( '}' ).
     lo_buf->add( 'function setInitialFocusWithQuerySelector(sSelector, bFocusParent) {' ).
     lo_buf->add( '  var oSelected = document.querySelector(sSelector);' ).
     lo_buf->add( '  if (oSelected) {' ).
@@ -54665,13 +55048,131 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'function submitFormById(id) {' ).
     lo_buf->add( '  submitForm(document.getElementById(id));' ).
     lo_buf->add( '}' ).
+    lo_buf->add( 'var gScriptErrorReported = false;' ).
+    lo_buf->add( 'var gCommonJsUrlPattern  = /(^|\/)js\/common\.js(\?|$)/;' ).
+    lo_buf->add( 'function isOwnScript(url) {' ).
+    lo_buf->add( '  var page = String(window.location && window.location.href).replace(/#.*$/, "");' ).
+    lo_buf->add( '  return gCommonJsUrlPattern.test(url) || url.replace(/#.*$/, "") === page;' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( 'function reportScriptError(message, url, line) {' ).
+    lo_buf->add( '  var errorBanner = document.getElementById("js-error-banner");' ).
+    lo_buf->add( '  if (gScriptErrorReported || !errorBanner || !url || !isOwnScript(url)) return;' ).
+    lo_buf->add( '  gScriptErrorReported = true;' ).
+    lo_buf->add( '  var icon = errorBanner.querySelector("i");' ).
+    lo_buf->add( '  var file = gCommonJsUrlPattern.test(url) ? "common.js" : "page script";' ).
+    lo_buf->add( '  while (errorBanner.firstChild) errorBanner.removeChild(errorBanner.firstChild);' ).
+    lo_buf->add( '  if (icon) errorBanner.appendChild(icon);' ).
+    lo_buf->add( '  errorBanner.appendChild(document.createTextNode(" JavaScript error: " + message' ).
+    lo_buf->add( '    + " (" + file + (line ? ":" + line : "") + "), please log an issue"));' ).
+    lo_buf->add( '  errorBanner.style.animationName = "none"; // skip the delay in the css, the error is known now' ).
+    lo_buf->add( '  errorBanner.style.display = "";' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( 'window.addEventListener("error", function(event) {' ).
+    lo_buf->add( '  reportScriptError(event.message, event.filename, event.lineno);' ).
+    lo_buf->add( '});' ).
     lo_buf->add( 'function confirmInitialized() {' ).
     lo_buf->add( '  var errorBanner = document.getElementById("js-error-banner");' ).
     lo_buf->add( '  if (errorBanner) {' ).
     lo_buf->add( '    errorBanner.style.display = "none";' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '  debugOutput("js: OK"); // Final final confirmation :)' ).
+    lo_buf->add( '  initializeWebGuiBusyLock();' ).
     lo_buf->add( '}' ).
+    lo_buf->add( 'var gWebGuiBusyLock;' ).
+    lo_buf->add( 'function initializeWebGuiBusyLock() {' ).
+    lo_buf->add( '  if (!gEnv.isWebGui || gWebGuiBusyLock) return;' ).
+    lo_buf->add( '  var shell;' ).
+    lo_buf->add( '  try {' ).
+    lo_buf->add( '    var sap = window.parent.sap;' ).
+    lo_buf->add( '    shell = sap && sap.its && sap.its.LS;' ).
+    lo_buf->add( '    if (!shell) shell = window.parent.mysap && window.parent.mysap.LS;' ).
+    lo_buf->add( '    if (shell && typeof shell.oGetInternal === "function") shell = shell.oGetInternal(window.parent.UCF_System);' ).
+    lo_buf->add( '  } catch (error) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( '    return; // Cross-origin embedding, or a WebGUI release without these hooks' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  if (!shell || !shell.E_EVENTS || !shell.E_EVENTS.Lock || !shell.E_EVENTS.Unlock' ).
+    lo_buf->add( '      || typeof shell.attachEvent !== "function" || typeof shell.detachEvent !== "function"' ).
+    lo_buf->add( '      || typeof shell.bLocked !== "function") return;' ).
+    lo_buf->add( '  var overlay = document.createElement("div");' ).
+    lo_buf->add( '  overlay.className = "webgui-busy-lock";' ).
+    lo_buf->add( '  overlay.tabIndex = -1;' ).
+    lo_buf->add( '  overlay.hidden = true;' ).
+    lo_buf->add( '  overlay.setAttribute("role", "status");' ).
+    lo_buf->add( '  overlay.setAttribute("aria-label", "Working...");' ).
+    lo_buf->add( '  var message = document.createElement("span");' ).
+    lo_buf->add( '  message.textContent = "Working...";' ).
+    lo_buf->add( '  overlay.appendChild(message);' ).
+    lo_buf->add( '  document.body.appendChild(overlay);' ).
+    lo_buf->add( '  var previousFocus;' ).
+    lo_buf->add( '  var previousBusy;' ).
+    lo_buf->add( '  var locked = false;' ).
+    lo_buf->add( '  var inputEvents = ["click", "dblclick", "mousedown", "mouseup", "pointerdown", "pointerup",' ).
+    lo_buf->add( '    "touchstart", "touchmove", "touchend", "wheel", "keydown", "keypress", "keyup", "submit", "contextmenu"];' ).
+    lo_buf->add( '  function isShellLocked() {' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      return shell.bLocked();' ).
+    lo_buf->add( '    } catch (error) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( '      return false;' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  function blockInput(event) {' ).
+    lo_buf->add( '    if (!locked) return;' ).
+    lo_buf->add( '    if (!isShellLocked()) {' ).
+    lo_buf->add( '      listener.unlock();' ).
+    lo_buf->add( '      return;' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '    event.preventDefault();' ).
+    lo_buf->add( '    event.stopImmediatePropagation();' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  var listener = {' ).
+    lo_buf->add( '    lock: function() {' ).
+    lo_buf->add( '      if (locked) return;' ).
+    lo_buf->add( '      locked = true;' ).
+    lo_buf->add( '      previousFocus = document.activeElement;' ).
+    lo_buf->add( '      previousBusy = document.body.getAttribute("aria-busy");' ).
+    lo_buf->add( '      document.body.setAttribute("aria-busy", "true");' ).
+    lo_buf->add( '      overlay.hidden = false;' ).
+    lo_buf->add( '      overlay.focus({ preventScroll: true });' ).
+    lo_buf->add( '    },' ).
+    lo_buf->add( '    unlock: function() {' ).
+    lo_buf->add( '      if (!locked) return;' ).
+    lo_buf->add( '      locked = false;' ).
+    lo_buf->add( '      var restoreFocus = document.activeElement === overlay;' ).
+    lo_buf->add( '      overlay.hidden = true;' ).
+    lo_buf->add( '      if (previousBusy === null) document.body.removeAttribute("aria-busy");' ).
+    lo_buf->add( '      else document.body.setAttribute("aria-busy", previousBusy);' ).
+    lo_buf->add( '      if (restoreFocus && previousFocus && document.body.contains(previousFocus)) {' ).
+    lo_buf->add( '        previousFocus.focus({ preventScroll: true });' ).
+    lo_buf->add( '      }' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  function destroy() {' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      shell.detachEvent(shell.E_EVENTS.Lock, listener, "lock");' ).
+    lo_buf->add( '      shell.detachEvent(shell.E_EVENTS.Unlock, listener, "unlock");' ).
+    lo_buf->add( '    } catch (error) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '    inputEvents.forEach(function(name) { window.removeEventListener(name, blockInput, true) });' ).
+    lo_buf->add( '    window.removeEventListener("pagehide", destroy);' ).
+    lo_buf->add( '    listener.unlock();' ).
+    lo_buf->add( '    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);' ).
+    lo_buf->add( '    gWebGuiBusyLock = null;' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  try {' ).
+    lo_buf->add( '    shell.attachEvent(shell.E_EVENTS.Lock, listener, "lock");' ).
+    lo_buf->add( '    shell.attachEvent(shell.E_EVENTS.Unlock, listener, "unlock");' ).
+    lo_buf->add( '  } catch (error) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( '    destroy();' ).
+    lo_buf->add( '    return;' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  inputEvents.forEach(function(name) {' ).
+    lo_buf->add( '    window.addEventListener(name, blockInput, { capture: true, passive: false });' ).
+    lo_buf->add( '  });' ).
+    lo_buf->add( '  window.addEventListener("pagehide", destroy);' ).
+    lo_buf->add( '  gWebGuiBusyLock = listener;' ).
+    lo_buf->add( '  if (isShellLocked()) listener.lock();' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( 'window.addEventListener("pageshow", function() { initializeWebGuiBusyLock() });' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Performance utils (for debugging)' ).
     lo_buf->add( ' **********************************************************/' ).
@@ -54697,6 +55198,56 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'function perfClear() {' ).
     lo_buf->add( '  gPerf = [];' ).
     lo_buf->add( '}' ).
+    lo_buf->add( '/**********************************************************' ).
+    lo_buf->add( ' * Keyboard' ).
+    lo_buf->add( ' **********************************************************/' ).
+    lo_buf->add( 'var gKeyboard = {' ).
+    lo_buf->add( '  order: {' ).
+    lo_buf->add( '    sourceViewer: 10, // Ctrl+Shift+?, a troubleshooting key that no page shortcut may take' ).
+    lo_buf->add( '    linkHints   : 20,' ).
+    lo_buf->add( '    menus       : 30, // arrow keys through dropdown menus (KeyNavigation)' ).
+    lo_buf->add( '    palette     : 40, // the toggle keys of the command palettes' ).
+    lo_buf->add( '    page        : 50, // shortcuts of the page helpers (repository overview, stage)' ).
+    lo_buf->add( '    hotkeys     : 60' ).
+    lo_buf->add( '  },' ).
+    lo_buf->add( '  handlers: {}' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'gKeyboard.on = function(type, order, handler) {' ).
+    lo_buf->add( '  var handlers = gKeyboard.handlers[type];' ).
+    lo_buf->add( '  if (!handlers) {' ).
+    lo_buf->add( '    handlers = gKeyboard.handlers[type] = [];' ).
+    lo_buf->add( '    document.addEventListener(type, function(event) { gKeyboard.dispatch(type, event) });' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  var i = handlers.length;' ).
+    lo_buf->add( '  while (i > 0 && handlers[i - 1].order > order) i--;' ).
+    lo_buf->add( '  handlers.splice(i, 0, { order: order, handler: handler });' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'gKeyboard.dispatch = function(type, event) {' ).
+    lo_buf->add( '  var handlers = gKeyboard.handlers[type].slice(); // a handler may register another one' ).
+    lo_buf->add( '  var firstError;' ).
+    lo_buf->add( '  for (var i = 0; i < handlers.length; i++) {' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      handlers[i].handler(event);' ).
+    lo_buf->add( '    } catch (error) {' ).
+    lo_buf->add( '      if (firstError === undefined) firstError = error;' ).
+    lo_buf->add( '    }' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  if (firstError !== undefined) throw firstError;' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'gKeyboard.isTakenByField = function(element, isArrowKey) {' ).
+    lo_buf->add( '  if (!element) return false;' ).
+    lo_buf->add( '  if (element.isContentEditable) return true;' ).
+    lo_buf->add( '  if (!/^(INPUT|TEXTAREA|SELECT)$/.test(element.nodeName || "")) return false;' ).
+    lo_buf->add( '  return isArrowKey || !element.readOnly;' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'gKeyboard.isTyping = function() {' ).
+    lo_buf->add( '  return gKeyboard.isTakenByField(document.activeElement, false);' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'gKeyboard.getVerticalArrow = function(event) {' ).
+    lo_buf->add( '  if (event.key === "ArrowUp" || event.key === "Up" || event.keyCode === 38) return -1;' ).
+    lo_buf->add( '  if (event.key === "ArrowDown" || event.key === "Down" || event.keyCode === 40) return 1;' ).
+    lo_buf->add( '  return 0;' ).
+    lo_buf->add( '};' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Repo Overview Logic' ).
     lo_buf->add( ' **********************************************************/' ).
@@ -54736,6 +55287,17 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'function escapeHtmlText(text) {' ).
     lo_buf->add( '  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");' ).
     lo_buf->add( '}' ).
+    lo_buf->add( 'function scrollRowIntoView(row) {' ).
+    lo_buf->add( '  if (!row.getBoundingClientRect) return;' ).
+    lo_buf->add( '  var rect   = row.getBoundingClientRect();' ).
+    lo_buf->add( '  var header = document.getElementById("header");' ).
+    lo_buf->add( '  var top    = header && header.getBoundingClientRect ? Math.max(0, header.getBoundingClientRect().bottom) : 0;' ).
+    lo_buf->add( '  if (rect.top < top) {' ).
+    lo_buf->add( '    window.scrollBy(0, rect.top - top);' ).
+    lo_buf->add( '  } else if (rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {' ).
+    lo_buf->add( '    row.scrollIntoView(false);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '}' ).
     lo_buf->add( 'function RepoOverViewHelper(opts) {' ).
     lo_buf->add( '  if (opts && opts.focusFilterKey) {' ).
     lo_buf->add( '    this.focusFilterKey = opts.focusFilterKey;' ).
@@ -54763,8 +55325,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '};' ).
     lo_buf->add( 'RepoOverViewHelper.prototype.registerKeyboardShortcuts = function() {' ).
     lo_buf->add( '  var self = this;' ).
-    lo_buf->add( '  document.addEventListener("keypress", function(event) {' ).
-    lo_buf->add( '    if (document.activeElement.id === "filter") {' ).
+    lo_buf->add( '  gKeyboard.on("keypress", gKeyboard.order.page, function(event) {' ).
+    lo_buf->add( '    if (event.defaultPrevented || LinkHints.areHintsDisplayed || gKeyboard.isTyping()) {' ).
     lo_buf->add( '      return;' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '    if (self.focusFilterKey && event.key === self.focusFilterKey && !CommandPalette.isVisible()) {' ).
@@ -54773,19 +55335,38 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      event.preventDefault();' ).
     lo_buf->add( '      return;' ).
     lo_buf->add( '    }' ).
-    lo_buf->add( '    var keycode         = event.keyCode;' ).
-    lo_buf->add( '    var rows            = Array.prototype.slice.call(self.getVisibleRows());' ).
-    lo_buf->add( '    var selected        = document.querySelector(".repo-overview tr.selected");' ).
-    lo_buf->add( '    var indexOfSelected = rows.indexOf(selected);' ).
-    lo_buf->add( '    var lastRow         = rows.length - 1;' ).
+    lo_buf->add( '    var keycode = event.keyCode;' ).
     lo_buf->add( '    if (keycode === 13 && document.activeElement.tagName.toLowerCase() !== "input") {' ).
     lo_buf->add( '      self.openSelectedRepo();' ).
-    lo_buf->add( '    } else if ((keycode === 52 || keycode === 56) && indexOfSelected > 0) {' ).
-    lo_buf->add( '      self.selectRowByIndex(indexOfSelected - 1);' ).
-    lo_buf->add( '    } else if ((keycode === 54 || keycode === 50) && indexOfSelected < lastRow) {' ).
-    lo_buf->add( '      self.selectRowByIndex(indexOfSelected + 1);' ).
+    lo_buf->add( '    } else if (keycode === 52 || keycode === 56) {' ).
+    lo_buf->add( '      self.selectAdjacentRow(-1);' ).
+    lo_buf->add( '    } else if (keycode === 54 || keycode === 50) {' ).
+    lo_buf->add( '      self.selectAdjacentRow(1);' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '  });' ).
+    lo_buf->add( '  gKeyboard.on("keydown", gKeyboard.order.page, function(event) {' ).
+    lo_buf->add( '    if (event.defaultPrevented || event.ctrlKey || event.altKey || event.metaKey || event.shiftKey) return;' ).
+    lo_buf->add( '    if (CommandPalette.isVisible() || !self.isArrowNavigationTarget(document.activeElement)) return;' ).
+    lo_buf->add( '    var offset = gKeyboard.getVerticalArrow(event);' ).
+    lo_buf->add( '    if (!offset) return;' ).
+    lo_buf->add( '    self.selectAdjacentRow(offset);' ).
+    lo_buf->add( '    event.preventDefault(); // the selected row is scrolled into view instead' ).
+    lo_buf->add( '  });' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'RepoOverViewHelper.prototype.isArrowNavigationTarget = function(element) {' ).
+    lo_buf->add( '  if (gKeyboard.isTakenByField(element, true)) return false;' ).
+    lo_buf->add( '  for (var el = element; el && el.nodeName; el = el.parentElement) {' ).
+    lo_buf->add( '    if (el.nodeName === "LI") return false;' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  return true;' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'RepoOverViewHelper.prototype.selectAdjacentRow = function(offset) {' ).
+    lo_buf->add( '  var rows     = Array.prototype.slice.call(this.getVisibleRows());' ).
+    lo_buf->add( '  var selected = document.querySelector(".repo-overview tr.selected");' ).
+    lo_buf->add( '  var index    = rows.indexOf(selected);' ).
+    lo_buf->add( '  if (index < 0 || index + offset < 0 || index + offset >= rows.length) return;' ).
+    lo_buf->add( '  this.selectRowByIndex(index + offset);' ).
+    lo_buf->add( '  scrollRowIntoView(rows[index + offset]);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'RepoOverViewHelper.prototype.openSelectedRepo = function() {' ).
     lo_buf->add( '  var selectedRow = document.querySelector(".repo-overview tr.selected");' ).
@@ -54831,7 +55412,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  var newKey                = "key=" + selectedRepoKey;' ).
     lo_buf->add( '  var actionLinks = document.querySelectorAll("a.action_link");' ).
     lo_buf->add( '  actionLinks.forEach(function(link) {' ).
-    lo_buf->add( '    link.href = link.href.replace(reKey, newKey);' ).
+    lo_buf->add( '    var href = link.getAttribute("href");' ).
+    lo_buf->add( '    if (href) link.setAttribute("href", href.replace(reKey, newKey));' ).
     lo_buf->add( '    if (link.hrefsav) {' ).
     lo_buf->add( '      link.hrefsav = link.hrefsav.replace(reKey, newKey);' ).
     lo_buf->add( '    }' ).
@@ -54981,7 +55563,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.onFilter({ type: "keypress", which: 13, target: this.dom.objectSearch });' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'StageHelper.prototype.setHooks = function() {' ).
-    lo_buf->add( '  window.addEventListener("keypress", this.onCtrlEnter.bind(this));' ).
+    lo_buf->add( '  gKeyboard.on("keypress", gKeyboard.order.page, this.onCtrlEnter.bind(this));' ).
     lo_buf->add( '  this.dom.stageTab.onclick        = this.onTableClick.bind(this);' ).
     lo_buf->add( '  this.dom.commitBtn.onclick       = this.submitCommit.bind(this);' ).
     lo_buf->add( '  this.dom.patchBtn.onclick        = this.submitPatch.bind(this);' ).
@@ -54991,10 +55573,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  window.addEventListener("pagehide", this.onPageUnload.bind(this));' ).
     lo_buf->add( '  window.addEventListener("load", this.onPageLoad.bind(this));' ).
     lo_buf->add( '  var self = this;' ).
-    lo_buf->add( '  document.addEventListener("keypress", function(event) {' ).
-    lo_buf->add( '    if (document.activeElement.id !== self.ids.objectSearch' ).
-    lo_buf->add( '      && self.focusFilterKey && event.key === self.focusFilterKey' ).
-    lo_buf->add( '      && !CommandPalette.isVisible()) {' ).
+    lo_buf->add( '  gKeyboard.on("keypress", gKeyboard.order.page, function(event) {' ).
+    lo_buf->add( '    if (event.defaultPrevented || LinkHints.areHintsDisplayed || gKeyboard.isTyping()) return;' ).
+    lo_buf->add( '    if (self.focusFilterKey && event.key === self.focusFilterKey && !CommandPalette.isVisible()) {' ).
     lo_buf->add( '      self.dom.objectSearch.focus();' ).
     lo_buf->add( '      event.preventDefault();' ).
     lo_buf->add( '    }' ).
@@ -55076,12 +55657,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.updateMenu();' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'StageHelper.prototype.getPlainText = function(elem) {' ).
-    lo_buf->add( '  var clone = elem.cloneNode(true);' ).
-    lo_buf->add( '  var hints = clone.querySelectorAll("span.link-hint");' ).
-    lo_buf->add( '  for (var i = hints.length - 1; i >= 0; i--) {' ).
-    lo_buf->add( '    hints[i].parentNode.removeChild(hints[i]);' ).
-    lo_buf->add( '  }' ).
-    lo_buf->add( '  return clone.textContent;' ).
+    lo_buf->add( '  return getTextWithoutLinkHints(elem);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'StageHelper.prototype.applyFilterToRow = function(row, filter, pattern) {' ).
     lo_buf->add( '  var targets = this.filterTargets.map(function(attr) {' ).
@@ -55286,11 +55862,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( ' * Diff Page Logic' ).
     lo_buf->add( ' **********************************************************/' ).
     lo_buf->add( 'function DiffHelper(params) {' ).
-    lo_buf->add( '  this.pageSeed    = params.seed;' ).
-    lo_buf->add( '  this.stageAction = params.stageAction;' ).
     lo_buf->add( '  this.dom = {' ).
-    lo_buf->add( '    diffList   : document.getElementById(params.ids.diffList),' ).
-    lo_buf->add( '    stageButton: document.getElementById(params.ids.stageButton)' ).
+    lo_buf->add( '    diffList: document.getElementById(params.ids.diffList)' ).
     lo_buf->add( '  };' ).
     lo_buf->add( '  this.repoKey = this.dom.diffList.getAttribute("data-repo-key");' ).
     lo_buf->add( '  if (!this.repoKey) return; // Unexpected' ).
@@ -55299,10 +55872,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  if (document.getElementById(params.ids.filterMenu)) {' ).
     lo_buf->add( '    this.checkList        = new CheckListWrapper(params.ids.filterMenu, this.onFilter.bind(this), this.onFilterOnlyMyChanges.bind(this));' ).
     lo_buf->add( '    this.dom.filterButton = document.getElementById(params.ids.filterMenu).parentNode;' ).
-    lo_buf->add( '  }' ).
-    lo_buf->add( '  if (this.dom.stageButton) {' ).
-    lo_buf->add( '    this.dom.stageButton.href    = "#";' ).
-    lo_buf->add( '    this.dom.stageButton.onclick = this.onStage.bind(this);' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'DiffHelper.prototype.onJump = function(e) {' ).
@@ -55368,21 +55937,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  });' ).
     lo_buf->add( '  this.highlightButton();' ).
     lo_buf->add( '};' ).
-    lo_buf->add( 'DiffHelper.prototype.onStage = function(e) { // eslint-disable-line no-unused-vars' ).
-    lo_buf->add( '  writeStoredState("sessionStorage", this.pageSeed, this.buildStageCache());' ).
-    lo_buf->add( '  var getParams = { key: this.repoKey, seed: this.pageSeed };' ).
-    lo_buf->add( '  submitSapeventForm(getParams, this.stageAction, "get");' ).
-    lo_buf->add( '};' ).
-    lo_buf->add( 'DiffHelper.prototype.buildStageCache = function() {' ).
-    lo_buf->add( '  var list = {};' ).
-    lo_buf->add( '  this.iterateDiffList(function(div) {' ).
-    lo_buf->add( '    var filename = div.getAttribute("data-file");' ).
-    lo_buf->add( '    if (!div.style.display && filename) { // No display override - visible !!' ).
-    lo_buf->add( '      list[filename] = "A"; // Add' ).
-    lo_buf->add( '    }' ).
-    lo_buf->add( '  });' ).
-    lo_buf->add( '  return list;' ).
-    lo_buf->add( '};' ).
     lo_buf->add( 'DiffHelper.prototype.iterateDiffList = function(cb /*, ...*/) {' ).
     lo_buf->add( '  var restArgs = Array.prototype.slice.call(arguments, 1);' ).
     lo_buf->add( '  var diffList = this.dom.diffList;' ).
@@ -55425,31 +55979,25 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( ' **********************************************************/' ).
     lo_buf->add( 'function DiffColumnSelection() {' ).
     lo_buf->add( '  this.selectedColumnIdx = -1;' ).
-    lo_buf->add( '  this.lineNumColumnIdx  = -1;' ).
+    lo_buf->add( '  this.selectedTable     = null;' ).
     lo_buf->add( '  document.addEventListener("mousedown", this.mousedownEventListener.bind(this));' ).
     lo_buf->add( '  document.addEventListener("copy", this.copyEventListener.bind(this));' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'DiffColumnSelection.prototype.mousedownEventListener = function(e) {' ).
-    lo_buf->add( '  var unifiedLineNumColumnIdx    = 0;' ).
-    lo_buf->add( '  var unifiedCodeColumnIdx       = 3;' ).
-    lo_buf->add( '  var splitLineNumLeftColumnIdx  = 0;' ).
-    lo_buf->add( '  var splitCodeLeftColumnIdx     = 2;' ).
-    lo_buf->add( '  var splitLineNumRightColumnIdx = 3;' ).
-    lo_buf->add( '  var splitCodeRightColumnIdx    = 5;' ).
+    lo_buf->add( '  var unifiedCodeColumnIdx = 3;' ).
     lo_buf->add( '  var range;' ).
     lo_buf->add( '  if (e.button !== 0) return; // function is only valid for left button, not right button' ).
     lo_buf->add( '  var td = e.target;' ).
+    lo_buf->add( '  this.selectedTable = null;' ).
     lo_buf->add( '  while (td !== null && td !== undefined && td.tagName !== "TD" && td.tagName !== "TBODY") td = td.parentElement;' ).
-    lo_buf->add( '  if (td === null || td === undefined) return;' ).
+    lo_buf->add( '  if (!td || td.tagName !== "TD") return;' ).
     lo_buf->add( '  var table = td.parentElement.parentElement;' ).
-    lo_buf->add( '  var patchColumnCount = 0;' ).
-    lo_buf->add( '  if (td.parentElement.cells[0].classList.contains("patch")) {' ).
-    lo_buf->add( '    patchColumnCount = 1;' ).
-    lo_buf->add( '  }' ).
-    lo_buf->add( '  if (td.classList.contains("diff_left")) {' ).
-    lo_buf->add( '    table.classList.remove("diff_select_right");' ).
-    lo_buf->add( '    table.classList.add("diff_select_left");' ).
-    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx !== splitCodeLeftColumnIdx + patchColumnCount) {' ).
+    lo_buf->add( '  if (td.classList.contains("diff_left") || td.classList.contains("diff_right")) {' ).
+    lo_buf->add( '    var isLeft = td.classList.contains("diff_left");' ).
+    lo_buf->add( '    table.classList.remove(isLeft ? "diff_select_right" : "diff_select_left");' ).
+    lo_buf->add( '    table.classList.add(isLeft ? "diff_select_left" : "diff_select_right");' ).
+    lo_buf->add( '    var splitCodeColumnIdx = td.cellIndex;' ).
+    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx !== splitCodeColumnIdx) {' ).
     lo_buf->add( '      if (document.body.createTextRange) { // All IE but Edge' ).
     lo_buf->add( '        range = document.body.createTextRange();' ).
     lo_buf->add( '        range.collapse();' ).
@@ -55458,43 +56006,36 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '        document.getSelection().removeAllRanges();' ).
     lo_buf->add( '      }' ).
     lo_buf->add( '    }' ).
-    lo_buf->add( '    this.selectedColumnIdx = splitCodeLeftColumnIdx + patchColumnCount;' ).
-    lo_buf->add( '    this.lineNumColumnIdx  = splitLineNumLeftColumnIdx + patchColumnCount;' ).
-    lo_buf->add( '  } else if (td.classList.contains("diff_right")) {' ).
-    lo_buf->add( '    table.classList.remove("diff_select_left");' ).
-    lo_buf->add( '    table.classList.add("diff_select_right");' ).
-    lo_buf->add( '    if (window.getSelection() && this.selectedColumnIdx !== splitCodeRightColumnIdx + patchColumnCount) {' ).
-    lo_buf->add( '      if (document.body.createTextRange) { // All IE but Edge' ).
-    lo_buf->add( '        range = document.body.createTextRange();' ).
-    lo_buf->add( '        range.collapse();' ).
-    lo_buf->add( '        range.select();' ).
-    lo_buf->add( '      } else {' ).
-    lo_buf->add( '        document.getSelection().removeAllRanges();' ).
-    lo_buf->add( '      }' ).
-    lo_buf->add( '    }' ).
-    lo_buf->add( '    this.selectedColumnIdx = splitCodeRightColumnIdx + patchColumnCount;' ).
-    lo_buf->add( '    this.lineNumColumnIdx  = splitLineNumRightColumnIdx + patchColumnCount;' ).
+    lo_buf->add( '    this.selectedColumnIdx = splitCodeColumnIdx;' ).
     lo_buf->add( '  } else if (td.classList.contains("diff_unified")) {' ).
     lo_buf->add( '    this.selectedColumnIdx = unifiedCodeColumnIdx;' ).
-    lo_buf->add( '    this.lineNumColumnIdx  = unifiedLineNumColumnIdx;' ).
     lo_buf->add( '  } else {' ).
     lo_buf->add( '    this.selectedColumnIdx = -1;' ).
-    lo_buf->add( '    this.lineNumColumnIdx  = -1;' ).
     lo_buf->add( '  }' ).
+    lo_buf->add( '  if (this.selectedColumnIdx >= 0) this.selectedTable = table;' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'DiffColumnSelection.prototype.copyEventListener = function(e) {' ).
-    lo_buf->add( '  var td = e.target;' ).
-    lo_buf->add( '  while (td !== null && td !== undefined && td.tagName !== "TD" && td.tagName !== "TBODY") td = td.parentElement;' ).
-    lo_buf->add( '  if (td !== null && td !== undefined) {' ).
+    lo_buf->add( '  if (e.defaultPrevented || !this.selectedTable || !this.selectedTable.contains(e.target)) return;' ).
+    lo_buf->add( '  var text = this.getSelectedText();' ).
+    lo_buf->add( '  if (text !== null) {' ).
     lo_buf->add( '    var clipboardData = (e.clipboardData === undefined ? window.clipboardData : e.clipboardData);' ).
-    lo_buf->add( '    var text          = this.getSelectedText();' ).
-    lo_buf->add( '    clipboardData.setData("text", text);' ).
-    lo_buf->add( '    e.preventDefault();' ).
+    lo_buf->add( '    if (!clipboardData || typeof clipboardData.setData !== "function") return;' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      if (clipboardData.setData("text", text) !== false) e.preventDefault();' ).
+    lo_buf->add( '    } catch (error) { // eslint-disable-line no-unused-vars' ).
+    lo_buf->add( '    }' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
+    lo_buf->add( 'function containsNode(element, node) {' ).
+    lo_buf->add( '  if (node && node.nodeType !== 1) node = node.parentNode;' ).
+    lo_buf->add( '  return !!node && element.contains(node);' ).
+    lo_buf->add( '}' ).
     lo_buf->add( 'DiffColumnSelection.prototype.getSelectedText = function() {' ).
+    lo_buf->add( '  if (!this.selectedTable || this.selectedColumnIdx < 0 || !window.getSelection) return null;' ).
     lo_buf->add( '  var sel   = window.getSelection();' ).
+    lo_buf->add( '  if (!sel || !sel.rangeCount || sel.isCollapsed) return null;' ).
     lo_buf->add( '  var range = sel.getRangeAt(0);' ).
+    lo_buf->add( '  if (!containsNode(this.selectedTable, range.startContainer) || !containsNode(this.selectedTable, range.endContainer)) return null;' ).
     lo_buf->add( '  var doc   = range.cloneContents();' ).
     lo_buf->add( '  var nodes = doc.querySelectorAll("tr");' ).
     lo_buf->add( '  var text  = "";' ).
@@ -55534,13 +56075,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( ' **********************************************************/' ).
     lo_buf->add( 'function KeyNavigation() { }' ).
     lo_buf->add( 'KeyNavigation.prototype.onkeydown = function(event) {' ).
-    lo_buf->add( '  if (event.defaultPrevented) return;' ).
+    lo_buf->add( '  if (event.defaultPrevented || event.ctrlKey || event.altKey || event.metaKey) return;' ).
     lo_buf->add( '  var isHandled = false;' ).
     lo_buf->add( '  if (event.key === "Enter" || event.key === " ") {' ).
     lo_buf->add( '    isHandled = this.onEnterOrSpace();' ).
-    lo_buf->add( '  } else if (/Down$/.test(event.key)) {' ).
+    lo_buf->add( '  } else if (gKeyboard.getVerticalArrow(event) === 1) {' ).
     lo_buf->add( '    isHandled = this.onArrowDown();' ).
-    lo_buf->add( '  } else if (/Up$/.test(event.key)) {' ).
+    lo_buf->add( '  } else if (gKeyboard.getVerticalArrow(event) === -1) {' ).
     lo_buf->add( '    isHandled = this.onArrowUp();' ).
     lo_buf->add( '  } else if (event.key === "Backspace") {' ).
     lo_buf->add( '    isHandled = this.onBackspace();' ).
@@ -55624,7 +56165,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  return this.onkeydown.bind(this);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'function enableArrowListNavigation() {' ).
-    lo_buf->add( '  document.addEventListener("keydown", new KeyNavigation().getHandler());' ).
+    lo_buf->add( '  gKeyboard.on("keydown", gKeyboard.order.menus, new KeyNavigation().getHandler());' ).
     lo_buf->add( '}' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Link Hints (Vimium-like)' ).
@@ -55643,12 +56184,16 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    maxHintStringLength = (targetsCount + baseLength).toString().length;' ).
     lo_buf->add( '  return Math.pow(10, maxHintStringLength - 1);' ).
     lo_buf->add( '};' ).
+    lo_buf->add( 'LinkHints.prototype.isDisabled = function(element) {' ).
+    lo_buf->add( '  var matches = element.matches || element.msMatchesSelector;' ).
+    lo_buf->add( '  return element.disabled || (matches && matches.call(element, ":disabled"));' ).
+    lo_buf->add( '};' ).
     lo_buf->add( 'LinkHints.prototype.deployHintContainers = function() {' ).
     lo_buf->add( '  var hintTargets = document.querySelectorAll("a, input, textarea, i");' ).
     lo_buf->add( '  var codeCounter = this.getHintStartValue(hintTargets.length);' ).
     lo_buf->add( '  var hintsMap    = { first: codeCounter };' ).
     lo_buf->add( '  for (var i = 0, N = hintTargets.length; i < N; i++) {' ).
-    lo_buf->add( '    if (hintTargets[i].type === "hidden") {' ).
+    lo_buf->add( '    if (hintTargets[i].type === "hidden" || this.isDisabled(hintTargets[i])) {' ).
     lo_buf->add( '      continue;' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '    var hint = {};' ).
@@ -55702,13 +56247,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  return this.handleKey.bind(this);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'LinkHints.prototype.handleKey = function(event) {' ).
-    lo_buf->add( '  if (event.defaultPrevented) {' ).
+    lo_buf->add( '  if (event.defaultPrevented || event.ctrlKey || event.altKey || event.metaKey || gKeyboard.isTyping()) {' ).
     lo_buf->add( '    return;' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '  if (event.key === "y") {' ).
     lo_buf->add( '    this.yankModeActive = !this.yankModeActive;' ).
     lo_buf->add( '  }' ).
-    lo_buf->add( '  if (event.key === this.linkHintHotKey && Hotkeys.isHotkeyCallPossible()) {' ).
+    lo_buf->add( '  if (event.key === this.linkHintHotKey) {' ).
     lo_buf->add( '    if (this.areHintsDisplayed && this.activatedDropdown) this.closeActivatedDropdown();' ).
     lo_buf->add( '    if (this.areHintsDisplayed) this.yankModeActive = false;' ).
     lo_buf->add( '    this.pendingPath = "";' ).
@@ -55718,13 +56263,14 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    }' ).
     lo_buf->add( '    this.displayHints(!this.areHintsDisplayed);' ).
     lo_buf->add( '  } else if (this.areHintsDisplayed) {' ).
+    lo_buf->add( '    event.preventDefault();' ).
     lo_buf->add( '    this.pendingPath += event.key;' ).
     lo_buf->add( '    var hint = this.hintsMap[this.pendingPath];' ).
     lo_buf->add( '    if (hint) { // we are there, we have a fully specified tooltip. Let us activate or yank it' ).
     lo_buf->add( '      this.displayHints(false);' ).
-    lo_buf->add( '      event.preventDefault();' ).
     lo_buf->add( '      if (this.yankModeActive) {' ).
-    lo_buf->add( '        submitSapeventForm({ clipboard: hint.parent.firstChild.textContent }, "clipboard");' ).
+    lo_buf->add( '        var yankText = this.getYankText(hint.parent);' ).
+    lo_buf->add( '        if (yankText) submitSapeventForm({ clipboard: yankText }, "clipboard");' ).
     lo_buf->add( '        this.yankModeActive = false;' ).
     lo_buf->add( '      } else {' ).
     lo_buf->add( '        this.hintActivate(hint);' ).
@@ -55733,18 +56279,27 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      var visibleHints = this.filterHints();' ).
     lo_buf->add( '      if (!visibleHints) {' ).
     lo_buf->add( '        this.displayHints(false);' ).
+    lo_buf->add( '        this.yankModeActive = false;' ).
     lo_buf->add( '        if (this.activatedDropdown) this.closeActivatedDropdown();' ).
     lo_buf->add( '      }' ).
     lo_buf->add( '    }' ).
     lo_buf->add( '  }' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'LinkHints.prototype.getYankText = function(element) {' ).
+    lo_buf->add( '  if (element.nodeName === "INPUT" || element.nodeName === "TEXTAREA") {' ).
+    lo_buf->add( '    return element.value || "";' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  return getTextWithoutLinkHints(element).trim() || element.title || "";' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'LinkHints.prototype.closeActivatedDropdown = function() {' ).
     lo_buf->add( '  if (!this.activatedDropdown) return;' ).
     lo_buf->add( '  this.activatedDropdown.classList.remove("force-nav-hover");' ).
     lo_buf->add( '  this.activatedDropdown = null;' ).
     lo_buf->add( '};' ).
+    lo_buf->add( 'LinkHints.areHintsDisplayed = false;' ).
     lo_buf->add( 'LinkHints.prototype.displayHints = function(isActivate) {' ).
-    lo_buf->add( '  this.areHintsDisplayed = isActivate;' ).
+    lo_buf->add( '  this.areHintsDisplayed      = isActivate;' ).
+    lo_buf->add( '  LinkHints.areHintsDisplayed = isActivate;' ).
     lo_buf->add( '  for (var i = this.hintsMap.first; i <= this.hintsMap.last; i++) {' ).
     lo_buf->add( '    var hint = this.hintsMap[i];' ).
     lo_buf->add( '    if (isActivate) {' ).
@@ -55757,6 +56312,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'LinkHints.prototype.hintActivate = function(hint) {' ).
+    lo_buf->add( '  if (this.isDisabled(hint.parent)) return;' ).
     lo_buf->add( '  if (hint.parent.nodeName === "A"' ).
     lo_buf->add( '    && (hint.parent.href.substr(0, hint.parent.href.length - 1) === document.location.href)// href is #' ).
     lo_buf->add( '    && !hint.parent.onclick // no handler' ).
@@ -55806,10 +56362,18 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  }' ).
     lo_buf->add( '  return visibleHints;' ).
     lo_buf->add( '};' ).
+    lo_buf->add( 'function getTextWithoutLinkHints(element) {' ).
+    lo_buf->add( '  var clone = element.cloneNode(true);' ).
+    lo_buf->add( '  var hints = clone.querySelectorAll("span.link-hint");' ).
+    lo_buf->add( '  for (var i = hints.length - 1; i >= 0; i--) {' ).
+    lo_buf->add( '    hints[i].parentNode.removeChild(hints[i]);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  return clone.textContent;' ).
+    lo_buf->add( '}' ).
     lo_buf->add( 'function activateLinkHints(linkHintHotKey) {' ).
     lo_buf->add( '  if (!linkHintHotKey) return;' ).
     lo_buf->add( '  var oLinkHint = new LinkHints(linkHintHotKey);' ).
-    lo_buf->add( '  document.addEventListener("keypress", oLinkHint.getHandler());' ).
+    lo_buf->add( '  gKeyboard.on("keypress", gKeyboard.order.linkHints, oLinkHint.getHandler());' ).
     lo_buf->add( '}' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Hotkeys' ).
@@ -55822,13 +56386,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      elAnchor.title = elAnchor.title + " [" + sKey + "]";' ).
     lo_buf->add( '    });' ).
     lo_buf->add( '    this.oKeyMap[sKey] = function(oEvent) {' ).
-    lo_buf->add( '      var diffHelper = (window.gHelper || {});' ).
+    lo_buf->add( '      var pageHelper = (window.gHelper || {});' ).
     lo_buf->add( '      if (this[action]) {' ).
     lo_buf->add( '        this[action].call(this);' ).
     lo_buf->add( '        return;' ).
     lo_buf->add( '      }' ).
-    lo_buf->add( '      if (diffHelper[action]) {' ).
-    lo_buf->add( '        diffHelper[action].call(diffHelper);' ).
+    lo_buf->add( '      if (pageHelper[action]) {' ).
+    lo_buf->add( '        pageHelper[action].call(pageHelper);' ).
     lo_buf->add( '        return;' ).
     lo_buf->add( '      }' ).
     lo_buf->add( '      if (window[action] && typeof (window[action]) === "function") {' ).
@@ -55851,10 +56415,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'Hotkeys.prototype.onkeydown = function(oEvent) {' ).
-    lo_buf->add( '  if (oEvent.defaultPrevented) {' ).
+    lo_buf->add( '  if (oEvent.defaultPrevented || oEvent.ctrlKey || oEvent.altKey || oEvent.metaKey) {' ).
     lo_buf->add( '    return;' ).
     lo_buf->add( '  }' ).
-    lo_buf->add( '  if (!Hotkeys.isHotkeyCallPossible()) {' ).
+    lo_buf->add( '  if (gKeyboard.isTyping()) {' ).
     lo_buf->add( '    return;' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '  var' ).
@@ -55863,11 +56427,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  if (fnHotkey) {' ).
     lo_buf->add( '    fnHotkey.call(this, oEvent);' ).
     lo_buf->add( '  }' ).
-    lo_buf->add( '};' ).
-    lo_buf->add( 'Hotkeys.isHotkeyCallPossible = function() {' ).
-    lo_buf->add( '  var activeElementType     = ((document.activeElement && document.activeElement.nodeName) || "");' ).
-    lo_buf->add( '  var activeElementReadOnly = ((document.activeElement && document.activeElement.readOnly) || false);' ).
-    lo_buf->add( '  return (activeElementReadOnly || (activeElementType !== "INPUT" && activeElementType !== "TEXTAREA"));' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'Hotkeys.formatKeyForDisplay = function(key) {' ).
     lo_buf->add( '  if (Array.isArray(key)) {' ).
@@ -55891,7 +56450,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '};' ).
     lo_buf->add( 'function setKeyBindings(oKeyMap) {' ).
     lo_buf->add( '  var oHotkeys = new Hotkeys(oKeyMap);' ).
-    lo_buf->add( '  document.addEventListener("keypress", oHotkeys.onkeydown.bind(oHotkeys));' ).
+    lo_buf->add( '  gKeyboard.on("keypress", gKeyboard.order.hotkeys, oHotkeys.onkeydown.bind(oHotkeys));' ).
     lo_buf->add( '  setTimeout(function() {' ).
     lo_buf->add( '    var div                     = document.getElementById("hotkeys-hint");' ).
     lo_buf->add( '    if  (div) div.style.opacity = 0.2;' ).
@@ -56144,15 +56703,31 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.renderAndBindElements();' ).
     lo_buf->add( '  this.hookEvents();' ).
     lo_buf->add( '  Hotkeys.addHotkeyToHelpSheet(opts.toggleKey, opts.hotkeyDescription);' ).
-    lo_buf->add( '  if (!CommandPalette.instances) {' ).
-    lo_buf->add( '    CommandPalette.instances = [];' ).
-    lo_buf->add( '  }' ).
     lo_buf->add( '  CommandPalette.instances.push(this);' ).
     lo_buf->add( '}' ).
+    lo_buf->add( 'CommandPalette.instances = [];' ).
     lo_buf->add( 'CommandPalette.prototype.hookEvents = function() {' ).
-    lo_buf->add( '  document.addEventListener("keydown", this.handleToggleKey.bind(this));' ).
+    lo_buf->add( '  gKeyboard.on("keydown", gKeyboard.order.palette, this.handleToggleKey.bind(this));' ).
+    lo_buf->add( '  document.addEventListener("mousedown", this.handleOutsideClick.bind(this));' ).
+    lo_buf->add( '  this.elements.input.addEventListener("keydown", this.handleInputKeydown.bind(this));' ).
     lo_buf->add( '  this.elements.input.addEventListener("keyup", this.handleInputKey.bind(this));' ).
     lo_buf->add( '  this.elements.ul.addEventListener("click", this.handleUlClick.bind(this));' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'CommandPalette.prototype.handleInputKeydown = function(event) {' ).
+    lo_buf->add( '  var arrow = gKeyboard.getVerticalArrow(event);' ).
+    lo_buf->add( '  if (arrow === -1) {' ).
+    lo_buf->add( '    this.selectPrev();' ).
+    lo_buf->add( '  } else if (arrow === 1) {' ).
+    lo_buf->add( '    this.selectNext();' ).
+    lo_buf->add( '  } else {' ).
+    lo_buf->add( '    return;' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  event.preventDefault();' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'CommandPalette.prototype.handleOutsideClick = function(event) {' ).
+    lo_buf->add( '  var target = event.target || event.srcElement;' ).
+    lo_buf->add( '  if (this.elements.palette.style.display === "none" || this.elements.palette.contains(target)) return;' ).
+    lo_buf->add( '  this.toggleDisplay(false);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'CommandPalette.prototype.renderCommandItem = function(cmd) {' ).
     lo_buf->add( '  var li = document.createElement("li");' ).
@@ -56191,11 +56766,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  event.preventDefault();' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'CommandPalette.prototype.handleInputKey = function(event) {' ).
-    lo_buf->add( '  if (event.key === "ArrowUp" || event.key === "Up") {' ).
-    lo_buf->add( '    this.selectPrev();' ).
-    lo_buf->add( '  } else if (event.key === "ArrowDown" || event.key === "Down") {' ).
-    lo_buf->add( '    this.selectNext();' ).
-    lo_buf->add( '  } else if (event.key === "Enter") {' ).
+    lo_buf->add( '  if (event.key === "Enter") {' ).
     lo_buf->add( '    this.exec(this.getSelected());' ).
     lo_buf->add( '  } else if (event.key === "Backspace" && !this.filter) {' ).
     lo_buf->add( '    this.toggleDisplay(false);' ).
@@ -56209,7 +56780,9 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'CommandPalette.prototype.applyFilter = function() {' ).
     lo_buf->add( '  for (var i = 0; i < this.commands.length; i++) {' ).
     lo_buf->add( '    var cmd = this.commands[i];' ).
-    lo_buf->add( '    if (!this.filter) {' ).
+    lo_buf->add( '    if (cmd.isAvailable && !cmd.isAvailable()) {' ).
+    lo_buf->add( '      cmd.element.style.display = "none";' ).
+    lo_buf->add( '    } else if (!this.filter) {' ).
     lo_buf->add( '      cmd.element.style.display = "";' ).
     lo_buf->add( '      cmd.titleSpan.innerText   = cmd.title;' ).
     lo_buf->add( '    } else {' ).
@@ -56318,7 +56891,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'CommandPalette.isVisible = function() {' ).
-    lo_buf->add( '  return CommandPalette.instances.reduce(function(result, instance) { return result || instance.elements.palette.style.display !== "none" }, false);' ).
+    lo_buf->add( '  return (CommandPalette.instances || []).reduce(function(result, instance) { return result || instance.elements.palette.style.display !== "none" }, false);' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'function addHotkey(opts) {' ).
     lo_buf->add( '  Hotkeys.addHotkeyToHelpSheet(opts.toggleKey, opts.hotkeyDescription);' ).
@@ -56336,6 +56909,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '      };' ).
     lo_buf->add( '    });' ).
     lo_buf->add( '  };' ).
+    lo_buf->add( '}' ).
+    lo_buf->add( 'function isActionLinkEnabled(anchor) {' ).
+    lo_buf->add( '  var listItem = anchor.parentElement;' ).
+    lo_buf->add( '  return !listItem || !listItem.classList.contains("action_link") || listItem.classList.contains("enabled");' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'function enumerateUiActions() {' ).
     lo_buf->add( '  var items = [];' ).
@@ -56365,12 +56942,13 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    var anchor = item[0];' ).
     lo_buf->add( '    var prefix = item[1];' ).
     lo_buf->add( '    var getTitle = function() {' ).
-    lo_buf->add( '      return (prefix ? prefix + ": " : "") + anchor.innerText.trim();' ).
+    lo_buf->add( '      return (prefix ? prefix + ": " : "") + getTextWithoutLinkHints(anchor).replace(/\s+/g, " ").trim();' ).
     lo_buf->add( '    };' ).
     lo_buf->add( '    return {' ).
-    lo_buf->add( '      action  : function() { clickSapEvent(anchor) },' ).
-    lo_buf->add( '      getTitle: getTitle,' ).
-    lo_buf->add( '      title   : getTitle()' ).
+    lo_buf->add( '      action     : function() { clickSapEvent(anchor) },' ).
+    lo_buf->add( '      getTitle   : getTitle,' ).
+    lo_buf->add( '      title      : getTitle(),' ).
+    lo_buf->add( '      isAvailable: function() { return isActionLinkEnabled(anchor) }' ).
     lo_buf->add( '    };' ).
     lo_buf->add( '  });' ).
     lo_buf->add( '  [].slice.call(document.querySelectorAll("input[type=''submit''], input[type=''button''][data-sapevent]"))' ).
@@ -56449,6 +57027,35 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    return fn.apply(this, arguments);' ).
     lo_buf->add( '  };' ).
     lo_buf->add( '}' ).
+    lo_buf->add( 'function rememberScrollPosition(pageId) {' ).
+    lo_buf->add( '  var storage;' ).
+    lo_buf->add( '  var key = "scrollTop:" + pageId;' ).
+    lo_buf->add( '  try {' ).
+    lo_buf->add( '    storage = window.sessionStorage;' ).
+    lo_buf->add( '    if (!storage) return;' ).
+    lo_buf->add( '    storage.getItem(key);' ).
+    lo_buf->add( '  } catch (err) { return err }' ).
+    lo_buf->add( '  function save() {' ).
+    lo_buf->add( '    var root = document.scrollingElement || document.documentElement;' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      storage.setItem(key, window.pageYOffset || root.scrollTop);' ).
+    lo_buf->add( '    } catch (err) { return err }' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  function restore() {' ).
+    lo_buf->add( '    try {' ).
+    lo_buf->add( '      var position = Number(storage.getItem(key));' ).
+    lo_buf->add( '      if (isFinite(position) && position >= 0) window.scrollTo(0, position);' ).
+    lo_buf->add( '    } catch (err) { return err }' ).
+    lo_buf->add( '    window.addEventListener("scroll", save);' ).
+    lo_buf->add( '    document.addEventListener("click", save, true);' ).
+    lo_buf->add( '    document.addEventListener("submit", save, true);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  if (document.readyState === "complete") {' ).
+    lo_buf->add( '    restore();' ).
+    lo_buf->add( '  } else {' ).
+    lo_buf->add( '    window.addEventListener("load", restore);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '}' ).
     lo_buf->add( '/**********************************************************' ).
     lo_buf->add( ' * Sticky Header' ).
     lo_buf->add( ' **********************************************************/' ).
@@ -56493,7 +57100,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '}' ).
     lo_buf->add( 'document.addEventListener("click", handleLocalFragmentClick);' ).
     lo_buf->add( 'function toggleBrowserControlWarning() {' ).
-    lo_buf->add( '  if (!isEdgeControl() || !gEnv.isSapGuiForWindows) {' ).
+    lo_buf->add( '  if (gEnv.browserControl !== "Edge") {' ).
     lo_buf->add( '    var elBrowserControlWarning = document.getElementById("browser-control-warning");' ).
     lo_buf->add( '    if (elBrowserControlWarning) {' ).
     lo_buf->add( '      elBrowserControlWarning.style.display = "none";' ).
@@ -56502,8 +57109,8 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '}' ).
     lo_buf->add( 'function displayBrowserControlFooter() {' ).
     lo_buf->add( '  var out = document.getElementById("browser-control-footer");' ).
-    lo_buf->add( '  if (!out || !gEnv.isSapGuiForWindows) return;' ).
-    lo_buf->add( '  out.innerHTML = " - " + (isEdgeControl() ? "Edge" : "IE");' ).
+    lo_buf->add( '  if (!out || !gEnv.browserControl) return;' ).
+    lo_buf->add( '  out.innerHTML = " - " + gEnv.browserControl;' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'function redirectBrowserBackToSapEvent(backAction) {' ).
     lo_buf->add( '  backAction = backAction || "go_back";' ).
@@ -56563,9 +57170,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  if (focusable.length === 0) return;' ).
     lo_buf->add( '  var firstElement = focusable[0];' ).
     lo_buf->add( '  var lastElement = focusable[focusable.length - 1];' ).
-    lo_buf->add( '  if (document.querySelector(".main-button")) {' ).
-    lo_buf->add( '    setInitialFocus("main-button");' ).
-    lo_buf->add( '  }' ).
     lo_buf->add( '  modal.onkeydown = function(e) {' ).
     lo_buf->add( '    var keyCode = e.keyCode || e.which;' ).
     lo_buf->add( '    if (keyCode === 9) {' ).
@@ -56598,6 +57202,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  this.source = null;' ).
     lo_buf->add( '  this.lineNumbers = null;' ).
     lo_buf->add( '  this.activeSource = null;' ).
+    lo_buf->add( '  this.validationUnlock = null;' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'SourceViewer.prototype.getHtmlSource = function() {' ).
     lo_buf->add( '  var doctype = document.doctype ? "<!DOCTYPE " + document.doctype.name + ">\n" : "";' ).
@@ -56613,7 +57218,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    if (!styleSheets[index].href || styleSheets[index].href.indexOf(url) === -1) continue;' ).
     lo_buf->add( '    try {' ).
     lo_buf->add( '      rules = styleSheets[index].cssRules || styleSheets[index].rules;' ).
-    lo_buf->add( '    } catch (error) {' ).
+    lo_buf->add( '    } catch (error) { // eslint-disable-line no-unused-vars' ).
     lo_buf->add( '      this.reportError("Could not access " + url + " from the document stylesheets.");' ).
     lo_buf->add( '      return "";' ).
     lo_buf->add( '    }' ).
@@ -56633,9 +57238,6 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( 'SourceViewer.prototype.reportError = function(message) {' ).
     lo_buf->add( '  this.log(message);' ).
     lo_buf->add( '  window.alert("abapGit source viewer error:\n" + message);' ).
-    lo_buf->add( '};' ).
-    lo_buf->add( 'SourceViewer.prototype.isInternetExplorer = function() {' ).
-    lo_buf->add( '  return !!document.documentMode;' ).
     lo_buf->add( '};' ).
     lo_buf->add( 'SourceViewer.prototype.updateLineNumbers = function(content) {' ).
     lo_buf->add( '  var lineCount = content ? content.split(/\r\n|\r|\n/).length : 1;' ).
@@ -56676,20 +57278,86 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    sourceViewer.reportError("Could not request " + url + ": " + error.message);' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '};' ).
+    lo_buf->add( 'SourceViewer.prototype.lockValidation = function() {' ).
+    lo_buf->add( '  var busy = document.createElement("div");' ).
+    lo_buf->add( '  var previousFocus = document.activeElement;' ).
+    lo_buf->add( '  var sourceViewer = this;' ).
+    lo_buf->add( '  var inputEvents = ["click", "dblclick", "mousedown", "mouseup", "pointerdown", "pointerup",' ).
+    lo_buf->add( '    "touchstart", "touchend", "keydown", "keypress", "keyup", "submit", "contextmenu"];' ).
+    lo_buf->add( '  busy.className = "source-viewer-busy";' ).
+    lo_buf->add( '  busy.tabIndex = -1;' ).
+    lo_buf->add( '  busy.setAttribute("role", "status");' ).
+    lo_buf->add( '  busy.setAttribute("aria-busy", "true");' ).
+    lo_buf->add( '  busy.textContent = "Validating HTML...";' ).
+    lo_buf->add( '  busy.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;" +' ).
+    lo_buf->add( '    "z-index:2147483647;cursor:wait;background:rgba(0,0,0,0.5);color:#fff;" +' ).
+    lo_buf->add( '    "display:flex;align-items:center;justify-content:center;font:16px sans-serif;";' ).
+    lo_buf->add( '  function blockInput(event) {' ).
+    lo_buf->add( '    event.preventDefault();' ).
+    lo_buf->add( '    event.stopImmediatePropagation();' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '  this.validationUnlock = function() {' ).
+    lo_buf->add( '    inputEvents.forEach(function(name) { window.removeEventListener(name, blockInput, true) });' ).
+    lo_buf->add( '    window.removeEventListener("pageshow", sourceViewer.validationUnlock);' ).
+    lo_buf->add( '    if (busy.parentNode) busy.parentNode.removeChild(busy);' ).
+    lo_buf->add( '    sourceViewer.validationUnlock = null;' ).
+    lo_buf->add( '    if (previousFocus && document.body.contains(previousFocus)) previousFocus.focus();' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  inputEvents.forEach(function(name) { window.addEventListener(name, blockInput, true) });' ).
+    lo_buf->add( '  window.addEventListener("pageshow", this.validationUnlock);' ).
+    lo_buf->add( '  document.body.appendChild(busy);' ).
+    lo_buf->add( '  busy.focus();' ).
+    lo_buf->add( '};' ).
+    lo_buf->add( 'SourceViewer.prototype.validateHtml = function() {' ).
+    lo_buf->add( '  if (this.validationUnlock) return;' ).
+    lo_buf->add( '  var form = document.createElement("form");' ).
+    lo_buf->add( '  var fields = {' ).
+    lo_buf->add( '    fragment: this.activeSource === this.sources[0] ? this.source.value : this.sources[0].content,' ).
+    lo_buf->add( '    prefill: "0",' ).
+    lo_buf->add( '    doctype: "Inline",' ).
+    lo_buf->add( '    group: "1",' ).
+    lo_buf->add( '    ss: "1",' ).
+    lo_buf->add( '    outline: "1"' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  form.method = "post";' ).
+    lo_buf->add( '  form.action = "https://validator.w3.org/check";' ).
+    lo_buf->add( '  form.enctype = "multipart/form-data";' ).
+    lo_buf->add( '  form.acceptCharset = "UTF-8";' ).
+    lo_buf->add( '  form.target = gEnv.isWebGui ? "_blank" : "_self";' ).
+    lo_buf->add( '  form.style.display = "none";' ).
+    lo_buf->add( '  Object.keys(fields).forEach(function(name) {' ).
+    lo_buf->add( '    var input = document.createElement("input");' ).
+    lo_buf->add( '    input.type = "hidden";' ).
+    lo_buf->add( '    input.name = name;' ).
+    lo_buf->add( '    input.value = fields[name];' ).
+    lo_buf->add( '    form.appendChild(input);' ).
+    lo_buf->add( '  });' ).
+    lo_buf->add( '  document.body.appendChild(form);' ).
+    lo_buf->add( '  try {' ).
+    lo_buf->add( '    if (!gEnv.isWebGui) this.lockValidation();' ).
+    lo_buf->add( '    form.submit();' ).
+    lo_buf->add( '  } catch (error) {' ).
+    lo_buf->add( '    if (this.validationUnlock) this.validationUnlock();' ).
+    lo_buf->add( '    this.reportError("Could not submit HTML to the W3C validator: " + error.message);' ).
+    lo_buf->add( '  } finally {' ).
+    lo_buf->add( '    document.body.removeChild(form);' ).
+    lo_buf->add( '  }' ).
+    lo_buf->add( '};' ).
     lo_buf->add( 'SourceViewer.prototype.show = function() {' ).
     lo_buf->add( '  var overlay = document.createElement("div");' ).
     lo_buf->add( '  var heading = document.createElement("div");' ).
     lo_buf->add( '  var close = document.createElement("button");' ).
     lo_buf->add( '  var tabs = document.createElement("div");' ).
+    lo_buf->add( '  var validate = document.createElement("button");' ).
     lo_buf->add( '  var sourceContainer = document.createElement("div");' ).
     lo_buf->add( '  var lineNumbers = document.createElement("pre");' ).
     lo_buf->add( '  var source = document.createElement("textarea");' ).
     lo_buf->add( '  var sourceViewer = this;' ).
+    lo_buf->add( '  this.sources[0].content = this.getHtmlSource();' ).
     lo_buf->add( '  overlay.className = "source-viewer";' ).
     lo_buf->add( '  overlay.tabIndex = -1;' ).
     lo_buf->add( '  heading.className = "source-viewer-heading";' ).
-    lo_buf->add( '  heading.appendChild(document.createTextNode("Source Viewer (" +' ).
-    lo_buf->add( '    (this.isInternetExplorer() ? "X" : "Esc or X") + " to close)"));' ).
+    lo_buf->add( '  heading.appendChild(document.createTextNode("Source Viewer (X to close)"));' ).
     lo_buf->add( '  close.type = "button";' ).
     lo_buf->add( '  close.innerHTML = "&times;";' ).
     lo_buf->add( '  close.className = "source-viewer-close";' ).
@@ -56698,7 +57366,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  sourceContainer.className = "source-viewer-content";' ).
     lo_buf->add( '  lineNumbers.setAttribute("aria-hidden", "true");' ).
     lo_buf->add( '  lineNumbers.className = "source-viewer-line-numbers";' ).
-    lo_buf->add( '  source.wrap = "off";' ).
+    lo_buf->add( '  source.wrap = "soft";' ).
     lo_buf->add( '  source.className = "source-viewer-source";' ).
     lo_buf->add( '  overlay.appendChild(heading);' ).
     lo_buf->add( '  heading.appendChild(close);' ).
@@ -56724,6 +57392,15 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    sourceDefinition.tab = tab;' ).
     lo_buf->add( '    tabs.appendChild(tab);' ).
     lo_buf->add( '  });' ).
+    lo_buf->add( '  validate.type = "button";' ).
+    lo_buf->add( '  validate.className = "source-viewer-tab";' ).
+    lo_buf->add( '  validate.appendChild(document.createTextNode("Validate HTML"));' ).
+    lo_buf->add( '  validate.title = "Send HTML source to the W3C validator" +' ).
+    lo_buf->add( '    (gEnv.isWebGui ? " (opens in a new tab)" : " (opens in the SAP GUI browser control)");' ).
+    lo_buf->add( '  validate.onclick = function() {' ).
+    lo_buf->add( '    sourceViewer.validateHtml();' ).
+    lo_buf->add( '  };' ).
+    lo_buf->add( '  tabs.appendChild(validate);' ).
     lo_buf->add( '  function stopEvent(event) {' ).
     lo_buf->add( '    event.preventDefault();' ).
     lo_buf->add( '    event.stopPropagation();' ).
@@ -56745,8 +57422,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '    sourceViewer.activeSource = null;' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '  function isCloseKey(event) {' ).
-    lo_buf->add( '    return event.key === "x" || event.key === "X" || event.keyCode === 88 ||' ).
-    lo_buf->add( '      (!sourceViewer.isInternetExplorer() && (event.key === "Escape" || event.keyCode === 27));' ).
+    lo_buf->add( '    return event.key === "x" || event.key === "X" || event.keyCode === 88;' ).
     lo_buf->add( '  }' ).
     lo_buf->add( '  function getTabIndex(event) {' ).
     lo_buf->add( '    if (event.key >= "1" && event.key <= "5") return Number(event.key) - 1;' ).
@@ -56800,10 +57476,10 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '  } else if (sourceDefinition.getContent) {' ).
     lo_buf->add( '    sourceDefinition.content = sourceDefinition.getContent(sourceDefinition.url);' ).
     lo_buf->add( '    display(sourceDefinition.content);' ).
-    lo_buf->add( '  } else if (this.isInternetExplorer() && sourceDefinition.url.indexOf("css/") === 0) {' ).
+    lo_buf->add( '  } else if (gEnv.isInternetExplorer && sourceDefinition.url.indexOf("css/") === 0) {' ).
     lo_buf->add( '    sourceDefinition.content = this.getStylesheetSource(sourceDefinition.url);' ).
     lo_buf->add( '    display(sourceDefinition.content);' ).
-    lo_buf->add( '  } else if (this.isInternetExplorer()) {' ).
+    lo_buf->add( '  } else if (gEnv.isInternetExplorer) {' ).
     lo_buf->add( '    display("Internet Explorer cannot display cached JavaScript source.\n" +' ).
     lo_buf->add( '      "Use the Edge WebView2 browser control for this source view.");' ).
     lo_buf->add( '  } else {' ).
@@ -56824,7 +57500,7 @@ CLASS /apmg/cl_apm_gui_factory IMPLEMENTATION.
     lo_buf->add( '};' ).
     lo_buf->add( 'function registerSourceViewerShortcuts() {' ).
     lo_buf->add( '  var sourceViewer = new SourceViewer();' ).
-    lo_buf->add( '  document.addEventListener("keydown", sourceViewer.handleKeydown.bind(sourceViewer));' ).
+    lo_buf->add( '  gKeyboard.on("keydown", gKeyboard.order.sourceViewer, sourceViewer.handleKeydown.bind(sourceViewer));' ).
     lo_buf->add( '}' ).
     lo_buf->add( 'registerSourceViewerShortcuts();' ).
 
@@ -57528,6 +58204,9 @@ CLASS /apmg/cl_apm_gui_page IMPLEMENTATION.
   METHOD /apmg/if_apm_gui_renderable~render.
     register_handlers( ).
 
+    " Get page content first because it might register styles and scripts
+    DATA(content) = render_content( ). " TODO -> render child
+
     " Real page
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
@@ -57536,13 +58215,22 @@ CLASS /apmg/cl_apm_gui_page IMPLEMENTATION.
     html->add( html_head( ) ).
     html->add( |<body class="{ page_control-page_layout }">| ).
 
+    html->add( render_deferred_parts( c_html_parts-styles ) ). " apm
+
     html->add( title( ) ).
 
     html->add( '<div class="not_sticky">' ).
 
     DATA(timer) = zcl_abapgit_timer=>create( )->start( ).
 
-    html->add( render_content( ) ). " TODO -> render child
+    " Visible until the page scripts confirm they initialized, and shown again
+    " by common.js for a later script error - on every page, so a broken
+    " common.js does not go unnoticed where most users start
+    html->add( /apmg/cl_apm_gui_chunk_lib=>render_js_error_banner( ) ).
+
+    html->add( '<div id="main">' ).
+    html->add( content ).
+    html->add( '</div>' ).
 
     DATA(render_content_time) = timer->end( ).
 
@@ -57682,7 +58370,7 @@ CLASS /apmg/cl_apm_gui_page IMPLEMENTATION.
     html->add( '<head>' ).
 
     html->add( '<meta http-equiv="content-type" content="text/html; charset=utf-8">' ).
-    html->add( '<meta http-equiv="X-UA-Compatible" content="IE=11,10,9,8" />' ).
+    html->add( '<meta http-equiv="X-UA-Compatible" content="IE=edge" />' ).
 
     html->add( '<title>apm</title>' ).
 
@@ -57871,9 +58559,9 @@ CLASS /apmg/cl_apm_gui_page IMPLEMENTATION.
     html->add( render_command_palettes( ) ).
     html->add( render_deferred_parts( c_html_parts-scripts ) ).
 
-    html->add( |toggleBrowserControlWarning();| ).
-    html->add( |displayBrowserControlFooter();| ).
-    html->add( |redirectBrowserBackToSapEvent();| ).
+    html->add( 'toggleBrowserControlWarning();' ).
+    html->add( 'displayBrowserControlFooter();' ).
+    html->add( 'redirectBrowserBackToSapEvent();' ).
     html->add( render_back_navigation( ) ).
 
     result = html.
@@ -57929,13 +58617,13 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
     CASE ii_event->mv_action.
       WHEN c_action-db_display.
         rs_handled-page  = /apmg/cl_apm_gui_page_db_entry=>create(
-          key          = key
-          edit_mode    = abap_false ).
+          key       = key
+          edit_mode = abap_false ).
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-new_page.
       WHEN c_action-db_edit.
         rs_handled-page  = /apmg/cl_apm_gui_page_db_entry=>create(
-          key          = key
-          edit_mode    = abap_true ).
+          key       = key
+          edit_mode = abap_true ).
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-new_page.
       WHEN c_action-delete.
         do_delete_entry( key ).
@@ -57991,6 +58679,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD /apmg/if_apm_html_table~get_row_attrs.
+    ASSERT 1 = 1.
   ENDMETHOD.
 
   METHOD /apmg/if_apm_html_table~render_cell.
@@ -58035,7 +58724,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
         ENDIF.
       WHEN 'cmd'.
         IF <key_extra> IS NOT INITIAL.
-          DATA(action)  = |key={ escape( val = |{ <key> }| format =  cl_abap_format=>e_url ) }|.
+          DATA(action)  = |key={ escape( val = |{ <key> }| format = cl_abap_format=>e_url ) }|.
           DATA(toolbar) = /apmg/cl_apm_html_toolbar=>create(
             )->add(
               iv_txt = 'Display'
@@ -58094,11 +58783,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
         filename = filename && '.txt'.
       ENDIF.
 
-      TRY.
-          DATA(content) = zcl_abapgit_convert=>string_to_xstring_utf8( db_entry-value ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-      ENDTRY.
+      DATA(content) = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( db_entry-value ).
 
       zip->add(
         name    = filename
@@ -58107,11 +58792,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
       INSERT explain_key( db_entry-keys ) INTO TABLE table_of_contents.
     ENDLOOP.
 
-    TRY.
-        content = zcl_abapgit_convert=>string_to_xstring_utf8( concat_lines_of( table_of_contents ) ).
-      CATCH zcx_abapgit_exception INTO error.
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-    ENDTRY.
+    content = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( concat_lines_of( table_of_contents ) ).
 
     zip->add(
       name    = c_toc_filename
@@ -58195,7 +58876,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
       CLEAR db_entry.
 
       " Remove extension
-      SPLIT <file>-name AT '.' INTO db_entry-keys DATA(rest).
+      SPLIT <file>-name AT '.' INTO db_entry-keys DATA(rest) ##NEEDED.
 
       TRANSLATE db_entry-keys USING '#/'.
 
@@ -58219,11 +58900,7 @@ CLASS /apmg/cl_apm_gui_page_db IMPLEMENTATION.
         RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = |Error getting file { <file>-name } from ZIP|.
       ENDIF.
 
-      TRY.
-          db_entry-value = zcl_abapgit_convert=>xstring_to_string_utf8( file_data ).
-        CATCH zcx_abapgit_exception INTO DATA(error).
-          RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-      ENDTRY.
+      db_entry-value = /apmg/cl_apm_abapgit_convert=>xstring_to_string_utf8( file_data ).
 
       INSERT db_entry INTO TABLE db_entries.
     ENDLOOP.
@@ -58831,9 +59508,9 @@ CLASS /apmg/cl_apm_gui_page_db_entry IMPLEMENTATION.
     html->set_title( cl_abap_typedescr=>describe_by_object_ref( me )->get_relative_name( ) ).
 
     " TODO: Replace with full-featured JSON editor; needs testing
-    " IF content_type = /apmg/if_apm_persist_apm=>c_content_type-json.
-      " html->add( lcl_json_editor=>get_javascript( ) )
-    " ENDIF.
+    " IF content_type = /apmg/if_apm_persist_apm=>c_content_type-json
+    "   html->add( lcl_json_editor=>get_javascript( ) )
+    " ENDIF
 
     result = html.
 
@@ -58910,11 +59587,7 @@ CLASS /apmg/cl_apm_gui_page_debuginf IMPLEMENTATION.
           iv_extension        = 'html'
           iv_default_filename = filename ).
 
-        TRY.
-            DATA(content) = zcl_abapgit_convert=>string_to_xstring_utf8( html_for_download ).
-          CATCH zcx_abapgit_exception INTO DATA(error).
-            RAISE EXCEPTION TYPE /apmg/cx_apm_error_prev EXPORTING previous = error.
-        ENDTRY.
+        DATA(content) = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( html_for_download ).
 
         frontend_services->file_download(
           iv_path = path
@@ -59008,7 +59681,7 @@ CLASS /apmg/cl_apm_gui_page_debuginf IMPLEMENTATION.
     ENDTRY.
 
     IF zcl_abapgit_factory=>get_environment( )->is_merged( ) = abap_true.
-      html->add( '<h2>apm - Standalone Version</h2>' ).
+      html->add( '<h1>apm - Standalone Version</h1>' ).
       html->add( '<div>To keep apm up-to-date (or also to contribute) you need to' ).
       html->add( |install it as a repository ({ html->a(
         iv_txt = 'Developer Version'
@@ -59019,28 +59692,29 @@ CLASS /apmg/cl_apm_gui_page_debuginf IMPLEMENTATION.
           DATA(package) = zcl_abapgit_factory=>get_tadir( )->get_object_package(
             iv_object   = 'PROG'
             iv_obj_name = '/APMG/APM' ).
-        CATCH cx_root ##NO_HANDLER.
+        CATCH cx_root.
           package = 'UNKNOWN'.
       ENDTRY.
-      html->add( '<h2>apm - Developer Version</h2>' ).
-      html->add( |<div>apm is installed in package { package }</div>| ).
+      html->add( '<h1>apm - Developer Version</h1>' ).
+      html->add( |<p>apm is installed in package { package }</p>| ).
     ENDIF.
 
     DATA(action) = |{ /apmg/if_apm_gui_router=>c_action-url }?url={
                       /apmg/if_apm_constants=>c_repository }/blob/main/CONTRIBUTING.md|.
 
-    html->add( '<br><div>' ).
+    html->add( '<br>' ).
+    html->add( '<p>' ).
     html->add_a(
       iv_txt   = 'Contribution guidelines for apm'
       iv_act   = action
-      iv_class = |url| ).
-    html->add( '</div>' ).
+      iv_class = 'url' ).
+    html->add( '</p>' ).
 
     DATA(release) = zcl_abapgit_factory=>get_environment( )->get_basis_release( ).
 
     html->add( '<h2>Environment</h2>' ).
 
-    html->add( |<table>| ).
+    html->add( '<table>' ).
     html->add( |<tr><td>apm version:    </td><td>{ /apmg/if_apm_version=>c_version }</td></tr>| ).
     html->add( |<tr><td>GUI type:       </td><td>{ gui_type }</td></tr>| ).
     html->add( |<tr><td>GUI version:    </td><td>{ gui_version }</td></tr>| ).
@@ -59048,8 +59722,8 @@ CLASS /apmg/cl_apm_gui_page_debuginf IMPLEMENTATION.
     html->add( |<tr><td>SY release:     </td><td>{ release-release } SP { release-sp }</td></tr>| ).
     html->add( |<tr><td>Charsize:       </td><td>{ cl_abap_char_utilities=>charsize }</td></tr>| ).
     html->add( |<tr><td>Endian:         </td><td>{ cl_abap_char_utilities=>endian }</td></tr>| ).
-    html->add( |</table>| ).
-    html->add( |<br>| ).
+    html->add( '</table>' ).
+    html->add( '<br>' ).
 
     " TODO: List support objects for bundling and IMPORT (see package /APMG/APM_OBJECTS)
 
@@ -59352,8 +60026,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_class    = c_action_class
       iv_li_class = c_action_class
     )->add(
-      iv_txt      = 'Registry'
-      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+      iv_txt = 'Registry'
+      iv_typ = /apmg/if_apm_html=>c_action_type-separator
     )->add(
       iv_txt      = 'Deprecate'
       iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_deprecate }{ c_dummy_key }|
@@ -59365,8 +60039,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_class    = c_action_class
       iv_li_class = c_action_class
     )->add(
-      iv_txt      = 'Danger'
-      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+      iv_txt = 'Danger'
+      iv_typ = /apmg/if_apm_html=>c_action_type-separator
     )->add(
       iv_txt      = 'Unpublish'
       iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_unpublish }{ c_dummy_key }|
@@ -59381,11 +60055,11 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
     DATA(toolbar) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-list' ).
 
     toolbar->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'file' ) && ' Init'
-      iv_act      = /apmg/if_apm_gui_router=>c_action-apm_init
+      iv_txt = /apmg/cl_apm_html=>icon( 'file' ) && ' Init'
+      iv_act = /apmg/if_apm_gui_router=>c_action-apm_init
     )->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'download-solid' ) && ' Install'
-      iv_act      = /apmg/if_apm_gui_router=>c_action-apm_install
+      iv_txt = /apmg/cl_apm_html=>icon( 'download-solid' ) && ' Install'
+      iv_act = /apmg/if_apm_gui_router=>c_action-apm_install
     )->add(
       iv_txt      = /apmg/cl_apm_html=>icon( 'upload-solid' ) && ' Publish'
       iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_publish }{ c_dummy_key }|
@@ -59397,17 +60071,17 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_class    = c_action_class
       iv_li_class = c_action_class
     )->add(
-      iv_txt      = /apmg/cl_apm_gui_buttons=>settings( )
-      io_sub      = /apmg/cl_apm_gui_menus=>settings( )
+      iv_txt = /apmg/cl_apm_gui_buttons=>settings( )
+      io_sub = /apmg/cl_apm_gui_menus=>settings( )
     )->add(
-      iv_txt      = /apmg/cl_apm_gui_buttons=>refresh( )
-      iv_act      = c_action-refresh
+      iv_txt = /apmg/cl_apm_gui_buttons=>refresh( )
+      iv_act = c_action-refresh
     )->add(
-      iv_txt      = /apmg/cl_apm_gui_buttons=>advanced( )
-      io_sub      = /apmg/cl_apm_gui_menus=>advanced( )
+      iv_txt = /apmg/cl_apm_gui_buttons=>advanced( )
+      io_sub = /apmg/cl_apm_gui_menus=>advanced( )
     )->add(
-      iv_txt      = /apmg/cl_apm_gui_buttons=>help( )
-      io_sub      = /apmg/cl_apm_gui_menus=>help( ) ).
+      iv_txt = /apmg/cl_apm_gui_buttons=>help( )
+      io_sub = /apmg/cl_apm_gui_menus=>help( ) ).
 
     ro_toolbar = toolbar.
 
@@ -59425,7 +60099,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
-    render_styles( html ).
+    register_styles( /apmg/cl_apm_gui_styles=>emoji( ) ).
 
     html->add( '<div class="repo-overview">' ).
 
@@ -59698,9 +60372,10 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
     html->add( |<form class="inline" method="post" action="sapevent:{ c_action-apply_filter }">| ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_text_input(
-      iv_name      = 'filter'
-      iv_label     = |Filter: { render_filter_help_hint( ) }|
-      iv_value     = settings-list_settings-filter ) ).
+      iv_name  = 'filter'
+      iv_label = |Filter: |
+      iv_value = settings-list_settings-filter ) ).
+    html->add( render_filter_help_hint( ) ).
     html->add( '<input type="submit" class="hidden-submit">' ).
     html->add( '</form>' ).
 
@@ -59710,7 +60385,7 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       icon_class = `grey`.
     ENDIF.
 
-    html->add( '<span class="toolbar-light pad-sides">' ).
+    html->add( '<div class="toolbar-light pad-sides" style="display: inline;">' ).
 
     IF settings-list_settings-filter IS NOT INITIAL.
       html->add( html->a(
@@ -59728,7 +60403,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       iv_act   = 'gHelper.toggleRepoListDetail()'
       iv_class = 'command'
       iv_typ   = /apmg/if_apm_html=>c_action_type-onclick ) ).
-    html->add( '</span>' ).
+
+    html->add( '</div>' ).
 
   ENDMETHOD.
 
@@ -59788,22 +60464,9 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
 
   METHOD render_registry_bar.
 
-    html->add( '<span style="float:right">' ).
+    html->add( '<div style="float:right;display:inline;">' ).
     html->add( /apmg/cl_apm_gui_menus=>registry( settings-registry )->render( ) ).
-    html->add( '</span>' ).
-
-  ENDMETHOD.
-
-  METHOD render_styles.
-
-    " Emoji Styles
-    DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_css( )
-      sep   = cl_abap_char_utilities=>newline ).
-
-    html->add( '<style>' ).
-    html->add( emoji_styles ).
-    html->add( '</style>' ).
+    html->add( '</div>' ).
 
   ENDMETHOD.
 
@@ -59830,8 +60493,8 @@ CLASS /apmg/cl_apm_gui_page_list IMPLEMENTATION.
       html->add( `<tr><td colspan="100%">` ).
       html->add( |(Only favorites are shown. {
         html->a(
-          iv_txt   = |Show All|
-          iv_act   = |{ c_action-toggle_favorites }?force_state={ abap_false }| )
+          iv_txt = |Show All|
+          iv_act = |{ c_action-toggle_favorites }?force_state={ abap_false }| )
         })| ).
       html->add( `</td></tr>` ).
       html->add( `</tfoot>` ).
@@ -60095,68 +60758,67 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     CONSTANTS:
       c_key          TYPE string VALUE `?key=`,
-      c_release_type TYPE string VALUE `&release_type=`,
-      c_action_class TYPE string VALUE `action_link`.
+      c_release_type TYPE string VALUE `&release_type=`.
 
     DATA(commands) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-view-commands' ).
 
     DATA(id) = /apmg/cl_apm_package_json=>get_id_from_package( package ).
 
     commands->add(
-      iv_txt      = 'Version'
-      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+      iv_txt = 'Version'
+      iv_typ = /apmg/if_apm_html=>c_action_type-separator
     )->add(
-      iv_txt      = '+ Major'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }major|
+      iv_txt = '+ Major'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }major|
     )->add(
-      iv_txt      = '+ Minor'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }minor|
+      iv_txt = '+ Minor'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }minor|
     )->add(
-      iv_txt      = '+ Patch'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }patch|
+      iv_txt = '+ Patch'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_version }{ c_key }{ id }{ c_release_type }patch|
     )->add(
-      iv_txt      = 'Update to Latest'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_update }{ c_key }{ id }|
+      iv_txt = 'Update to Latest'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_update }{ c_key }{ id }|
     )->add(
-      iv_txt      = 'Registry'
-      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+      iv_txt = 'Registry'
+      iv_typ = /apmg/if_apm_html=>c_action_type-separator
     )->add(
-      iv_txt      = 'Publish'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_publish }{ c_key }{ id }|
+      iv_txt = 'Publish'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_publish }{ c_key }{ id }|
     )->add(
-      iv_txt      = 'Deprecate'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_deprecate }{ c_key }{ id }|
+      iv_txt = 'Deprecate'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_deprecate }{ c_key }{ id }|
     )->add(
-      iv_txt      = 'Undeprecate'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_undeprecate }{ c_key }{ id }|
+      iv_txt = 'Undeprecate'
+      iv_act = |{ /apmg/if_apm_gui_router=>c_action-apm_undeprecate }{ c_key }{ id }|
     )->add(
-      iv_txt      = 'Danger'
-      iv_typ      = /apmg/if_apm_html=>c_action_type-separator
+      iv_txt = 'Danger'
+      iv_typ = /apmg/if_apm_html=>c_action_type-separator
     )->add(
-      iv_txt      = 'Unpublish'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_unpublish }{ c_key }{ id }|
-      iv_class    = 'red'
+      iv_txt   = 'Unpublish'
+      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-apm_unpublish }{ c_key }{ id }|
+      iv_class = 'red'
     )->add(
-      iv_txt      = 'Uninstall'
-      iv_act      = |{ /apmg/if_apm_gui_router=>c_action-apm_uninstall }{ c_key }{ id }|
-      iv_class    = 'red' ).
+      iv_txt   = 'Uninstall'
+      iv_act   = |{ /apmg/if_apm_gui_router=>c_action-apm_uninstall }{ c_key }{ id }|
+      iv_class = 'red' ).
 
     DATA(toolbar) = /apmg/cl_apm_html_toolbar=>create( 'apm-package-view' )->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'markdown' ) && ' Readme'
-      iv_act      = c_action-view_readme
+      iv_txt = /apmg/cl_apm_html=>icon( 'markdown' ) && ' Readme'
+      iv_act = c_action-view_readme
     )->add(
       " TODO: Replace with dependencies icon
-      iv_txt      = /apmg/cl_apm_html=>icon( 'code-fork-solid' ) && ' Dependencies'
-      iv_act      = c_action-view_dependencies
+      iv_txt = /apmg/cl_apm_html=>icon( 'code-fork-solid' ) && ' Dependencies'
+      iv_act = c_action-view_dependencies
     )->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'code-solid' ) && ' Manifest'
-      iv_act      = c_action-view_json
+      iv_txt = /apmg/cl_apm_html=>icon( 'code-solid' ) && ' Manifest'
+      iv_act = c_action-view_json
     )->add(
-      iv_txt      = /apmg/cl_apm_html=>icon( 'chevron-right' ) && ' Commands'
-      io_sub      = commands
+      iv_txt = /apmg/cl_apm_html=>icon( 'chevron-right' ) && ' Commands'
+      io_sub = commands
     )->add(
-      iv_txt      = 'Back'
-      iv_act      = /apmg/if_apm_gui_router=>c_action-go_back ).
+      iv_txt = 'Back'
+      iv_act = /apmg/if_apm_gui_router=>c_action-go_back ).
 
     ro_toolbar = toolbar.
 
@@ -60171,7 +60833,8 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
     markdown-data = get_markdown( ).
     package_json  = get_package_json( ).
 
-    render_styles( html ).
+    register_styles( /apmg/cl_apm_gui_styles=>markdown( get_styles( ) ) ).
+
     render_top( html ).
 
     html->add( '<div class="markdown">' ).
@@ -60241,11 +60904,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
   METHOD download_to_file.
 
-    TRY.
-        DATA(bin_data) = zcl_abapgit_convert=>string_to_xstring_utf8( data ).
-      CATCH zcx_abapgit_exception INTO DATA(error).
-        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = error->get_text( ).
-    ENDTRY.
+    DATA(bin_data) = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( data ).
 
     DATA(frontend_services) = /apmg/cl_apm_gui_factory=>get_frontend_services( ).
 
@@ -60273,6 +60932,13 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     " Always load data since it can be edited in another page
     result = /apmg/cl_apm_readme=>factory( package )->load( )->get( ).
+
+    " Replace deprecated HTML sometimes found in readmes
+    result = replace(
+      val  = result
+      sub  = '<div align="center">'
+      with = '<div class="center">'
+      occ  = 0 ).
 
   ENDMETHOD.
 
@@ -60383,6 +61049,20 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
       " Add other git hosts here...
       result = |{ url }/raw/{ branch }|.
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_styles.
+
+    result = |table.dependencies \{\n|
+      && |width: 100%;\n|
+      && |table-layout: fixed;\n|
+      && |\}\n|
+      && |table.dependencies .col-range   \{ width: 30%; \}\n|
+      && |table.dependencies .col-type    \{ width: 10%; \}\n|
+      && |table.dependencies .col-package \{ width: 40%; \}\n|
+      && |table.dependencies .col-version \{ width: 10%; \}\n|
+      && |table.dependencies .col-status  \{ width: 10%; \}|.
 
   ENDMETHOD.
 
@@ -60550,7 +61230,7 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
     ENDIF.
 
     IF none = abap_true.
-      html->add( '<h3>This package has no dependencies</h3>' ).
+      html->add( '<h2>This package has no dependencies</h2>' ).
     ENDIF.
 
     html->add( '</div>' ).
@@ -60563,13 +61243,13 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
     DATA(list) = /apmg/cl_apm_package_json=>list( instanciate = abap_true ).
 
-    html->add( '<table width="100%">' ).
+    html->add( '<table class="dependencies">' ).
     html->add( '<tr>' ).
-    html->add( '<th width="30%">Range</th>' ).
-    html->add( '<th width="10%">Type</th>' ).
-    html->add( '<th width="40%">Package</th>' ).
-    html->add( '<th width="10%">Version</th>' ).
-    html->add( '<th width="10%">Status</th>' ).
+    html->add( '<th class="col-range">Range</th>' ).
+    html->add( '<th class="col-type">Type</th>' ).
+    html->add( '<th class="col-package">Package</th>' ).
+    html->add( '<th class="col-version">Version</th>' ).
+    html->add( '<th class="col-status">Status</th>' ).
     html->add( '</tr>' ).
 
     LOOP AT dependencies ASSIGNING FIELD-SYMBOL(<dependency>).
@@ -60618,13 +61298,13 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
   METHOD render_engines_table.
 
-    html->add( '<table width="100%">' ).
+    html->add( '<table class="dependencies">' ).
     html->add( '<tr>' ).
-    html->add( '<th width="30%">Range</th>' ).
-    html->add( '<th width="10%">&nbsp;</th>' ).
-    html->add( '<th width="40%">&nbsp;</th>' ).
-    html->add( '<th width="10%">Version</th>' ).
-    html->add( '<th width="10%">Status</th>' ).
+    html->add( '<th class="col-range">Range</th>' ).
+    html->add( '<th class="col-type">&nbsp;</th>' ).
+    html->add( '<th class="col-package">&nbsp;</th>' ).
+    html->add( '<th class="col-version">Version</th>' ).
+    html->add( '<th class="col-status">Status</th>' ).
     html->add( '</tr>' ).
 
     LOOP AT engines ASSIGNING FIELD-SYMBOL(<engine>)
@@ -60714,12 +61394,12 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
   METHOD render_header_content.
 
-    html->add( '<div class="header">' ).
+    html->add( '<h1 class="header">' ).
     html->add( image ).
     html->add( '<span class="indent5em">' ).
     html->add( text ).
     html->add( '</span>' ).
-    html->add( '</div>' ).
+    html->add( '</h1>' ).
 
   ENDMETHOD.
 
@@ -60822,24 +61502,6 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD render_styles.
-
-    " Emoji Styles
-    DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_css( )
-      sep   = cl_abap_char_utilities=>newline ).
-
-    html->add( '<style>' ).
-    html->add( emoji_styles ).
-    html->add( '</style>' ).
-
-    " Markdown Styles
-    html->add( '<style>' ).
-    html->add( /apmg/cl_apm_markdown=>styles( ) ).
-    html->add( '</style>' ).
-
-  ENDMETHOD.
-
   METHOD render_top.
 
     " TODO: Add 'favorite' (star icon), 'write_protected' (lock icon) with toggles
@@ -60850,22 +61512,29 @@ CLASS /apmg/cl_apm_gui_page_package IMPLEMENTATION.
     html->add( '<table class="w100"><tr>' ).
     html->add( '<td>' ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_package_name( package ) ).
+
     html->add( '<span class="indent5em">' ).
     html->add( get_package_boxed(
       name  = package_json-name
       value = package_json-version ) ).
     html->add( '</span>' ).
+
     html->add( '<span class="indent5em">' ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_registry_link(
       iv_registry = settings-registry
       iv_name     = package_json-name
       iv_version  = package_json-version ) ).
     html->add( '</span>' ).
+
+    " TODO: if the package has an associated repository, add link to abapGit
+
     html->add( '</td>' ).
     html->add( '<td class="right">' ).
     html->add( get_toolbar( )->render( iv_right = abap_true ) ).
     html->add( '</td>' ).
-    html->add( '</tr></table>' ).
+
+    html->add( '</tr>' ).
+    html->add( '</table>' ).
 
     html->add( '</div>' ).
 
@@ -60972,7 +61641,8 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
-    render_styles( html ).
+    register_styles( /apmg/cl_apm_gui_styles=>emoji( get_styles( ) ) ).
+
     render_log( html ).
 
     html->add( |<div class="repo-overview">| ).
@@ -61033,20 +61703,17 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
     table_schema->add_column(
       tech_name      = 'NAME'
       display_name   = 'Name'
-      css_class      = 'name'
-      width          = '25%'
+      css_class      = 'col-name'
       allow_order_by = abap_true
     )->add_column(
       tech_name      = 'VERSION'
       display_name   = 'Version'
-      css_class      = 'version'
-      width          = '25%'
+      css_class      = 'col-version'
       allow_order_by = abap_true
     )->add_column(
       tech_name      = 'PACKAGE'
       display_name   = 'Package'
-      css_class      = 'package'
-      width          = '40%'
+      css_class      = 'col-package'
       allow_order_by = abap_true
     )->add_column(
       tech_name      = 'STATUS'
@@ -61119,6 +61786,19 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
     html->add( |var gHelper = new RepoOverViewHelper(\{ focusFilterKey: "f", pageId: "{ c_page_id }" \});| ).
 
     result = html.
+
+  ENDMETHOD.
+
+  METHOD get_styles.
+
+    result = |table.dependencies \{\n|
+      && |width: 100%;\n|
+      && |table-layout: fixed;\n|
+      && |\}\n|
+      && |table.dependencies .col-name    \{ width: 25%; \}\n|
+      && |table.dependencies .col-version \{ width: 25%; \}\n|
+      && |table.dependencies .col-package \{ width: 40%; \}\n|
+      && |tr.border-top td \{ border-top: 1px solid darkgray; \}|.
 
   ENDMETHOD.
 
@@ -61217,8 +61897,9 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
     html->add( |<form class="inline" method="post" action="sapevent:{ c_action-apply_filter }">| ).
     html->add( /apmg/cl_apm_gui_chunk_lib=>render_text_input(
       iv_name  = |filter|
-      iv_label = |Filter: { render_filter_help_hint( ) }|
+      iv_label = |Filter: |
       iv_value = settings-tree_settings-filter ) ).
+    html->add( render_filter_help_hint( ) ).
     html->add( |<input type="submit" class="hidden-submit">| ).
     html->add( |</form>| ).
 
@@ -61257,7 +61938,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
   METHOD render_log.
 
-    html->add( '<div>' ).
+    html->add( '<div class="log">' ).
 
     " TODO: Improve formatting/color by type
     LOOP AT log ASSIGNING FIELD-SYMBOL(<log>).
@@ -61299,20 +61980,6 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD render_styles.
-
-    " Emoji Styles
-    DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_css( )
-      sep   = cl_abap_char_utilities=>newline ).
-
-    html->add( '<style>' ).
-    html->add( emoji_styles ).
-    html->add( 'tr.border-top td { border-top: 1px solid darkgray; }' ).
-    html->add( '</style>' ).
-
-  ENDMETHOD.
-
   METHOD render_table_body.
 
     html->add( '<tbody>' ).
@@ -61341,9 +62008,9 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
   METHOD render_table_edges_fill.
 
     html->td(
-      iv_class     = 'ro-detail top'
-      is_data_attr = VALUE #( name = 'colspan' value = 5 )
-      iv_content   = '' ).
+      iv_class   = 'ro-detail top'
+      iv_colspan = 5
+      iv_content = '' ).
 
     html->td(
       iv_class   = 'ro-detail nodisplay top'
@@ -61436,9 +62103,9 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
     html->add( '<tr>' ).
 
     html->td(
-      iv_content   = out
-      is_data_attr = VALUE #( name = 'colspan' value = 4 )
-      iv_class     = 'top red' ).
+      iv_content = out
+      iv_colspan = 4
+      iv_class   = 'top red' ).
 
     " Remaining columns
     render_table_edges_fill( html ).
@@ -61471,7 +62138,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
         html->a(
           iv_txt = node->name
           iv_act = |{ c_action-select }?key={ node->package }| )
-      iv_class = 'top' ).
+      iv_class   = 'top' ).
 
     " Version
     html->td(
@@ -61479,7 +62146,7 @@ CLASS /apmg/cl_apm_gui_page_tree IMPLEMENTATION.
         html->a(
           iv_txt = node->version
           iv_act = |{ c_action-select }?key={ node->package }| )
-      iv_class = 'top' ).
+      iv_class   = 'top' ).
 
     " Package
     " FIX: node->installed flag should be evaluated but it's not correct in arborist
@@ -61594,7 +62261,15 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
         " Re-runs connection check
         rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
 
-      WHEN c_action-setup.
+      WHEN c_action-setup_persistence.
+
+        IF confirm_popup( ) = abap_true.
+          /apmg/cl_apm_persist_apm_setup=>install( ).
+        ENDIF.
+
+        rs_handled-state = /apmg/cl_apm_gui=>c_event_state-re_render.
+
+      WHEN c_action-setup_certificates.
 
         IF confirm_popup( ) = abap_true.
           /apmg/cl_apm_certificates=>setup( ).
@@ -61641,10 +62316,11 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
 
     DATA(html) = /apmg/cl_apm_html=>create( ).
 
-    render_styles( html ).
+    register_styles( /apmg/cl_apm_gui_styles=>emoji( get_styles( ) ) ).
 
     render_welcome( html ).
     render_connections( html ).
+    render_persistence( html ).
 
     ri_html = html.
 
@@ -61675,6 +62351,14 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD constructor.
+
+    super->constructor( ).
+
+    emoji = /apmg/cl_apm_emoji=>create( ).
+
+  ENDMETHOD.
+
   METHOD create.
 
     DATA(component) = NEW /apmg/cl_apm_gui_page_welcome( ).
@@ -61686,9 +62370,16 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD render_connections.
+  METHOD get_styles.
 
-    DATA(emoji) = /apmg/cl_apm_emoji=>create( ).
+    result = |table.repo_tab tbody td \{ padding: 10px \}\n|
+      && |table.repo_tab .col-name \{ width: 25% \}\n|
+      && |table.repo_tab .col-action \{ width: 70% \}|
+      && |table.repo_tab .col-status \{ width: 5% \}|.
+
+  ENDMETHOD.
+
+  METHOD render_connections.
 
     html->add( '<div style="padding:10px 150px 30px;font-size:large;">' ).
     html->add( '<h3>' ).
@@ -61702,11 +62393,11 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
 
     DO 2 TIMES.
       IF sy-index = 2.
-        DATA(name)     = 'Playground'.
+        DATA(name)     = `Playground`.
         DATA(registry) = /apmg/if_apm_constants=>c_playground.
         DATA(action)   = /apmg/if_apm_gui_router=>c_action-playground.
       ELSE.
-        name     = 'Registry'.
+        name     = `Registry`.
         registry = /apmg/if_apm_constants=>c_registry.
         action   = /apmg/if_apm_gui_router=>c_action-registry.
       ENDIF.
@@ -61721,31 +62412,39 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
       ENDTRY.
 
       html->add( '<tr>' ).
-      html->td( name ).
-      html->td( html->a( iv_txt = registry iv_act = action ) ).
+      html->td(
+        iv_content = name
+        iv_class   = 'col-name' ).
+      html->td(
+        iv_content = html->a( iv_txt = registry iv_act = action )
+        iv_class   = 'col-action' ).
 
       IF ping = c_ping_pong.
-        html->td( emoji->format( ':heavy_check_mark:' ) ).
+        html->td(
+          iv_content = emoji->format( ':heavy_check_mark:' )
+          iv_class   = 'col-status' ).
       ELSE.
-        html->td( emoji->format( ':x:' ) ).
+        html->td(
+          iv_content = emoji->format( ':x:' )
+          iv_class   = 'col-status' ).
+        html->add( '</tr>' ).
         html->add( '<tr>' ).
         html->td( '' ).
         html->td(
-          iv_content   = ping
-          is_data_attr = VALUE #( name = 'colspan' value = 2 ) ).
-        html->add( '</tr>' ).
-        html->add( '</tr>' ).
+          iv_content = ping
+          iv_colspan = 2 ).
       ENDIF.
+      html->add( '</tr>' ).
     ENDDO.
 
     IF missing_certificates = abap_true.
       html->add( '<tr>' ).
       html->td( '' ).
       html->td(
-        iv_content   = html->a(
+        iv_content = html->a(
           iv_txt = 'Install missing certificates...'
-          iv_act = c_action-setup )
-        is_data_attr = VALUE #( name = 'colspan' value = 2 ) ).
+          iv_act = c_action-setup_certificates )
+        iv_colspan = 2 ).
       html->add( '</tr>' ).
     ENDIF.
 
@@ -61755,79 +62454,187 @@ CLASS /apmg/cl_apm_gui_page_welcome IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD render_styles.
+  METHOD render_persistence.
 
-    " Emoji Styles
-    DATA(emoji_styles) = concat_lines_of(
-      table = /apmg/cl_apm_emoji=>create( )->get_css( )
-      sep   = cl_abap_char_utilities=>newline ).
+    html->add( '<div style="padding:10px 150px 30px;font-size:large;">' ).
+    html->add( '<h3>' ).
+    html->add( 'Persistence Check' ).
+    html->add( '</h3>' ).
 
-    html->add( '<style>' ).
-    html->add( emoji_styles ).
-    html->add( '</style>' ).
+    html->add( '<table class="repo_tab w100 paddings">' ).
+    html->add( '<tbody>' ).
+
+    DATA(missing_persistence) = abap_false.
+
+    DO 3 TIMES.
+      CASE sy-index.
+        WHEN 1.
+          DATA(name)   = `Database Table`.
+          DATA(object) = /apmg/if_apm_persist_apm=>c_tabname.
+          DATA(action) = /apmg/if_apm_gui_router=>c_action-jump
+                      && |?type=TABL&name={ /apmg/if_apm_persist_apm=>c_tabname }|.
+          DATA(exists) = /apmg/cl_apm_persist_apm_setup=>table_exists( ).
+        WHEN 2.
+          name   = `Lock Object`.
+          object = /apmg/if_apm_persist_apm=>c_lock.
+          action = /apmg/if_apm_gui_router=>c_action-jump
+                && |?type=ENQU&name={ /apmg/if_apm_persist_apm=>c_lock }|.
+          exists = /apmg/cl_apm_persist_apm_setup=>lock_exists( ).
+        WHEN 3.
+          name   = `Transport Object`.
+          object = /apmg/if_apm_persist_apm=>c_zapm.
+          action = /apmg/if_apm_gui_router=>c_action-jump_transaction && |?transaction=SOBJ|.
+          exists = /apmg/cl_apm_persist_apm_setup=>logo_exists( ).
+      ENDCASE.
+
+      html->add( '<tr>' ).
+      html->td(
+        iv_content = name
+        iv_class   = 'col-name' ).
+      html->td(
+        iv_content = html->a(
+          iv_txt = object
+          iv_act = action )
+        iv_class   = 'col-action' ).
+
+      IF exists = abap_true.
+        html->td(
+          iv_content = emoji->format( ':heavy_check_mark:' )
+          iv_class   = 'col-status' ).
+      ELSE.
+        missing_persistence = abap_true.
+        html->td(
+          iv_content = emoji->format( ':x:' )
+          iv_class   = 'col-status' ).
+      ENDIF.
+
+      html->add( '</tr>' ).
+    ENDDO.
+
+    IF missing_persistence = abap_true.
+      html->add( '<tr>' ).
+      html->td( '' ).
+      html->td(
+        iv_content = html->a(
+          iv_txt = 'Install missing persistence...'
+          iv_act = c_action-setup_persistence )
+        iv_colspan = 2 ).
+      html->add( '</tr>' ).
+    ENDIF.
+
+    html->add( '</tbody>' ).
+    html->add( '</table>' ).
+    html->add( '</div>' ).
 
   ENDMETHOD.
 
   METHOD render_welcome.
 
-    DATA(emoji) = /apmg/cl_apm_emoji=>create( ).
+    DATA(apm) = '<strong>apm</strong>'.
 
-    DATA(apm) = |<strong>apm</strong>|.
-
-    DATA(tutorial) = html->a(
-      iv_txt   = 'Tutorial'
-      iv_title = 'Tutorial'
-      iv_act   = /apmg/if_apm_gui_router=>c_action-tutorial ).
+    DATA(tutorial) = |{ emoji->format( ':point_right:' ) } |
+      && html->a(
+        iv_txt   = 'Tutorial'
+        iv_title = 'Tutorial'
+        iv_act   = /apmg/if_apm_gui_router=>c_action-tutorial ).
 
     html->add( '<div style="padding:20px 150px 0;font-size:large;">' ).
     html->add( '<h1>' ).
     html->add( emoji->format( 'Welcome to apm :wave:' ) ).
     html->add( '</h1>' ).
     html->add( '<p>' ).
-    html->add( |You're looking at something that, until recently, didn't exist: a real package manager for ABAP.| ).
+    html->add( 'You''re looking at the first package manager built for ABAP and written in ABAP.' ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |abapGit gave ABAP its git. For over 10 years we could share code but were missing solid| ).
-    html->add( |versioning, dependencies, and automatic installs. We had git, but no npm.| ).
+    html->add( 'abapGit gave ABAP its Git. For more than a decade, we''ve been able to share code, but' ).
+    html->add( 'package releases, dependency management, and automated installations were still missing.' ).
+    html->add( 'We had Git, but no npm.' ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |That's why I built { apm } and why a growing community of ABAP developers is building| ).
-    html->add( |ABAP open-source with you. Whatever you do here, you're now part of that.| ).
+    html->add( |That's why I built { apm }.| ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |You can:| ).
+    html->add( |With { apm }, you can:| ).
     html->add( '</p>' ).
     html->add( '<ul>' ).
     html->add( '<li>' ).
     html->add( emoji->format( ':mag_right:' ) ).
-    html->add( |Browse the registry and find packages to solve problems you would otherwise build from scratch| ).
+    html->add( '<strong>Find packages</strong> in the registry to solve problems you would otherwise' ).
+    html->add( 'build from scratch' ).
     html->add( '</li>' ).
     html->add( '<li>' ).
     html->add( emoji->format( ':package:' ) ).
-    html->add( |Install packages with a few clicks, dependencies resolve automatically| ).
+    html->add( '<strong>Install packages</strong> with a few clicks, with dependencies resolved automatically' ).
     html->add( '</li>' ).
     html->add( '<li>' ).
     html->add( emoji->format( ':rocket:' ) ).
-    html->add( |Publish & share your own ABAP code with a manifest and a version number, for the whole| ).
-    html->add( |ecosystem to use| ).
+    html->add( '<strong>Publish your code</strong> with a package manifest and version number so other' ).
+    html->add( 'ABAP developers can use it' ).
     html->add( '</li>' ).
     html->add( '</ul>' ).
     html->add( '<p>' ).
-    html->add( |No complex setup. One ABAP report. You're already up and running.| ).
+    html->add( 'Getting started takes just one ABAP report.' ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |Thanks for being here early. { apm } is new, so expect a few hiccups along the way, and please| ).
-    html->add( |keep the feedback coming. This ecosystem grows because of developers like you.| ).
+    html->add( |{ apm } is new, and your feedback helps shape it. Thanks for being here early and helping grow| ).
+    html->add( 'the ABAP open-source ecosystem.' ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |Ready to install your first package? Try the { tutorial }! Welcome aboard.| ).
+    html->add( |Follow the { tutorial } to install your first package! Welcome aboard.| ).
     html->add( emoji->format( ':tada:' ) ).
     html->add( '</p>' ).
     html->add( '<p>' ).
-    html->add( |Marc & the ABAP open-source community<br>| ).
+    html->add( 'Marc & the ABAP open-source community<br>' ).
     html->add( emoji->format( 'Made with :heart: in Canada' ) ).
     html->add( '</p>' ).
+    html->add( '<p class="center">' ).
+    html->add( emoji->format( ':arrow_down:' ) ).
+    html->add( '</p>' ).
     html->add( '</div>' ).
+
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS /apmg/cl_apm_gui_styles IMPLEMENTATION.
+
+  METHOD emoji.
+
+    " Emoji styles
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    html->add( '<style>' ).
+    html->add( '@scope {' ).
+    html->add( /apmg/cl_apm_emoji=>styles( ) ).
+
+    IF styles IS NOT INITIAL.
+      html->add( styles ).
+    ENDIF.
+
+    html->add( '}' ).
+    html->add( '</style>' ).
+
+    result = html.
+
+  ENDMETHOD.
+
+  METHOD markdown.
+
+    " Markdown + Emoji styles
+    DATA(html) = /apmg/cl_apm_html=>create( ).
+
+    html->add( '<style>' ).
+    html->add( '@scope {' ).
+    html->add( /apmg/cl_apm_markdown=>styles( ) ).
+    html->add( /apmg/cl_apm_emoji=>styles( ) ).
+
+    IF styles IS NOT INITIAL.
+      html->add( styles ).
+    ENDIF.
+
+    html->add( '}' ).
+    html->add( '</style>' ).
+
+    result = html.
 
   ENDMETHOD.
 ENDCLASS.
@@ -62394,9 +63201,10 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
               token = c_token-selectors
               style = c_css-selectors ).
 
-    add_rule( regex = c_regex-units
-              token = c_token-units
-              style = c_css-units ).
+    add_rule( regex    = c_regex-units
+              token    = c_token-units
+              style    = c_css-units
+              submatch = 2 ).
 
     " Styles for keywords
     add_rule( regex = ''
@@ -62433,6 +63241,7 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
 
     CLEAR keywords.
 
+    " Shared keywords keep the first inserted token unless followed directly by ( (function call).
     " 1) CSS Properties
     DATA(keyword_list) =
     'align-content|align-items|align-self|animation|animation-delay|animation-direction|animation-duration|' &&
@@ -62454,7 +63263,7 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
     'grid-row-end|grid-row-gap|grid-row-start|grid-template|grid-template-areas|grid-template-columns|' &&
     'grid-template-rows|hanging-punctuation|height|hyphens|isolation|justify-content|' &&
     'letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|' &&
-    'margin-bottom|margin-left|margin-right|margin-top|max-height|max-width|media|min-height|min-width|' &&
+    'margin-bottom|margin-left|margin-right|margin-top|max-height|max-width|min-height|min-width|' &&
     'mix-blend-mode|object-fit|object-position|opacity|order|outline|outline-color|outline-offset|' &&
     'outline-style|outline-width|overflow|overflow-x|overflow-y|padding|padding-bottom|padding-left|' &&
     'padding-right|padding-top|page-break-after|page-break-before|page-break-inside|perspective|' &&
@@ -62463,15 +63272,57 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
     'text-decoration-style|text-indent|text-justify|text-overflow|text-rendering|text-shadow|text-transform|' &&
     'transform|transform-origin|transform-style|transition|transition-delay|transition-duration|' &&
     'transition-property|transition-timing-function|unicode-bidi|user-select|vertical-align|visibility|' &&
-    'white-space|width|word-break|word-spacing|word-wrap|writing-mode|z-index'.
+    'white-space|width|word-break|word-spacing|word-wrap|writing-mode|z-index|' &&
+    'accent-color|all|appearance|aspect-ratio|backdrop-filter|background-position-x|background-position-y|' &&
+    'block-size|border-block|border-block-color|border-block-end|border-block-end-color|' &&
+    'border-block-end-style|border-block-end-width|border-block-start|border-block-start-color|' &&
+    'border-block-start-style|border-block-start-width|border-block-style|border-block-width|' &&
+    'border-end-end-radius|border-end-start-radius|border-inline|border-inline-color|border-inline-end|' &&
+    'border-inline-end-color|border-inline-end-style|border-inline-end-width|border-inline-start|' &&
+    'border-inline-start-color|border-inline-start-style|border-inline-start-width|border-inline-style|' &&
+    'border-inline-width|border-start-end-radius|border-start-start-radius|bottom|break-after|break-before|' &&
+    'break-inside|clip-path|contain|container|container-name|container-type|content-visibility|counter-set|' &&
+    'font-feature-settings|font-optical-sizing|font-variant-caps|font-variant-east-asian|' &&
+    'font-variant-ligatures|font-variant-numeric|font-variant-position|font-variation-settings|gap|' &&
+    'image-rendering|inline-size|inset|inset-block|inset-block-end|inset-block-start|inset-inline|' &&
+    'inset-inline-end|inset-inline-start|justify-items|justify-self|left|line-break|margin-block|' &&
+    'margin-block-end|margin-block-start|margin-inline|margin-inline-end|margin-inline-start|mask|' &&
+    'mask-clip|mask-composite|mask-image|mask-mode|mask-origin|mask-position|mask-repeat|mask-size|mask-type|' &&
+    'max-block-size|max-inline-size|min-block-size|min-inline-size|offset|offset-anchor|offset-distance|' &&
+    'offset-path|offset-position|offset-rotate|orphans|overflow-anchor|overflow-clip-margin|overflow-wrap|' &&
+    'overscroll-behavior|overscroll-behavior-block|overscroll-behavior-inline|overscroll-behavior-x|' &&
+    'overscroll-behavior-y|padding-block|padding-block-end|padding-block-start|padding-inline|' &&
+    'padding-inline-end|padding-inline-start|place-content|place-items|place-self|print-color-adjust|right|' &&
+    'rotate|row-gap|scale|scroll-margin|scroll-margin-block|scroll-margin-block-end|scroll-margin-block-start|' &&
+    'scroll-margin-bottom|scroll-margin-inline|scroll-margin-inline-end|scroll-margin-inline-start|' &&
+    'scroll-margin-left|scroll-margin-right|scroll-margin-top|scroll-padding|scroll-padding-block|' &&
+    'scroll-padding-block-end|scroll-padding-block-start|scroll-padding-bottom|scroll-padding-inline|' &&
+    'scroll-padding-inline-end|scroll-padding-inline-start|scroll-padding-left|scroll-padding-right|' &&
+    'scroll-padding-top|scroll-snap-align|scroll-snap-stop|scroll-snap-type|scrollbar-color|scrollbar-gutter|' &&
+    'scrollbar-width|shape-image-threshold|shape-margin|shape-outside|text-combine-upright|' &&
+    'text-decoration-skip-ink|text-decoration-thickness|text-orientation|text-size-adjust|' &&
+    'text-underline-offset|text-underline-position|text-wrap|top|touch-action|translate|widows|will-change|zoom'.
     insert_keywords( list  = keyword_list
                      token = c_token-properties ).
 
     " 2) CSS Values
     keyword_list =
-    'absolute|all|auto|block|bold|border-box|both|bottom|center|counter|cover|dashed|fixed|hidden|important|' &&
-    'inherit|initial|inline-block|italic|left|max-content|middle|min-content|no-repeat|none|normal|pointer|' &&
-    'relative|rem|right|solid|table-cell|text|top|transparent|underline|url'.
+    'absolute|auto|block|bold|border-box|both|center|cover|dashed|fixed|hidden|important|' &&
+    'inherit|initial|inline-block|italic|max-content|middle|min-content|no-repeat|none|normal|pointer|' &&
+    'relative|solid|table-cell|text|underline|unset|revert|revert-layer|' &&
+    'alternate|alternate-reverse|always|avoid|avoid-column|avoid-page|backwards|baseline|bolder|capitalize|' &&
+    'collapse|column-reverse|contain|content-box|contents|crosshair|default|dense|disc|dotted|double|' &&
+    'ease|ease-in|ease-in-out|ease-out|ellipsis|end|fill|flex-end|flex-start|flow-root|forwards|grab|grabbing|' &&
+    'groove|help|infinite|inline|inline-flex|inline-grid|inline-table|inside|keep-all|lighter|linear|' &&
+    'list-item|lowercase|ltr|move|no-drop|nowrap|not-allowed|outside|overline|paused|progress|repeat|' &&
+    'repeat-x|repeat-y|reverse|ridge|round|row|row-reverse|rtl|running|scroll|separate|space|' &&
+    'space-around|space-between|space-evenly|start|static|step-end|step-start|sticky|stretch|subgrid|' &&
+    'table-caption|table-column|table-column-group|table-footer-group|table-header-group|table-row|' &&
+    'table-row-group|uppercase|visible|wait|wrap|wrap-reverse|zoom-in|zoom-out|' &&
+    'balance|break-all|break-word|column|cursive|ew-resize|fantasy|horizontal-tb|justify|large|larger|' &&
+    'line-through|medium|monospace|n-resize|ne-resize|nesw-resize|ns-resize|nw-resize|nwse-resize|' &&
+    'oblique|pre-line|pre-wrap|print|s-resize|sans-serif|screen|se-resize|serif|small|small-caps|' &&
+    'smaller|smooth|sw-resize|thick|thin|vertical-lr|vertical-rl|w-resize|x-large|x-small|xx-large|xx-small'.
     insert_keywords( list  = keyword_list
                      token = c_token-values ).
 
@@ -62479,20 +63330,29 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
     keyword_list =
     ':active|::after|::before|:checked|:disabled|:empty|:enabled|:first-child|::first-letter|::first-line|' &&
     ':first-of-type|:focus|:hover|:lang|:last-child|:last-of-type|:link|:not|:nth-child|:nth-last-child|' &&
-    ':nth-last-of-type|:nth-of-type|:only-child|:only-of-type|:root|:target|:visited'.
+    ':nth-last-of-type|:nth-of-type|:only-child|:only-of-type|:root|:target|:visited|' &&
+    ':any-link|:default|:defined|:dir|:focus-visible|:focus-within|:has|:indeterminate|:in-range|' &&
+    ':invalid|:is|:optional|:out-of-range|:placeholder-shown|:read-only|:read-write|:required|' &&
+    ':user-invalid|:user-valid|:valid|:where|::backdrop|::file-selector-button|::marker|::part|' &&
+    '::placeholder|::selection|::slotted'.
     insert_keywords( list  = keyword_list
                      token = c_token-selectors ).
 
     " 4) CSS Functions
     keyword_list =
-    'attr|calc|cubic-bezier|hsl|hsla|linear-gradient|math|radial-gradient|repeating-linear-gradient|' &&
-    'repeating-radial-gradient|rgb|rgba|rotate|scale|theme|translateX|translateY|var'.
+    'attr|blur|brightness|calc|circle|clamp|color|color-mix|conic-gradient|contrast|counter|counters|' &&
+    'cubic-bezier|drop-shadow|ellipse|env|fit-content|grayscale|hsl|hsla|hue-rotate|hwb|inset|invert|' &&
+    'lab|lch|linear-gradient|matrix|matrix3d|max|min|minmax|oklab|oklch|opacity|perspective|polygon|' &&
+    'radial-gradient|repeat|repeating-conic-gradient|repeating-linear-gradient|repeating-radial-gradient|' &&
+    'rgb|rgba|rotate|rotate3d|rotatex|rotatey|rotatez|saturate|scale|scale3d|scalex|scaley|scalez|sepia|' &&
+    'skew|skewx|skewy|steps|translate|translate3d|translatex|translatey|translatez|url|var|math|theme'.
     insert_keywords( list  = keyword_list
                      token = c_token-functions ).
 
     " 5) CSS Colors
     keyword_list =
-    '#|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|' &&
+    'currentcolor|transparent|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|' &&
+    'blanchedalmond|blue|blueviolet|brown|' &&
     'burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|' &&
     'darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|' &&
     'darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|' &&
@@ -62567,37 +63427,32 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
     'webkit-transform|webkit-transform-origin|webkit-transform-origin-x|' &&
     'webkit-transform-origin-y|webkit-transform-origin-z|webkit-transition|' &&
     'webkit-transition-delay|webkit-user-drag|webkit-user-modify|overflow-clip-box|' &&
-    'overflow-clip-box-block|overflow-clip-box-inline|zoom'.
+    'overflow-clip-box-block|overflow-clip-box-inline|moz-appearance|moz-user-select|ms-user-select|' &&
+    'webkit-animation|webkit-animation-delay|webkit-animation-direction|webkit-animation-duration|' &&
+    'webkit-animation-fill-mode|webkit-animation-iteration-count|webkit-animation-name|' &&
+    'webkit-animation-play-state|webkit-animation-timing-function|webkit-user-select'.
     insert_keywords( list  = keyword_list
                      token = c_token-extensions ).
 
-    " 6) CSS At-Rules (SASS/SCSS)
+    " 7) CSS At-Rules (including SASS/SCSS)
     keyword_list =
-    '@|charset|counter-style|font-face|import|keyframes|@use|@mixin|@include|@extend'.
+    '@charset|@container|@counter-style|@font-face|@font-feature-values|@font-palette-values|@import|' &&
+    '@keyframes|@layer|@media|@namespace|@page|@property|@scope|@starting-style|@supports|@viewport|' &&
+    '@-moz-keyframes|@-o-keyframes|@-webkit-keyframes|@use|@mixin|@include|@extend'.
     insert_keywords( list  = keyword_list
                      token = c_token-at_rules ).
 
-    " 7) HTML tag
+    " 8) HTML Tags (including legacy elements)
     keyword_list =
-    'doctyype|a|abbr|acronym|address|applet|area|b|base|basefont|bdo|bgsound|big|blink|blockquote|' &&
-    'body|br|button|caption|center|cite|code|col|colgroup|dd|del|dfn|dir|div|dl|dt|em|embed|fieldset|' &&
-    'font|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|hr|html|i|iframe|ilayer|img|input|ins|isindex|' &&
-    'kbd|keygen|label|layer|legend|li|link|listing|map|menu|meta|multicol|nobr|noembed|noframes|' &&
-    'nolayer|noscript|object|ol|optgroup|option|p|param|plaintext|pre|q|s|samp|script|select|server|' &&
-    'small|sound|spacer|span|strike|strong|style|sub|sup|tbody|textarea|title|tt|u|ul|var|wbr|xmp|' &&
-    'xsl|xml|accesskey|action|align|alink|alt|background|balance|behavior|bgcolor|bgproperties|' &&
-    'border|bordercolor|bordercolordark|bordercolorlight|bottommargin|checked|class|classid|clear|' &&
-    'code|codebase|codetype|color|cols|colspan|compact|content|controls|coords|data|datafld|' &&
-    'dataformatas|datasrc|direction|disabled|dynsrc|enctype|event|face|for|frame|frameborder|' &&
-    'framespacing|height|hidden|href|hspace|http-equiv|id|ismap|lang|language|leftmargin|link|loop|' &&
-    'lowsrc|marginheight|marginwidth|maxlength|mayscript|method|methods|multiple|name|nohref|' &&
-    'noresize|noshade|nowrap|palette|pluginspage|public|readonly|rel|rev|rightmargin|rows|rowspan|' &&
-    'rules|scroll|scrollamount|scrolldelay|scrolling|selected|shape|size|span|src|start|style|' &&
-    'tabindex|target|text|title|topmargin|truespeed|type|url|urn|usemap|valign|value|vlink|volume|' &&
-    'vrml|vspace|width|wrap|apply-templates|attribute|choose|comment|define-template-set|' &&
-    'entity-ref|eval|expr|for-each|if|match|no-entities|node-name|order-by|otherwise|select|' &&
-    'stylesheet|template|test|value-of|version|when|xmlns|xsl|cellpadding|cellspacing|table|td|' &&
-    'tfoot|th|thead|tr'.
+    'a|abbr|acronym|address|applet|area|article|aside|audio|b|base|basefont|bdi|bdo|bgsound|big|blink|' &&
+    'blockquote|body|br|button|canvas|caption|center|cite|code|col|colgroup|data|datalist|dd|del|details|' &&
+    'dfn|dialog|dir|div|dl|dt|em|embed|fieldset|figcaption|figure|font|footer|form|frame|frameset|' &&
+    'h1|h2|h3|h4|h5|h6|head|header|hgroup|hr|html|i|iframe|ilayer|img|input|ins|isindex|kbd|keygen|' &&
+    'label|layer|legend|li|link|listing|main|map|mark|menu|meta|meter|multicol|nav|nobr|noembed|noframes|' &&
+    'nolayer|noscript|object|ol|optgroup|option|output|p|param|picture|plaintext|pre|progress|q|rp|rt|' &&
+    'ruby|s|samp|script|search|section|select|server|slot|small|sound|source|spacer|span|strike|strong|' &&
+    'style|sub|summary|sup|table|tbody|td|template|textarea|tfoot|th|thead|time|title|tr|track|tt|u|ul|' &&
+    'var|video|wbr|xmp|xml|xsl'.
     insert_keywords( list  = keyword_list
                      token = c_token-html ).
 
@@ -62630,8 +63485,9 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
     SORT matches BY offset length DESCENDING.
 
     DATA(line_len)   = strlen( line ).
-    DATA(prev_token) = ''.
-    DATA(prev_end)   = ''.
+    DATA(next)       = 0.
+    DATA(prev_token) = ``.
+    DATA(prev_end)   = 0.
 
     " Check if this is part of multi-line comment and mark it accordingly
     IF comment = abap_true.
@@ -62669,6 +63525,12 @@ CLASS /apmg/cl_apm_highlighter_css IMPLEMENTATION.
           READ TABLE keywords ASSIGNING FIELD-SYMBOL(<keyword>) WITH TABLE KEY keyword = match.
           IF sy-subrc = 0.
             <match>-token = <keyword>-token.
+          ENDIF.
+
+          " A keyword directly followed by ( is a function call; keep @ rules as at-rules
+          next = <match>-offset + <match>-length.
+          IF next < line_len AND match(1) <> '@' AND line+next(1) = '('.
+            <match>-token = c_token-functions.
           ENDIF.
 
         WHEN c_token-comment.
@@ -63297,16 +64159,15 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
 
     FIELD-SYMBOLS <prev_match> TYPE ty_match.
 
-    " Longest matches
-    SORT matches BY offset length DESCENDING.
-
     DATA(line_len)   = strlen( line ).
     DATA(prev_token) = ''.
+    DATA(prev_end) = 0.
     DATA(state) = 'O'. " O - for open tag; C - for closed tag;
 
-    " Check if this is part of multi-line comment and mark it accordingly
+    " A continued comment ends at the first delimiter, regardless of its content.
     IF comment = abap_true.
-      IF NOT line_exists( matches[ token = c_token-comment ] ).
+      FIND FIRST OCCURRENCE OF '-->' IN line MATCH OFFSET DATA(comment_end).
+      IF sy-subrc <> 0.
         CLEAR matches.
         APPEND INITIAL LINE TO matches ASSIGNING FIELD-SYMBOL(<match>).
         <match>-token = c_token-comment.
@@ -63314,10 +64175,23 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
         <match>-length = line_len.
         RETURN.
       ENDIF.
+      comment_end = comment_end + 3.
+      DELETE matches WHERE offset < comment_end.
+      APPEND VALUE #( token = c_token-comment offset = 0 length = comment_end ) TO matches.
+      comment = abap_false.
     ENDIF.
+
+    " Longest matches, including any continued comment prefix.
+    SORT matches BY offset length DESCENDING.
 
     LOOP AT matches ASSIGNING <match>.
       DATA(index) = sy-tabix.
+
+      " Ignore comment delimiters and nested quotes inside an accepted match.
+      IF <match>-offset < prev_end.
+        DELETE matches INDEX index.
+        CONTINUE.
+      ENDIF.
 
       DATA(match) = substring( val = line
                                off = <match>-offset
@@ -63346,6 +64220,7 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
           ENDIF.
 
         WHEN c_token-comment.
+          state = 'C'.
           CASE match.
             WHEN '<!--'.
               DELETE matches WHERE offset > <match>-offset.
@@ -63359,7 +64234,7 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
               comment = abap_false.
             WHEN OTHERS.
               DATA(cmmt_end) = <match>-offset + <match>-length.
-              DELETE matches WHERE offset > <match>-offset AND offset <= cmmt_end.
+              DELETE matches WHERE offset > <match>-offset AND offset < cmmt_end.
               DELETE matches WHERE offset = <match>-offset AND token = c_token-xml_tag.
           ENDCASE.
 
@@ -63375,6 +64250,7 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
 
       ENDCASE.
 
+      prev_end = <match>-offset + <match>-length.
       prev_token = <match>-token.
       ASSIGN <match> TO <prev_match>.
     ENDLOOP.
@@ -63391,6 +64267,66 @@ CLASS /apmg/cl_apm_highlighter_xml IMPLEMENTATION.
       ENDIF.
 
     ENDIF.
+
+  ENDMETHOD.
+
+  METHOD parse_line.
+
+    DATA(line_len) = strlen( line ).
+    DATA(segment_start) = 0.
+    DATA(scan_offset) = 0.
+    DATA(pattern) = c_regex-attr_val && '|<!--'.
+
+    " Comments are parsed separately so their quotes cannot hide subsequent tags.
+    IF comment = abap_true.
+      FIND FIRST OCCURRENCE OF '-->' IN line MATCH OFFSET DATA(comment_end).
+      IF sy-subrc <> 0.
+        APPEND VALUE #( token = c_token-comment offset = 0 length = line_len ) TO result.
+        RETURN.
+      ENDIF.
+      segment_start = comment_end + 3.
+      scan_offset = segment_start.
+      APPEND VALUE #( token = c_token-comment offset = 0 length = segment_start ) TO result.
+    ENDIF.
+
+    WHILE scan_offset < line_len.
+      FIND FIRST OCCURRENCE OF REGEX pattern IN line+scan_offset
+        MATCH OFFSET DATA(found_offset) MATCH LENGTH DATA(found_length) ##REGEX_POSIX.
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+      found_offset = found_offset + scan_offset.
+      scan_offset = found_offset + found_length.
+      IF substring( val = line off = found_offset len = found_length ) <> '<!--'.
+        CONTINUE.
+      ENDIF.
+
+      DATA(segment) = substring( val = line off = segment_start len = found_offset - segment_start ).
+      DATA(segment_matches) = super->parse_line( segment ).
+      LOOP AT segment_matches ASSIGNING FIELD-SYMBOL(<segment_match>).
+        <segment_match>-offset = <segment_match>-offset + segment_start.
+      ENDLOOP.
+      APPEND LINES OF segment_matches TO result.
+
+      DATA(comment_length) = 4.
+      FIND FIRST OCCURRENCE OF '-->' IN line+scan_offset MATCH OFFSET comment_end.
+      IF sy-subrc = 0.
+        scan_offset = scan_offset + comment_end + 3.
+        comment_length = scan_offset - found_offset.
+      ELSE.
+        scan_offset = line_len.
+      ENDIF.
+      APPEND VALUE #( token  = c_token-comment offset = found_offset
+                      length = comment_length ) TO result.
+      segment_start = scan_offset.
+    ENDWHILE.
+
+    segment = substring( val = line off = segment_start ).
+    segment_matches = super->parse_line( segment ).
+    LOOP AT segment_matches ASSIGNING <segment_match>.
+      <segment_match>-offset = <segment_match>-offset + segment_start.
+    ENDLOOP.
+    APPEND LINES OF segment_matches TO result.
 
   ENDMETHOD.
 ENDCLASS.
@@ -63484,13 +64420,13 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
 
   METHOD /apmg/if_apm_html~a.
 
-    DATA: lv_class TYPE string,
-          lv_href  TYPE string,
-          lv_click TYPE string,
-          lv_id    TYPE string,
-          lv_act   TYPE string,
-          lv_style TYPE string,
-          lv_title TYPE string,
+    DATA: lv_class         TYPE string,
+          lv_href          TYPE string,
+          lv_click         TYPE string,
+          lv_id            TYPE string,
+          lv_act           TYPE string,
+          lv_style         TYPE string,
+          lv_title         TYPE string,
           lv_data_sapevent TYPE string.
 
     lv_class = iv_class.
@@ -63704,6 +64640,7 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
       iv_class              = iv_class
       is_data_attr          = is_data_attr
       it_data_attrs         = it_data_attrs
+      iv_colspan            = iv_colspan
       iv_hint               = iv_hint ).
     ri_self = me.
   ENDMETHOD.
@@ -63718,6 +64655,7 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
       iv_class              = iv_class
       is_data_attr          = is_data_attr
       it_data_attrs         = it_data_attrs
+      iv_colspan            = iv_colspan
       iv_hint               = iv_hint ).
     ri_self = me.
   ENDMETHOD.
@@ -63731,6 +64669,7 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
     DATA: lv_class     TYPE string,
           lv_id        TYPE string,
           lv_data_attr TYPE string,
+          lv_colspan   TYPE string,
           lv_title     TYPE string.
 
     IF iv_id IS NOT INITIAL.
@@ -63753,7 +64692,11 @@ CLASS /apmg/cl_apm_html IMPLEMENTATION.
       lv_data_attr = lv_data_attr && | data-{ ls_data_attr-name }="{ ls_data_attr-value }"|.
     ENDLOOP.
 
-    lv_open_tag = |<{ iv_tag }{ lv_id }{ lv_class }{ lv_data_attr }{ lv_title }>|.
+    IF iv_colspan IS NOT INITIAL. " apm
+      lv_colspan = | colspan="{ iv_colspan }"|.
+    ENDIF.
+
+    lv_open_tag = |<{ iv_tag }{ lv_id }{ lv_class }{ lv_data_attr }{ lv_colspan }{ lv_title }>|.
     lv_close_tag = |</{ iv_tag }>|.
 
     IF ii_content IS NOT BOUND AND iv_content IS INITIAL.
@@ -64884,7 +65827,7 @@ CLASS /apmg/cl_apm_html_form IMPLEMENTATION.
     IF is_field-rows > 0.
       lv_rows = | rows="{ is_field-rows }"|.
     ELSEIF is_attr-value IS NOT INITIAL.
-      lv_rows = | rows="{ lines( zcl_abapgit_convert=>split_string( is_attr-value ) ) + 1 }"|.
+      lv_rows = | rows="{ lines( /apmg/cl_apm_abapgit_convert=>split_string( is_attr-value ) ) + 1 }"|.
     ENDIF.
 
     IF is_field-cols > 0.
@@ -68022,11 +68965,11 @@ CLASS /apmg/cl_apm_logo IMPLEMENTATION.
 
     result = |<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 232 252" width="$" height="$">\n|
       && |<g>|
-      && |<path id="1b" d="M 0 62 L 116 120 L 116 254 L 0 196 L 0 62 Z" stroke="#000000" |
+      && |<path d="M 0 62 L 116 120 L 116 254 L 0 196 L 0 62 Z" stroke="#000000" | "1b
       && |stroke-width="0" fill="#000000" stroke-miterlimit="1"/>|
-      && |<path id="1w" d="M 116 120 L 116 254 L 232 196 L 232 62 L 116 120 Z" stroke="#808080" |
+      && |<path d="M 116 120 L 116 254 L 232 196 L 232 62 L 116 120 Z" stroke="#808080" | "1w
       && |stroke-width="0.5" fill="#FFFFFF" stroke-miterlimit="1"/>|
-      && |<path id="1g" d="M 0 62 L 116 2 L 232 62 L 116 120 L 0 62 Z" stroke="#808080" |
+      && |<path d="M 0 62 L 116 2 L 232 62 L 116 120 L 0 62 Z" stroke="#808080" | "1g
       && |stroke-width="0" fill="#808080" stroke-miterlimit="1"/>|
       && |</g>|
       && |</svg>|.
@@ -68042,23 +68985,23 @@ CLASS /apmg/cl_apm_logo IMPLEMENTATION.
 
     result = |<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512" width="$" height="$">\n|
       && |<g>\n|
-      && |<path id="1b" d="M 116 62 L 232 120 L 232 254 L 116 196 L 116 62 Z" stroke="#000000" |
+      && |<path d="M 116 62 L 232 120 L 232 254 L 116 196 L 116 62 Z" stroke="#000000" | "1b
       && |stroke-width="0" fill="#000000" stroke-miterlimit="1" />\n|
-      && |<path id="1w" d="M 232 120 L 232 254 L 350 196 L 350 62 L 232 120 Z" stroke="#808080" |
+      && |<path d="M 232 120 L 232 254 L 350 196 L 350 62 L 232 120 Z" stroke="#808080" | "1w
       && |stroke-width="0.5" fill="#FFFFFF" stroke-miterlimit="1" />\n|
-      && |<path id="1g" d="M 116 62 L 232 2 L 350 62 L 232 120 L 116 62 Z" stroke="#808080" |
+      && |<path d="M 116 62 L 232 2 L 350 62 L 232 120 L 116 62 Z" stroke="#808080" | "1g
       && |stroke-width="0" fill="#808080" stroke-miterlimit="1" />\n|
-      && |<path id="2b" d="M 2 254 L 116 312 L 116 446 L 2 388 L 2 254 Z" stroke="#000000" |
+      && |<path d="M 2 254 L 116 312 L 116 446 L 2 388 L 2 254 Z" stroke="#000000" | "2b
       && |stroke-width="0" fill="#000000" stroke-miterlimit="1" />\n|
-      && |<path id="2w" d="M 116 312 L 116 446 L 232 388 L 232 254 L 116 312 Z" stroke="#808080" |
+      && |<path d="M 116 312 L 116 446 L 232 388 L 232 254 L 116 312 Z" stroke="#808080" | "2w
       && |stroke-width="0.5" fill="#FFFFFF" stroke-miterlimit="1" />\n|
-      && |<path id="2g" d="M 2 254 L 116 196 L 232 254 L 116 312 L 2 254 Z" stroke="#808080" |
+      && |<path d="M 2 254 L 116 196 L 232 254 L 116 312 L 2 254 Z" stroke="#808080" | "2g
       && |stroke-width="0" fill="#808080" stroke-miterlimit="1" />\n|
-      && |<path id="3b" d="M 232 254 L 350 312 L 350 446 L 232 388 L 232 254 Z" stroke="#000000" |
+      && |<path d="M 232 254 L 350 312 L 350 446 L 232 388 L 232 254 Z" stroke="#000000" | "3b
       && |stroke-width="0" fill="#000000" stroke-miterlimit="1" />\n|
-      && |<path id="3w" d="M 350 312 L 350 446 L 468 388 L 468 254 L 350 312 Z" stroke="#808080" |
+      && |<path d="M 350 312 L 350 446 L 468 388 L 468 254 L 350 312 Z" stroke="#808080" | "3w
       && |stroke-width="0.5" fill="#FFFFFF" stroke-miterlimit="1" />\n|
-      && |<path id="3g" d="M 232 254 L 350 196 L 468 254 L 350 312 L 232 254 Z" stroke="#808080" |
+      && |<path d="M 232 254 L 350 196 L 468 254 L 350 312 L 232 254 Z" stroke="#808080" | "3g
       && |stroke-width="0" fill="#808080" stroke-miterlimit="1" />\n|
       && |</g>\n|
       && |</svg>|.
@@ -68077,7 +69020,7 @@ CLASS /apmg/cl_apm_logo IMPLEMENTATION.
 
   METHOD svg_text.
 
-    result = |<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 804 331" |
+    result = |<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 804 331" |
       && |width="$" height="$">\n|
       && |<g transform="translate(0,331) scale(0.1,-0.1)" fill=" " stroke="none">\n|
       && |<path d="M1090 3083 c-121 -19 -259 -65 -360 -120 -387 -211 -593 -624 -551 |
@@ -69354,11 +70297,9 @@ CLASS /apmg/cl_apm_markdown IMPLEMENTATION.
 
     result = |<{ current_element-name }|.
 
-    IF current_element-attributes IS NOT INITIAL.
-      LOOP AT current_element-attributes ASSIGNING <attribute>.
-        result = |{ result } { <attribute>-name }="{ _escape( <attribute>-value ) }"|.
-      ENDLOOP.
-    ENDIF.
+    LOOP AT current_element-attributes ASSIGNING <attribute>.
+      result = |{ result } { <attribute>-name }="{ _escape( <attribute>-value ) }"|.
+    ENDLOOP.
 
     IF <text> IS NOT INITIAL OR current_element-texts IS NOT INITIAL OR current_element-lines IS NOT INITIAL.
       result = |{ result }>|.
@@ -70312,7 +71253,7 @@ CLASS /apmg/cl_apm_markdown IMPLEMENTATION.
       && |\{ line-height: 1.5; \}\n|
       && |.markdown table\n|
       && |\{ border: 1px solid #ddd; border-radius: 3px; \}\n|
-      && |.markdown th,\n|
+      && |.markdown th\n|
       && |\{ color: #4078c0; background-color: #edf2f9; border-bottom-color: #ddd; \}\n|
       && |.markdown th,\n|
       && |.markdown td\n|
@@ -70343,6 +71284,8 @@ CLASS /apmg/cl_apm_markdown IMPLEMENTATION.
       && |  margin-bottom: 16px; margin-top: 0; overflow: auto; overflow-wrap: normal;\n|
       && |  padding: 16px; word-break: normal; box-sizing: border-box;\n|
       && |  font-family: Consolas, Courier, monospace; font-size: 14px; \}\n|
+      && |.markdown li code,\n|
+      && |.markdown td code,\n|
       && |.markdown p code\n|
       && |\{ background-color: #eee; border-radius: 6px; margin: 0; padding: .2em .4em;\n|
       && |  font-family: Consolas, Courier, monospace; font-size: 14px; \}\n|
@@ -70367,7 +71310,8 @@ CLASS /apmg/cl_apm_markdown IMPLEMENTATION.
       && |  font-weight: 400;\n|
       && |  line-height: 10px;\n|
       && |  padding: 4px;\n|
-      && |  vertical-align: middle;\}\n|.
+      && |  vertical-align: middle;\n|
+      && |\}|.
 
   ENDMETHOD.
 
@@ -73846,7 +74790,7 @@ CLASS /apmg/cl_apm_package_json_vali IMPLEMENTATION.
 
     result = xsdbool(
       cpu_val IS INITIAL OR
-      cpu_val = /apmg/if_apm_types=>c_cpu-x86_64 OR
+      cpu_val = /apmg/if_apm_types=>c_cpu-x64 OR
       cpu_val = /apmg/if_apm_types=>c_cpu-power_pc OR
       cpu_val = /apmg/if_apm_types=>c_cpu-sparc ).
 
@@ -81722,8 +82666,8 @@ CLASS /apmg/cl_apm_trace IMPLEMENTATION.
     TRY.
         /apmg/cl_apm_gui_factory=>get_frontend_services( )->file_download(
           iv_path = |{ dir }/apm-trace-{ timestamp }.log|
-          iv_xstr = zcl_abapgit_convert=>string_to_xstring_utf8( cdata ) ).
-      CATCH zcx_abapgit_exception /apmg/cx_apm_error.
+          iv_xstr = /apmg/cl_apm_abapgit_convert=>string_to_xstring_utf8( cdata ) ).
+      CATCH /apmg/cx_apm_error.
         ASSERT 0 = 0.
     ENDTRY.
 
@@ -81771,6 +82715,40 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
       WHEN 'wss'.
         result = '443'.
     ENDCASE.
+
+  ENDMETHOD.
+
+  METHOD domain_to_ascii.
+
+    CHECK domain IS NOT INITIAL.
+
+    " Punycode encoding, not full UTS #46 normalization or IDNA validation.
+    DATA(domain_name) = to_lower( domain ).
+
+    " Replace unicode dots
+    DATA(dot1) = cl_abap_conv_in_ce=>uccpi( 12290 ).
+    DATA(dot2) = cl_abap_conv_in_ce=>uccpi( 65294 ).
+    DATA(dot3) = cl_abap_conv_in_ce=>uccpi( 65377 ).
+    REPLACE ALL OCCURRENCES OF dot1 IN domain_name WITH '.'.
+    REPLACE ALL OCCURRENCES OF dot2 IN domain_name WITH '.'.
+    REPLACE ALL OCCURRENCES OF dot3 IN domain_name WITH '.'.
+
+    IF domain_name CA | #%/:<>?@[\\]^\||.
+      RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Host contains invalid code point'.
+    ENDIF.
+
+    " Assemble by index so empty labels and a trailing root dot are preserved.
+    SPLIT domain_name AT '.' INTO TABLE DATA(labels).
+    DATA(last) = strlen( domain_name ) - 1.
+    IF domain_name+last(1) = '.'.
+      APPEND `` TO labels.
+    ENDIF.
+    LOOP AT labels INTO DATA(label).
+      IF sy-tabix > 1.
+        result = |{ result }.|.
+      ENDIF.
+      result = |{ result }{ punycode_encode( label ) }|.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -81849,20 +82827,17 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
       remaining = remaining+2.
 
       " Find end of authority
-      delimiter = find( val = remaining sub = '/' ).
+      IF components-is_special = abap_true.
+        delimiter = find( val = remaining regex = '[/?#\\]' ) ##REGEX_POSIX.
+      ELSE.
+        delimiter = find( val = remaining regex = '[/?#]' ) ##REGEX_POSIX.
+      ENDIF.
       IF delimiter < 0.
         authority = remaining.
         CLEAR remaining.
       ELSE.
         authority = remaining(delimiter).
         remaining = remaining+delimiter.
-      ENDIF.
-
-      " Split off fragment
-      delimiter = find( val = authority sub = '#' ).
-      IF delimiter >= 0.
-        authority = authority(delimiter).
-        remaining = authority+delimiter.
       ENDIF.
 
       " Parse authority section
@@ -81927,6 +82902,9 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
         ENDIF.
     ENDCASE.
 
+    IF components-is_special = abap_true.
+      REPLACE ALL OCCURRENCES OF '\' IN components-path WITH '/'.
+    ENDIF.
     components-path     = percent_decode( normalize_path( components-path ) ).
     components-query    = percent_decode( components-query ).
     components-fragment = percent_decode( components-fragment ).
@@ -81986,7 +82964,11 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
         host = temp.
       ENDIF.
 
-      " TODO: punycode
+      IF is_special_scheme( scheme ).
+        " Decode UTF-8 escapes before converting domain labels. Keep literal '+'.
+        host = unescape_host( host ).
+        host = domain_to_ascii( host ).
+      ENDIF.
     ENDIF.
 
     " Validate port if present
@@ -82067,6 +83049,111 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD punycode_adapt.
+
+    " RFC 3492 section 6.1: base=36, tmin=1, tmax=26, skew=38, damp=700.
+    DATA(adjusted) = delta.
+
+    IF first = abap_true.
+      adjusted = adjusted DIV 700.
+    ELSE.
+      adjusted = adjusted DIV 2.
+    ENDIF.
+
+    adjusted = adjusted + adjusted DIV count.
+
+    WHILE adjusted > 455.
+      adjusted = adjusted DIV 35.
+      result = result + 36.
+    ENDWHILE.
+
+    result = result + ( 36 * adjusted ) DIV ( adjusted + 38 ).
+
+  ENDMETHOD.
+
+  METHOD punycode_delta.
+
+    CONSTANTS digits TYPE string VALUE 'abcdefghijklmnopqrstuvwxyz0123456789'.
+
+    DATA(remainder) = delta.
+    DATA(weight) = 36.
+    DATA(threshold) = nmin( val1 = 26 val2 = nmax( val1 = 1 val2 = weight - bias ) ).
+
+    WHILE remainder >= threshold.
+      DATA(digit) = threshold + ( remainder - threshold ) MOD ( 36 - threshold ).
+      result = |{ result }{ digits+digit(1) }|.
+      remainder = ( remainder - threshold ) DIV ( 36 - threshold ).
+      weight = weight + 36.
+      threshold = nmin( val1 = 26 val2 = nmax( val1 = 1 val2 = weight - bias ) ).
+    ENDWHILE.
+
+    result = |{ result }{ digits+remainder(1) }|.
+
+  ENDMETHOD.
+
+  METHOD punycode_encode.
+
+    " RFC 3492 section 6.3, with explicit signed 32-bit overflow checks.
+    CONSTANTS max_integer TYPE i VALUE 2147483647.
+
+    DATA(points) = unicode_codepoints( label ).
+    DATA(count) = lines( points ).
+
+    LOOP AT points INTO DATA(point) WHERE table_line < 128.
+      result = |{ result }{ cl_abap_conv_in_ce=>uccpi( point ) }|.
+    ENDLOOP.
+
+    DATA(basic) = strlen( result ).
+    DATA(handled) = basic.
+
+    IF handled = count.
+      RETURN.
+    ENDIF.
+
+    IF basic > 0.
+      result = |{ result }-|.
+    ENDIF.
+
+    DATA(next_point) = 128.
+    DATA(delta) = 0.
+    DATA(bias) = 72.
+
+    WHILE handled < count.
+      DATA(minimum) = 1114112.
+
+      LOOP AT points INTO point WHERE table_line >= next_point.
+        minimum = nmin( val1 = minimum val2 = point ).
+      ENDLOOP.
+
+      IF minimum - next_point > ( max_integer - delta ) DIV ( handled + 1 ).
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Punycode overflow'.
+      ENDIF.
+
+      delta = delta + ( minimum - next_point ) * ( handled + 1 ).
+      next_point = minimum.
+
+      LOOP AT points INTO point.
+        IF point < next_point.
+          IF delta = max_integer.
+            RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Punycode overflow'.
+          ENDIF.
+          delta = delta + 1.
+        ELSEIF point = next_point.
+          result = |{ result }{ punycode_delta( delta = delta bias = bias ) }|.
+          bias = punycode_adapt( delta = delta count = handled + 1 first = xsdbool( handled = basic ) ).
+          delta = 0.
+          handled = handled + 1.
+        ENDIF.
+      ENDLOOP.
+
+      delta = delta + 1.
+      next_point = next_point + 1.
+    ENDWHILE.
+
+    result = |xn--{ result }|.
+
+  ENDMETHOD.
+
   METHOD serialize.
 
     DATA(url) = |{ components-scheme }:|.
@@ -82087,7 +83174,11 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
       ENDIF.
 
       " Add host and port
-      url = |{ url }{ components-host }|.
+      DATA(host) = components-host.
+      IF is_special_scheme( components-scheme ) AND host NS ':'.
+        host = domain_to_ascii( host ).
+      ENDIF.
+      url = |{ url }{ host }|.
       IF components-port IS NOT INITIAL.
         url = |{ url }:{ components-port }|.
       ENDIF.
@@ -82112,6 +83203,94 @@ CLASS /apmg/cl_apm_url IMPLEMENTATION.
     ENDIF.
 
     result = url.
+
+  ENDMETHOD.
+
+  METHOD unescape_host.
+
+    CONSTANTS hex_digits TYPE string VALUE '0123456789ABCDEF'.
+
+    TYPES ty_x TYPE x LENGTH 1.
+    DATA bytes TYPE xstring.
+
+    IF raw NS '%'.
+      result = raw.
+      RETURN.
+    ENDIF.
+
+    DATA(offset) = 0.
+    DATA(length) = strlen( raw ).
+
+    WHILE offset < length.
+      IF raw+offset(1) <> '%'.
+        result = result && raw+offset(1).
+        offset = offset + 1.
+        CONTINUE.
+      ENDIF.
+
+      CLEAR bytes.
+      WHILE offset < length AND raw+offset(1) = '%'.
+        IF offset + 2 >= length.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid percent escape in host'.
+        ENDIF.
+        DATA(start) = offset + 1.
+        DATA(pair) = to_upper( raw+start(2) ).
+        IF pair CN hex_digits.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid percent escape in host'.
+        ENDIF.
+        DATA(octet) = CONV ty_x( pair(2) ).
+        CONCATENATE bytes octet INTO bytes IN BYTE MODE.
+        offset = offset + 3.
+      ENDWHILE.
+
+      TRY.
+          DATA(converter) = cl_abap_conv_in_ce=>create(
+            encoding    = 'UTF-8'
+            input       = bytes
+            ignore_cerr = abap_false ).
+          DATA(decoded) = ``.
+          converter->read( IMPORTING data = decoded ).
+          result = result && decoded.
+        CATCH cx_root.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid UTF-8 escape in host'.
+      ENDTRY.
+    ENDWHILE.
+
+  ENDMETHOD.
+
+  METHOD unicode_codepoints.
+
+    DATA(character) = space.
+    DATA(length) = strlen( input ).
+    DATA(offset) = 0.
+
+    WHILE offset < length.
+      character = input+offset(1).
+      DATA(point) = cl_abap_conv_out_ce=>uccpi( character ).
+      offset = offset + 1.
+
+      " ABAP strings use UTF-16; combine surrogate pairs before Bootstring.
+      IF point BETWEEN 55296 AND 56319.
+        IF offset >= length.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid Unicode in host'.
+        ENDIF.
+        character = input+offset(1).
+        DATA(low) = cl_abap_conv_out_ce=>uccpi( character ).
+        IF low NOT BETWEEN 56320 AND 57343.
+          RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid Unicode in host'.
+        ENDIF.
+        point = 65536 + ( point - 55296 ) * 1024 + low - 56320.
+        offset = offset + 1.
+      ELSEIF point BETWEEN 56320 AND 57343.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Invalid Unicode in host'.
+      ENDIF.
+
+      IF point <= 32 OR point = 127.
+        RAISE EXCEPTION TYPE /apmg/cx_apm_error_text EXPORTING text = 'Host contains invalid code point'.
+      ENDIF.
+
+      APPEND point TO result.
+    ENDWHILE.
 
   ENDMETHOD.
 
@@ -83016,812 +84195,11 @@ CLASS lcl_out_ IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS lcl_bcp47_language_table DEFINITION CREATE PRIVATE.
-
-  PUBLIC SECTION.
-    TYPES: BEGIN OF ty_language_mapping,
-             sap1_code  TYPE sy-langu,
-             sap2_code  TYPE laiso,
-             bcp47_code TYPE string,
-             text       TYPE string,
-           END OF ty_language_mapping,
-           ty_language_mappings TYPE STANDARD TABLE OF ty_language_mapping WITH DEFAULT KEY.
-    CLASS-METHODS:
-      sap1_to_text
-        IMPORTING
-          im_sap1        TYPE sy-langu
-        RETURNING
-          VALUE(re_text) TYPE string,
-      sap1_to_sap2
-        IMPORTING
-          im_sap1        TYPE sy-langu
-        RETURNING
-          VALUE(re_sap2) TYPE laiso
-        RAISING
-          zcx_abapgit_exception,
-      sap2_to_sap1
-        IMPORTING
-          im_sap2        TYPE laiso
-        RETURNING
-          VALUE(re_sap1) TYPE sy-langu
-        RAISING
-          zcx_abapgit_exception,
-      sap1_to_bcp47
-        IMPORTING
-          im_sap1         TYPE sy-langu
-        RETURNING
-          VALUE(re_bcp47) TYPE string
-        RAISING
-          zcx_abapgit_exception,
-      bcp47_to_sap1
-        IMPORTING
-          im_bcp47       TYPE string
-        RETURNING
-          VALUE(re_sap1) TYPE sy-langu
-        RAISING
-          zcx_abapgit_exception.
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-    CLASS-DATA gt_language_mappings TYPE ty_language_mappings.
-
-    CLASS-METHODS fill_language_mappings.
-    CLASS-METHODS
-      fill_language_mapping
-        IMPORTING
-          im_sap1  TYPE string
-          im_sap2  TYPE string
-          im_bcp47 TYPE string
-          iv_text  TYPE string OPTIONAL.
-
-ENDCLASS.
-
-CLASS lcl_bcp47_language_table IMPLEMENTATION.
-
-  METHOD sap1_to_bcp47.
-    DATA lv_language_mapping TYPE ty_language_mapping.
-
-    IF gt_language_mappings IS INITIAL OR lines( gt_language_mappings ) = 0.
-      fill_language_mappings( ).
-    ENDIF.
-
-    LOOP AT gt_language_mappings INTO lv_language_mapping WHERE sap1_code = im_sap1.
-      IF re_bcp47 IS INITIAL OR strlen( re_bcp47 ) > strlen( lv_language_mapping-bcp47_code ).
-        re_bcp47 = lv_language_mapping-bcp47_code.
-      ENDIF.
-    ENDLOOP.
-
-    IF re_bcp47 IS INITIAL.
-      zcx_abapgit_exception=>raise( |Could not map SAP1 language code { im_sap1 } to BCP47 language code.| ).
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD bcp47_to_sap1.
-    DATA lv_language_mapping TYPE ty_language_mapping.
-
-    IF gt_language_mappings IS INITIAL OR lines( gt_language_mappings ) = 0.
-      fill_language_mappings( ).
-    ENDIF.
-
-    LOOP AT gt_language_mappings INTO lv_language_mapping.
-      IF to_lower( lv_language_mapping-bcp47_code ) = to_lower( im_bcp47 ) AND re_sap1 IS INITIAL.
-        re_sap1 = lv_language_mapping-sap1_code.
-      ENDIF.
-    ENDLOOP.
-
-    IF re_sap1 IS INITIAL.
-      zcx_abapgit_exception=>raise( |Could not map BCP47 language code { im_bcp47 } to SAP1 language code.| ).
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD sap1_to_text.
-    DATA lv_language_mapping TYPE ty_language_mapping.
-
-    IF gt_language_mappings IS INITIAL.
-      fill_language_mappings( ).
-    ENDIF.
-
-    READ TABLE gt_language_mappings WITH KEY sap1_code = im_sap1 INTO lv_language_mapping.
-    IF sy-subrc = 0.
-      re_text = lv_language_mapping-text.
-    ELSE.
-      re_text = 'Unknonw language'.
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD sap1_to_sap2.
-    DATA lv_language_mapping TYPE ty_language_mapping.
-
-    IF gt_language_mappings IS INITIAL.
-      fill_language_mappings( ).
-    ENDIF.
-
-    READ TABLE gt_language_mappings WITH KEY sap1_code = im_sap1 INTO lv_language_mapping.
-    re_sap2 = lv_language_mapping-sap2_code.
-
-    IF re_sap2 IS INITIAL.
-      zcx_abapgit_exception=>raise( |Could not map SAP1 language code { im_sap1 } to SAP2 language code.| ).
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD sap2_to_sap1.
-    DATA lv_language_mapping TYPE ty_language_mapping.
-
-    IF gt_language_mappings IS INITIAL.
-      fill_language_mappings( ).
-    ENDIF.
-
-    READ TABLE gt_language_mappings WITH KEY sap2_code = im_sap2 INTO lv_language_mapping.
-    re_sap1 = lv_language_mapping-sap1_code.
-
-    IF re_sap1 IS INITIAL.
-      zcx_abapgit_exception=>raise( |Could not map SAP2 language code { im_sap2 } to SAP1 language code.| ).
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD fill_language_mapping.
-    DATA lv_line TYPE ty_language_mapping.
-    DATA lv_sap1 TYPE sy-langu.
-
-    IF strlen( im_sap1 ) = 4.
-      TRY.
-          lv_sap1 = zcl_abapgit_convert=>uccp( im_sap1 ).
-        CATCH cx_root.
-          " Language is not supported in this system -> ignore it
-          " Should someone try to use the language in a repo, it will result in an error (see above)
-          RETURN.
-      ENDTRY.
-    ELSEIF strlen( im_sap1 ) = 1.
-      lv_sap1 = im_sap1.
-    ENDIF.
-
-    lv_line-bcp47_code = im_bcp47.
-    lv_line-sap2_code = im_sap2.
-    lv_line-sap1_code = lv_sap1.
-    lv_line-text      = iv_text.
-
-    APPEND lv_line TO gt_language_mappings.
-    CLEAR lv_line.
-  ENDMETHOD.
-
-  METHOD fill_language_mappings.
-    fill_language_mapping( im_sap1  = 'a'
-                           im_sap2  = 'AF'
-                           im_bcp47 = 'af'
-                           iv_text  = 'Afrikaans' ).
-
-    fill_language_mapping( im_sap1  = 'BF51'
-                           im_sap2  = 'SQ'
-                           im_bcp47 = 'sq'
-                           iv_text  = 'Albanian' ).
-
-    fill_language_mapping( im_sap1  = 'A'
-                           im_sap2  = 'AR'
-                           im_bcp47 = 'ar-SA'
-                           iv_text  = 'Arabic' ).
-
-    fill_language_mapping( im_sap1  = 'BA15'
-                           im_sap2  = 'EU'
-                           im_bcp47 = 'eu'
-                           iv_text  = 'Basque' ).
-
-    fill_language_mapping( im_sap1  = 'B8F3'
-                           im_sap2  = 'BS'
-                           im_bcp47 = 'bs'
-                           iv_text  = 'Bosnian' ).
-
-    fill_language_mapping( im_sap1  = 'W'
-                           im_sap2  = 'BG'
-                           im_bcp47 = 'bg'
-                           iv_text  = 'Bulgarian' ).
-
-    fill_language_mapping( im_sap1  = 'c'
-                           im_sap2  = 'CA'
-                           im_bcp47 = 'ca'
-                           iv_text  = 'Catalan' ).
-
-    fill_language_mapping( im_sap1  = '1'
-                           im_sap2  = 'ZH'
-                           im_bcp47 = 'zh'
-                           iv_text  = 'Chinese' ).
-
-    fill_language_mapping( im_sap1  = '1'
-                           im_sap2  = 'ZH'
-                           im_bcp47 = 'zh-Hans'
-                           iv_text  = 'Chinese (Simplified)' ).
-
-    fill_language_mapping( im_sap1  = 'B343'
-                           im_sap2  = '3C'
-                           im_bcp47 = 'zh-SG'
-                           iv_text  = 'Chinese (Singapore)' ).
-
-    fill_language_mapping( im_sap1  = 'M'
-                           im_sap2  = 'ZF'
-                           im_bcp47 = 'zh-Hant'
-                           iv_text  = 'Chinese (Traditional)' ).
-
-    fill_language_mapping( im_sap1  = '6'
-                           im_sap2  = 'HR'
-                           im_bcp47 = 'hr'
-                           iv_text  = 'Croatian' ).
-
-    fill_language_mapping( im_sap1  = 'C'
-                           im_sap2  = 'CS'
-                           im_bcp47 = 'cs'
-                           iv_text  = 'Czech' ).
-
-    fill_language_mapping( im_sap1  = 'K'
-                           im_sap2  = 'DA'
-                           im_bcp47 = 'da'
-                           iv_text  = 'Danish' ).
-
-    fill_language_mapping( im_sap1  = 'N'
-                           im_sap2  = 'NL'
-                           im_bcp47 = 'nl'
-                           iv_text  = 'Dutch' ).
-
-    fill_language_mapping( im_sap1  = 'N'
-                           im_sap2  = 'NL'
-                           im_bcp47 = 'nl-NL'
-                           iv_text  = 'Dutch' ).
-
-    fill_language_mapping( im_sap1  = 'B284'
-                           im_sap2  = '1D'
-                           im_bcp47 = 'nl-BE'
-                           iv_text  = 'Dutch (Belgium)' ).
-
-    fill_language_mapping( im_sap1  = 'E'
-                           im_sap2  = 'EN'
-                           im_bcp47 = 'en'
-                           iv_text  = 'English' ).
-
-    fill_language_mapping( im_sap1  = 'E'
-                           im_sap2  = 'EN'
-                           im_bcp47 = 'en-US'
-                           iv_text  = 'English (American)' ).
-
-    fill_language_mapping( im_sap1  = 'B46E'
-                           im_sap2  = '6N'
-                           im_bcp47 = 'en-GB'
-                           iv_text  = 'English (British)' ).
-
-    fill_language_mapping( im_sap1  = 'B285'
-                           im_sap2  = '1E'
-                           im_bcp47 = 'en-AU'
-                           iv_text  = 'English (Australia)' ).
-
-    fill_language_mapping( im_sap1  = 'B2E5'
-                           im_sap2  = '2E'
-                           im_bcp47 = 'en-BZ'
-                           iv_text  = 'English (Belize)' ).
-
-    fill_language_mapping( im_sap1  = 'B345'
-                           im_sap2  = '3E'
-                           im_bcp47 = 'en-CA'
-                           iv_text  = 'English (Canada)' ).
-
-    fill_language_mapping( im_sap1  = 'B405'
-                           im_sap2  = '5E'
-                           im_bcp47 = 'en-HK'
-                           iv_text  = 'English (Hong Kong SAR China)' ).
-
-    fill_language_mapping( im_sap1  = 'B465'
-                           im_sap2  = '6E'
-                           im_bcp47 = 'en-IN'
-                           iv_text  = 'English (India)' ).
-
-    fill_language_mapping( im_sap1  = 'B4C5'
-                           im_sap2  = '7E'
-                           im_bcp47 = 'en-ID'
-                           iv_text  = 'English' ).
-
-    fill_language_mapping( im_sap1  = 'B525'
-                           im_sap2  = '8E'
-                           im_bcp47 = 'en-IE'
-                           iv_text  = 'English (Ireland)' ).
-
-    fill_language_mapping( im_sap1  = 'B585'
-                           im_sap2  = '9E'
-                           im_bcp47 = 'en-JM'
-                           iv_text  = 'English (Jamaica)' ).
-
-    fill_language_mapping( im_sap1  = 'B225'
-                           im_sap2  = '0E'
-                           im_bcp47 = 'en-MY'
-                           iv_text  = 'English (Malaysia)' ).
-
-    fill_language_mapping( im_sap1  = 'B28E'
-                           im_sap2  = '1N'
-                           im_bcp47 = 'en-NZ'
-                           iv_text  = 'English (New Zealand)' ).
-
-    fill_language_mapping( im_sap1  = 'B2EE'
-                           im_sap2  = '2N'
-                           im_bcp47 = 'en-PH'
-                           iv_text  = 'English (Philippines)' ).
-
-    fill_language_mapping( im_sap1  = 'B34E'
-                           im_sap2  = '3N'
-                           im_bcp47 = 'en-SG'
-                           iv_text  = 'English (Singapore)' ).
-
-    fill_language_mapping( im_sap1  = 'B3AE'
-                           im_sap2  = '4N'
-                           im_bcp47 = 'en-ZA'
-                           iv_text  = 'English (South Africa)' ).
-
-    fill_language_mapping( im_sap1  = 'B40E'
-                           im_sap2  = '5N'
-                           im_bcp47 = 'en-TT'
-                           iv_text  = 'English (Trinidad & Tobago)' ).
-
-    fill_language_mapping( im_sap1  = 'B4CE'
-                           im_sap2  = '7N'
-                           im_bcp47 = 'en-ZW'
-                           iv_text  = 'English (Zimbabwe)' ).
-
-    fill_language_mapping( im_sap1  = '9'
-                           im_sap2  = 'ET'
-                           im_bcp47 = 'et'
-                           iv_text  = 'Estonian' ).
-
-    fill_language_mapping( im_sap1  = 'U'
-                           im_sap2  = 'FI'
-                           im_bcp47 = 'fi'
-                           iv_text  = 'Finnish' ).
-
-    fill_language_mapping( im_sap1  = 'F'
-                           im_sap2  = 'FR'
-                           im_bcp47 = 'fr'
-                           iv_text  = 'French' ).
-
-    fill_language_mapping( im_sap1  = 'F'
-                           im_sap2  = 'FR'
-                           im_bcp47 = 'fr-FR'
-                           iv_text  = 'French' ).
-
-    fill_language_mapping( im_sap1  = 'B286'
-                           im_sap2  = '1F'
-                           im_bcp47 = 'fr-BE'
-                           iv_text  = 'French (Belgium)' ).
-
-    fill_language_mapping( im_sap1  = 'B2E6'
-                           im_sap2  = '2F'
-                           im_bcp47 = 'fr-CM'
-                           iv_text  = 'French (Cameroon)' ).
-
-    fill_language_mapping( im_sap1  = 'B346'
-                           im_sap2  = '3F'
-                           im_bcp47 = 'fr-CA'
-                           iv_text  = 'French (Canada)' ).
-
-    fill_language_mapping( im_sap1  = 'B3A6'
-                           im_sap2  = '4F'
-                           im_bcp47 = 'fr-CG'
-                           iv_text  = 'French (Congo-Brazzaville)' ).
-
-    fill_language_mapping( im_sap1  = 'B406'
-                           im_sap2  = '5F'
-                           im_bcp47 = 'fr-CI'
-                           iv_text  = 'French (Cote d''Ivoire)' ).
-
-    fill_language_mapping( im_sap1  = 'B466'
-                           im_sap2  = '6F'
-                           im_bcp47 = 'fr-HT'
-                           iv_text  = 'French (Haiti)' ).
-
-    fill_language_mapping( im_sap1  = 'B4C6'
-                           im_sap2  = '7F'
-                           im_bcp47 = 'fr-LU'
-                           iv_text  = 'French (Luxembourg)' ).
-
-    fill_language_mapping( im_sap1  = 'B526'
-                           im_sap2  = '8F'
-                           im_bcp47 = 'fr-ML'
-                           iv_text  = 'French (Mali)' ).
-
-    fill_language_mapping( im_sap1  = 'B586'
-                           im_sap2  = '9F'
-                           im_bcp47 = 'fr-MC'
-                           iv_text  = 'French (Monaco)' ).
-
-    fill_language_mapping( im_sap1  = 'B288'
-                           im_sap2  = '1H'
-                           im_bcp47 = 'fr-MA'
-                           iv_text  = 'French (Morocco)' ).
-
-    fill_language_mapping( im_sap1  = 'B2E8'
-                           im_sap2  = '2H'
-                           im_bcp47 = 'fr-RE'
-                           iv_text  = 'French (Reunion)' ).
-
-    fill_language_mapping( im_sap1  = 'B348'
-                           im_sap2  = '3H'
-                           im_bcp47 = 'fr-SN'
-                           iv_text  = 'French (Senegal)' ).
-
-    fill_language_mapping( im_sap1  = 'B3A8'
-                           im_sap2  = '4H'
-                           im_bcp47 = 'fr-CH'
-                           iv_text  = 'French (Switzerland)' ).
-
-    fill_language_mapping( im_sap1  = 'BAC4'
-                           im_sap2  = 'GD'
-                           im_bcp47 = 'gd'
-                           iv_text  = 'Scottish Gaelic' ).
-
-    fill_language_mapping( im_sap1  = 'BACC'
-                           im_sap2  = 'GL'
-                           im_bcp47 = 'gl'
-                           iv_text  = 'Galician' ).
-
-    fill_language_mapping( im_sap1  = 'D'
-                           im_sap2  = 'DE'
-                           im_bcp47 = 'de'
-                           iv_text  = 'German' ).
-
-    fill_language_mapping( im_sap1  = 'D'
-                           im_sap2  = 'DE'
-                           im_bcp47 = 'de-DE'
-                           iv_text  = 'German' ).
-
-    fill_language_mapping( im_sap1  = 'B287'
-                           im_sap2  = '1G'
-                           im_bcp47 = 'de-AT'
-                           iv_text  = 'German (Austria)' ).
-
-    fill_language_mapping( im_sap1  = 'B2E7'
-                           im_sap2  = '2G'
-                           im_bcp47 = 'de-LI'
-                           iv_text  = 'German (Liechtenstein)' ).
-
-    fill_language_mapping( im_sap1  = 'B347'
-                           im_sap2  = '3G'
-                           im_bcp47 = 'de-LU'
-                           iv_text  = 'German (Luxembourg)' ).
-
-    fill_language_mapping( im_sap1  = 'B3A7'
-                           im_sap2  = '4G'
-                           im_bcp47 = 'de-CH'
-                           iv_text  = 'German (Switzerland)' ).
-
-    fill_language_mapping( im_sap1  = 'G'
-                           im_sap2  = 'EL'
-                           im_bcp47 = 'el'
-                           iv_text  = 'Greek' ).
-
-    fill_language_mapping( im_sap1  = 'B'
-                           im_sap2  = 'HE'
-                           im_bcp47 = 'he'
-                           iv_text  = 'Hebrew' ).
-
-    fill_language_mapping( im_sap1  = 'BB29'
-                           im_sap2  = 'HI'
-                           im_bcp47 = 'hi'
-                           iv_text  = 'Hindi' ).
-
-    fill_language_mapping( im_sap1  = 'H'
-                           im_sap2  = 'HU'
-                           im_bcp47 = 'hu'
-                           iv_text  = 'Hungarian' ).
-
-    fill_language_mapping( im_sap1  = 'b'
-                           im_sap2  = 'IS'
-                           im_bcp47 = 'is'
-                           iv_text  = 'Icelandic' ).
-
-    fill_language_mapping( im_sap1  = 'i'
-                           im_sap2  = 'ID'
-                           im_bcp47 = 'id'
-                           iv_text  = 'Indonesian' ).
-
-    fill_language_mapping( im_sap1  = 'BAC1'
-                           im_sap2  = 'GA'
-                           im_bcp47 = 'ga'
-                           iv_text  = 'Irish' ).
-
-    fill_language_mapping( im_sap1  = 'I'
-                           im_sap2  = 'IT'
-                           im_bcp47 = 'it'
-                           iv_text  = 'Italian' ).
-
-    fill_language_mapping( im_sap1  = 'I'
-                           im_sap2  = 'IT'
-                           im_bcp47 = 'it-IT'
-                           iv_text  = 'Italian' ).
-
-    fill_language_mapping( im_sap1  = 'B289'
-                           im_sap2  = '1I'
-                           im_bcp47 = 'it-CH'
-                           iv_text  = 'Italian (Swiss)' ).
-
-    fill_language_mapping( im_sap1  = 'J'
-                           im_sap2  = 'JA'
-                           im_bcp47 = 'ja'
-                           iv_text  = 'Japanese' ).
-
-    fill_language_mapping( im_sap1  = '3'
-                           im_sap2  = 'KO'
-                           im_bcp47 = 'ko'
-                           iv_text  = 'Korean' ).
-
-    fill_language_mapping( im_sap1  = '3'
-                           im_sap2  = 'KO'
-                           im_bcp47 = 'ko-KR'
-                           iv_text  = 'Korean' ).
-
-    fill_language_mapping( im_sap1  = 'Y'
-                           im_sap2  = 'LV'
-                           im_bcp47 = 'lv'
-                           iv_text  = 'Latvian' ).
-
-    fill_language_mapping( im_sap1  = 'X'
-                           im_sap2  = 'LT'
-                           im_bcp47 = 'lt'
-                           iv_text  = 'Lithuanian' ).
-
-    fill_language_mapping( im_sap1  = '7'
-                           im_sap2  = 'MS'
-                           im_bcp47 = 'ms'
-                           iv_text  = 'Malay' ).
-
-    fill_language_mapping( im_sap1  = '7'
-                           im_sap2  = 'MS'
-                           im_bcp47 = 'ms-MY'
-                           iv_text  = 'Malay' ).
-
-    fill_language_mapping( im_sap1  = 'B28D'
-                           im_sap2  = '1M'
-                           im_bcp47 = 'ms-BN'
-                           iv_text  = 'Malay (Brunei)' ).
-
-    fill_language_mapping( im_sap1  = 'O'
-                           im_sap2  = 'NO'
-                           im_bcp47 = 'no'
-                           iv_text  = 'Norwegian' ).
-
-    fill_language_mapping( im_sap1  = 'L'
-                           im_sap2  = 'PL'
-                           im_bcp47 = 'pl'
-                           iv_text  = 'Polish' ).
-
-    fill_language_mapping( im_sap1  = 'P'
-                           im_sap2  = 'PT'
-                           im_bcp47 = 'pt'
-                           iv_text  = 'Portuguese' ).
-
-    fill_language_mapping( im_sap1  = 'P'
-                           im_sap2  = 'PT'
-                           im_bcp47 = 'pt-BR'
-                           iv_text  = 'Portuguese' ).
-
-    fill_language_mapping( im_sap1  = 'BEED'
-                           im_sap2  = 'RM'
-                           im_bcp47 = 'rm'
-                           iv_text  = 'Romansh' ).
-
-    fill_language_mapping( im_sap1  = '4'
-                           im_sap2  = 'RO'
-                           im_bcp47 = 'ro'
-                           iv_text  = 'Romanian' ).
-
-    fill_language_mapping( im_sap1  = '4'
-                           im_sap2  = 'RO'
-                           im_bcp47 = 'ro-RO'
-                           iv_text  = 'Romanian' ).
-
-    fill_language_mapping( im_sap1  = 'R'
-                           im_sap2  = 'RU'
-                           im_bcp47 = 'ru-RU'
-                           iv_text  = 'Russian' ).
-
-    fill_language_mapping( im_sap1  = '0'
-                           im_sap2  = 'SR'
-                           im_bcp47 = 'sr'
-                           iv_text  = 'Serbian' ).
-
-    fill_language_mapping( im_sap1  = '0'
-                           im_sap2  = 'SR'
-                           im_bcp47 = 'sr-Cyrl'
-                           iv_text  = 'Serbian' ).
-
-    fill_language_mapping( im_sap1  = 'd'
-                           im_sap2  = 'SH'
-                           im_bcp47 = 'sr-Latn'
-                           iv_text  = 'Serbian (Latin)' ).
-
-    fill_language_mapping( im_sap1  = 'Q'
-                           im_sap2  = 'SK'
-                           im_bcp47 = 'sk'
-                           iv_text  = 'Slovak' ).
-
-    fill_language_mapping( im_sap1  = '5'
-                           im_sap2  = 'SL'
-                           im_bcp47 = 'sl'
-                           iv_text  = 'Slovenian' ).
-
-    fill_language_mapping( im_sap1  = 'BF42'
-                           im_sap2  = 'SB'
-                           im_bcp47 = 'wen'
-                           iv_text  = '' ).
-
-    fill_language_mapping( im_sap1  = 'B9B3'
-                           im_sap2  = 'DS'
-                           im_bcp47 = 'dsb'
-                           iv_text  = '' ).
-
-    fill_language_mapping( im_sap1  = 'BB33'
-                           im_sap2  = 'HS'
-                           im_bcp47 = 'hsb'
-                           iv_text  = '' ).
-
-    fill_language_mapping( im_sap1  = 'S'
-                           im_sap2  = 'ES'
-                           im_bcp47 = 'es'
-                           iv_text  = 'Spanish' ).
-
-    fill_language_mapping( im_sap1  = 'S'
-                           im_sap2  = 'ES'
-                           im_bcp47 = 'es-ES'
-                           iv_text  = 'Spanish' ).
-
-    fill_language_mapping( im_sap1  = 'B293'
-                           im_sap2  = '1S'
-                           im_bcp47 = 'es-AR'
-                           iv_text  = 'Spanish (Argentina)' ).
-
-    fill_language_mapping( im_sap1  = 'B2F3'
-                           im_sap2  = '2S'
-                           im_bcp47 = 'es-BO'
-                           iv_text  = 'Spanish (Bolivia)' ).
-
-    fill_language_mapping( im_sap1  = 'B353'
-                           im_sap2  = '3S'
-                           im_bcp47 = 'es-CL'
-                           iv_text  = 'Spanish (Chile)' ).
-
-    fill_language_mapping( im_sap1  = 'B233'
-                           im_sap2  = '0S'
-                           im_bcp47 = 'es-CO'
-                           iv_text  = 'Spanish (Colombia)' ).
-
-    fill_language_mapping( im_sap1  = 'B3B3'
-                           im_sap2  = '4S'
-                           im_bcp47 = 'es-CR'
-                           iv_text  = 'Spanish (Costa Rica)' ).
-
-    fill_language_mapping( im_sap1  = 'B413'
-                           im_sap2  = '5S'
-                           im_bcp47 = 'es-DO'
-                           iv_text  = 'Spanish (Dominican Republic)' ).
-
-    fill_language_mapping( im_sap1  = 'B473'
-                           im_sap2  = '6S'
-                           im_bcp47 = 'es-EC'
-                           iv_text  = 'Spanish (Ecuador)' ).
-
-    fill_language_mapping( im_sap1  = 'B4D3'
-                           im_sap2  = '7S'
-                           im_bcp47 = 'es-SV'
-                           iv_text  = 'Spanish (El Salvador)' ).
-
-    fill_language_mapping( im_sap1  = 'B533'
-                           im_sap2  = '8S'
-                           im_bcp47 = 'es-GT'
-                           iv_text  = 'Spanish (Guatemala)' ).
-
-    fill_language_mapping( im_sap1  = 'B593'
-                           im_sap2  = '9S'
-                           im_bcp47 = 'es-HN'
-                           iv_text  = 'Spanish (Honduras)' ).
-
-    fill_language_mapping( im_sap1  = 'B298'
-                           im_sap2  = '1X'
-                           im_bcp47 = 'es-MX'
-                           iv_text  = 'Spanish (Mexico)' ).
-
-    fill_language_mapping( im_sap1  = 'B2F8'
-                           im_sap2  = '2X'
-                           im_bcp47 = 'es-NI'
-                           iv_text  = 'Spanish (Nicaragua)' ).
-
-    fill_language_mapping( im_sap1  = 'B358'
-                           im_sap2  = '3X'
-                           im_bcp47 = 'es-PA'
-                           iv_text  = 'Spanish (Panama)' ).
-
-    fill_language_mapping( im_sap1  = 'B3B8'
-                           im_sap2  = '4X'
-                           im_bcp47 = 'es-PY'
-                           iv_text  = 'Spanish (Paraguay)' ).
-
-    fill_language_mapping( im_sap1  = 'B418'
-                           im_sap2  = '5X'
-                           im_bcp47 = 'es-PE'
-                           iv_text  = 'Spanish (Peru)' ).
-
-    fill_language_mapping( im_sap1  = 'B478'
-                           im_sap2  = '6X'
-                           im_bcp47 = 'es-PR'
-                           iv_text  = 'Spanish (Puerto Rico)' ).
-
-    fill_language_mapping( im_sap1  = 'B4D8'
-                           im_sap2  = '7X'
-                           im_bcp47 = 'es-UY'
-                           iv_text  = 'Spanish (Uruguay)' ).
-
-    fill_language_mapping( im_sap1  = 'B538'
-                           im_sap2  = '8X'
-                           im_bcp47 = 'es-VE'
-                           iv_text  = 'Spanish (Venezuela)' ).
-
-    fill_language_mapping( im_sap1  = 'BF57'
-                           im_sap2  = 'SW'
-                           im_bcp47 = 'sw'
-                           iv_text  = 'Swahili' ).
-
-    fill_language_mapping( im_sap1  = 'V'
-                           im_sap2  = 'SV'
-                           im_bcp47 = 'sv'
-                           iv_text  = 'Swedish' ).
-
-    fill_language_mapping( im_sap1  = 'BFAC'
-                           im_sap2  = 'TL'
-                           im_bcp47 = 'tl'
-                           iv_text  = 'Tagalog' ).
-
-    fill_language_mapping( im_sap1  = '2'
-                           im_sap2  = 'TH'
-                           im_bcp47 = 'th'
-                           iv_text  = 'Thai' ).
-
-    fill_language_mapping( im_sap1  = 'T'
-                           im_sap2  = 'TR'
-                           im_bcp47 = 'tr'
-                           iv_text  = 'Turkish' ).
-
-    fill_language_mapping( im_sap1  = '8'
-                           im_sap2  = 'UK'
-                           im_bcp47 = 'uk'
-                           iv_text  = 'Ukrainian' ).
-
-    fill_language_mapping( im_sap1  = 'C069'
-                           im_sap2  = 'VI'
-                           im_bcp47 = 'vi'
-                           iv_text  = 'Vietnamese' ).
-
-    fill_language_mapping( im_sap1  = 'C0C1'
-                           im_sap2  = 'WA'
-                           im_bcp47 = 'wa'
-                           iv_text  = 'Wa' ).
-
-    fill_language_mapping( im_sap1  = 'Z'
-                           im_sap2  = 'Z1'
-                           im_bcp47 = 'z1'
-                           iv_text  = 'Customer reserve' ).
-  ENDMETHOD.
-
-ENDCLASS.
-
 CLASS zcl_abapgit_convert IMPLEMENTATION.
 
   METHOD base64_to_xstring.
 
     rv_xstr = cl_http_utility=>decode_x_base64( iv_base64 ).
-
-  ENDMETHOD.
-
-  METHOD conversion_exit_isola_output.
-
-    language_sap1_to_sap2(
-      EXPORTING
-        im_lang_sap1  = iv_spras
-      RECEIVING
-        re_lang_sap2  = rv_spras
-      EXCEPTIONS
-        no_assignment = 1
-        OTHERS        = 2 ).                              "#EC CI_SUBRC
-
-    TRANSLATE rv_spras TO UPPER CASE.
 
   ENDMETHOD.
 
@@ -83832,112 +84210,6 @@ CLASS zcl_abapgit_convert IMPLEMENTATION.
 
     lv_x = iv_i.
     rv_xstring = lv_x.
-
-  ENDMETHOD.
-
-  METHOD language_bcp47_to_sap1.
-    DATA lv_converter_instance TYPE REF TO object.
-    DATA lv_converter_class_name TYPE string VALUE `CL_AFF_LANGUAGE_CONVERTER`.
-    DATA lv_regex TYPE REF TO cl_abap_regex.
-    DATA lv_abap_matcher TYPE REF TO cl_abap_matcher.
-
-    DATA lv_sap2_lang_code TYPE laiso.
-
-    TRY.
-        CALL METHOD (lv_converter_class_name)=>create_instance
-          RECEIVING
-            result = lv_converter_instance.
-
-        TRY.
-            CALL METHOD lv_converter_instance->(`IF_AFF_LANGUAGE_CONVERTER~BCP47_TO_SAP1`)
-              EXPORTING
-                language = im_lang_bcp47
-              RECEIVING
-                result   = re_lang_sap1.
-
-          CATCH cx_static_check.
-            RAISE no_assignment.
-        ENDTRY.
-
-      CATCH cx_sy_dyn_call_error.
-        TRY.
-            re_lang_sap1 = lcl_bcp47_language_table=>bcp47_to_sap1( im_lang_bcp47 ).
-          CATCH zcx_abapgit_exception.
-
-            CREATE OBJECT lv_regex EXPORTING pattern = `[A-Z0-9]{2}` ##REGEX_POSIX.
-            lv_abap_matcher = lv_regex->create_matcher( text = im_lang_bcp47 ).
-
-            IF abap_true = lv_abap_matcher->match( ).
-              "Fallback try to convert from SAP language
-              lv_sap2_lang_code = im_lang_bcp47.
-
-              language_sap2_to_sap1(
-                EXPORTING
-                  im_lang_sap2  = lv_sap2_lang_code
-                RECEIVING
-                  re_lang_sap1  = re_lang_sap1
-                EXCEPTIONS
-                  no_assignment = 1
-                  OTHERS        = 2 ).
-              IF sy-subrc <> 0.
-                RAISE no_assignment.
-              ENDIF.
-
-            ELSE.
-              RAISE no_assignment.
-            ENDIF.
-        ENDTRY.
-    ENDTRY.
-  ENDMETHOD.
-
-  METHOD language_sap1_to_bcp47.
-    DATA lv_converter_instance TYPE REF TO object.
-    DATA lv_converter_class_name TYPE string VALUE `CL_AFF_LANGUAGE_CONVERTER`.
-
-    TRY.
-        CALL METHOD (lv_converter_class_name)=>create_instance
-          RECEIVING
-            result = lv_converter_instance.
-
-        TRY.
-            CALL METHOD lv_converter_instance->(`IF_AFF_LANGUAGE_CONVERTER~SAP1_TO_BCP47`)
-              EXPORTING
-                language = im_lang_sap1
-              RECEIVING
-                result   = re_lang_bcp47.
-          CATCH cx_static_check.
-            RAISE no_assignment.
-        ENDTRY.
-      CATCH cx_sy_dyn_call_error.
-        TRY.
-            re_lang_bcp47 = lcl_bcp47_language_table=>sap1_to_bcp47( im_lang_sap1 ).
-          CATCH zcx_abapgit_exception.
-            RAISE no_assignment.
-        ENDTRY.
-    ENDTRY.
-  ENDMETHOD.
-
-  METHOD language_sap1_to_sap2.
-
-    TRY.
-        re_lang_sap2 = lcl_bcp47_language_table=>sap1_to_sap2( im_lang_sap1 ).
-      CATCH zcx_abapgit_exception.
-        RAISE no_assignment.
-    ENDTRY.
-
-  ENDMETHOD.
-
-  METHOD language_sap1_to_text.
-    re_text = lcl_bcp47_language_table=>sap1_to_text( im_lang_sap1 ).
-  ENDMETHOD.
-
-  METHOD language_sap2_to_sap1.
-
-    TRY.
-        re_lang_sap1 = lcl_bcp47_language_table=>sap2_to_sap1( im_lang_sap2 ).
-      CATCH zcx_abapgit_exception.
-        RAISE no_assignment.
-    ENDTRY.
 
   ENDMETHOD.
 
@@ -84002,41 +84274,6 @@ CLASS zcl_abapgit_convert IMPLEMENTATION.
     IF xstrlen( rv_xstring ) < 3 OR rv_xstring(3) <> cl_abap_char_utilities=>byte_order_mark_utf8.
       rv_xstring = cl_abap_char_utilities=>byte_order_mark_utf8 && rv_xstring.
     ENDIF.
-
-  ENDMETHOD.
-
-  METHOD uccp.
-
-    DATA lv_class    TYPE string.
-    DATA lv_xstr     TYPE xstring.
-    DATA lo_instance TYPE REF TO object.
-
-    lv_class = 'CL_ABAP_CONV_IN_CE'.
-
-    TRY.
-        CALL METHOD (lv_class)=>uccp
-          EXPORTING
-            uccp = iv_uccp
-          RECEIVING
-            char = rv_char.
-      CATCH cx_sy_dyn_call_illegal_class.
-        lv_xstr = iv_uccp.
-
-        CALL METHOD ('CL_ABAP_CONV_CODEPAGE')=>create_in
-          EXPORTING
-            codepage = 'UTF-16'
-          RECEIVING
-            instance = lo_instance.
-
-* convert endianness
-        CONCATENATE lv_xstr+1(1) lv_xstr(1) INTO lv_xstr IN BYTE MODE.
-
-        CALL METHOD lo_instance->('IF_ABAP_CONV_IN~CONVERT')
-          EXPORTING
-            source = lv_xstr
-          RECEIVING
-            result = rv_char.
-    ENDTRY.
 
   ENDMETHOD.
 
@@ -84120,21 +84357,6 @@ CLASS zcl_abapgit_convert IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD xstring_to_string_utf8_raw.
-
-    DATA lv_length TYPE i.
-
-    lv_length = iv_length.
-    IF lv_length <= 0.
-      lv_length = xstrlen( iv_data ).
-    ENDIF.
-
-    rv_string = lcl_in=>convert(
-      iv_data   = iv_data
-      iv_length = lv_length ).
-
-  ENDMETHOD.
-
   METHOD xstring_to_string_utf8_bom.
 
     DATA lv_xstring TYPE xstring.
@@ -84153,6 +84375,20 @@ CLASS zcl_abapgit_convert IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD xstring_to_string_utf8_raw.
+
+    DATA lv_length TYPE i.
+
+    lv_length = iv_length.
+    IF lv_length <= 0.
+      lv_length = xstrlen( iv_data ).
+    ENDIF.
+
+    rv_string = lcl_in=>convert(
+      iv_data   = iv_data
+      iv_length = lv_length ).
+
+  ENDMETHOD.
 ENDCLASS.
 
 CLASS zcl_abapgit_cts_api IMPLEMENTATION.
@@ -89045,7 +89281,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
 
   METHOD laiso_to_langu_safe.
 
-    zcl_abapgit_convert=>language_sap2_to_sap1(
+    zcl_abapgit_convert_language=>sap2_to_sap1(
       EXPORTING
         im_lang_sap2  = iv_laiso
       RECEIVING
@@ -89061,7 +89297,7 @@ CLASS zcl_abapgit_lxe_texts IMPLEMENTATION.
 
   METHOD langu_to_laiso_safe.
 
-    zcl_abapgit_convert=>language_sap1_to_sap2(
+    zcl_abapgit_convert_language=>sap1_to_sap2(
       EXPORTING
         im_lang_sap1  = iv_langu
       RECEIVING
@@ -89549,10 +89785,15 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
 
     MOVE-CORRESPONDING is_package TO ls_package.
 
-    " Set software component to 'HOME' if none is set at this point.
+    " Set software component to HOME or ZCUSTOM_DEVELOPMENT (ABAP Cloud) if none is set at this point.
     " Otherwise SOFTWARE_COMPONENT_INVALID will be raised.
     IF ls_package-dlvunit IS INITIAL.
-      ls_package-dlvunit = 'HOME'.
+      IF is_package-packkind = zif_abapgit_aff_types_v1=>co_abap_language_version-cloud_development.
+        ls_package-parentcl = 'ZCUSTOM_DEVELOPMENT'.
+        ls_package-dlvunit  = 'ZCUSTOM_DEVELOPMENT'.
+      ELSE.
+        ls_package-dlvunit = 'HOME'.
+      ENDIF.
     ENDIF.
 
     " For transportable packages, get default transport and layer
@@ -89575,7 +89816,7 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     cl_package_factory=>create_new_package(
       EXPORTING
         i_reuse_deleted_object     = abap_true
-*        i_suppress_dialog          = abap_true " does not exist in 730
+*       i_suppress_dialog          = abap_true " does not exist in 730
       IMPORTING
         e_package                  = li_package
       CHANGING
@@ -89598,10 +89839,10 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
         unexpected_error           = 15
         intern_err                 = 16
         no_access                  = 17
-*        invalid_translation_depth  = 18
-*        wrong_mainpack_value       = 19
-*        superpackage_invalid       = 20
-*        error_in_cts_checks        = 21
+*       invalid_translation_depth  = 18
+*       wrong_mainpack_value       = 19
+*       superpackage_invalid       = 20
+*       error_in_cts_checks        = 21
         OTHERS                     = 18 ).
     IF sy-subrc <> 0.
       zcx_abapgit_exception=>raise_t100( ).
@@ -89647,6 +89888,8 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     DATA: li_parent TYPE REF TO if_package,
           ls_child  TYPE zif_abapgit_sap_package=>ty_create.
 
+    FIELD-SYMBOLS <lv_package_kind> TYPE uccheck.
+
     cl_package_factory=>load_package(
       EXPORTING
         i_package_name             = mv_package
@@ -89671,6 +89914,12 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     ls_child-pdevclass = li_parent->transport_layer.
     ls_child-as4user   = sy-uname.
 
+    " Interface does not contain ABAP language version (package_kind) in lower releases
+    ASSIGN li_parent->('PACKAGE_KIND') TO <lv_package_kind>.
+    IF sy-subrc = 0.
+      ls_child-packkind = <lv_package_kind>.
+    ENDIF.
+
     zif_abapgit_sap_package~create( ls_child ).
 
   ENDMETHOD.
@@ -89681,8 +89930,13 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
 
     ls_package-devclass = mv_package.
     ls_package-ctext    = mv_package.
-    ls_package-parentcl = '$TMP'.
-    ls_package-dlvunit  = 'LOCAL'.
+    IF iv_abap_language_version = zif_abapgit_aff_types_v1=>co_abap_language_version-cloud_development.
+      ls_package-parentcl = 'ZLOCAL'.
+      ls_package-dlvunit  = 'ZLOCAL'.
+    ELSE.
+      ls_package-parentcl = '$TMP'.
+      ls_package-dlvunit  = 'LOCAL'.
+    ENDIF.
     ls_package-as4user  = sy-uname.
     ls_package-packkind = iv_abap_language_version.
 
@@ -89708,6 +89962,8 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
   METHOD zif_abapgit_sap_package~get.
 
     DATA li_package TYPE REF TO if_package.
+
+    FIELD-SYMBOLS <lv_package_kind> TYPE uccheck.
 
     cl_package_factory=>load_package(
       EXPORTING
@@ -89735,6 +89991,12 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     rs_package-as4user   = li_package->changed_by.
     rs_package-korrflag  = li_package->wbo_korr_flag.
 
+    " Interface does not contain ABAP language version (package_kind) in lower releases
+    ASSIGN li_package->('PACKAGE_KIND') TO <lv_package_kind>.
+    IF sy-subrc = 0.
+      rs_package-packkind = <lv_package_kind>.
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD zif_abapgit_sap_package~get_default_transport_layer.
@@ -89753,7 +90015,7 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
             cts_initialization_failure = 3
             OTHERS                     = 4.
         IF sy-subrc <> 0.
-      " Return empty layer (i.e. "local workbench request" for the package)
+          " Return empty layer (i.e. "local workbench request" for the package)
           CLEAR rv_transport_layer.
         ENDIF.
       CATCH cx_sy_dyn_call_illegal_func.
@@ -89859,6 +90121,7 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_abapgit_sap_package~read_description.
+
     DATA li_package TYPE REF TO if_package.
 
     cl_package_factory=>load_package(
@@ -89879,6 +90142,13 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
     ENDIF.
 
     rv_description = li_package->short_text.
+
+  ENDMETHOD.
+
+  METHOD zif_abapgit_sap_package~read_namespace.
+    SELECT SINGLE namespace FROM tdevc
+      INTO rv_namespace
+      WHERE devclass = mv_package ##SUBRC_OK.           "#EC CI_GENBUFF
   ENDMETHOD.
 
   METHOD zif_abapgit_sap_package~read_parent.
@@ -89897,18 +90167,13 @@ CLASS zcl_abapgit_sap_package IMPLEMENTATION.
       WHERE devclass = mv_package ##SUBRC_OK.           "#EC CI_GENBUFF
   ENDMETHOD.
 
-  METHOD zif_abapgit_sap_package~read_namespace.
-    SELECT SINGLE namespace FROM tdevc
-      INTO rv_namespace
-      WHERE devclass = mv_package ##SUBRC_OK.           "#EC CI_GENBUFF
-  ENDMETHOD.
-
   METHOD zif_abapgit_sap_package~update_tree.
 
     DATA lv_tree TYPE string.
 
-* update package tree for SE80
+    " update package tree for SE80
     lv_tree = 'EU_' && mv_package.
+
     CALL FUNCTION 'WB_TREE_ACTUALIZE'
       EXPORTING
         tree_name              = lv_tree
@@ -90923,8 +91188,8 @@ CLASS zcl_abapgit_filename_logic IMPLEMENTATION.
         IF ev_ext = `po`.
           ev_lang = to_lower( lv_lang_suffix ).
         ELSEIF ev_ext = `properties`.
-          lv_sap1 = zcl_abapgit_convert=>language_bcp47_to_sap1( lv_lang_suffix ).
-          ev_lang = zcl_abapgit_convert=>language_sap1_to_sap2( lv_sap1 ). " actually it is to_upper( ISO-639 )
+          lv_sap1 = zcl_abapgit_convert_language=>bcp47_to_sap1( lv_lang_suffix ).
+          ev_lang = zcl_abapgit_convert_language=>sap1_to_sap2( lv_sap1 ). " actually it is to_upper( ISO-639 )
         ELSE.
           zcx_abapgit_exception=>raise( |Unexpected translation file format { iv_filename }| ).
         ENDIF.
@@ -91608,18 +91873,15 @@ CLASS zcl_abapgit_gui_jumper IMPLEMENTATION.
 
   METHOD zif_abapgit_gui_jumper~jump.
 
-    " WebGUI cannot open windows or ADT
-    IF /apmg/cl_apm_gui_factory=>get_frontend_services( )->is_webgui( ) = abap_true.
-      zcx_abapgit_exception=>raise( |Jump not possible in WebGUI| ).
-    ENDIF.
-
     " Try all generic jump options
 
     " 1) ADT Jump
-    rv_exit = zif_abapgit_gui_jumper~jump_adt(
-      is_item         = is_item
-      iv_sub_obj_name = is_sub_item-obj_name
-      iv_line_number  = iv_line_number ).
+    IF /apmg/cl_apm_gui_factory=>get_frontend_services( )->is_webgui( ) = abap_false.
+      rv_exit = zif_abapgit_gui_jumper~jump_adt(
+        is_item         = is_item
+        iv_sub_obj_name = is_sub_item-obj_name
+        iv_line_number  = iv_line_number ).
+    ENDIF.
 
     IF rv_exit = abap_true.
       RETURN.
@@ -91854,7 +92116,7 @@ CLASS zcl_abapgit_hash IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_I18N_PARAMS IMPLEMENTATION.
+CLASS zcl_abapgit_i18n_params IMPLEMENTATION.
 
   METHOD build_language_filter.
     IF mt_language_filter IS INITIAL.
@@ -91891,7 +92153,7 @@ CLASS ZCL_ABAPGIT_I18N_PARAMS IMPLEMENTATION.
 
     LOOP AT it_iso_filter INTO lv_laiso.
 
-      zcl_abapgit_convert=>language_sap2_to_sap1(
+      zcl_abapgit_convert_language=>sap2_to_sap1(
         EXPORTING
           im_lang_sap2  = lv_laiso
         RECEIVING
@@ -91988,7 +92250,7 @@ CLASS ZCL_ABAPGIT_I18N_PARAMS IMPLEMENTATION.
         CONTINUE. " Just keep it
       ENDIF.
 
-      zcl_abapgit_convert=>language_sap1_to_sap2(
+      zcl_abapgit_convert_language=>sap1_to_sap2(
         EXPORTING
           im_lang_sap1  = <lv_langu>
         RECEIVING
@@ -92023,7 +92285,7 @@ CLASS ZCL_ABAPGIT_I18N_PARAMS IMPLEMENTATION.
     LOOP AT ct_sap_langs INTO lv_langu.
       lv_index = sy-tabix.
 
-      zcl_abapgit_convert=>language_sap1_to_sap2(
+      zcl_abapgit_convert_language=>sap1_to_sap2(
         EXPORTING
           im_lang_sap1  = lv_langu
         RECEIVING
@@ -92250,7 +92512,7 @@ CLASS lcl_aff_filter IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_JSON_HANDLER IMPLEMENTATION.
+CLASS zcl_abapgit_json_handler IMPLEMENTATION.
 
   METHOD deserialize.
     DATA lo_ajson TYPE REF TO /apmg/if_apm_ajson.
@@ -92312,7 +92574,7 @@ CLASS ZCL_ABAPGIT_JSON_HANDLER IMPLEMENTATION.
 
     lv_bcp47_language = co_ajson->get_string( '/header/original_language' ).
 
-    lv_original_language = zcl_abapgit_convert=>language_bcp47_to_sap1( lv_bcp47_language ).
+    lv_original_language = zcl_abapgit_convert_language=>bcp47_to_sap1( lv_bcp47_language ).
 
     co_ajson->set_string( iv_path = '/header/original_language'
                           iv_val  = lv_original_language ).
@@ -92363,7 +92625,7 @@ CLASS ZCL_ABAPGIT_JSON_HANDLER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lv_bcp47_language = zcl_abapgit_convert=>language_sap1_to_bcp47( lv_original_language ).
+    lv_bcp47_language = zcl_abapgit_convert_language=>sap1_to_bcp47( lv_original_language ).
 
     co_ajson->set_string( iv_path = '/header/originalLanguage'
                           iv_val  = lv_bcp47_language ).
@@ -103619,11 +103881,14 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
   METHOD is_local.
 
     DATA lv_dlvunit TYPE tdevc-dlvunit.
+    DATA lv_comp_type TYPE c LENGTH 1.
 
     SELECT SINGLE dlvunit FROM tdevc INTO lv_dlvunit
         WHERE devclass = iv_package_name AND intsys <> 'SAP'.
-    IF sy-subrc = 0 AND lv_dlvunit = 'LOCAL'.
-      rv_is_local = abap_true.
+    IF sy-subrc = 0.
+      " Look up type of software component (typically LOCAL or ZLOCAL but others are possible)
+      SELECT SINGLE comp_type FROM cvers INTO lv_comp_type WHERE component = lv_dlvunit.
+      rv_is_local = boolc( sy-subrc = 0 AND lv_comp_type CA 'LJZ' ).
     ENDIF.
 
   ENDMETHOD.
@@ -103877,7 +104142,7 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
         EXCEPTIONS
           object_not_changeable = 1
           object_invalid        = 2
-*          deletion_not_allowed  = 3 downport, does not exist in 7.30
+*         deletion_not_allowed  = 3 downport, does not exist in 7.30
           intern_err            = 4
           OTHERS                = 5 ).
       IF sy-subrc <> 0.
@@ -104102,8 +104367,8 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
           prefix_in_use              = 13
           unexpected_error           = 14
           intern_err                 = 15
-*          wrong_mainpack_value       = 16  downport, does not exist in 7.30
-*          superpackage_invalid       = 17  downport, does not exist in 7.30
+*         wrong_mainpack_value       = 16  downport, does not exist in 7.30
+*         superpackage_invalid       = 17  downport, does not exist in 7.30
           OTHERS                     = 18 ).
       IF sy-subrc <> 0.
         unlock_and_raise_error( li_package ).
@@ -104135,10 +104400,10 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
           unexpected_error           = 15
           intern_err                 = 16
           no_access                  = 17
-*          invalid_translation_depth  = 18 downport, does not exist in 7.30
-*          wrong_mainpack_value       = 19 downport, does not exist in 7.30
-*          superpackage_invalid       = 20 downport, does not exist in 7.30
-*          error_in_cts_checks        = 21 downport, does not exist in 7.31
+*         invalid_translation_depth  = 18 downport, does not exist in 7.30
+*         wrong_mainpack_value       = 19 downport, does not exist in 7.30
+*         superpackage_invalid       = 20 downport, does not exist in 7.30
+*         error_in_cts_checks        = 21 downport, does not exist in 7.31
           OTHERS                     = 22 ).
       IF sy-subrc <> 0.
         zcx_abapgit_exception=>raise_t100( ).
@@ -104195,12 +104460,12 @@ CLASS zcl_abapgit_object_devc IMPLEMENTATION.
     ELSE.
       cl_package_helper=>check_package_existence(
         EXPORTING
-          i_package_name          = mv_local_devclass
+          i_package_name   = mv_local_devclass
         IMPORTING
-          e_package_exists        = rv_bool
+          e_package_exists = rv_bool
         EXCEPTIONS
-          intern_err              = 1
-          OTHERS                  = 2 ).
+          intern_err       = 1
+          OTHERS           = 2 ).
       IF sy-subrc <> 0.
         zcx_abapgit_exception=>raise_t100( ).
       ENDIF.
@@ -112380,7 +112645,7 @@ CLASS zcl_abapgit_object_form IMPLEMENTATION.
 
     DATA lv_tdspras TYPE laiso.
 
-    lv_tdspras = zcl_abapgit_convert=>conversion_exit_isola_output( is_header-tdspras ).
+    lv_tdspras = zcl_abapgit_convert_language=>conversion_exit_isola_output( is_header-tdspras ).
 
     " Refuse to serialize inconsistent text-header data. An empty tdspras
     " or a tdspras that ISO conversion cannot map (typically because the
@@ -117673,7 +117938,7 @@ CLASS lcl_aff_metadata_handler__ IMPLEMENTATION.
   METHOD fill_translation.
     DATA: lv_langu_sap1 TYPE sy-langu.
 
-    lv_langu_sap1 = zcl_abapgit_convert=>language_sap2_to_sap1( iv_language ).
+    lv_langu_sap1 = zcl_abapgit_convert_language=>sap2_to_sap1( iv_language ).
 
     rt_result-descriptions = lcl_aff_helper=>get_descriptions_compo_subco(
       iv_clif_name = iv_name
@@ -117704,7 +117969,7 @@ CLASS lcl_aff_metadata_handler__ IMPLEMENTATION.
       lo_properties_file ?= li_translation_file.
       lo_properties_file->get_translations( IMPORTING ev_data = ls_aff_data ).
 
-      lv_sap1 = zcl_abapgit_convert=>language_sap2_to_sap1( li_translation_file->lang( ) ).
+      lv_sap1 = zcl_abapgit_convert_language=>sap2_to_sap1( li_translation_file->lang( ) ).
       ls_aff_data-header-original_language = lv_sap1.
 
       CREATE OBJECT lo_type_mapper TYPE lcl_aff_type_mapping__.
@@ -117906,7 +118171,7 @@ CLASS zcl_abapgit_object_intf IMPLEMENTATION.
     DELETE ADJACENT DUPLICATES FROM lt_unique_language.
 
     LOOP AT lt_unique_language INTO lv_unique.
-      lv_sap2 = zcl_abapgit_convert=>language_sap1_to_sap2( lv_unique ).
+      lv_sap2 = zcl_abapgit_convert_language=>sap1_to_sap2( lv_unique ).
       APPEND lv_sap2 TO rs_result.
     ENDLOOP.
 
@@ -137295,7 +137560,63 @@ CLASS zcl_abapgit_object_tabl_compar IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
+CLASS lcl_replacement_mapping DEFINITION FINAL.
+
+  PUBLIC SECTION.
+    INTERFACES lif_replacement_mapping.
+
+ENDCLASS.
+
+CLASS lcl_replacement_mapping IMPLEMENTATION.
+
+  METHOD lif_replacement_mapping~to_entity.
+
+    DATA lv_entityname TYPE ddobjname.
+
+    TRY.
+        CALL METHOD ('CL_SBD_DDLS_UTILITY')=>('MAP_TO_REPLACEMENT_DDLS')
+          EXPORTING
+            i_view_name  = iv_view_name
+          IMPORTING
+            e_entityname = lv_entityname.
+        rv_entityname = lv_entityname.
+      CATCH cx_root.
+        " The utility is not available on older releases and is also absent
+        " from the open-abap test runtime. In that case no annotation is
+        " emitted rather than serializing DD02V-VIEWREF with the wrong
+        " meaning.
+        CLEAR rv_entityname.
+    ENDTRY.
+
+  ENDMETHOD.
+
+  METHOD lif_replacement_mapping~to_view.
+
+    DATA lv_view_name TYPE ddobjname.
+
+    TRY.
+        CALL METHOD ('CL_SBD_DDLS_UTILITY')=>('MAP_TO_REPLACEMENT_VIEW')
+          EXPORTING
+            i_entityname = iv_entityname
+          IMPORTING
+            e_view_name  = lv_view_name.
+        rv_view_name = lv_view_name.
+      CATCH cx_root.
+        " Keep source-only parsing usable on releases without the SAP
+        " utility. A SAP system with the utility returns the resolved view
+        " name, or initial for an entity that cannot be resolved.
+        rv_view_name = iv_entityname.
+    ENDTRY.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
+
+  METHOD constructor.
+    CREATE OBJECT mi_replacement_mapping TYPE lcl_replacement_mapping.
+  ENDMETHOD.
 
   METHOD deserialize.
 
@@ -137492,62 +137813,37 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
   METHOD get_replacement_object.
 
     DATA lv_view_name TYPE ddobjname.
-    DATA lv_entityname TYPE ddobjname.
 
     lv_view_name = to_upper( iv_viewref ).
     IF lv_view_name IS INITIAL.
       RETURN.
     ENDIF.
 
-    TRY.
-        " DD02V-VIEWREF contains the database view name. DDL uses the
-        " corresponding CDS entity name instead.
-        CALL METHOD ('CL_SBD_DDLS_UTILITY')=>('MAP_TO_REPLACEMENT_DDLS')
-          EXPORTING
-            i_view_name  = lv_view_name
-          IMPORTING
-            e_entityname = lv_entityname.
-        rv_object = lv_entityname.
-      CATCH cx_root.
-        " The utility is not available on older releases and is also absent
-        " from the open-abap test runtime. In that case no annotation is
-        " emitted rather than serializing DD02V-VIEWREF with the wrong
-        " meaning.
-        CLEAR rv_object.
-    ENDTRY.
+    " DD02V-VIEWREF contains the database view name. DDL uses the
+    " corresponding CDS entity name instead.
+    rv_object = mi_replacement_mapping->to_entity( lv_view_name ).
 
   ENDMETHOD.
 
   METHOD get_replacement_view.
 
     DATA lv_entityname TYPE ddobjname.
-    DATA lv_view_name TYPE ddobjname.
 
     lv_entityname = to_upper( iv_entityname ).
     IF lv_entityname IS INITIAL.
       RETURN.
     ENDIF.
 
-    TRY.
-        " The reverse mapping is needed when DDL is saved back to TABL:
-        " DD02V-VIEWREF must receive the database view name.
-        CALL METHOD ('CL_SBD_DDLS_UTILITY')=>('MAP_TO_REPLACEMENT_VIEW')
-          EXPORTING
-            i_entityname = lv_entityname
-          IMPORTING
-            e_view_name = lv_view_name.
-        rv_viewname = lv_view_name.
-      CATCH cx_root.
-        " Keep source-only parsing usable on releases without the SAP
-        " utility. A SAP system with the utility returns the resolved view
-        " name, or initial for an entity that cannot be resolved.
-        rv_viewname = lv_entityname.
-    ENDTRY.
+    " The reverse mapping is needed when DDL is saved back to TABL:
+    " DD02V-VIEWREF must receive the database view name.
+    rv_viewname = mi_replacement_mapping->to_view( lv_entityname ).
 
   ENDMETHOD.
 
   METHOD parse_replacement_object.
     DATA lv_entityname TYPE string.
+    DATA lv_viewname TYPE string.
+    FIELD-SYMBOLS <lv_viewref> TYPE any.
 
     lv_entityname = unescape_string( iv_value ).
     IF lv_entityname IS INITIAL.
@@ -137556,12 +137852,17 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
         iv_token = iv_name
         iv_offset = 0 ).
     ENDIF.
-    cs_data-dd02v-viewref = get_replacement_view( lv_entityname ).
-    IF cs_data-dd02v-viewref IS INITIAL.
+    lv_viewname = get_replacement_view( lv_entityname ).
+    IF lv_viewname IS INITIAL.
       parse_error(
         iv_context = 'replacement object cannot be resolved'
         iv_token = lv_entityname
         iv_offset = 0 ).
+    ENDIF.
+    " DD02V-VIEWREF does not exist before 7.40
+    ASSIGN COMPONENT 'VIEWREF' OF STRUCTURE cs_data-dd02v TO <lv_viewref>.
+    IF sy-subrc = 0.
+      <lv_viewref> = lv_viewname.
     ENDIF.
   ENDMETHOD.
 
@@ -137707,6 +138008,7 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
     DATA lv_name TYPE string.
     DATA lv_value TYPE string.
     DATA lv_compare TYPE string.
+    DATA lv_compare_upper TYPE string.
     FIELD-SYMBOLS <lv_is_gtt> TYPE abap_bool.
     FIELD-SYMBOLS <lv_pk_is_invhash> TYPE c.
 
@@ -137738,6 +138040,8 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
       ENDIF.
       lv_compare = lv_value.
       CONDENSE lv_compare NO-GAPS.
+      " A built-in function is not allowed as CASE operand before 7.40
+      lv_compare_upper = to_upper( lv_compare ).
       CASE lv_name.
         WHEN '@endusertext.label'.
           IF lv_value IS INITIAL.
@@ -137748,7 +138052,7 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
           ENDIF.
           cs_data-dd02v-ddtext = unescape_string( lv_value ).
         WHEN '@abapcatalog.enhancementcategory'.
-          CASE to_upper( lv_compare ).
+          CASE lv_compare_upper.
             WHEN '#NOT_CLASSIFIED'.
               cs_data-dd02v-exclass = '0'.
             WHEN '#NOT_EXTENSIBLE'.
@@ -137766,7 +138070,7 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
                 iv_offset = 0 ).
           ENDCASE.
         WHEN '@abapcatalog.tablecategory'.
-          CASE to_upper( lv_compare ).
+          CASE lv_compare_upper.
             WHEN '#TRANSPARENT'.
               cs_data-dd02v-tabclass = 'TRANSP'.
             WHEN '#GLOBAL_TEMPORARY'.
@@ -137792,7 +138096,7 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
           ENDIF.
           cs_data-dd02v-contflag = to_upper( lv_compare+1 ).
         WHEN '@abapcatalog.datamaintenance'.
-          CASE to_upper( lv_compare ).
+          CASE lv_compare_upper.
             WHEN '#ALLOWED'.
               cs_data-dd02v-mainflag = abap_true.
             WHEN '#RESTRICTED'.
@@ -137840,7 +138144,10 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD parse_activation_type.
-    CASE to_upper( iv_value ).
+    DATA lv_value TYPE string.
+
+    lv_value = to_upper( iv_value ).
+    CASE lv_value.
       WHEN '#NAMETAB_GENERATION_OFFLINE'.
         rv_authclass = '01'.
       WHEN '#ADAPT_C_STRUCTURES'.
@@ -139396,6 +139703,7 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
   METHOD serialize_top.
     FIELD-SYMBOLS <lv_pk_is_invhash> TYPE c.
     FIELD-SYMBOLS <lv_is_gtt> TYPE abap_bool.
+    FIELD-SYMBOLS <lv_viewref> TYPE any.
     DATA lv_replacement_object TYPE string.
     IF is_data-dd02v-exclass NOT BETWEEN '0' AND '4'.
       zcx_abapgit_exception=>raise(
@@ -139448,7 +139756,10 @@ CLASS ZCL_ABAPGIT_OBJECT_TABL_DDL IMPLEMENTATION.
       zcx_abapgit_exception=>raise(
         |TABL DDL serialization error: unsupported data maintenance value { is_data-dd02v-mainflag }| ).
     ENDIF.
-    lv_replacement_object = get_replacement_object( is_data-dd02v-viewref ).
+    ASSIGN COMPONENT 'VIEWREF' OF STRUCTURE is_data-dd02v TO <lv_viewref>.
+    IF sy-subrc = 0.
+      lv_replacement_object = get_replacement_object( <lv_viewref> ).
+    ENDIF.
     IF lv_replacement_object IS NOT INITIAL.
       rv_ddl = rv_ddl && |@AbapCatalog.replacementObject : { escape_string( to_lower( lv_replacement_object ) ) }\n|.
     ENDIF.
@@ -148671,7 +148982,7 @@ CLASS zcl_abapgit_progress IMPLEMENTATION.
   ENDMETHOD.
 ENDCLASS.
 
-CLASS ZCL_ABAPGIT_PROPERTIES_FILE IMPLEMENTATION.
+CLASS zcl_abapgit_properties_file IMPLEMENTATION.
 
   METHOD constructor.
     mv_lang = to_upper( iv_lang ).
@@ -148728,8 +149039,8 @@ CLASS ZCL_ABAPGIT_PROPERTIES_FILE IMPLEMENTATION.
     DATA: lv_langu_sap1 TYPE sy-langu,
           lv_langu_bcp47 TYPE string.
 
-    lv_langu_sap1 = zcl_abapgit_convert=>language_sap2_to_sap1( to_upper( mv_lang ) ).
-    lv_langu_bcp47 = zcl_abapgit_convert=>language_sap1_to_bcp47( lv_langu_sap1 ).
+    lv_langu_sap1 = zcl_abapgit_convert_language=>sap2_to_sap1( to_upper( mv_lang ) ).
+    lv_langu_bcp47 = zcl_abapgit_convert_language=>sap1_to_bcp47( lv_langu_sap1 ).
 
     rv_lang_suffix = lv_langu_bcp47.
 
@@ -150202,6 +150513,10 @@ SELECTION-SCREEN BEGIN OF SCREEN 1001.
 * dummy for triggering screen on Java SAP GUI
 SELECTION-SCREEN END OF SCREEN 1001.
 
+SELECTION-SCREEN BEGIN OF BLOCK b1.
+  PARAMETERS p_pack TYPE devclass NO-DISPLAY.
+SELECTION-SCREEN END OF BLOCK b1.
+
 ************************************************************************
 * apm Forms
 *
@@ -150230,7 +150545,7 @@ FORM open_gui RAISING /apmg/cx_apm_error.
 
   DATA:
     action TYPE string,
-    mode   TYPE tabname.
+    mode   TYPE devclass.
 
   IF sy-batch = abap_true.
     " FUTURE: One day we will add this
@@ -150238,7 +150553,11 @@ FORM open_gui RAISING /apmg/cx_apm_error.
     MESSAGE s000(oo) WITH 'apm does not support background processing'.
   ELSE.
 
-    GET PARAMETER ID 'DBT' FIELD mode.
+    IF p_pack IS INITIAL.
+      GET PARAMETER ID 'DBT' FIELD mode.
+    ELSE.
+      SET PARAMETER ID 'DBT' FIELD p_pack.
+    ENDIF.
 
     CASE mode.
       WHEN 'INIT'.
@@ -150393,7 +150712,7 @@ START-OF-SELECTION.
 
 **********************************************************************
 INTERFACE lif_abapmerge_marker.
-  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-09-18T17:48:49Z`.
+  CONSTANTS c_merge_timestamp TYPE string VALUE `2026-10-06T14:00:37Z`.
   CONSTANTS c_abapinst_version TYPE string VALUE `1.2.0`.
 ENDINTERFACE.
 **********************************************************************
