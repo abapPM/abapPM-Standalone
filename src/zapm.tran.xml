@@ -16,6 +16,14 @@
     <TCODE>ZAPM</TCODE>
     <TTEXT>apm - Standalone Version</TTEXT>
    </TSTCT>
+   <HEAD>
+    <NAME>ZAPM</NAME>
+    <TYPE>TR</TYPE>
+    <DISPLAY_NAME>ZAPM</DISPLAY_NAME>
+    <STEXT>apm - Standalone Version</STEXT>
+    <CTYPE>R</CTYPE>
+    <CINFO>gA==</CINFO>
+   </HEAD>
   </asx:values>
  </asx:abap>
 </abapGit>
