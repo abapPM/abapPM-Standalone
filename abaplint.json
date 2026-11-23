@@ -254,9 +254,7 @@
     "prefer_xsdbool": false,
     "preferred_compare_operator": true,
     "prefix_is_current_class": false,
-    "reduce_procedural_code": {
-      "maxStatements": 20
-    },
+    "reduce_procedural_code": false,
     "reduce_string_templates": true,
     "release_idoc": true,
     "remove_descriptions": true,
