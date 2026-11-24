@@ -152,12 +152,7 @@
     "in_statement_indentation": false,
     "indentation": false,
     "inline_data_old_versions": true,
-    "intf_referencing_clas": {
-      "allow": [
-        "/APMG/CL_APM_ARBORIST_NODE",
-        "/APMG/CL_APM_STRING_MAP"
-      ]
-    },
+    "intf_referencing_clas": true,
     "invalid_table_index": true,
     "keep_single_parameter_on_one_line": true,
     "keyword_case": false,
@@ -178,23 +173,13 @@
     "message_exists": true,
     "method_implemented_twice": true,
     "method_length": false,
-    "method_overwrites_builtin": {
-      "exclude": [
-        "#apmg#cl_apm_tap"
-      ]
-    },
+    "method_overwrites_builtin": true,
     "method_parameter_names": false,
     "mix_returning": true,
     "modify_only_own_db_tables": false,
     "msag_consistency": true,
     "names_no_dash": true,
-    "nesting": {
-      "depth": 5,
-      "exclude": [
-        "#apmg#cl_apm_markdown_path",
-        "#apmg#cl_apm_semver"
-      ]
-    },
+    "nesting": false,
     "newline_between_methods": true,
     "no_aliases": false,
     "no_chained_assignment": true,
