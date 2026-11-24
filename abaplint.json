@@ -86,6 +86,7 @@
     "cyclic_oo": false,
     "cyclomatic_complexity": false,
     "dangerous_statement": {
+      "editorCallForReport": true,
       "exclude": [],
       "execSQL": true,
       "kernelCall": true,
@@ -96,6 +97,7 @@
       "generateSubroutine": true,
       "deleteReport": false,
       "deleteTextpool": false,
+      "ignoreRAPQueryProvider": true,
       "insertTextpool": false,
       "deleteDynpro": true,
       "exportDynpro": true,
@@ -187,7 +189,9 @@
     "msag_consistency": true,
     "names_no_dash": true,
     "nesting": {
+      "depth": 5,
       "exclude": [
+        "#apmg#cl_apm_markdown_path",
         "#apmg#cl_apm_semver"
       ]
     },
